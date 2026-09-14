@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en" class="as-root">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apple-Style · Liquid Glass demo</title>
+<link rel="stylesheet" href="apple-style.css">
+<style>
+  /* Demo-only chrome. The content layer is deliberately rich so the material
+     has something to lens, tint and adapt to. */
+  body { margin: 0; min-height: 100vh; }
+  .stage { position: relative; min-height: 100vh; }
+  .hero { position: relative; height: 62vh; min-height: 420px; overflow: hidden;
+    background:
+      radial-gradient(60% 80% at 20% 20%, #ff9f43 0%, transparent 60%),
+      radial-gradient(50% 70% at 80% 30%, #ff2d55 0%, transparent 60%),
+      radial-gradient(70% 60% at 50% 100%, #5e5ce6 0%, transparent 60%),
+      linear-gradient(180deg, #1c1c1e, #0a84ff); }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero .caption { position: absolute; left: var(--as-margin); bottom: 28px; color: #fff; text-shadow: 0 1px 12px rgb(0 0 0 / .35); }
+  .hero .caption h1 { margin: 0; font: 700 34px/41px var(--as-font-display); letter-spacing: .4px; }
+  .hero .caption p { margin: 4px 0 0; font: 400 17px/22px var(--as-font-text); opacity: .9; }
+  .floating-controls { position: absolute; right: var(--as-margin); bottom: 28px; display: flex; gap: 12px; }
+  .section { padding: 24px var(--as-margin); }
+  .section h2 { margin: 0 0 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { padding: 20px; border-radius: var(--as-radius-xl); background: var(--as-bg-grouped-2); box-shadow: 0 1px 0 var(--as-separator); }
+  .card h3 { margin: 0 0 12px; font: 600 17px/22px var(--as-font-text); }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .dark-band { margin: 24px 0; padding: 40px var(--as-margin); background: #0b0b0d; color: #fff; }
+  .light-band { margin: 24px 0; padding: 40px var(--as-margin); background: #f2f2f7; color: #000; }
+  .prose { max-width: 672px; color: var(--as-label-secondary); }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 8px var(--as-margin); }
+  .relative { position: relative; }
+  .art { width: 100%; height: 160px; border-radius: 18px; object-fit: cover; background: linear-gradient(135deg, #30d158, #64d2ff 50%, #bf5af2); }
+  .pref { position: fixed; top: 76px; right: 12px; z-index: 50; }
+</style>
+</head>
+<body class="as-body as-grouped as-safe-bottom">
+
+<!-- Top toolbar: transparent bar, items float in glass groups, scroll edge beneath -->
+<header class="as-scroll-edge as-edge-top" id="topbar">
+  <div class="as-toolbar">
+    <div class="as-glass as-glass-group" aria-label="Navigation">
+      <button class="as-item" aria-label="Back"><svg class="as-icon" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    </div>
+    <div class="as-toolbar-title">Landmarks</div>
+    <div class="as-spacer"></div>
+    <div class="as-glass as-glass-group" aria-label="Actions">
+      <button class="as-item" aria-label="Favorite"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg></button>
+      <button class="as-item" aria-label="Add to collection"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10M18 15v6M15 18h6"/></svg></button>
+    </div>
+    <div class="as-glass as-glass-group">
+      <button class="as-item" id="shareBtn" aria-label="Share" aria-haspopup="menu"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg></button>
+    </div>
+    <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass as-button-small" id="doneBtn">Done</button>
+  </div>
+</header>
+
+<!-- Share menu pops open from its source (morph) -->
+<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" hidden>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg>Copy<span class="as-shortcut">⌘C</span></div>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>Share…</div>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg>Add to Home Screen</div>
+  <div class="as-menu-sep"></div>
+  <div class="as-menu-item as-destructive" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Delete</div>
+</div>
+
+<main class="stage">
+  <section class="hero" data-glass-scheme-hint="dark">
+    <canvas id="art" aria-hidden="true"></canvas>
+    <div class="caption">
+      <h1>Liquid Glass</h1>
+      <p>A digital meta-material that bends and shapes light.</p>
+    </div>
+    <div class="floating-controls">
+      <!-- Clear variant: over media-rich content, bold bright content on top, dimming layer -->
+      <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass as-button-icon" aria-label="Play"><svg class="as-icon" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+      <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass" id="openSheet">Details</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="as-text-title2 as-em">Regular variant adapts to what is behind it</h2>
+    <p class="prose">Scroll the page: the toolbar glass at the top flips between light and dark as this content passes under it, and its shadow deepens over text. Below, the same button sits on dark and light bands.</p>
+  </section>
+
+  <div class="dark-band relative">
+    <div class="row">
+      <button class="as-glass as-glass-interactive as-button as-button-glass">Regular on dark</button>
+      <button class="as-glass as-glass-interactive as-glass-tinted as-button as-button-glass" style="--as-tint: var(--as-red)">Tinted primary</button>
+      <div class="as-glass as-glass-group"><button class="as-item is-selected">For You</button><button class="as-item">Library</button><button class="as-item">Search</button></div>
+    </div>
+  </div>
+  <div class="light-band relative">
+    <div class="row">
+      <button class="as-glass as-glass-interactive as-button as-button-glass">Regular on light</button>
+      <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass">Prominent</button>
+      <div class="as-glass as-glass-group"><button class="as-item">Day</button><button class="as-item is-selected">Week</button><button class="as-item">Month</button></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2 class="as-text-title2 as-em">Controls come alive on interaction</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Toggle · knob stretches while pressed</h3>
+        <div class="row">
+          <button class="as-toggle" role="switch" aria-checked="true" aria-label="Wi-Fi"><span class="as-knob"></span></button>
+          <button class="as-toggle" role="switch" aria-checked="false" aria-label="Bluetooth"><span class="as-knob"></span></button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Slider · knob becomes a transparent lens</h3>
+        <input class="as-slider" type="range" min="0" max="100" value="62" aria-label="Volume" style="--as-value:62%">
+      </div>
+      <div class="card">
+        <h3>Segmented control · selection lifts</h3>
+        <div class="as-segmented" role="tablist">
+          <button class="as-segment is-selected" role="tab" aria-selected="true">Map</button>
+          <button class="as-segment" role="tab">Transit</button>
+          <button class="as-segment" role="tab">Satellite</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Buttons · style, not size, marks the preferred choice</h3>
+        <div class="row">
+          <button class="as-button as-button-filled">Continue</button>
+          <button class="as-button as-button-tinted">Later</button>
+          <button class="as-button as-button-gray">Cancel</button>
+          <button class="as-button as-button-bordered as-button-small">Small</button>
+          <button class="as-button as-button-filled as-button-xlarge">Extra large</button>
+        </div>
+      </div>
+      <div class="card as-container" data-concentric style="--as-container-radius: 26px">
+        <h3>Concentric nesting</h3>
+        <div class="art as-concentric" style="--as-concentric-inset: 20px" role="img" aria-label="Artwork"></div>
+        <p class="as-text-footnote as-secondary" style="margin:12px 0 0">Inner radius = container radius (26) − inset (20) = 6pt. Corners never look pinched or flared.</p>
+      </div>
+      <div class="card">
+        <h3>Alert · bold, left-aligned</h3>
+        <div class="as-glass as-glass-large as-alert" role="alertdialog" aria-labelledby="alT">
+          <h2 id="alT">Delete "Yosemite"?</h2>
+          <p>This landmark will be removed from all of your collections.</p>
+          <div class="as-actions"><button class="as-button">Cancel</button><button class="as-button as-button-destructive">Delete</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="as-text-title2 as-em">Inset grouped list</h2>
+  </section>
+  <p class="as-list-header">Appearance</p>
+  <ul class="as-list">
+    <li>Text Size<span class="as-value">Large</span></li>
+    <li>Bold Text<button class="as-toggle" role="switch" aria-checked="false" aria-label="Bold text" style="margin-left:auto"><span class="as-knob"></span></button></li>
+    <li>Liquid Glass<span class="as-value" id="glassPrefLabel">Clear</span></li>
+  </ul>
+  <p class="as-list-header">Section headers use title-style capitalization</p>
+  <ul class="as-list">
+    <li>Standard materials belong in the content layer</li>
+    <li>Glass belongs to the navigation layer</li>
+    <li>Never glass on glass</li>
+  </ul>
+  <section class="section"><p class="prose as-text-footnote">Long content so the tab bar can minimize on scroll…</p><div style="height: 60vh"></div></section>
+</main>
+
+<!-- Floating tab bar with separate search tab -->
+<nav class="as-tabbar" data-minimize aria-label="Tab bar">
+  <div class="as-glass as-glass-group" role="tablist">
+    <button class="as-tab is-selected" role="tab" aria-selected="true"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span>Home</span></button>
+    <button class="as-tab" role="tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg><span>Favorites</span></button>
+    <button class="as-tab" role="tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span>Collections</span></button>
+  </div>
+  <div class="as-glass as-glass-group"><button class="as-tab as-tab-search" aria-label="Search"><svg class="as-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button></div>
+</nav>
+
+<!-- Half sheet -->
+<div class="as-sheet-backdrop" id="sheetBackdrop"></div>
+<div class="as-glass as-glass-large as-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="as-grabber"></div>
+  <h2 class="as-sheet-title" id="sheetTitle">Yosemite National Park</h2>
+  <p class="as-text-body" style="margin:0 0 16px">Half sheets are inset from the display edge so content peeks through. Expanding to full height makes the material opaque.</p>
+  <div class="row"><button class="as-button as-button-filled" id="sheetFull">Expand</button><button class="as-button as-button-gray" id="sheetClose">Close</button></div>
+</div>
+
+<!-- Preferences: theme / platform / user glass preference -->
+<div class="pref as-glass as-glass-group" aria-label="Preferences">
+  <button class="as-item" id="themeBtn">Auto</button>
+  <button class="as-item" id="platBtn">iOS</button>
+  <button class="as-item" id="glassBtn">Clear</button>
+</div>
+
+<script src="liquid-glass.js"></script>
+<script>
+  // Paint a photo-like content layer so glass has real detail to lens.
+  (function () { const c = document.getElementById('art'), x = c.getContext('2d'); const W = c.width = c.offsetWidth * devicePixelRatio, H = c.height = c.offsetHeight * devicePixelRatio;
+    x.globalAlpha = .9; for (let i = 0; i < 140; i++) { x.beginPath(); const r = 20 + Math.random() * 120 * devicePixelRatio; x.arc(Math.random() * W, Math.random() * H, r, 0, 7); x.fillStyle = `hsl(${Math.random() * 360} 90% ${40 + Math.random() * 40}% / .35)`; x.fill(); }
+    x.globalAlpha = 1; x.fillStyle = 'rgb(255 255 255 / .85)'; x.font = `${28 * devicePixelRatio}px -apple-system, system-ui`; for (let i = 0; i < 6; i++) x.fillText('content layer · content layer · content layer', 20, (i + 1) * H / 7);
+  })();
+  const status = LiquidGlass.init();
+  console.log('LiquidGlass', status);
+
+  // Menu morphs out of its source button
+  const shareBtn = document.getElementById('shareBtn'), menu = document.getElementById('shareMenu');
+  shareBtn.addEventListener('click', () => {
+    const r = shareBtn.getBoundingClientRect(); menu.hidden = false; menu.style.top = (r.bottom + 8) + 'px'; menu.style.left = Math.max(8, r.right - 250) + 'px'; menu.style.setProperty('--as-origin', 'top right');
+    requestAnimationFrame(() => menu.classList.add('is-open'));
+  });
+  document.addEventListener('pointerdown', e => { if (!menu.contains(e.target) && !shareBtn.contains(e.target)) { menu.classList.remove('is-open'); setTimeout(() => menu.hidden = true, 300); } });
+  // Sheet
+  const sheet = document.getElementById('sheet'), bd = document.getElementById('sheetBackdrop');
+  document.getElementById('openSheet').addEventListener('click', () => { bd.classList.add('is-open'); sheet.classList.add('is-open'); });
+  document.getElementById('sheetClose').addEventListener('click', close); bd.addEventListener('click', close);
+  function close() { bd.classList.remove('is-open'); sheet.classList.remove('is-open', 'is-full'); }
+  document.getElementById('sheetFull').addEventListener('click', () => sheet.classList.toggle('is-full'));
+  // Toggles / segments / slider fill
+  document.querySelectorAll('.as-toggle').forEach(t => t.addEventListener('click', () => t.setAttribute('aria-checked', t.getAttribute('aria-checked') !== 'true')));
+  document.querySelectorAll('.as-segmented').forEach(s => s.addEventListener('click', e => { const b = e.target.closest('.as-segment'); if (!b) return; s.querySelectorAll('.as-segment').forEach(x => { x.classList.toggle('is-selected', x === b); x.setAttribute('aria-selected', x === b); }); }));
+  document.querySelectorAll('.as-glass-group[role=tablist] .as-tab, .as-glass-group .as-item:not([aria-label])').forEach(b => b.addEventListener('click', () => { const g = b.parentElement; if (g.closest('.pref')) return; g.querySelectorAll('.as-tab,.as-item').forEach(x => x.classList.toggle('is-selected', x === b)); }));
+  document.querySelector('.as-slider').addEventListener('input', e => e.target.style.setProperty('--as-value', e.target.value + '%'));
+  // Preferences
+  const html = document.documentElement; const themes = ['Auto', 'light', 'dark']; let ti = 0;
+  document.getElementById('themeBtn').addEventListener('click', e => { ti = (ti + 1) % 3; const t = themes[ti]; t === 'Auto' ? html.removeAttribute('data-theme') : html.dataset.theme = t; e.target.textContent = t[0].toUpperCase() + t.slice(1); LiquidGlass.refresh(); });
+  document.getElementById('platBtn').addEventListener('click', e => { const mac = html.dataset.platform !== 'macos'; mac ? html.dataset.platform = 'macos' : html.removeAttribute('data-platform'); e.target.textContent = mac ? 'macOS' : 'iOS'; });
+  document.getElementById('glassBtn').addEventListener('click', e => { const tinted = html.dataset.liquidGlass !== 'tinted'; tinted ? html.dataset.liquidGlass = 'tinted' : html.removeAttribute('data-liquid-glass'); e.target.textContent = document.getElementById('glassPrefLabel').textContent = tinted ? 'Tinted' : 'Clear'; });
+</script>
+</body>
+</html>

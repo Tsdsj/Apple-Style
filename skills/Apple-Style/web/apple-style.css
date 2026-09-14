@@ -1,0 +1,525 @@
+/* ==========================================================================
+   Apple-Style — web implementation of Apple's design system (HIG + Liquid Glass)
+   Prefix: as-   |  Source of truth: Apple HIG (Materials, Color, Typography,
+   Layout, Buttons, Toolbars, Tab bars, Sidebars, Sheets, Menus), WWDC25 219/356.
+   Load once. Pair with liquid-glass.js for lensing, adaptivity, morphing.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Root tokens
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+
+  /* Fonts: SF Pro renders natively on Apple devices via -apple-system. Text vs
+     Display optical sizes are chosen automatically by the system font (~20pt). */
+  --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --as-font-rounded: ui-rounded, "SF Pro Rounded", var(--as-font-text);
+  --as-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Spacing (4pt grid) + layout metrics from HIG Layout/Buttons */
+  --as-space-1: 4px;  --as-space-2: 8px;  --as-space-3: 12px; --as-space-4: 16px;
+  --as-space-5: 20px; --as-space-6: 24px; --as-space-8: 32px; --as-space-10: 40px;
+  --as-margin: 16px;              /* compact width layout margin */
+  --as-margin-regular: 20px;      /* regular width layout margin */
+  --as-hit-min: 44px;             /* minimum hit region 44x44pt (visionOS: 60) */
+  --as-readable-width: 672px;     /* readable content guide */
+
+  /* Shapes. Three types (WWDC25/356): fixed, capsule (radius = height/2),
+     concentric (parent radius − inset). */
+  --as-radius-xs: 6px;  --as-radius-s: 10px; --as-radius-m: 14px; --as-radius-l: 20px;
+  --as-radius-xl: 26px; --as-radius-xxl: 34px; --as-radius-capsule: 9999px;
+  --as-radius-sheet: 38px;        /* iOS 26 sheet corners nest into display corners */
+  --as-radius-window: 24px;       /* macOS 26 window corner */
+
+  /* Motion: spring-ish curves. Liquid Glass is gel-like; use springs, not ease-in-out. */
+  --as-ease-spring: linear(0, 0.009 1.1%, 0.036 2.3%, 0.145 4.9%, 0.318 7.9%, 0.554 11.6%, 0.8 15.9%, 1.006 20.4%, 1.07 22.9%, 1.11 25.5%, 1.128 28.3%, 1.121 31.7%, 1.031 43.7%, 0.996 51.6%, 0.989 60.3%, 0.998 74.8%, 1);
+  --as-ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --as-dur-fast: 160ms; --as-dur-base: 320ms; --as-dur-slow: 560ms;
+
+  /* ---------------- System colors (HIG Color → Specifications) ------------ */
+  --as-red:    light-dark(rgb(255 56 60),   rgb(255 66 69));
+  --as-orange: light-dark(rgb(255 141 40),  rgb(255 146 48));
+  --as-yellow: light-dark(rgb(255 204 0),   rgb(255 214 0));
+  --as-green:  light-dark(rgb(52 199 89),   rgb(48 209 88));
+  --as-mint:   light-dark(rgb(0 200 179),   rgb(0 218 195));
+  --as-teal:   light-dark(rgb(0 195 208),   rgb(0 210 224));
+  --as-cyan:   light-dark(rgb(0 192 232),   rgb(60 211 254));
+  --as-blue:   light-dark(rgb(0 136 255),   rgb(0 145 255));
+  --as-indigo: light-dark(rgb(97 85 245),   rgb(109 124 255));
+  --as-purple: light-dark(rgb(203 48 224),  rgb(219 52 242));
+  --as-pink:   light-dark(rgb(255 45 85),   rgb(255 55 95));
+  --as-brown:  light-dark(rgb(172 127 94),  rgb(183 138 102));
+  --as-gray:   light-dark(rgb(142 142 147), rgb(142 142 147));
+  --as-gray2:  light-dark(rgb(174 174 178), rgb(99 99 102));
+  --as-gray3:  light-dark(rgb(199 199 204), rgb(72 72 74));
+  --as-gray4:  light-dark(rgb(209 209 214), rgb(58 58 60));
+  --as-gray5:  light-dark(rgb(229 229 234), rgb(44 44 46));
+  --as-gray6:  light-dark(rgb(242 242 247), rgb(28 28 30));
+  --as-accent: var(--as-blue);   /* app accent color; override per brand */
+
+  /* Semantic (dynamic) colors — UIKit semantic values, adapt light/dark */
+  --as-label:            light-dark(rgb(0 0 0),              rgb(255 255 255));
+  --as-label-secondary:  light-dark(rgb(60 60 67 / .60),     rgb(235 235 245 / .60));
+  --as-label-tertiary:   light-dark(rgb(60 60 67 / .30),     rgb(235 235 245 / .30));
+  --as-label-quaternary: light-dark(rgb(60 60 67 / .18),     rgb(235 235 245 / .16));
+  --as-placeholder:      var(--as-label-tertiary);
+  --as-separator:        light-dark(rgb(60 60 67 / .29),     rgb(84 84 88 / .60));
+  --as-separator-opaque: light-dark(rgb(198 198 200),        rgb(56 56 58));
+  --as-link:             var(--as-blue);
+  --as-bg:               light-dark(rgb(255 255 255),        rgb(0 0 0));
+  --as-bg-secondary:     light-dark(rgb(242 242 247),        rgb(28 28 30));
+  --as-bg-tertiary:      light-dark(rgb(255 255 255),        rgb(44 44 46));
+  --as-bg-grouped:       light-dark(rgb(242 242 247),        rgb(0 0 0));
+  --as-bg-grouped-2:     light-dark(rgb(255 255 255),        rgb(28 28 30));
+  --as-bg-grouped-3:     light-dark(rgb(242 242 247),        rgb(44 44 46));
+  --as-fill:             light-dark(rgb(120 120 128 / .20),  rgb(120 120 128 / .36));
+  --as-fill-secondary:   light-dark(rgb(120 120 128 / .16),  rgb(120 120 128 / .32));
+  --as-fill-tertiary:    light-dark(rgb(118 118 128 / .12),  rgb(118 118 128 / .24));
+  --as-fill-quaternary:  light-dark(rgb(116 116 128 / .08),  rgb(118 118 128 / .18));
+
+  /* Standard materials (content layer). Thickness = opacity of fill. */
+  --as-material-ultrathin: light-dark(rgb(255 255 255 / .55), rgb(30 30 30 / .55));
+  --as-material-thin:      light-dark(rgb(255 255 255 / .70), rgb(30 30 30 / .70));
+  --as-material-regular:   light-dark(rgb(255 255 255 / .82), rgb(30 30 30 / .82));
+  --as-material-thick:     light-dark(rgb(255 255 255 / .93), rgb(30 30 30 / .93));
+  --as-material-blur: 30px;
+
+  /* ---------------- Liquid Glass material tokens --------------------------
+     Layers (WWDC25/219): lensing → blur/luminosity → tint → highlights → shadow
+     → interactive glow. Glass has NO inherent color; it takes color from behind. */
+  --as-glass-blur: 14px;                 /* regular, small elements */
+  --as-glass-blur-large: 40px;           /* regular, large surfaces (sidebar/menu/sheet) */
+  --as-glass-saturate: 1.6;
+  --as-glass-fill: light-dark(rgb(255 255 255 / .42), rgb(40 40 44 / .42));      /* luminosity adaptation */
+  --as-glass-fill-large: light-dark(rgb(255 255 255 / .70), rgb(36 36 40 / .72)); /* more opaque when large */
+  --as-glass-fg: light-dark(rgb(0 0 0 / .88), rgb(255 255 255 / .94));
+  --as-glass-fg-secondary: light-dark(rgb(0 0 0 / .55), rgb(255 255 255 / .62));
+  --as-glass-rim-hi: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .38));  /* specular rim, lit side */
+  --as-glass-rim-lo: light-dark(rgb(255 255 255 / .28), rgb(255 255 255 / .08));  /* shadow side */
+  --as-glass-edge:   light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .06));         /* hairline edge for definition */
+  --as-glass-shadow: 0 8px 24px -6px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .14);
+  --as-glass-shadow-large: 0 24px 60px -12px rgb(0 0 0 / .32), 0 6px 16px -6px rgb(0 0 0 / .16);
+  --as-glass-light-angle: 145deg;        /* virtual light source direction (top-left) */
+  --as-glass-lens: 0;                    /* set to 1 by liquid-glass.js when displacement filter is active */
+  --as-glass-tint: transparent;          /* stained-glass tint; use only for primary actions */
+}
+
+/* Explicit theme override (data-theme="light|dark" on <html>) */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
+
+/* Increased contrast variants of system colors (HIG Color spec) */
+@media (prefers-contrast: more) {
+  :root {
+    --as-red:    light-dark(rgb(233 21 45),   rgb(255 97 101));
+    --as-orange: light-dark(rgb(197 83 0),    rgb(255 160 86));
+    --as-yellow: light-dark(rgb(161 106 0),   rgb(254 223 67));
+    --as-green:  light-dark(rgb(0 137 50),    rgb(74 217 104));
+    --as-mint:   light-dark(rgb(0 133 117),   rgb(84 223 203));
+    --as-teal:   light-dark(rgb(0 129 152),   rgb(59 221 236));
+    --as-cyan:   light-dark(rgb(0 126 174),   rgb(109 217 255));
+    --as-blue:   light-dark(rgb(30 110 244),  rgb(92 184 255));
+    --as-indigo: light-dark(rgb(86 74 222),   rgb(167 170 255));
+    --as-purple: light-dark(rgb(176 47 194),  rgb(234 141 255));
+    --as-pink:   light-dark(rgb(231 18 77),   rgb(255 138 196));
+    --as-brown:  light-dark(rgb(149 109 81),  rgb(219 166 121));
+    --as-gray:   light-dark(rgb(108 108 112), rgb(174 174 178));
+    --as-gray2:  light-dark(rgb(142 142 147), rgb(124 124 128));
+    --as-gray3:  light-dark(rgb(174 174 178), rgb(84 84 86));
+    --as-gray4:  light-dark(rgb(188 188 192), rgb(68 68 70));
+    --as-gray5:  light-dark(rgb(216 216 220), rgb(54 54 56));
+    --as-gray6:  light-dark(rgb(235 235 240), rgb(36 36 38));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1. Base + typography (iOS Large default Dynamic Type; macOS via data-platform)
+   -------------------------------------------------------------------------- */
+.as-root, .as-body {
+  font-family: var(--as-font-text);
+  font-size: 17px; line-height: 22px;
+  color: var(--as-label);
+  background: var(--as-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern";
+}
+.as-text-largetitle { font: 400 34px/41px var(--as-font-display); letter-spacing: .4px; }
+.as-text-title1     { font: 400 28px/34px var(--as-font-display); letter-spacing: .36px; }
+.as-text-title2     { font: 400 22px/28px var(--as-font-display); letter-spacing: .35px; }
+.as-text-title3     { font: 400 20px/25px var(--as-font-display); letter-spacing: .38px; }
+.as-text-headline   { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-text-body       { font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-text-callout    { font: 400 16px/21px var(--as-font-text); letter-spacing: -.32px; }
+.as-text-subhead    { font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; }
+.as-text-footnote   { font: 400 13px/18px var(--as-font-text); letter-spacing: -.08px; }
+.as-text-caption1   { font: 400 12px/16px var(--as-font-text); letter-spacing: 0; }
+.as-text-caption2   { font: 400 11px/13px var(--as-font-text); letter-spacing: .07px; }
+/* Emphasized weights per HIG table */
+.as-text-largetitle.as-em, .as-text-title1.as-em, .as-text-title2.as-em { font-weight: 700; }
+.as-text-title3.as-em, .as-text-body.as-em, .as-text-callout.as-em, .as-text-subhead.as-em,
+.as-text-footnote.as-em, .as-text-caption1.as-em, .as-text-caption2.as-em { font-weight: 600; }
+/* macOS built-in text styles */
+[data-platform="macos"] .as-root, [data-platform="macos"] .as-body { font-size: 13px; line-height: 16px; }
+[data-platform="macos"] .as-text-largetitle { font: 400 26px/32px var(--as-font-display); }
+[data-platform="macos"] .as-text-title1     { font: 400 22px/26px var(--as-font-display); }
+[data-platform="macos"] .as-text-title2     { font: 400 17px/22px var(--as-font-text); }
+[data-platform="macos"] .as-text-title3     { font: 400 15px/20px var(--as-font-text); }
+[data-platform="macos"] .as-text-headline   { font: 700 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-body       { font: 400 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-callout    { font: 400 12px/15px var(--as-font-text); }
+[data-platform="macos"] .as-text-subhead    { font: 400 11px/14px var(--as-font-text); }
+[data-platform="macos"] .as-text-footnote,
+[data-platform="macos"] .as-text-caption1   { font: 400 10px/13px var(--as-font-text); }
+[data-platform="macos"] .as-text-caption2   { font: 500 10px/13px var(--as-font-text); }
+.as-secondary { color: var(--as-label-secondary); }
+.as-tertiary  { color: var(--as-label-tertiary); }
+.as-mono { font-family: var(--as-font-mono); font-variant-numeric: tabular-nums; }
+.as-tabular { font-variant-numeric: tabular-nums; }
+.as-readable { max-width: var(--as-readable-width); }
+
+/* --------------------------------------------------------------------------
+   2. Shapes
+   -------------------------------------------------------------------------- */
+.as-capsule { border-radius: var(--as-radius-capsule); }
+/* Concentric: a container declares --as-container-radius on itself; a child
+   with .as-concentric sets --as-concentric-inset to its distance from the
+   container edge (usually the container padding). Optional minimum radius. */
+.as-container { border-radius: var(--as-container-radius, var(--as-radius-xl)); }
+.as-concentric {
+  border-radius: max(var(--as-concentric-min, 0px),
+                     calc(var(--as-container-radius, var(--as-radius-xl)) - var(--as-concentric-inset, 0px)));
+}
+
+/* --------------------------------------------------------------------------
+   3. Standard materials (content layer only — never for controls/navigation)
+   -------------------------------------------------------------------------- */
+.as-material {
+  background: var(--as-material-regular);
+  -webkit-backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+  backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+}
+.as-material-ultrathin { background: var(--as-material-ultrathin); }
+.as-material-thin      { background: var(--as-material-thin); }
+.as-material-thick     { background: var(--as-material-thick); }
+/* Vibrant labels/fills on materials (use these instead of plain grays) */
+.as-vibrant            { color: var(--as-label); mix-blend-mode: plus-lighter; }
+.as-vibrant-secondary  { color: var(--as-label-secondary); }
+
+/* --------------------------------------------------------------------------
+   4. Liquid Glass — the material
+   -------------------------------------------------------------------------- */
+.as-glass {
+  --_blur: var(--as-glass-blur);
+  --_fill: var(--as-glass-fill);
+  --_shadow: var(--as-glass-shadow);
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--as-glass-radius, var(--as-radius-capsule));
+  color: var(--as-glass-fg);
+  background:
+    /* stained-glass tint sits between lens and highlights */
+    linear-gradient(var(--as-glass-tint), var(--as-glass-tint)),
+    var(--_fill);
+  -webkit-backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)));
+  backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)));
+  box-shadow:
+    var(--_shadow),
+    inset 0 0 0 0.5px var(--as-glass-edge);
+  transition:
+    transform var(--as-dur-base) var(--as-ease-spring),
+    box-shadow var(--as-dur-base) var(--as-ease-soft),
+    background-color var(--as-dur-base) var(--as-ease-soft),
+    color var(--as-dur-base) var(--as-ease-soft),
+    border-radius var(--as-dur-base) var(--as-ease-soft);
+  will-change: transform;
+}
+/* Highlights layer: a light source at --as-glass-light-angle produces a rim
+   that is bright on the lit side and faint on the far side (gradient border
+   drawn with a mask so the interior stays clear). */
+.as-glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
+  padding: 1.25px;
+  background: linear-gradient(var(--as-glass-light-angle),
+      var(--as-glass-rim-hi) 0%, var(--as-glass-rim-lo) 30%, transparent 48%,
+      transparent 60%, var(--as-glass-rim-lo) 82%, var(--as-glass-rim-hi) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: .95;
+}
+/* Interactive glow: "illuminates from within, starting under the fingertip" */
+.as-glass::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(160px 160px at var(--as-px, 50%) var(--as-py, 50%),
+      rgb(255 255 255 / .55), rgb(255 255 255 / .18) 40%, transparent 72%);
+  opacity: var(--as-glow, 0);
+  transition: opacity var(--as-dur-base) var(--as-ease-soft);
+}
+.as-glass > * { position: relative; z-index: 2; }
+
+/* Variants */
+.as-glass-clear {
+  /* Clear: permanently more transparent, no luminosity adaptation. Needs bold,
+     bright content on top and (if the background is bright) a 35% dimming layer. */
+  --_fill: rgb(0 0 0 / 0);
+  --_blur: 3px;
+  color: rgb(255 255 255 / .96);
+  --as-glass-rim-hi: rgb(255 255 255 / .7);
+  --as-glass-rim-lo: rgb(255 255 255 / .18);
+}
+.as-glass-clear.as-glass-dimmed { --_fill: rgb(0 0 0 / .35); }
+.as-glass-large {
+  /* Sidebars, menus, sheets, popovers: thicker material, deeper shadows, more
+     opaque, softer scattering. Does NOT flip light/dark with content. */
+  --_blur: var(--as-glass-blur-large);
+  --_fill: var(--as-glass-fill-large);
+  --_shadow: var(--as-glass-shadow-large);
+  --as-glass-radius: var(--as-radius-xl);
+}
+.as-glass-tinted, .as-glass-prominent {
+  /* Stained glass. Tint the BACKGROUND (not the label) for primary actions. */
+  --as-glass-tint: color-mix(in oklab, var(--as-tint, var(--as-accent)) 78%, transparent);
+  color: #fff;
+  --as-glass-rim-hi: rgb(255 255 255 / .75);
+}
+/* Adaptivity: small elements flip light/dark based on what's behind them.
+   liquid-glass.js sets data-glass-scheme by sampling the backdrop; or set it
+   yourself when you know the content region is dark/light. */
+.as-glass[data-glass-scheme="dark"]  { --_fill: rgb(40 40 44 / .42); --as-glass-fg: rgb(255 255 255 / .94); --as-glass-fg-secondary: rgb(255 255 255 / .62); --as-glass-rim-hi: rgb(255 255 255 / .38); --as-glass-rim-lo: rgb(255 255 255 / .08); color: var(--as-glass-fg); }
+.as-glass[data-glass-scheme="light"] { --_fill: rgb(255 255 255 / .42); --as-glass-fg: rgb(0 0 0 / .88); --as-glass-fg-secondary: rgb(0 0 0 / .55); --as-glass-rim-hi: rgb(255 255 255 / .85); --as-glass-rim-lo: rgb(255 255 255 / .28); color: var(--as-glass-fg); }
+.as-glass[data-glass-over="text"] { --_shadow: 0 10px 28px -6px rgb(0 0 0 / .34), 0 2px 6px -2px rgb(0 0 0 / .2); }
+/* Focus recedes: window/pane loses focus → glass visually recedes */
+.as-glass[data-glass-focus="inactive"] { opacity: .78; --_shadow: 0 2px 8px -2px rgb(0 0 0 / .1); }
+
+/* Interactivity (Glass.interactive / .glass button style): flex + energize */
+.as-glass-interactive { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
+.as-glass-interactive:hover  { --as-glow: .35; }
+.as-glass-interactive:active, .as-glass-interactive.is-pressed {
+  --as-glow: 1;
+  transform: scale(1.06);
+  transition-duration: var(--as-dur-fast);
+}
+.as-glass-interactive:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
+
+/* Glass groups: several items share ONE glass background (toolbar groups,
+   tab bars). Children must NOT be glass themselves — never glass on glass. */
+.as-glass-group { display: inline-flex; align-items: center; gap: 2px; padding: 4px; }
+.as-glass-group > .as-glass { display: none !important; } /* guard: no nested glass */
+.as-glass-group > .as-item {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: calc(var(--as-hit-min) - 8px); min-height: calc(var(--as-hit-min) - 8px);
+  padding: 0 14px; border-radius: var(--as-radius-capsule); border: 0; background: transparent;
+  color: inherit; font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
+  transition: background var(--as-dur-fast) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-spring);
+}
+.as-glass-group > .as-item:hover { background: rgb(128 128 128 / .12); }
+.as-glass-group > .as-item:active { transform: scale(.94); }
+.as-glass-group > .as-item[aria-pressed="true"], .as-glass-group > .as-item.is-selected {
+  background: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .16));
+  box-shadow: 0 1px 4px rgb(0 0 0 / .12);
+}
+.as-glass-group > .as-item.is-selected { color: var(--as-accent); }
+
+/* Element lifts INTO glass only while interacting (sliders, toggles knobs) */
+.as-glass-transient { transition: all var(--as-dur-base) var(--as-ease-spring); }
+.as-glass-transient:not(:active):not(.is-dragging) { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 3px rgb(0 0 0 / .15); }
+
+/* Dimming layer for clear glass / modality */
+.as-dim { position: absolute; inset: 0; background: rgb(0 0 0 / .35); pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   5. Scroll edge effect (replaces bar backgrounds & hard dividers)
+   -------------------------------------------------------------------------- */
+.as-scroll-edge {
+  position: sticky; z-index: 10; background: transparent; pointer-events: none;
+}
+.as-scroll-edge > * { pointer-events: auto; }
+.as-scroll-edge::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+  /* soft style: blur + fade content into the background near the edge */
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--as-bg) 70%, transparent), transparent);
+}
+.as-scroll-edge.as-edge-top    { top: 0; padding-bottom: 8px; }
+.as-scroll-edge.as-edge-bottom { bottom: 0; padding-top: 8px; }
+.as-scroll-edge.as-edge-bottom::before { -webkit-mask-image: linear-gradient(to top, #000 30%, transparent); mask-image: linear-gradient(to top, #000 30%, transparent); background: linear-gradient(to top, color-mix(in srgb, var(--as-bg) 70%, transparent), transparent); }
+/* hard style (macOS, pinned headers): uniform, more opaque, no gradient */
+.as-scroll-edge.as-edge-hard::before { -webkit-mask-image: none; mask-image: none; background: color-mix(in srgb, var(--as-bg) 80%, transparent); box-shadow: 0 .5px 0 var(--as-separator); }
+
+/* --------------------------------------------------------------------------
+   6. Components
+   -------------------------------------------------------------------------- */
+/* Buttons — sizes mini/small/regular/large/xlarge, capsule by default */
+.as-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: var(--as-hit-min); padding: 0 20px; border: 0; border-radius: var(--as-radius-capsule);
+  font: 500 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-accent);
+  background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform var(--as-dur-base) var(--as-ease-spring), opacity var(--as-dur-fast), background var(--as-dur-fast);
+}
+.as-button:active { transform: scale(.96); opacity: .7; }           /* always a press state */
+.as-button:disabled { opacity: .35; pointer-events: none; }
+.as-button-filled { background: var(--as-accent); color: #fff; }
+.as-button-tinted { background: color-mix(in oklab, var(--as-accent) 15%, transparent); }
+.as-button-gray   { background: var(--as-fill); color: var(--as-label); }
+.as-button-bordered { box-shadow: inset 0 0 0 1px var(--as-separator-opaque); color: var(--as-label); }
+.as-button-glass  { /* compose: class="as-glass as-glass-interactive as-button as-button-glass" */
+  color: var(--as-glass-fg);
+  background: linear-gradient(var(--as-glass-tint), var(--as-glass-tint)), var(--_fill); }
+.as-button-glass.as-glass-tinted, .as-button-glass.as-glass-prominent, .as-button-glass.as-glass-clear { color: #fff; }
+.as-button-glass:active { transform: scale(1.06); opacity: 1; }
+.as-button-mini   { min-height: 28px; padding: 0 12px; font-size: 13px; line-height: 18px; }
+.as-button-small  { min-height: 32px; padding: 0 14px; font-size: 15px; line-height: 20px; }
+.as-button-large  { min-height: 50px; padding: 0 24px; }
+.as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
+.as-button-icon   { width: var(--as-hit-min); padding: 0; }
+.as-button-destructive { color: var(--as-red); }
+.as-button-destructive.as-button-filled { background: var(--as-red); color: #fff; }
+[data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
+[data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
+
+/* Toolbar: transparent bar; items float in glass groups; scroll edge under it */
+.as-toolbar { display: flex; align-items: center; gap: 12px; padding: 8px var(--as-margin); min-height: 60px; }
+.as-toolbar .as-spacer { flex: 1; }
+.as-toolbar .as-glass-group > .as-item { padding: 0 12px; }
+.as-toolbar .as-item svg { width: 20px; height: 20px; }
+.as-toolbar-title { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-label); }
+
+/* Tab bar (iOS): floating capsule, search tab separate at trailing end */
+.as-tabbar { position: fixed; left: 0; right: 0; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 10px; padding: 0 var(--as-margin); z-index: 20; pointer-events: none; }
+.as-tabbar > * { pointer-events: auto; }
+.as-tabbar .as-glass-group { padding: 5px; gap: 0; transition: transform var(--as-dur-slow) var(--as-ease-spring), width var(--as-dur-slow) var(--as-ease-spring); }
+.as-tabbar .as-tab { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: 48px; padding: 4px 10px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-glass-fg-secondary); font: 500 10px/12px var(--as-font-text); cursor: pointer; transition: color var(--as-dur-fast), background var(--as-dur-base) var(--as-ease-spring), transform var(--as-dur-base) var(--as-ease-spring); }
+.as-tabbar .as-tab svg { width: 24px; height: 24px; }
+.as-tabbar .as-tab:active { transform: scale(.92); }
+.as-tabbar .as-tab.is-selected { color: var(--as-accent); background: light-dark(rgb(255 255 255 / .9), rgb(255 255 255 / .14)); box-shadow: 0 1px 4px rgb(0 0 0 / .12); }
+.as-tabbar .as-tab-search { width: 56px; height: 56px; min-width: 0; padding: 0; }
+/* minimize on scroll: liquid-glass.js toggles .is-minimized */
+.as-tabbar.is-minimized .as-glass-group { transform: translateY(8px) scale(.82); opacity: .9; }
+.as-tabbar.is-minimized .as-tab:not(.is-selected):not(.as-tab-search) { display: none; }
+.as-tabbar.is-minimized .as-tab-search { width: 46px; height: 46px; }
+.as-tabbar.is-minimized .as-tab span { display: none; }
+
+/* Sidebar (iPad/Mac): inset floating glass; content extends beneath */
+.as-sidebar { position: absolute; inset: 12px auto 12px 12px; width: 280px; padding: 12px; overflow: auto; display: flex; flex-direction: column; gap: 2px; z-index: 15; }
+.as-sidebar .as-row { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border-radius: var(--as-radius-s); color: var(--as-glass-fg); font: 400 15px/20px var(--as-font-text); cursor: pointer; }
+.as-sidebar .as-row:hover { background: rgb(128 128 128 / .12); }
+.as-sidebar .as-row.is-selected { background: light-dark(rgb(0 0 0 / .08), rgb(255 255 255 / .14)); font-weight: 600; }
+.as-sidebar .as-row svg { width: 20px; height: 20px; color: var(--as-accent); }
+.as-sidebar .as-section-title { padding: 14px 12px 6px; font: 600 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
+.as-with-sidebar { padding-left: 304px; }
+/* Background extension effect: mirror + blur content beneath sidebar/inspector */
+.as-bg-extension { position: absolute; inset: 0 auto 0 0; width: 304px; overflow: hidden; z-index: 0; }
+.as-bg-extension > img, .as-bg-extension > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); filter: blur(24px) saturate(1.2); }
+
+/* Sheet: inset half-sheet with large radius; becomes opaque at full height */
+.as-sheet-backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / .30); z-index: 30; opacity: 0; pointer-events: none; transition: opacity var(--as-dur-base) var(--as-ease-soft); }
+.as-sheet-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.as-sheet { position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto;
+  --as-glass-radius: var(--as-radius-sheet); transform: translateY(110%); transition: transform var(--as-dur-slow) var(--as-ease-spring), border-radius var(--as-dur-base), background var(--as-dur-base), left var(--as-dur-base), right var(--as-dur-base), bottom var(--as-dur-base), max-height var(--as-dur-slow) var(--as-ease-spring); }
+.as-sheet.is-open { transform: translateY(0); }
+.as-sheet.is-full { left: 0; right: 0; bottom: 0; max-height: 100vh; --as-glass-radius: var(--as-radius-sheet) var(--as-glass-radius, 0) 0 0; border-radius: var(--as-radius-sheet) var(--as-radius-sheet) 0 0; --_fill: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.as-sheet .as-grabber { width: 36px; height: 5px; margin: 6px auto 14px; border-radius: 3px; background: var(--as-label-tertiary); }
+.as-sheet .as-sheet-title { text-align: left; font: 700 20px/25px var(--as-font-display); margin: 0 0 12px; }  /* bolder, left-aligned */
+
+/* Menu / popover: pops open from its source; thicker glass; icons lead items */
+.as-menu { position: absolute; min-width: 250px; padding: 6px; z-index: 40; transform-origin: var(--as-origin, top left); --as-glass-radius: var(--as-radius-l);
+  opacity: 0; transform: scale(.4); pointer-events: none; transition: transform var(--as-dur-base) var(--as-ease-spring), opacity var(--as-dur-fast); }
+.as-menu.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.as-menu .as-menu-item { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--as-radius-m); color: var(--as-glass-fg); font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; cursor: pointer; }
+.as-menu .as-menu-item:hover { background: rgb(128 128 128 / .14); }
+.as-menu .as-menu-item svg { width: 20px; height: 20px; opacity: .9; }
+.as-menu .as-menu-item .as-shortcut { margin-left: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
+.as-menu .as-menu-item.as-destructive { color: var(--as-red); }
+.as-menu .as-menu-sep { height: .5px; margin: 6px 0; background: var(--as-separator); }
+[data-platform="macos"] .as-menu .as-menu-item { min-height: 28px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
+
+/* Alert: bolder, left-aligned text */
+.as-alert { width: 270px; padding: 20px 16px 8px; --as-glass-radius: var(--as-radius-xl); text-align: left; }
+.as-alert h2 { margin: 0 0 4px; font: 700 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-alert p  { margin: 0 0 16px; font: 400 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
+.as-alert .as-actions { display: flex; gap: 8px; margin: 0 -8px; }
+.as-alert .as-actions .as-button { flex: 1; }
+
+/* Segmented control: selection lifts into glass */
+.as-segmented { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--as-radius-capsule); background: var(--as-fill-tertiary); position: relative; }
+.as-segmented .as-segment { position: relative; z-index: 1; min-height: 32px; padding: 0 16px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-label); font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer; }
+.as-segmented .as-segment.is-selected { background: light-dark(rgb(255 255 255), rgb(99 99 102)); box-shadow: 0 2px 6px rgb(0 0 0 / .14), inset 0 0 0 .5px rgb(255 255 255 / .5); }
+.as-segmented .as-segment:active { transform: scale(1.04); }
+
+/* Toggle (switch): capsule mirrors slider proportions; knob lifts into glass on drag */
+.as-toggle { position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: var(--as-radius-capsule); background: var(--as-fill); cursor: pointer; transition: background var(--as-dur-base) var(--as-ease-soft); -webkit-tap-highlight-color: transparent; }
+.as-toggle[aria-checked="true"] { background: var(--as-green); }
+.as-toggle .as-knob { position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle[aria-checked="true"] .as-knob { transform: translateX(20px); }
+.as-toggle:active .as-knob { width: 33px; }
+.as-toggle[aria-checked="true"]:active .as-knob { transform: translateX(14px); }
+
+/* Slider: transparent liquid lens knob to observe the value beneath */
+.as-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; }
+.as-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
+.as-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring); }
+.as-slider:active::-webkit-slider-thumb { transform: scaleX(1.35); background: rgb(255 255 255 / .6); box-shadow: 0 6px 16px rgb(0 0 0 / .18), inset 0 0 0 1px rgb(255 255 255 / .8); }
+.as-slider::-moz-range-track { height: 6px; border-radius: 3px; background: var(--as-fill); }
+.as-slider::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--as-accent); }
+.as-slider::-moz-range-thumb { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15); }
+
+/* Search field: own glass surface (compose with .as-glass) */
+.as-search { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; }
+.as-search input { flex: 1; border: 0; background: transparent; color: inherit; font: 400 17px/22px var(--as-font-text); outline: none; }
+.as-search input::placeholder { color: var(--as-glass-fg-secondary); }
+.as-search svg { width: 18px; height: 18px; color: var(--as-glass-fg-secondary); }
+
+/* Inset grouped list: larger radius and row height (iOS 26) */
+.as-list { margin: 0 var(--as-margin); padding: 0; list-style: none; border-radius: var(--as-radius-xl); background: var(--as-bg-grouped-2); overflow: hidden; }
+.as-list li { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 16px; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-list li + li { box-shadow: inset 0 .5px 0 var(--as-separator); }
+.as-list li .as-value { margin-left: auto; color: var(--as-label-secondary); }
+.as-list-header { margin: 24px calc(var(--as-margin) + 16px) 8px; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); text-transform: none; } /* title-style capitalization, not ALL CAPS */
+.as-grouped { background: var(--as-bg-grouped); }
+
+/* Badge / status */
+.as-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-red); color: #fff; font: 600 12px/18px var(--as-font-text); text-align: center; }
+
+/* Navigation bar large title */
+.as-navbar { display: flex; flex-direction: column; padding: 0 var(--as-margin); }
+.as-navbar .as-large-title { font: 700 34px/41px var(--as-font-display); letter-spacing: .4px; margin: 4px 0 8px; }
+
+/* --------------------------------------------------------------------------
+   7. Accessibility + user preferences (applied system-wide, automatically)
+   -------------------------------------------------------------------------- */
+/* Reduce Transparency → frostier, obscures more of what's behind */
+@media (prefers-reduced-transparency: reduce) {
+  .as-glass { --_fill: light-dark(rgb(245 245 247 / .92), rgb(44 44 46 / .92)); --_blur: 40px; }
+  .as-glass::before { opacity: .5; }
+  .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
+}
+:root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
+/* Increase Contrast → predominantly black/white with a contrasting border */
+@media (prefers-contrast: more) {
+  .as-glass { --_fill: light-dark(rgb(255 255 255 / .96), rgb(0 0 0 / .96)); --_blur: 0px; box-shadow: var(--_shadow), inset 0 0 0 1.5px var(--as-label); }
+  .as-glass::before, .as-glass::after { display: none; }
+  .as-glass-tinted, .as-glass-prominent { --as-glass-tint: var(--as-tint, var(--as-accent)); }
+}
+/* Reduce Motion → no elastic / morphing, keep opacity changes */
+@media (prefers-reduced-motion: reduce) {
+  .as-glass, .as-glass *, .as-button, .as-sheet, .as-menu, .as-toggle .as-knob, .as-tabbar .as-glass-group { transition-duration: 1ms !important; }
+  .as-glass-interactive:active, .as-glass-interactive.is-pressed { transform: none; }
+}
+/* Forced colors (Windows High Contrast) */
+@media (forced-colors: active) { .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; } .as-glass::before, .as-glass::after { display: none; } }
+/* No backdrop-filter support → solid material fallback */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .as-glass { --_fill: light-dark(rgb(250 250 252 / .94), rgb(40 40 44 / .94)); }
+}
+
+/* Utilities */
+.as-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.as-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.as-safe-bottom { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
