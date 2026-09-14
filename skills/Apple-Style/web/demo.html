@@ -215,11 +215,9 @@
   document.getElementById('sheetClose').addEventListener('click', close); bd.addEventListener('click', close);
   function close() { bd.classList.remove('is-open'); sheet.classList.remove('is-open', 'is-full'); }
   document.getElementById('sheetFull').addEventListener('click', () => sheet.classList.toggle('is-full'));
-  // Toggles / segments / slider fill
-  document.querySelectorAll('.as-toggle').forEach(t => t.addEventListener('click', () => t.setAttribute('aria-checked', t.getAttribute('aria-checked') !== 'true')));
-  document.querySelectorAll('.as-segmented').forEach(s => s.addEventListener('click', e => { const b = e.target.closest('.as-segment'); if (!b) return; s.querySelectorAll('.as-segment').forEach(x => { x.classList.toggle('is-selected', x === b); x.setAttribute('aria-selected', x === b); }); }));
+  // Toggles, segmented controls and sliders are owned by LiquidGlass.init():
+  // it adds the drag gesture and keeps their state, and emits `change`.
   document.querySelectorAll('.as-glass-group[role=tablist] .as-tab, .as-glass-group .as-item:not([aria-label])').forEach(b => b.addEventListener('click', () => { const g = b.parentElement; if (g.closest('.pref')) return; g.querySelectorAll('.as-tab,.as-item').forEach(x => x.classList.toggle('is-selected', x === b)); }));
-  document.querySelector('.as-slider').addEventListener('input', e => e.target.style.setProperty('--as-value', e.target.value + '%'));
   // Preferences
   const html = document.documentElement; const themes = ['Auto', 'light', 'dark']; let ti = 0;
   document.getElementById('themeBtn').addEventListener('click', e => { ti = (ti + 1) % 3; const t = themes[ti]; t === 'Auto' ? html.removeAttribute('data-theme') : html.dataset.theme = t; e.target.textContent = t[0].toUpperCase() + t.slice(1); LiquidGlass.refresh(); });

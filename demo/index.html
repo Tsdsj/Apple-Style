@@ -1,0 +1,614 @@
+<!doctype html>
+<!-- Apple-Style demo — 独立演示站，只存在于 demo/ 目录。
+     样式与运行时直接引用 ../skills/Apple-Style/web/，不复制、不修改技能文件。 -->
+<html lang="zh-Hans" class="as-root i18n-pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-i18n="doc.title">Apple-Style · Design system demo</title>
+<meta name="color-scheme" content="light dark">
+
+<!-- 技能本体：改这两个文件，刷新本页即可看到效果 -->
+<link rel="stylesheet" href="../skills/Apple-Style/web/apple-style.css">
+<!-- 仅本演示站使用的排版与调试样式 -->
+<link rel="stylesheet" href="demo.css">
+</head>
+
+<body class="as-body as-grouped as-safe-bottom">
+
+<!-- ── 顶部工具栏：栏透明，元素浮在玻璃分组里，下方是滚动边缘效果 ───────── -->
+<header class="as-scroll-edge as-edge-top" id="topbar">
+  <div class="as-toolbar">
+    <div class="as-glass as-glass-group">
+      <button class="as-item" data-i18n-aria="tb.back" aria-label="Back">
+        <svg class="as-icon" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+    </div>
+    <div class="as-toolbar-title" data-i18n="app.title">Apple-Style Demo</div>
+    <div class="as-spacer"></div>
+    <div class="as-glass as-glass-group">
+      <button class="as-item" data-i18n-aria="tb.favorite" aria-label="Favorite">
+        <svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg>
+      </button>
+      <button class="as-item" data-i18n-aria="tb.collect" aria-label="Add to collection">
+        <svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10M18 15v6M15 18h6"/></svg>
+      </button>
+    </div>
+    <div class="as-glass as-glass-group">
+      <button class="as-item" id="shareBtn" aria-haspopup="menu" data-i18n-aria="tb.share" aria-label="Share">
+        <svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>
+      </button>
+    </div>
+    <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass as-button-small" data-i18n="tb.done">Done</button>
+  </div>
+</header>
+
+<!-- 共享菜单：从触发它的按钮形变而来 -->
+<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" hidden>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg><span data-i18n="menu.copy">Copy</span><span class="as-shortcut">⌘C</span></div>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg><span data-i18n="menu.share">Share…</span></div>
+  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg><span data-i18n="menu.addhome">Add to Home Screen</span></div>
+  <div class="as-menu-sep"></div>
+  <div class="as-menu-item as-destructive" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg><span data-i18n="menu.delete">Delete</span></div>
+</div>
+
+<!-- ── Hero：媒体内容之上使用 Clear 变体 ─────────────────────────────── -->
+<section class="hero" data-glass-scheme-hint="dark">
+  <canvas id="heroArt" aria-hidden="true"></canvas>
+  <div class="hero-caption">
+    <p class="eyebrow" data-i18n="hero.eyebrow">Apple-Style skill set · live preview</p>
+    <h1>Liquid Glass</h1>
+    <p class="lede" data-i18n="hero.sub">A digital meta-material that bends and shapes light.</p>
+  </div>
+  <div class="hero-controls">
+    <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass as-button-icon" data-chroma="on" data-i18n-aria="hero.play" aria-label="Play">
+      <svg class="as-icon" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>
+    </button>
+    <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass" data-chroma="on" id="heroSheet" data-i18n="hero.details">Details</button>
+  </div>
+</section>
+
+<!-- ── 主体：左侧目录 + 右侧内容 ─────────────────────────────────────── -->
+<div class="shell">
+  <!-- 目录（大屏显示，由 demo.js 根据 section 自动生成） -->
+  <aside class="toc">
+    <nav class="as-glass as-glass-large toc-inner" data-lens="off" aria-labelledby="tocTitle">
+      <p class="toc-title" id="tocTitle" data-i18n="nav.toc">Contents</p>
+      <div id="tocList"></div>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+  <!-- 关于本页 ------------------------------------------------------- -->
+  <section class="section" id="s-overview" data-nav="nav.overview">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="ov.title">About this demo</h2>
+      <span class="src">skills/Apple-Style/SKILL.md</span>
+    </header>
+    <p class="prose" data-i18n-html="ov.desc"></p>
+    <div class="chips" id="statusChips"></div>
+    <p class="prose as-text-footnote as-secondary" data-i18n="ov.tip"></p>
+  </section>
+
+  <!-- 两层模型 ------------------------------------------------------- -->
+  <section class="section" id="s-layers" data-nav="nav.layers">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="ly.title">Two layers</h2>
+      <span class="src">cheatsheets/design-principles.md</span>
+    </header>
+    <p class="prose" data-i18n="ly.desc"></p>
+
+    <div class="compare">
+      <div class="panel good">
+        <p class="verdict"><span class="mark">✓</span><span data-i18n="ly.good">Correct</span></p>
+        <div class="stage stage-photo">
+          <div class="card" style="--as-container-radius: 26px">
+            <div class="thumb" aria-hidden="true"></div>
+            <p class="as-text-headline" data-i18n="ly.card.title">Yosemite</p>
+            <p class="as-text-footnote as-secondary" data-i18n="ly.card.body">California · National Park</p>
+            <span class="tag" data-i18n="ly.layer.content">Content layer</span>
+          </div>
+          <div class="as-glass as-glass-group float-group">
+            <button class="as-item is-selected" data-i18n="ct.seg.map">Map</button>
+            <button class="as-item" data-i18n="ct.seg.satellite">Satellite</button>
+          </div>
+          <span class="tag tag-float" data-i18n="ly.layer.control">Control layer</span>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="ly.good.d"></p>
+        <code class="snippet">.card { background: var(--as-bg-grouped-2) }</code>
+      </div>
+
+      <div class="panel bad">
+        <p class="verdict"><span class="mark">✗</span><span data-i18n="ly.bad">Wrong</span></p>
+        <div class="stage stage-photo">
+          <!-- 故意示范错误：内容层卡片使用玻璃 -->
+          <div class="as-glass card card-glass" style="--as-glass-radius: 26px">
+            <div class="thumb" aria-hidden="true"></div>
+            <p class="as-text-headline" data-i18n="ly.card.title">Yosemite</p>
+            <p class="as-text-footnote as-secondary" data-i18n="ly.card.body">California · National Park</p>
+          </div>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="ly.bad.d"></p>
+        <code class="snippet">.card.as-glass  /* 不要这样做 */</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- 材质 ----------------------------------------------------------- -->
+  <section class="section" id="s-material" data-nav="nav.material">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="mt.title">Materials</h2>
+      <span class="src">cheatsheets/materials-and-liquid-glass.md</span>
+    </header>
+    <p class="prose" data-i18n="mt.desc"></p>
+
+    <div class="band band-dark">
+      <p class="band-label" data-i18n="mt.ondark">Over dark content</p>
+      <div class="row">
+        <button class="as-glass as-glass-interactive as-button as-button-glass" data-chroma="on" data-i18n="mt.regular">Regular</button>
+        <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass" data-i18n="mt.tinted">Tinted</button>
+        <div class="as-glass as-glass-group">
+          <button class="as-item is-selected" data-i18n="ct.seg.map">Map</button>
+          <button class="as-item" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-item" data-i18n="ct.seg.satellite">Satellite</button>
+        </div>
+      </div>
+    </div>
+    <div class="band band-light">
+      <p class="band-label" data-i18n="mt.onlight">Over light content</p>
+      <div class="row">
+        <button class="as-glass as-glass-interactive as-button as-button-glass" data-chroma="on" data-i18n="mt.regular">Regular</button>
+        <button class="as-glass as-glass-interactive as-glass-tinted as-button as-button-glass" style="--as-tint: var(--as-red)" data-i18n="mt.tinted">Tinted</button>
+        <div class="as-glass as-glass-group">
+          <button class="as-item" data-i18n="ct.seg.map">Map</button>
+          <button class="as-item is-selected" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-item" data-i18n="ct.seg.satellite">Satellite</button>
+        </div>
+      </div>
+    </div>
+    <p class="prose as-text-footnote as-secondary" data-i18n="mt.adapt"></p>
+
+    <div class="grid">
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mt.clear">Clear · over media</h3>
+        <div class="stage stage-photo tall">
+          <div class="hero-controls inline">
+            <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass as-button-icon" data-chroma="on" data-i18n-aria="hero.play" aria-label="Play">
+              <svg class="as-icon" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>
+            </button>
+            <button class="as-glass as-glass-clear as-glass-dimmed as-glass-interactive as-button as-button-glass" data-i18n="hero.details">Details</button>
+          </div>
+        </div>
+        <code class="snippet">as-glass as-glass-clear as-glass-dimmed</code>
+      </div>
+
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mt.large">Large · big surfaces</h3>
+        <div class="stage stage-photo tall">
+          <div class="as-glass as-glass-large mini-panel" data-lens="off">
+            <p class="as-text-headline" data-i18n="nv.sheet.title">Yosemite National Park</p>
+            <p class="as-text-footnote" data-i18n="ly.card.body">California · National Park</p>
+          </div>
+        </div>
+        <code class="snippet">as-glass as-glass-large</code>
+      </div>
+
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mt.std">Standard materials</h3>
+        <div class="stage stage-photo tall material-stack">
+          <div class="as-material as-material-ultrathin swatch-m"><span data-i18n="mt.std.ultrathin">Ultra thin</span></div>
+          <div class="as-material as-material-thin swatch-m"><span data-i18n="mt.std.thin">Thin</span></div>
+          <div class="as-material swatch-m"><span data-i18n="mt.std.regular">Regular</span></div>
+          <div class="as-material as-material-thick swatch-m"><span data-i18n="mt.std.thick">Thick</span></div>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="mt.std.desc"></p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="panel bad">
+        <p class="verdict"><span class="mark">✗</span><span data-i18n="mt.badglass.t">Glass on glass</span></p>
+        <div class="stage stage-photo">
+          <!-- 故意示范错误：玻璃面板里再放玻璃按钮 -->
+          <div class="as-glass glass-panel">
+            <button class="as-glass as-glass-interactive as-button as-button-glass as-button-small" data-i18n="ct.seg.map">Map</button>
+            <button class="as-glass as-glass-interactive as-button as-button-glass as-button-small" data-i18n="ct.seg.transit">Transit</button>
+          </div>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="mt.badglass.d"></p>
+      </div>
+      <div class="panel good">
+        <p class="verdict"><span class="mark">✓</span><span data-i18n="mt.goodglass.t">One glass per group</span></p>
+        <div class="stage stage-photo">
+          <div class="as-glass as-glass-group">
+            <button class="as-item is-selected" data-i18n="ct.seg.map">Map</button>
+            <button class="as-item" data-i18n="ct.seg.transit">Transit</button>
+          </div>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="mt.goodglass.d"></p>
+        <code class="snippet">as-glass as-glass-group &gt; .as-item</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- 颜色 ----------------------------------------------------------- -->
+  <section class="section" id="s-color" data-nav="nav.color">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="cl.title">Color</h2>
+      <span class="src">cheatsheets/color.md</span>
+    </header>
+    <p class="prose" data-i18n="cl.desc"></p>
+    <h3 class="as-text-headline sub" data-i18n="cl.system">System colors</h3>
+    <div class="swatches" id="systemColors"></div>
+    <h3 class="as-text-headline sub" data-i18n="cl.semantic">Semantic colors</h3>
+    <div class="swatches" id="semanticColors"></div>
+    <div class="card">
+      <h3 class="as-text-headline" data-i18n="cl.tintrule">Tint rule</h3>
+      <p class="note as-text-footnote as-secondary" data-i18n="cl.tintrule.d"></p>
+      <div class="row">
+        <button class="as-glass as-glass-interactive as-button as-button-glass" data-i18n="ct.cancel">Cancel</button>
+        <button class="as-glass as-glass-interactive as-button as-button-glass" data-i18n="ct.later">Later</button>
+        <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass" data-i18n="ct.continue">Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 字体排印 ------------------------------------------------------- -->
+  <section class="section" id="s-type" data-nav="nav.type">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="ty.title">Typography</h2>
+      <span class="src">cheatsheets/typography.md</span>
+    </header>
+    <p class="prose" data-i18n="ty.desc"></p>
+    <div class="type-table" id="typeScale"></div>
+    <p class="prose as-text-footnote as-secondary" data-i18n="ty.note"></p>
+  </section>
+
+  <!-- 形状 ----------------------------------------------------------- -->
+  <section class="section" id="s-shape" data-nav="nav.shape">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="sh.title">Shapes</h2>
+      <span class="src">cheatsheets/layout-and-shapes.md</span>
+    </header>
+    <p class="prose" data-i18n="sh.desc"></p>
+    <div class="grid">
+      <div class="card shape-card">
+        <h3 class="as-text-headline" data-i18n="sh.capsule">Capsule</h3>
+        <div class="shape-demo as-capsule"></div>
+        <code class="snippet">border-radius: var(--as-radius-capsule)</code>
+      </div>
+      <div class="card shape-card">
+        <h3 class="as-text-headline" data-i18n="sh.fixed">Fixed</h3>
+        <div class="shape-demo" style="border-radius: var(--as-radius-l)"></div>
+        <code class="snippet">border-radius: var(--as-radius-l)</code>
+      </div>
+      <div class="card shape-card">
+        <h3 class="as-text-headline" data-i18n="sh.concentric">Concentric</h3>
+        <div class="shape-demo concentric-mini"><i></i></div>
+        <code class="snippet">as-container / as-concentric</code>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="as-text-headline" data-i18n="sh.play">Concentric radius playground</h3>
+      <div class="play">
+        <div class="play-controls">
+          <label class="ctl-row">
+            <span data-i18n="sh.radius">Outer radius</span>
+            <input class="as-slider" type="range" id="cRadius" min="0" max="48" value="26" style="--as-value:54%">
+            <b class="as-mono" id="cRadiusV">26</b>
+          </label>
+          <label class="ctl-row">
+            <span data-i18n="sh.inset">Inset</span>
+            <input class="as-slider" type="range" id="cInset" min="0" max="40" value="12" style="--as-value:30%">
+            <b class="as-mono" id="cInsetV">12</b>
+          </label>
+          <p class="as-text-footnote as-secondary">
+            <span data-i18n="sh.inner">Computed inner radius</span>: <b class="as-mono" id="cInner">14</b>px
+            · <span class="as-mono" data-i18n="sh.formula"></span>
+          </p>
+        </div>
+        <div class="play-stage">
+          <div class="card as-container" id="cBox" style="--as-container-radius:26px; padding:12px">
+            <div class="thumb as-concentric" id="cArt" style="--as-concentric-inset:12px" role="img" data-i18n-aria="sh.art" aria-label="Artwork"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 控件 ----------------------------------------------------------- -->
+  <section class="section" id="s-controls" data-nav="nav.controls">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="ct.title">Controls</h2>
+      <span class="src">cheatsheets/components-quickref.md</span>
+    </header>
+    <div class="grid">
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="ct.buttons">Buttons</h3>
+        <div class="row">
+          <button class="as-button as-button-filled" data-i18n="ct.continue">Continue</button>
+          <button class="as-button as-button-tinted" data-i18n="ct.later">Later</button>
+          <button class="as-button as-button-gray" data-i18n="ct.cancel">Cancel</button>
+          <button class="as-button as-button-bordered as-button-small" data-i18n="ct.bordered">Bordered</button>
+          <button class="as-button as-button-destructive" data-i18n="ct.destructive">Delete</button>
+        </div>
+        <div class="row">
+          <button class="as-glass as-glass-interactive as-button as-button-glass" data-i18n="ct.glass">Regular glass</button>
+          <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass" data-i18n="ct.prominent">Primary</button>
+          <button class="as-button as-button-filled as-button-xlarge" data-i18n="ct.xlarge">Extra large</button>
+        </div>
+        <p class="note as-text-footnote as-secondary" data-i18n="ct.hit"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="ct.segmented">Segmented control</h3>
+        <div class="as-segmented" role="tablist">
+          <button class="as-segment is-selected" role="tab" aria-selected="true" data-i18n="ct.seg.map">Map</button>
+          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.satellite">Satellite</button>
+        </div>
+        <p class="note as-text-footnote as-secondary drag-hint" data-i18n="ct.drag.seg"></p>
+        <h3 class="as-text-headline spaced" data-i18n="ct.toggle">Toggle</h3>
+        <div class="row">
+          <button class="as-toggle" role="switch" aria-checked="true" data-i18n-aria="ct.toggle.wifi" aria-label="Wi-Fi"><span class="as-knob"></span></button>
+          <button class="as-toggle" role="switch" aria-checked="false" data-i18n-aria="ct.toggle.bt" aria-label="Bluetooth"><span class="as-knob"></span></button>
+        </div>
+        <p class="note as-text-footnote as-secondary drag-hint" data-i18n="ct.drag.toggle"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="ct.slider">Slider</h3>
+        <input class="as-slider" type="range" min="0" max="100" value="62" style="--as-value:62%" data-i18n-aria="ct.slider.label" aria-label="Volume">
+        <p class="note as-text-footnote as-secondary drag-hint" data-i18n="ct.drag.slider"></p>
+        <h3 class="as-text-headline spaced" data-i18n="ct.search">Search field</h3>
+        <div class="as-glass as-search">
+          <svg class="as-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+          <input type="search" data-i18n-ph="ct.search.ph" placeholder="Search landmarks">
+        </div>
+      </div>
+
+      <div class="card card-flush">
+        <h3 class="as-text-headline flush-title" data-i18n="ct.list">Inset grouped list</h3>
+        <p class="as-list-header" data-i18n="ct.list.header">Appearance</p>
+        <ul class="as-list">
+          <li><span data-i18n="ct.list.textsize">Text Size</span><span class="as-value" data-i18n="ct.list.large">Large</span></li>
+          <li><span data-i18n="ct.list.bold">Bold Text</span>
+            <button class="as-toggle" role="switch" aria-checked="false" style="margin-left:auto" data-i18n-aria="ct.list.bold" aria-label="Bold Text"><span class="as-knob"></span></button>
+          </li>
+          <li><span data-i18n="ct.list.glass">Liquid Glass look</span><span class="as-value" id="glassPrefLabel">Clear</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 导航与呈现 ------------------------------------------------------ -->
+  <section class="section" id="s-nav" data-nav="nav.nav">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="nv.title">Navigation and presentation</h2>
+      <span class="src">cheatsheets/components-quickref.md</span>
+    </header>
+
+    <div class="card">
+      <h3 class="as-text-headline" data-i18n="nv.toolbar">Toolbar</h3>
+      <p class="note as-text-footnote as-secondary" data-i18n="nv.toolbar.d"></p>
+      <div class="stage stage-photo frame">
+        <div class="as-toolbar mock-toolbar">
+          <div class="as-glass as-glass-group">
+            <button class="as-item" data-i18n-aria="tb.back" aria-label="Back"><svg class="as-icon" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          </div>
+          <div class="as-spacer"></div>
+          <div class="as-glass as-glass-group">
+            <button class="as-item" data-i18n-aria="tb.favorite" aria-label="Favorite"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg></button>
+            <button class="as-item" data-i18n-aria="tb.collect" aria-label="Add to collection"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+          </div>
+          <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass as-button-small" data-i18n="tb.done">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="as-text-headline" data-i18n="nv.sidebar">Sidebar</h3>
+      <div class="stage stage-photo frame relative-frame sidebar-stage">
+        <div class="as-glass as-glass-large as-sidebar mock-sidebar" data-lens="off">
+          <p class="as-section-title" data-i18n="nv.sb.section">Library</p>
+          <div class="as-row is-selected"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span data-i18n="nv.sb.all">All Landmarks</span></div>
+          <div class="as-row"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg><span data-i18n="nv.sb.fav">Favorites</span></div>
+          <div class="as-row"><svg class="as-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span data-i18n="nv.sb.recent">Recently Viewed</span></div>
+          <div class="as-row"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg><span data-i18n="nv.sb.shared">Shared with Me</span></div>
+        </div>
+        <p class="sidebar-hint as-text-footnote" data-i18n="nv.sb.content">Content extends beneath the sidebar</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="nv.menu">Menu</h3>
+        <button class="as-button as-button-gray" id="menuDemoBtn" data-i18n="nv.menu.btn">Open share menu</button>
+      </div>
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="nv.sheet">Sheet</h3>
+        <button class="as-button as-button-gray" id="sheetDemoBtn" data-i18n="nv.sheet.open">Open sheet</button>
+      </div>
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="nv.alert">Alert</h3>
+        <button class="as-button as-button-gray" id="alertDemoBtn" data-i18n="nv.alert.open">Open alert</button>
+      </div>
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="nv.tabbar">Floating tab bar</h3>
+        <p class="note as-text-footnote as-secondary" data-i18n="nv.tabbar.d"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 动效 ----------------------------------------------------------- -->
+  <section class="section" id="s-motion" data-nav="nav.motion">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="mo.title">Motion</h2>
+      <span class="src">cheatsheets/motion-and-interaction.md</span>
+    </header>
+    <p class="prose" data-i18n="mo.desc"></p>
+    <div class="grid">
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mo.morph">Morph</h3>
+        <div class="stage stage-photo tall relative-frame">
+          <button class="as-glass as-glass-interactive as-button as-button-glass as-button-small morph-src" id="morphBtn" data-i18n="mo.morph.btn">Expand panel</button>
+          <div class="as-glass as-glass-large morph-dst" id="morphPanel" hidden>
+            <p class="as-text-footnote" data-i18n="mo.morph.panel"></p>
+            <button class="as-button as-button-small as-button-gray" id="morphClose" data-i18n="mo.morph.close">Collapse</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mo.materialize">Materialize</h3>
+        <div class="stage stage-photo tall">
+          <div class="as-glass as-glass-large mini-panel" id="matPanel">
+            <p class="as-text-footnote" data-i18n="mo.materialize.panel"></p>
+          </div>
+        </div>
+        <button class="as-button as-button-gray as-button-small" id="matBtn" data-i18n="mo.materialize.btn">Toggle materialize</button>
+      </div>
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mo.press">Press feedback</h3>
+        <p class="note as-text-footnote as-secondary" data-i18n="mo.press.d"></p>
+        <div class="stage stage-photo">
+          <button class="as-glass as-glass-interactive as-button as-button-glass" data-i18n="mo.press.btn">Press and hold</button>
+          <div class="as-glass as-glass-group"><button class="as-item" data-i18n="ct.seg.map">Map</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="as-text-headline" data-i18n="mo.scrub">Scrubbing</h3>
+        <p class="note as-text-footnote as-secondary" data-i18n="mo.scrub.d"></p>
+        <div class="as-segmented spaced" role="tablist">
+          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.map">Map</button>
+          <button class="as-segment is-selected" role="tab" aria-selected="true" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.satellite">Satellite</button>
+        </div>
+        <p class="note as-text-footnote as-tertiary drag-hint" data-i18n="mo.scrub.hint"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 无障碍 --------------------------------------------------------- -->
+  <section class="section" id="s-a11y" data-nav="nav.a11y">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="a11.title">Accessibility</h2>
+      <span class="src">cheatsheets/accessibility-and-inclusion.md</span>
+    </header>
+    <p class="prose" data-i18n="a11.desc"></p>
+    <p class="as-list-header" data-i18n="a11.sim">Simulate</p>
+    <ul class="as-list">
+      <li>
+        <span><span data-i18n="a11.rt">Reduce Transparency</span><br><em class="as-text-footnote as-secondary" data-i18n="a11.rt.d"></em></span>
+        <button class="as-toggle" role="switch" aria-checked="false" data-sim="rt" style="margin-left:auto"><span class="as-knob"></span></button>
+      </li>
+      <li>
+        <span><span data-i18n="a11.ct">Increase Contrast</span><br><em class="as-text-footnote as-secondary" data-i18n="a11.ct.d"></em></span>
+        <button class="as-toggle" role="switch" aria-checked="false" data-sim="ct" style="margin-left:auto"><span class="as-knob"></span></button>
+      </li>
+      <li>
+        <span><span data-i18n="a11.rm">Reduce Motion</span><br><em class="as-text-footnote as-secondary" data-i18n="a11.rm.d"></em></span>
+        <button class="as-toggle" role="switch" aria-checked="false" data-sim="rm" style="margin-left:auto"><span class="as-knob"></span></button>
+      </li>
+      <li>
+        <span><span data-i18n="a11.dt">Largest Dynamic Type</span><br><em class="as-text-footnote as-secondary" data-i18n="a11.dt.d"></em></span>
+        <button class="as-toggle" role="switch" aria-checked="false" data-sim="dt" style="margin-left:auto"><span class="as-knob"></span></button>
+      </li>
+    </ul>
+    <p class="prose as-text-footnote as-secondary" data-i18n="a11.note"></p>
+  </section>
+
+  <!-- 常见错误 ------------------------------------------------------- -->
+  <section class="section" id="s-mistakes" data-nav="nav.mistakes">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="mk.title">Common mistakes</h2>
+      <span class="src">skills/Apple-Style/SKILL.md</span>
+    </header>
+    <div class="mistakes" id="mistakes"></div>
+  </section>
+
+  <!-- 清单 ----------------------------------------------------------- -->
+  <section class="section" id="s-check" data-nav="nav.check">
+    <header class="section-head">
+      <h2 class="as-text-title2 as-em" data-i18n="ck.title">Checklist</h2>
+      <span class="src">skills/Apple-Style-Review/SKILL.md</span>
+    </header>
+    <p class="prose" data-i18n="ck.desc"></p>
+    <div class="check-head">
+      <div class="progress"><i id="ckBar"></i></div>
+      <span class="as-text-footnote as-secondary"><b class="as-mono" id="ckCount">0/12</b> <span data-i18n="ck.progress">done</span></span>
+      <button class="as-button as-button-small as-button-gray" id="ckReset" data-i18n="ck.reset">Reset</button>
+    </div>
+    <ul class="as-list checklist" id="checklist"></ul>
+  </section>
+
+  <footer class="footer">
+    <p class="as-text-footnote as-secondary" data-i18n="ft.note"></p>
+  </footer>
+  </main>
+</div>
+
+<!-- ── 浮动标签栏（真实组件，搜索单独成尾部标签，滚动时收起） ─────────── -->
+<nav class="as-tabbar" data-minimize aria-label="Tab bar">
+  <div class="as-glass as-glass-group" role="tablist">
+    <button class="as-tab is-selected" role="tab" aria-selected="true">
+      <svg class="as-icon" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span data-i18n="nav.overview">About</span>
+    </button>
+    <button class="as-tab" role="tab">
+      <svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span data-i18n="nav.controls">Controls</span>
+    </button>
+    <button class="as-tab" role="tab">
+      <svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/></svg><span data-i18n="nav.check">Checklist</span>
+    </button>
+  </div>
+  <div class="as-glass as-glass-group">
+    <button class="as-tab as-tab-search" data-i18n-aria="ct.search" aria-label="Search">
+      <svg class="as-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- 工作表 -->
+<div class="as-sheet-backdrop" id="sheetBackdrop"></div>
+<div class="as-glass as-glass-large as-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" data-lens="off">
+  <div class="as-grabber"></div>
+  <h2 class="as-sheet-title" id="sheetTitle" data-i18n="nv.sheet.title">Yosemite National Park</h2>
+  <p class="as-text-body sheet-body" data-i18n="nv.sheet.body"></p>
+  <div class="row">
+    <button class="as-button as-button-filled" id="sheetFull" data-i18n="nv.sheet.expand">Expand</button>
+    <button class="as-button as-button-gray" id="sheetClose" data-i18n="nv.sheet.close">Close</button>
+  </div>
+</div>
+
+<!-- 提醒 -->
+<div class="alert-backdrop" id="alertBackdrop"></div>
+<!-- 居中交给外层包裹容器：materialize() 会把 transform 动画到 none，
+     如果居中依赖 translate(-50%,-50%)，动画结束后对话框会跑偏。 -->
+<div class="alert-wrap">
+  <div class="as-glass as-glass-large as-alert" id="alert" role="alertdialog" aria-modal="true" aria-labelledby="alertTitle" hidden data-lens="off">
+    <h2 id="alertTitle" data-i18n="nv.alert.title">Delete “Yosemite”?</h2>
+    <p data-i18n="nv.alert.body"></p>
+    <div class="as-actions">
+      <button class="as-button" id="alertCancel" data-i18n="ct.cancel">Cancel</button>
+      <button class="as-button as-button-destructive" id="alertOk" data-i18n="ct.destructive">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- 演示设置：外观 / 平台 / 玻璃外观 / 语言 -->
+<div class="prefs as-glass as-glass-group" data-i18n-aria="ctl.settings" aria-label="Demo settings" data-lens="off">
+  <button class="as-item" id="themeBtn" title="Appearance">🌓 <span data-i18n="ctl.theme.auto">Auto</span></button>
+  <button class="as-item" id="platBtn" title="Platform">iOS</button>
+  <button class="as-item" id="glassBtn" title="Glass"><span data-i18n="ctl.glass.clear">Clear</span></button>
+  <button class="as-item" id="langBtn" title="Language"><span data-i18n="ctl.lang.next">中文</span></button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="i18n.js"></script>
+<script src="../skills/Apple-Style/web/liquid-glass.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>

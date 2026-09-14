@@ -42,7 +42,10 @@ Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheat
 
 **Motion & feedback**
 - [ ] Press state on every button; springs, interruptible, transform/opacity only; materialize not fade
-- [ ] Reduce Motion honored (no parallax/elastic/morph); no autoplay you can't pause
+- [ ] Glass **flexes** on press (gel, ~+6%) and illuminates from under the pointer, spreading to nearby glass; the specular highlight **travels around the silhouette** rather than sitting on one edge
+- [ ] Segmented control, switch and slider are **draggable**, not click-only: 1:1 tracking, live selection during the drag, stretch with velocity, spring on release (`segmented-controls`, `sliders`, `toggles`)
+- [ ] Knobs lift into glass **only while manipulated**; quiet at rest
+- [ ] Reduce Motion honored (no parallax/elastic/morph/drag stretch); no autoplay you can't pause
 - [ ] Loading shows content early; haptics/system sounds consistent; undo for destructive edits; confirmations for destructive actions
 
 **Accessibility & content**
@@ -50,6 +53,19 @@ Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheat
 - [ ] Reduce Transparency → frostier; Increase Contrast → B/W + border (custom glass must implement)
 - [ ] Copy: concise, "you", no "please"/exclamations, actionable errors; RTL mirroring via leading/trailing
 - [ ] Privacy prompts in context with purpose; no fake pre-prompts
+
+**Web implementation** (web targets only — `../Apple-Style/cheatsheets/web-implementation.md`)
+- [ ] No SF Symbols and no self-hosted SF fonts shipped to the browser (licence); icons are own-drawn on a 24×24 / 1.8-stroke grid; type scale still reads on the Windows/Android fallback face
+- [ ] Correct roles: tab bar is `<nav>` not `tablist`; segmented = tablist/radiogroup with roving `tabindex`; switch/slider use real semantics; dialogs trap focus, `inert` the background, close on Escape and restore focus
+- [ ] `:focus-visible` ring on every interactive element, visible on glass; nothing relies on `outline: none`
+- [ ] `100dvh` not `100vh`; `viewport-fit=cover` + `env(safe-area-inset-*)`; logical properties for RTL; overlays inside the documented z-index bands
+- [ ] `touch-action` on draggable controls; hover effects gated by `@media (hover: hover)`; 44×44 enforced on `(pointer: coarse)`; `overscroll-behavior: contain` on sheets/menus/inner scrollers
+- [ ] Forms: `<label for>`, `autocomplete`/`inputmode`, ≥16px inputs (no iOS zoom), errors via `aria-describedby` + `aria-invalid`, not colour alone
+- [ ] Theme applied before first paint (no flash); `color-scheme` set; `theme-color` per scheme
+- [ ] Media reserves space (`aspect-ratio`), lazy below the fold; cross-origin images given `data-glass-scheme-hint`
+- [ ] Loading / empty / error / populated states all designed, chrome stable across them
+- [ ] Perf: no blanket `will-change` on glass, ≤ ~20 lensed elements, dispersion only on a few non-fixed elements, no layout reads in `pointermove`, only `transform`/`opacity` animated
+- [ ] Checked in Safari and Firefox, where lensing degrades to blur — the fallback still reads as a material
 
 **Platform fit**
 - [ ] iPhone one-handed reach & tab bar; iPad sidebar/menu bar/pointer; Mac menu bar + shortcuts + inspectors; watch glanceable; tvOS focus; visionOS depth + 60pt targets (`designing-for-*`)

@@ -42,9 +42,9 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 - Keyboard shortcuts on macOS/iPadOS; ellipsis for items that need more input; checkmarks for state; separators to group; ≤ ~7 items per group.
 
 ## Controls
-- **Segmented control**: 2–5 segments, equal width, text OR icons (not mixed), selection lifts into glass; not for navigation actions.
-- **Toggle**: capsule, green when on; label describes the *on* state; no "Enable/Disable" text toggles.
-- **Slider**: knob becomes a transparent lens on drag; show value/min-max icons where useful; continuous vs discrete.
+- **Segmented control**: 2–5 segments, equal width, text OR icons (not mixed), selection lifts into glass; not for navigation actions. **Draggable**: press the selected segment and slide — the indicator tracks the finger, the selection updates live, and it springs into place on release. macOS: consider spring loading.
+- **Toggle**: capsule, green when on; label describes the *on* state; no "Enable/Disable" text toggles. **Draggable**: the knob can be thrown and lands on the nearer side; a tap still flips it.
+- **Slider**: knob becomes a transparent lens on drag (and only on drag — quiet at rest); show value/min-max icons where useful; continuous vs discrete; give live feedback as the value changes.
 - **Stepper**: small integer ranges; show the value nearby.
 - **Text fields**: rounded; placeholder is a hint, not a label; clear button; appropriate keyboard type; secure entry for passwords; capsule search field on its own glass surface; search field slides up with keyboard on iPhone.
 - **Pickers**: wheel (iPhone) vs menu/pop-up (Mac/iPad); date pickers compact/inline.

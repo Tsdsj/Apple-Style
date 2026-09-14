@@ -43,6 +43,9 @@ Layers of the material (all adapt to what is behind): lensing/refraction → blu
 ## Motion & transitions
 - Objects **materialize** in/out by modulating lensing (not a plain fade). Menus/popovers/action sheets/sheets **morph out of the control** that presented them and stay anchored to it (set the source view/item).
 - Glass flexes on touch (gel-like), lights up from within under the fingertip, and glow spreads to adjacent glass.
+- The highlight is not static: the virtual light **travels around the silhouette** during interaction (and with device motion), so the specular rim moves rather than sitting on one edge. On the web this is `--as-glass-light-angle` driven from the pointer, feeding a conic-gradient rim.
+- **Light is bent, not painted.** The material is defined by refraction plus one precise hairline edge; the interior stays clean. A gradient sweeping the face, a double bevel, a thick bright outline or a brightness boost turn it into a glossy plastic button — and they look worst over plain backgrounds, where there is nothing to refract and the decoration is all that is left.
+- Controls that can be dragged are dragged: see *Scrubbing* in `motion-and-interaction.md`.
 - `GlassEffectContainer(spacing:)` lets neighboring shapes blend/morph; `glassEffectID` + `matchedGeometry`; `materialize` transition for distant elements; `glassEffectUnion` to merge several views into one glass shape.
 
 ## Accessibility (system applies automatically; custom glass must honor them)

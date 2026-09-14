@@ -14,10 +14,12 @@ Source: HIG *Motion*, *Feedback*, *Gestures*, *Playing haptics*, *Loading*, *Lau
 - **Flex + illuminate** on press: the glass energizes with light under the finger; glow spreads to neighboring glass; gel-like slight expansion (~+4–6%) then springs back.
 - **Morph** between states (`matchedGeometry`) within a `GlassEffectContainer`; shapes blend when closer than the container spacing.
 - **Transient lift**: knobs (slider/toggle) turn into glass only while manipulated; the resting state stays quiet.
+- **Scrubbing**: the standard controls are drag targets. Press the *selected* segment of a segmented control and slide to move the selection; throw a switch knob and it lands on the nearer side; a slider thumb tracks the finger. The moving part follows 1:1, **stretches along the drag axis** with velocity (gel flex), rubber-bands past the ends and settles on a spring. Selection updates live during the drag, not on release. Click-only versions of these controls are the most common tell of a non-Apple UI.
 - **Tab bar minimize** on scroll down; **sheet** grows/opaques as it's dragged up; **focus recedes** when a window is inactive.
 
 ## Web spring/easing defaults (`web/apple-style.css`)
 `--as-ease-spring` (bouncy linear() spring), `--as-ease-soft` (cubic-bezier .2 .8 .2 1); durations 160 / 320 / 560 ms. Use `transform`/`opacity` only for 60 fps; avoid animating `backdrop-filter`.
+Press flex is `--as-flex-x` / `--as-flex-y` (default press 1.06 / 1.03) consumed by `.as-glass { transform: scale(…) }`; drag stretch is `--as-ind-sx` (segmented) and `--as-knob-sx` (slider). `LiquidGlass.init()` installs the scrubbing gestures on `.as-segmented`, `.as-toggle` and `.as-slider` and emits `change` — never add your own click handler on top.
 
 ## Feedback (`hig/feedback.md`)
 - Show status unobtrusively (progress, checkmarks, subtle animation); confirm destructive actions; **avoid unnecessary alerts**.

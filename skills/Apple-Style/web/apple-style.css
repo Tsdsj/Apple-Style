@@ -96,15 +96,39 @@
   --as-glass-fill-large: light-dark(rgb(255 255 255 / .70), rgb(36 36 40 / .72)); /* more opaque when large */
   --as-glass-fg: light-dark(rgb(0 0 0 / .88), rgb(255 255 255 / .94));
   --as-glass-fg-secondary: light-dark(rgb(0 0 0 / .55), rgb(255 255 255 / .62));
-  --as-glass-rim-hi: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .38));  /* specular rim, lit side */
-  --as-glass-rim-lo: light-dark(rgb(255 255 255 / .28), rgb(255 255 255 / .08));  /* shadow side */
+  --as-glass-rim-hi: light-dark(rgb(255 255 255 / .58), rgb(255 255 255 / .26));  /* specular rim, lit side */
+  --as-glass-rim-lo: light-dark(rgb(255 255 255 / .14), rgb(255 255 255 / .05));  /* shadow side */
+  --as-glass-rim-width: 1px;             /* hairline. Thicker reads as an outlined pill, not glass */
   --as-glass-edge:   light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .06));         /* hairline edge for definition */
   --as-glass-shadow: 0 8px 24px -6px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .14);
   --as-glass-shadow-large: 0 24px 60px -12px rgb(0 0 0 / .32), 0 6px 16px -6px rgb(0 0 0 / .16);
   --as-glass-light-angle: 145deg;        /* virtual light source direction (top-left) */
   --as-glass-lens: 0;                    /* set to 1 by liquid-glass.js when displacement filter is active */
   --as-glass-tint: transparent;          /* stained-glass tint; use only for primary actions */
+
+  /* Clarity comes from what the material does to the light behind it —
+     refraction, a re-levelled backdrop and one precise edge. It does NOT come
+     from highlights painted onto the surface: a body-wide white gradient or a
+     double bevel is the 2008 glossy-button look, and it reads as cheap plastic
+     the moment there is nothing interesting behind the glass. Interior stays
+     clean; contrast (not brightness) keeps refracted content from going milky. */
+  --as-glass-brightness: 1;              /* brightening washes the material out */
+  --as-glass-contrast: 1.05;             /* re-level so the backdrop keeps its punch */
+  --as-glass-bevel:                      /* light entering the top edge + a faint inner refraction ring */
+    inset 0 0.5px 0 0 rgb(255 255 255 / .20),
+    inset 0 0 12px -10px rgb(0 0 0 / .26);
+  --as-glass-sheen: transparent;         /* opt-in only; see the note above before raising it */
+
+  /* Gel flex. Liquid Glass "instantly flexes" on touch and "moves in tandem
+     with your interaction" (WWDC25/219). liquid-glass.js drives these from the
+     pointer; CSS :active is the no-JS fallback. */
+  --as-flex-x: 1; --as-flex-y: 1;
+  --as-flex-press-x: 1.06; --as-flex-press-y: 1.03;
 }
+
+/* Registered so the light source can glide back to rest instead of snapping
+   when the pointer leaves. Unsupported browsers just skip the transition. */
+@property --as-glass-light-angle { syntax: "<angle>"; inherits: true; initial-value: 145deg; }
 
 /* Explicit theme override (data-theme="light|dark" on <html>) */
 :root[data-theme="light"] { color-scheme: light; }
@@ -219,42 +243,72 @@
   isolation: isolate;
   border-radius: var(--as-glass-radius, var(--as-radius-capsule));
   color: var(--as-glass-fg);
+  transform: scale(var(--as-flex-x), var(--as-flex-y));
   background:
+    /* light entering the lit edge only — transparent by default. A sweep
+       across the whole body is gloss, not glass. */
+    linear-gradient(var(--as-glass-light-angle), var(--as-glass-sheen) 0%, transparent 22%),
     /* stained-glass tint sits between lens and highlights */
     linear-gradient(var(--as-glass-tint), var(--as-glass-tint)),
     var(--_fill);
-  -webkit-backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)));
-  backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)));
+  -webkit-backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)) brightness(var(--as-glass-brightness)) contrast(var(--as-glass-contrast)));
+  backdrop-filter: var(--as-glass-filter, blur(var(--_blur)) saturate(var(--as-glass-saturate)) brightness(var(--as-glass-brightness)) contrast(var(--as-glass-contrast)));
   box-shadow:
     var(--_shadow),
-    inset 0 0 0 0.5px var(--as-glass-edge);
+    inset 0 0 0 0.5px var(--as-glass-edge),
+    var(--as-glass-bevel);
   transition:
     transform var(--as-dur-base) var(--as-ease-spring),
     box-shadow var(--as-dur-base) var(--as-ease-soft),
     background-color var(--as-dur-base) var(--as-ease-soft),
     color var(--as-dur-base) var(--as-ease-soft),
-    border-radius var(--as-dur-base) var(--as-ease-soft);
-  will-change: transform;
+    border-radius var(--as-dur-base) var(--as-ease-soft),
+    --as-glass-light-angle var(--as-dur-slow) var(--as-ease-soft);
 }
-/* Highlights layer: a light source at --as-glass-light-angle produces a rim
-   that is bright on the lit side and faint on the far side (gradient border
-   drawn with a mask so the interior stays clear). */
+/* NOTE: no blanket `will-change: transform`. Every glass element carries a
+   backdrop-filter, and promoting all of them to their own composited layers
+   up front costs far more than it saves — a page with a few dozen glass
+   surfaces drops frames on any drag. Promote only what is actually moving. */
+.as-glass.is-lit, .as-glass.is-pressed, .as-glass-interactive:active { will-change: transform; }
+/* pointer is on/over the element: light tracks it closely */
+.as-glass.is-lit { transition-duration: var(--as-dur-fast); }
+/* Highlights layer: "light sources inside the environment shine on the material
+   producing highlights that respond to geometry… light travels around the
+   material, defining its silhouette" (WWDC25/219). A conic gradient puts two
+   specular poles on opposite edges and rotates them with the light source, so
+   the highlight wraps the shape instead of sliding across a flat face.
+   liquid-glass.js animates --as-glass-light-angle from the pointer.
+   One dominant arc where the light lands, and only a whisper on the far edge:
+   two matched bright poles look symmetrical and decorative, which is what makes
+   a rim read as a drawn outline instead of a catch of light. */
 .as-glass::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
-  padding: 1.25px;
-  background: linear-gradient(var(--as-glass-light-angle),
-      var(--as-glass-rim-hi) 0%, var(--as-glass-rim-lo) 30%, transparent 48%,
-      transparent 60%, var(--as-glass-rim-lo) 82%, var(--as-glass-rim-hi) 100%);
+  padding: var(--as-glass-rim-width, 1px);
+  background: conic-gradient(from var(--as-glass-light-angle) at 50% 50%,
+      var(--as-glass-rim-hi)   0deg,
+      var(--as-glass-rim-lo)  36deg,
+      transparent             88deg,
+      transparent            152deg,
+      color-mix(in srgb, var(--as-glass-rim-lo) 65%, transparent) 180deg,
+      transparent            208deg,
+      transparent            286deg,
+      var(--as-glass-rim-lo) 330deg,
+      var(--as-glass-rim-hi) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   opacity: .95;
+  transition: opacity var(--as-dur-base) var(--as-ease-soft);
 }
 /* Interactive glow: "illuminates from within, starting under the fingertip" */
 .as-glass::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
   background:
-    radial-gradient(160px 160px at var(--as-px, 50%) var(--as-py, 50%),
-      rgb(255 255 255 / .55), rgb(255 255 255 / .18) 40%, transparent 72%);
+    /* hot core right under the fingertip … */
+    radial-gradient(44px 44px at var(--as-px, 50%) var(--as-py, 50%),
+      rgb(255 255 255 / .50), transparent 72%),
+    /* … spreading through the body of the element */
+    radial-gradient(190px 190px at var(--as-px, 50%) var(--as-py, 50%),
+      rgb(255 255 255 / .28), rgb(255 255 255 / .09) 44%, transparent 74%);
   opacity: var(--as-glow, 0);
   transition: opacity var(--as-dur-base) var(--as-ease-soft);
 }
@@ -267,8 +321,8 @@
   --_fill: rgb(0 0 0 / 0);
   --_blur: 3px;
   color: rgb(255 255 255 / .96);
-  --as-glass-rim-hi: rgb(255 255 255 / .7);
-  --as-glass-rim-lo: rgb(255 255 255 / .18);
+  --as-glass-rim-hi: rgb(255 255 255 / .48);
+  --as-glass-rim-lo: rgb(255 255 255 / .10);
 }
 .as-glass-clear.as-glass-dimmed { --_fill: rgb(0 0 0 / .35); }
 .as-glass-large {
@@ -283,23 +337,25 @@
   /* Stained glass. Tint the BACKGROUND (not the label) for primary actions. */
   --as-glass-tint: color-mix(in oklab, var(--as-tint, var(--as-accent)) 78%, transparent);
   color: #fff;
-  --as-glass-rim-hi: rgb(255 255 255 / .75);
+  --as-glass-rim-hi: rgb(255 255 255 / .46);
 }
 /* Adaptivity: small elements flip light/dark based on what's behind them.
    liquid-glass.js sets data-glass-scheme by sampling the backdrop; or set it
    yourself when you know the content region is dark/light. */
-.as-glass[data-glass-scheme="dark"]  { --_fill: rgb(40 40 44 / .42); --as-glass-fg: rgb(255 255 255 / .94); --as-glass-fg-secondary: rgb(255 255 255 / .62); --as-glass-rim-hi: rgb(255 255 255 / .38); --as-glass-rim-lo: rgb(255 255 255 / .08); color: var(--as-glass-fg); }
-.as-glass[data-glass-scheme="light"] { --_fill: rgb(255 255 255 / .42); --as-glass-fg: rgb(0 0 0 / .88); --as-glass-fg-secondary: rgb(0 0 0 / .55); --as-glass-rim-hi: rgb(255 255 255 / .85); --as-glass-rim-lo: rgb(255 255 255 / .28); color: var(--as-glass-fg); }
+.as-glass[data-glass-scheme="dark"]  { --_fill: rgb(40 40 44 / .42); --as-glass-fg: rgb(255 255 255 / .94); --as-glass-fg-secondary: rgb(255 255 255 / .62); --as-glass-rim-hi: rgb(255 255 255 / .26); --as-glass-rim-lo: rgb(255 255 255 / .05); color: var(--as-glass-fg); }
+.as-glass[data-glass-scheme="light"] { --_fill: rgb(255 255 255 / .42); --as-glass-fg: rgb(0 0 0 / .88); --as-glass-fg-secondary: rgb(0 0 0 / .55); --as-glass-rim-hi: rgb(255 255 255 / .58); --as-glass-rim-lo: rgb(255 255 255 / .14); color: var(--as-glass-fg); }
 .as-glass[data-glass-over="text"] { --_shadow: 0 10px 28px -6px rgb(0 0 0 / .34), 0 2px 6px -2px rgb(0 0 0 / .2); }
 /* Focus recedes: window/pane loses focus → glass visually recedes */
 .as-glass[data-glass-focus="inactive"] { opacity: .78; --_shadow: 0 2px 8px -2px rgb(0 0 0 / .1); }
 
 /* Interactivity (Glass.interactive / .glass button style): flex + energize */
 .as-glass-interactive { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
-.as-glass-interactive:hover  { --as-glow: .35; }
+.as-glass-interactive:hover  { --as-glow: .28; --as-glass-rim-width: 1.25px; }
 .as-glass-interactive:active, .as-glass-interactive.is-pressed {
   --as-glow: 1;
-  transform: scale(1.06);
+  /* gel flex: expands slightly and flattens, then springs back */
+  --as-flex-x: var(--as-flex-press-x);
+  --as-flex-y: var(--as-flex-press-y);
   transition-duration: var(--as-dur-fast);
 }
 .as-glass-interactive:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
@@ -373,7 +429,7 @@
   color: var(--as-glass-fg);
   background: linear-gradient(var(--as-glass-tint), var(--as-glass-tint)), var(--_fill); }
 .as-button-glass.as-glass-tinted, .as-button-glass.as-glass-prominent, .as-button-glass.as-glass-clear { color: #fff; }
-.as-button-glass:active { transform: scale(1.06); opacity: 1; }
+.as-button-glass:active { transform: scale(var(--as-flex-x), var(--as-flex-y)); opacity: 1; }
 .as-button-mini   { min-height: 28px; padding: 0 12px; font-size: 13px; line-height: 18px; }
 .as-button-small  { min-height: 32px; padding: 0 14px; font-size: 15px; line-height: 20px; }
 .as-button-large  { min-height: 50px; padding: 0 24px; }
@@ -447,28 +503,94 @@
 .as-alert .as-actions { display: flex; gap: 8px; margin: 0 -8px; }
 .as-alert .as-actions .as-button { flex: 1; }
 
-/* Segmented control: selection lifts into glass */
-.as-segmented { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--as-radius-capsule); background: var(--as-fill-tertiary); position: relative; }
-.as-segmented .as-segment { position: relative; z-index: 1; min-height: 32px; padding: 0 16px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-label); font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer; }
+/* --------------------------------------------------------------------------
+   6a. Scrubbable controls
+   These are content-layer controls, so they are quiet at rest and only *lift
+   into glass while being manipulated* (WWDC25/219). All three are draggable —
+   on Apple platforms you press the selected segment / the switch knob / the
+   slider thumb and slide, and the control tracks your finger 1:1, stretching
+   with the drag and settling on a spring. liquid-glass.js adds the indicator
+   and the gesture; the CSS below degrades to click-only without it.
+   -------------------------------------------------------------------------- */
+
+/* Segmented control: selection lifts into glass and can be dragged */
+.as-segmented { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--as-radius-capsule); background: var(--as-fill-tertiary); position: relative; touch-action: pan-y; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; contain: layout style; }
+.as-segmented .as-segment { position: relative; z-index: 1; min-height: 32px; padding: 0 16px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-label); font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer; transition: color var(--as-dur-fast) var(--as-ease-soft); }
+/* fallback selection when JS has not upgraded the control */
 .as-segmented .as-segment.is-selected { background: light-dark(rgb(255 255 255), rgb(99 99 102)); box-shadow: 0 2px 6px rgb(0 0 0 / .14), inset 0 0 0 .5px rgb(255 255 255 / .5); }
 .as-segmented .as-segment:active { transform: scale(1.04); }
+/* upgraded: one sliding indicator carries the selection */
+.as-segmented[data-indicator] .as-segment.is-selected { background: transparent; box-shadow: none; }
+.as-segmented[data-indicator] .as-segment:active { transform: none; }
+.as-seg-indicator {
+  position: absolute; top: 3px; left: 0; height: calc(100% - 6px); width: 0; z-index: 0;
+  border-radius: var(--as-radius-capsule); pointer-events: none;
+  background: light-dark(rgb(255 255 255), rgb(99 99 102));
+  box-shadow: 0 2px 6px rgb(0 0 0 / .14), inset 0 0 0 .5px rgb(255 255 255 / .5);
+  transform: translateX(var(--as-ind-x, 0px)) scaleX(var(--as-ind-sx, 1));
+  transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring);
+}
+/* promote the moving part on press, before it starts moving, so the first
+   frame of the drag is not spent creating a layer */
+.as-segmented:active .as-seg-indicator, .as-segmented.is-scrubbing .as-seg-indicator,
+.as-toggle:active .as-knob, .as-toggle.is-scrubbing .as-knob,
+.as-slider:active ~ .as-slider-knob, .as-slider-knob.is-scrubbing { will-change: transform; }
+/* while the finger is down the indicator follows it 1:1 — no transition, and
+   it lifts into glass so the label underneath stays readable through it */
+.as-segmented.is-scrubbing .as-seg-indicator {
+  transition: none;
+  background: light-dark(rgb(255 255 255 / .72), rgb(120 120 124 / .72));
+  -webkit-backdrop-filter: blur(3px) saturate(1.7) brightness(1.06);
+  backdrop-filter: blur(3px) saturate(1.7) brightness(1.06);
+  box-shadow: 0 6px 18px rgb(0 0 0 / .2), inset 0 0 0 1px rgb(255 255 255 / .7);
+}
 
-/* Toggle (switch): capsule mirrors slider proportions; knob lifts into glass on drag */
-.as-toggle { position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: var(--as-radius-capsule); background: var(--as-fill); cursor: pointer; transition: background var(--as-dur-base) var(--as-ease-soft); -webkit-tap-highlight-color: transparent; }
+/* Toggle (switch): capsule mirrors slider proportions; knob is draggable and
+   lifts into glass while held */
+.as-toggle { position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: var(--as-radius-capsule); background: var(--as-fill); cursor: pointer; transition: background var(--as-dur-base) var(--as-ease-soft); -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
 .as-toggle[aria-checked="true"] { background: var(--as-green); }
-.as-toggle .as-knob { position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
-.as-toggle[aria-checked="true"] .as-knob { transform: translateX(20px); }
-.as-toggle:active .as-knob { width: 33px; }
-.as-toggle[aria-checked="true"]:active .as-knob { transform: translateX(14px); }
+.as-toggle .as-knob { position: absolute; top: 2px; left: 2px; width: var(--as-knob-w, 27px); height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transform: translateX(var(--as-knob-x, 0px)); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle[aria-checked="true"] { --as-knob-x: 20px; }
+.as-toggle:active { --as-knob-w: 33px; }
+.as-toggle[aria-checked="true"]:active { --as-knob-x: 14px; }
+.as-toggle.is-scrubbing .as-knob { transition: width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle.is-scrubbing { --as-knob-w: 33px; }
 
-/* Slider: transparent liquid lens knob to observe the value beneath */
-.as-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; }
+/* Slider: the thumb turns into a transparent liquid lens while dragged, so you
+   can watch the value underneath. JS hides the native thumb and overlays
+   .as-slider-knob as a sibling — the input keeps its own box, so it goes on
+   contributing its intrinsic width to whatever grid or flex row it sits in.
+   The bare input below is the no-JS fallback. */
+.as-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; touch-action: pan-y; }
 .as-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
 .as-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring); }
 .as-slider:active::-webkit-slider-thumb { transform: scaleX(1.35); background: rgb(255 255 255 / .6); box-shadow: 0 6px 16px rgb(0 0 0 / .18), inset 0 0 0 1px rgb(255 255 255 / .8); }
 .as-slider::-moz-range-track { height: 6px; border-radius: 3px; background: var(--as-fill); }
 .as-slider::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--as-accent); }
 .as-slider::-moz-range-thumb { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15); }
+/* upgraded */
+.as-slider.is-upgraded::-webkit-slider-thumb { opacity: 0; }
+.as-slider.is-upgraded::-moz-range-thumb { opacity: 0; }
+.as-slider-knob {
+  position: absolute; z-index: 1;
+  left: var(--as-knob-l, 0px); top: var(--as-knob-y, 50%);
+  width: 28px; height: 28px; margin-left: -14px;
+  border-radius: 50%; pointer-events: none; background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16);
+  transform: translate(var(--as-knob-x, 0px), -50%) scaleX(var(--as-knob-sx, 1));
+  transition: background var(--as-dur-base) var(--as-ease-soft),
+              box-shadow var(--as-dur-base) var(--as-ease-soft),
+              transform var(--as-dur-base) var(--as-ease-spring);
+}
+/* transient lift: only while the value is being changed */
+.as-slider-knob.is-scrubbing {
+  transition: background var(--as-dur-fast), box-shadow var(--as-dur-fast);
+  background: rgb(255 255 255 / .38);
+  -webkit-backdrop-filter: blur(1px) saturate(1.8) brightness(1.08);
+  backdrop-filter: blur(1px) saturate(1.8) brightness(1.08);
+  box-shadow: 0 8px 20px rgb(0 0 0 / .2), inset 0 0 0 1px rgb(255 255 255 / .85);
+}
+.as-slider-knob.is-focused { box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 0 0 3px color-mix(in oklab, var(--as-accent) 55%, transparent); }
 
 /* Search field: own glass surface (compose with .as-glass) */
 .as-search { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; }
@@ -499,18 +621,39 @@
   .as-glass { --_fill: light-dark(rgb(245 245 247 / .92), rgb(44 44 46 / .92)); --_blur: 40px; }
   .as-glass::before { opacity: .5; }
   .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(rgb(255 255 255 / .96), rgb(120 120 124 / .96)); }
 }
 :root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
 /* Increase Contrast → predominantly black/white with a contrasting border */
 @media (prefers-contrast: more) {
-  .as-glass { --_fill: light-dark(rgb(255 255 255 / .96), rgb(0 0 0 / .96)); --_blur: 0px; box-shadow: var(--_shadow), inset 0 0 0 1.5px var(--as-label); }
+  .as-glass {
+    --_fill: light-dark(rgb(255 255 255 / .96), rgb(0 0 0 / .96));
+    --_blur: 0px; --as-glass-filter: none;
+    --as-glass-brightness: 1; --as-glass-contrast: 1; --as-glass-sheen: transparent;
+    /* The fill stops following the backdrop here, so the label has to follow
+       the fill: an element that adapt() marked dark would otherwise keep white
+       text on now-white glass. */
+    --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary);
+    color: var(--as-label);
+    box-shadow: var(--_shadow), inset 0 0 0 1.5px var(--as-label);
+  }
+  .as-glass[data-glass-scheme] { --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary); color: var(--as-label); }
   .as-glass::before, .as-glass::after { display: none; }
-  .as-glass-tinted, .as-glass-prominent { --as-glass-tint: var(--as-tint, var(--as-accent)); }
+  .as-glass-tinted, .as-glass-prominent,
+  .as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-accent)); color: #fff; }
+  .as-glass-clear, .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(#fff, #000); box-shadow: inset 0 0 0 1.5px var(--as-label); }
 }
 /* Reduce Motion → no elastic / morphing, keep opacity changes */
 @media (prefers-reduced-motion: reduce) {
-  .as-glass, .as-glass *, .as-button, .as-sheet, .as-menu, .as-toggle .as-knob, .as-tabbar .as-glass-group { transition-duration: 1ms !important; }
-  .as-glass-interactive:active, .as-glass-interactive.is-pressed { transform: none; }
+  .as-glass, .as-glass *, .as-button, .as-sheet, .as-menu, .as-toggle .as-knob,
+  .as-tabbar .as-glass-group, .as-seg-indicator, .as-slider-knob { transition-duration: 1ms !important; }
+  /* no elastic: keep the illumination, drop the flex and the drag stretch */
+  .as-glass-interactive:active, .as-glass-interactive.is-pressed { --as-flex-x: 1; --as-flex-y: 1; }
+  .as-seg-indicator { --as-ind-sx: 1 !important; }
+  .as-slider-knob { --as-knob-sx: 1 !important; }
 }
 /* Forced colors (Windows High Contrast) */
 @media (forced-colors: active) { .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; } .as-glass::before, .as-glass::after { display: none; } }
