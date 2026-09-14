@@ -562,6 +562,35 @@
       if (acc > 24 && y > 40) bar.classList.add('is-minimized'); else if (acc < -24 || y <= 40) bar.classList.remove('is-minimized'); };
     scroller.addEventListener('scroll', onScroll, { passive: true });
   }
+  // Navigation bar title behaviour (HIG): the large title owns the top of the
+  // view, and the compact toolbar title only appears once that large title has
+  // scrolled out — showing both at rest prints the same words twice.
+  // Opt in per title: <div class="as-toolbar-title" data-reveal-on-scroll>.
+  // The optional attribute value is a selector for the large title(s);
+  // multiple titles (one per view/tab) are supported — hidden ones report as
+  // not intersecting, so the visible view is the one that decides.
+  function titleOnScroll(title, opts = {}) {
+    if (title.__lgTitle) return; title.__lgTitle = true;
+    const sel = opts.selector || title.dataset.revealOnScroll || '.as-large-title';
+    const seen = new Map();
+    const update = () => {
+      let largeVisible = false;
+      seen.forEach((inter, el) => { if (inter && el.isConnected) largeVisible = true; });
+      title.classList.toggle('is-visible', !largeVisible);
+    };
+    const io = new IntersectionObserver(es => { es.forEach(e => seen.set(e.target, e.isIntersecting)); update(); });
+    const sync = () => {
+      document.querySelectorAll(sel).forEach(t => { if (!seen.has(t)) { seen.set(t, false); io.observe(t); } });
+      seen.forEach((_, el) => { if (!el.isConnected) seen.delete(el); });
+      update();
+    };
+    sync();
+    // views that swap with [hidden], and lists that re-render, both need a
+    // resync — coalesced into one frame so a re-render storm costs one pass
+    let queued = 0;
+    const resync = () => { if (queued) return; queued = requestAnimationFrame(() => { queued = 0; sync(); }); };
+    new MutationObserver(resync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  }
   // Concentric: child radius = container radius − child's inset from container edge
   function concentric(container, min = 0) {
     const cs = getComputedStyle(container); const R = parseFloat(cs.borderTopLeftRadius) || 0; const cr = container.getBoundingClientRect();
@@ -614,6 +643,7 @@
     const wired = controls(root);
     addEventListener('scroll', scheduleAdapt, { passive: true, capture: true }); addEventListener('resize', scheduleAdapt);
     document.querySelectorAll('.as-tabbar[data-minimize]').forEach(b => tabBarMinimize(b));
+    document.querySelectorAll('.as-toolbar-title[data-reveal-on-scroll]').forEach(t => titleOnScroll(t));
     document.querySelectorAll('.as-container[data-concentric]').forEach(c => concentric(c));
     new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => {
       if (n.nodeType !== 1) return;
@@ -627,7 +657,7 @@
     ['(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(prefers-color-scheme: dark)'].forEach(q => matchMedia(q).addEventListener('change', () => attached.forEach(el => { el.style.removeProperty('--as-glass-filter'); if (onScreen.has(el)) applyLens(el, {}); adapt(el); })));
     return { attached: attached.size, controls: wired, lens: supportsLens && !liteMode() };
   }
-  global.LiquidGlass = { init, attach, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, concentric, supportsLens, refresh: scheduleAdapt };
+  global.LiquidGlass = { init, attach, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, supportsLens, refresh: scheduleAdapt };
   if (document.readyState !== 'loading' && document.currentScript?.dataset.auto !== undefined) init();
   else if (document.currentScript?.dataset.auto !== undefined) addEventListener('DOMContentLoaded', () => init());
 })(window);

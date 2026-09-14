@@ -46,8 +46,12 @@ Paths below are relative to this skill's directory; sibling skills live at `../A
 <button class="as-glass as-glass-interactive as-button as-button-glass">Regular</button>
 <button class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass">Done</button>
 <div class="as-glass as-glass-group"><button class="as-item is-selected">Day</button><button class="as-item">Week</button></div>
-<nav class="as-tabbar" data-minimize><div class="as-glass as-glass-group" role="tablist">…tabs…</div><div class="as-glass as-glass-group"><button class="as-tab as-tab-search">🔍</button></div></nav>
-<header class="as-scroll-edge as-edge-top"><div class="as-toolbar">…glass groups…</div></header>
+<!-- data-sidebar: the same tab bar becomes a left sidebar at ≥1024px (one element that scales).
+     Put .as-with-tabsidebar on whatever owns the page padding. -->
+<nav class="as-tabbar" data-minimize data-sidebar><div class="as-glass as-glass-group" role="tablist">…tabs…</div><div class="as-glass as-glass-group"><button class="as-tab as-tab-search">🔍</button></div></nav>
+<header class="as-scroll-edge as-edge-top"><div class="as-toolbar">
+  <div class="as-toolbar-title" data-reveal-on-scroll>Landmarks</div>  <!-- appears only after .as-large-title scrolls away -->
+  …glass groups…</div></header>
 <div class="as-glass as-glass-large as-sheet">…</div>     <!-- large glass: sidebar/menu/sheet/alert -->
 
 <!-- Scrubbable controls: plain markup, init() adds the drag gesture -->
@@ -73,6 +77,12 @@ Preview a standalone page: `python3 -m http.server 8765 --directory <dir>` then 
 | Semi-opaque white/black bar background + 1px border | Delete it; use `.as-scroll-edge` |
 | Every button tinted brand color | One `as-glass-prominent`; rest regular |
 | `border-radius: 16px` on artwork inside a 26px card with 12px padding | 14px (concentric) |
+| A selected-row **highlight** inside a glass group / sidebar left on a small fixed radius | Same rule, and it is the most visible case: radius = group radius − group padding. Drive it from the tokens (`calc(var(--as-glass-radius) - <pad>)`) so it survives a retune |
+| A **tall or large** glass surface left on the default capsule radius | `.as-glass` defaults to a capsule, which is only right for short horizontal controls — a 216×198 capsule is a 99px lozenge, not a sidebar. Set `--as-glass-radius` (`as-glass-large` and `.as-tabbar[data-sidebar]` already do) |
+| Menu items / sidebar rows as `<div role="menuitem">` | Use `<button>`/`<a>` — the menu keyboard model needs focusable items; the CSS resets the UA button chrome for you |
+| Compact toolbar title on screen while the large title is still visible | Same words twice: `data-reveal-on-scroll` on `.as-toolbar-title` |
+| `outline: none` on an input inside glass with no replacement ring | Keyboard users lose the field. Ring the glass container via `:focus-within` / `:focus-visible` with `outline` + `outline-offset` (never `box-shadow` — glass owns that) |
+| Destructive action with neither confirmation nor undo | Irreversible → alert/action sheet, red destructive button, Cancel is the default; reversible → do it and offer **Undo** in a toast |
 | `transition: all .3s ease-in-out` | `transform`/`opacity` only, `--as-ease-spring` |
 | Uppercase section headers, centered alert text | Title case; left-aligned bold |
 | Segmented control / switch / slider that only responds to clicks | Let `LiquidGlass.init()` own them; they must track a drag and stretch with it |
@@ -86,5 +96,5 @@ Preview a standalone page: `python3 -m http.server 8765 --directory <dir>` then 
 
 ## Files
 - `cheatsheets/` — 9 dense summaries with the exact numbers. `web-implementation.md` is the web-only layer: ARIA mapping per component, focus/keyboard, breakpoints, forms, theming, media, the z-index scale, the performance budget and the two licensing traps (SF Symbols and SF fonts are **not** usable on the web).
-- `web/apple-style.css` (tokens + type + colors + materials + Liquid Glass + components + a11y), `web/liquid-glass.js` (lensing with chromatic dispersion, travelling specular highlight, gel flex, backdrop adaptivity, morph/materialize, scrubbable controls, tab-bar minimize, concentric), `web/demo.html` (every component, verified in Chromium).
+- `web/apple-style.css` (tokens + type + colors + materials + Liquid Glass + components + a11y + the tab-bar→sidebar form), `web/liquid-glass.js` (lensing with chromatic dispersion, travelling specular highlight, gel flex, backdrop adaptivity, morph/materialize, scrubbable controls, tab-bar minimize, title-on-scroll, concentric), `web/demo.html` (every component, verified in Chromium).
 - `scripts/hig-lookup.sh`, `scripts/update-reference.sh` (+ `docc2md.py`, `crawl.py`, `transcript.py`) to search/refresh the Apple-Style-HIG library.

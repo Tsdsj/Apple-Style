@@ -58,12 +58,14 @@
 </header>
 
 <!-- Share menu pops open from its source (morph) -->
-<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" hidden>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg>Copy<span class="as-shortcut">⌘C</span></div>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>Share…</div>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg>Add to Home Screen</div>
-  <div class="as-menu-sep"></div>
-  <div class="as-menu-item as-destructive" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Delete</div>
+<!-- Menu items are real buttons: the menu keyboard model (Up/Down, Escape,
+     Tab) needs focusable elements, and the stylesheet resets the UA chrome. -->
+<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" aria-label="Share" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg>Copy<span class="as-shortcut">⌘C</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>Share…</button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg>Add to Home Screen</button>
+  <div class="as-menu-sep" role="separator"></div>
+  <button class="as-menu-item as-destructive" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Delete</button>
 </div>
 
 <main class="stage">
@@ -204,11 +206,24 @@
 
   // Menu morphs out of its source button
   const shareBtn = document.getElementById('shareBtn'), menu = document.getElementById('shareMenu');
+  shareBtn.setAttribute('aria-expanded', 'false');
   shareBtn.addEventListener('click', () => {
     const r = shareBtn.getBoundingClientRect(); menu.hidden = false; menu.style.top = (r.bottom + 8) + 'px'; menu.style.left = Math.max(8, r.right - 250) + 'px'; menu.style.setProperty('--as-origin', 'top right');
     requestAnimationFrame(() => menu.classList.add('is-open'));
+    shareBtn.setAttribute('aria-expanded', 'true');
+    menu.querySelector('.as-menu-item').focus();   // menus take focus when opened
   });
-  document.addEventListener('pointerdown', e => { if (!menu.contains(e.target) && !shareBtn.contains(e.target)) { menu.classList.remove('is-open'); setTimeout(() => menu.hidden = true, 300); } });
+  function closeMenu(restore) { menu.classList.remove('is-open'); shareBtn.setAttribute('aria-expanded', 'false'); setTimeout(() => menu.hidden = true, 300); if (restore) shareBtn.focus(); }
+  document.addEventListener('pointerdown', e => { if (!menu.hidden && !menu.contains(e.target) && !shareBtn.contains(e.target)) closeMenu(false); });
+  // Up/Down move, Escape closes and returns focus, Tab closes — the menu
+  // keyboard contract from cheatsheets/web-implementation.md
+  menu.addEventListener('keydown', e => {
+    const items = [...menu.querySelectorAll('.as-menu-item')], i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); }
+    else if (e.key === 'Tab') closeMenu(false);
+  });
   // Sheet
   const sheet = document.getElementById('sheet'), bd = document.getElementById('sheetBackdrop');
   document.getElementById('openSheet').addEventListener('click', () => { bd.classList.add('is-open'); sheet.classList.add('is-open'); });

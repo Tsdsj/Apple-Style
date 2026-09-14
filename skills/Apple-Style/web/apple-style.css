@@ -25,6 +25,7 @@
   --as-margin-regular: 20px;      /* regular width layout margin */
   --as-hit-min: 44px;             /* minimum hit region 44x44pt (visionOS: 60) */
   --as-readable-width: 672px;     /* readable content guide */
+  --as-tabsidebar-width: 216px;   /* tab bar adapted into a sidebar at regular width */
 
   /* Shapes. Three types (WWDC25/356): fixed, capsule (radius = height/2),
      concentric (parent radius − inset). */
@@ -446,6 +447,16 @@
 .as-toolbar .as-glass-group > .as-item { padding: 0 12px; }
 .as-toolbar .as-item svg { width: 20px; height: 20px; }
 .as-toolbar-title { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-label); }
+/* Opt-in (HIG Navigation bars): large title while the view is at the top, the
+   standard title only once that large title has scrolled away — otherwise the
+   same words sit on screen twice. Add `data-reveal-on-scroll` to the toolbar
+   title (optional value = selector of the large title, default .as-large-title)
+   and LiquidGlass.init() wires the observer. */
+.as-toolbar-title[data-reveal-on-scroll] {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-soft);
+}
+.as-toolbar-title[data-reveal-on-scroll].is-visible { opacity: 1; transform: none; }
 
 /* Tab bar (iOS): floating capsule, search tab separate at trailing end */
 .as-tabbar { position: fixed; left: 0; right: 0; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 10px; padding: 0 var(--as-margin); z-index: 20; pointer-events: none; }
@@ -454,6 +465,10 @@
 .as-tabbar .as-tab { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: 48px; padding: 4px 10px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-glass-fg-secondary); font: 500 10px/12px var(--as-font-text); cursor: pointer; transition: color var(--as-dur-fast), background var(--as-dur-base) var(--as-ease-spring), transform var(--as-dur-base) var(--as-ease-spring); }
 .as-tabbar .as-tab svg { width: 24px; height: 24px; }
 .as-tabbar .as-tab:active { transform: scale(.92); }
+/* A focus ring tuned for glass — the UA default is drawn for opaque surfaces
+   and disappears against a bright backdrop behind the bar. */
+.as-tabbar .as-tab:focus-visible,
+.as-glass-group > .as-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 65%, transparent); outline-offset: -2px; }
 .as-tabbar .as-tab.is-selected { color: var(--as-accent); background: light-dark(rgb(255 255 255 / .9), rgb(255 255 255 / .14)); box-shadow: 0 1px 4px rgb(0 0 0 / .12); }
 .as-tabbar .as-tab-search { width: 56px; height: 56px; min-width: 0; padding: 0; }
 /* minimize on scroll: liquid-glass.js toggles .is-minimized */
@@ -462,10 +477,59 @@
 .as-tabbar.is-minimized .as-tab-search { width: 46px; height: 46px; }
 .as-tabbar.is-minimized .as-tab span { display: none; }
 
+/* Tab bar ↔ sidebar: ONE navigational element that scales with width
+   (`sidebarAdaptable` / `UITabBarController.Mode.tabSidebar`). Opt in with
+   `data-sidebar` on the .as-tabbar; it takes effect at regular width.
+   The radius override is the point: .as-glass defaults to a capsule, which is
+   right for a short horizontal pill and wrong the moment the surface becomes
+   tall — a 216×198 capsule is a 99px lozenge, not a sidebar. Large glass is a
+   rounded rectangle (same radius .as-glass-large uses). */
+@media (min-width: 1024px) {
+  .as-tabbar[data-sidebar] {
+    flex-direction: column; justify-content: flex-start; align-items: stretch;
+    inset-block: 12px max(12px, env(safe-area-inset-bottom));
+    inset-inline: 12px auto;   /* leading edge, mirrors in RTL */
+    width: var(--as-tabsidebar-width); padding: 0;
+  }
+  .as-tabbar[data-sidebar] .as-glass-group {
+    --as-glass-radius: var(--as-radius-xl);
+    --as-tabsidebar-pad: 8px;
+    flex-direction: column; align-items: stretch; padding: var(--as-tabsidebar-pad); gap: 2px;
+  }
+  .as-tabbar[data-sidebar] .as-tab {
+    flex-direction: row; justify-content: flex-start; gap: 10px;
+    min-height: var(--as-hit-min); padding: 0 12px;
+    /* Concentric: the selected-row highlight is inset by the group padding, so
+       its radius is the group radius MINUS that inset. A fixed small radius
+       here reads as flared corners inside the rounded group — the single most
+       visible concentricity bug in a sidebar. */
+    border-radius: max(0px, calc(var(--as-glass-radius) - var(--as-tabsidebar-pad)));
+    font: 500 15px/20px var(--as-font-text);
+  }
+  .as-tabbar[data-sidebar] .as-tab svg { width: 20px; height: 20px; }
+  .as-tabbar[data-sidebar] .as-tab span { font-size: 15px; line-height: 20px; }
+  .as-tabbar[data-sidebar] .as-tab-search { width: auto; height: auto; min-width: 0; min-height: var(--as-hit-min); padding: 0 12px; border-radius: max(0px, calc(var(--as-glass-radius) - var(--as-tabsidebar-pad))); }
+  .as-tabbar[data-sidebar] .as-badge { position: static; margin-inline-start: auto; }
+  /* minimize-on-scroll is a compact-width behavior; a sidebar stays put.
+     The :not() chain mirrors the compact rules above so these win on
+     specificity rather than on source order alone. */
+  .as-tabbar[data-sidebar].is-minimized .as-glass-group { transform: none; opacity: 1; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab:not(.is-selected):not(.as-tab-search) { display: inline-flex; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab span { display: inline; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab-search { width: auto; height: auto; min-height: var(--as-hit-min); }
+  /* content inset: put this on the element that owns the page padding */
+  .as-with-tabsidebar { padding-inline-start: calc(var(--as-tabsidebar-width) + 24px); }
+  .as-with-tabsidebar.as-safe-bottom { padding-bottom: max(40px, env(safe-area-inset-bottom)); }
+}
+
 /* Sidebar (iPad/Mac): inset floating glass; content extends beneath */
-.as-sidebar { position: absolute; inset: 12px auto 12px 12px; width: 280px; padding: 12px; overflow: auto; display: flex; flex-direction: column; gap: 2px; z-index: 15; }
-.as-sidebar .as-row { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border-radius: var(--as-radius-s); color: var(--as-glass-fg); font: 400 15px/20px var(--as-font-text); cursor: pointer; }
+/* Logical inset so the sidebar lands on the leading edge in RTL too. */
+.as-sidebar { position: absolute; inset-block: 12px; inset-inline: 12px auto; width: 280px; --as-sidebar-pad: 12px; padding: var(--as-sidebar-pad); overflow: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 2px; z-index: 15; }
+/* Same button reset as the menu item: sidebar rows are navigation targets, so
+   they are <button> or <a>, not <div>. */
+.as-sidebar .as-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 0 12px; box-sizing: border-box; appearance: none; -webkit-appearance: none; border: 0; background: transparent; border-radius: max(0px, calc(var(--as-glass-radius, var(--as-radius-xl)) - var(--as-sidebar-pad, 12px))); color: var(--as-glass-fg); font: 400 15px/20px var(--as-font-text); text-align: start; text-decoration: none; cursor: pointer; }
 .as-sidebar .as-row:hover { background: rgb(128 128 128 / .12); }
+.as-sidebar .as-row:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
 .as-sidebar .as-row.is-selected { background: light-dark(rgb(0 0 0 / .08), rgb(255 255 255 / .14)); font-weight: 600; }
 .as-sidebar .as-row svg { width: 20px; height: 20px; color: var(--as-accent); }
 .as-sidebar .as-section-title { padding: 14px 12px 6px; font: 600 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
@@ -477,7 +541,9 @@
 /* Sheet: inset half-sheet with large radius; becomes opaque at full height */
 .as-sheet-backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / .30); z-index: 30; opacity: 0; pointer-events: none; transition: opacity var(--as-dur-base) var(--as-ease-soft); }
 .as-sheet-backdrop.is-open { opacity: 1; pointer-events: auto; }
-.as-sheet { position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto;
+/* overscroll-behavior: reaching the end of a sheet/menu/sidebar must not hand
+   the scroll to the page behind it. */
+.as-sheet { position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto; overscroll-behavior: contain;
   --as-glass-radius: var(--as-radius-sheet); transform: translateY(110%); transition: transform var(--as-dur-slow) var(--as-ease-spring), border-radius var(--as-dur-base), background var(--as-dur-base), left var(--as-dur-base), right var(--as-dur-base), bottom var(--as-dur-base), max-height var(--as-dur-slow) var(--as-ease-spring); }
 .as-sheet.is-open { transform: translateY(0); }
 .as-sheet.is-full { left: 0; right: 0; bottom: 0; max-height: 100vh; --as-glass-radius: var(--as-radius-sheet) var(--as-glass-radius, 0) 0 0; border-radius: var(--as-radius-sheet) var(--as-radius-sheet) 0 0; --_fill: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -485,11 +551,18 @@
 .as-sheet .as-sheet-title { text-align: left; font: 700 20px/25px var(--as-font-display); margin: 0 0 12px; }  /* bolder, left-aligned */
 
 /* Menu / popover: pops open from its source; thicker glass; icons lead items */
-.as-menu { position: absolute; min-width: 250px; padding: 6px; z-index: 40; transform-origin: var(--as-origin, top left); --as-glass-radius: var(--as-radius-l);
+.as-menu { position: absolute; min-width: 250px; max-height: min(70dvh, 520px); overflow: auto; overscroll-behavior: contain; padding: 6px; z-index: 40; transform-origin: var(--as-origin, top left); --as-glass-radius: var(--as-radius-l);
   opacity: 0; transform: scale(.4); pointer-events: none; transition: transform var(--as-dur-base) var(--as-ease-spring), opacity var(--as-dur-fast); }
 .as-menu.is-open { opacity: 1; transform: none; pointer-events: auto; }
-.as-menu .as-menu-item { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--as-radius-m); color: var(--as-glass-fg); font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; cursor: pointer; }
+/* The item must work as a real <button role="menuitem"> — the menu keyboard
+   model (arrow keys, Escape, Tab) needs a focusable element, and a bare <div>
+   is not one. So the UA button chrome (buttonface background, 2px outset
+   border, shrink-to-fit width, system font) has to be reset here, exactly as
+   .as-item / .as-tab / .as-segment / .as-button already do. Without this a
+   correctly-marked-up menu renders as a stack of gray OS buttons on glass. */
+.as-menu .as-menu-item { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 12px; box-sizing: border-box; appearance: none; -webkit-appearance: none; border: 0; background: transparent; border-radius: var(--as-radius-m); color: var(--as-glass-fg); font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; text-align: start; cursor: pointer; }
 .as-menu .as-menu-item:hover { background: rgb(128 128 128 / .14); }
+.as-menu .as-menu-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
 .as-menu .as-menu-item svg { width: 20px; height: 20px; opacity: .9; }
 .as-menu .as-menu-item .as-shortcut { margin-left: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
 .as-menu .as-menu-item.as-destructive { color: var(--as-red); }
@@ -594,6 +667,10 @@
 
 /* Search field: own glass surface (compose with .as-glass) */
 .as-search { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; }
+/* The input drops its own outline so the ring can wrap the whole glass pill
+   instead of the bare text box — but the ring has to come back somewhere, or
+   keyboard users lose the field entirely. Never `outline: none` alone. */
+.as-search:focus-within { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
 .as-search input { flex: 1; border: 0; background: transparent; color: inherit; font: 400 17px/22px var(--as-font-text); outline: none; }
 .as-search input::placeholder { color: var(--as-glass-fg-secondary); }
 .as-search svg { width: 18px; height: 18px; color: var(--as-glass-fg-secondary); }
@@ -649,7 +726,9 @@
 /* Reduce Motion → no elastic / morphing, keep opacity changes */
 @media (prefers-reduced-motion: reduce) {
   .as-glass, .as-glass *, .as-button, .as-sheet, .as-menu, .as-toggle .as-knob,
-  .as-tabbar .as-glass-group, .as-seg-indicator, .as-slider-knob { transition-duration: 1ms !important; }
+  .as-tabbar .as-glass-group, .as-seg-indicator, .as-slider-knob,
+  .as-toolbar-title[data-reveal-on-scroll] { transition-duration: 1ms !important; }
+  .as-toolbar-title[data-reveal-on-scroll] { transform: none; }
   /* no elastic: keep the illumination, drop the flex and the drag stretch */
   .as-glass-interactive:active, .as-glass-interactive.is-pressed { --as-flex-x: 1; --as-flex-y: 1; }
   .as-seg-indicator { --as-ind-sx: 1 !important; }
