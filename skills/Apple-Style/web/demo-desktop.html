@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en" class="as-root" data-platform="macos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apple-Style · desktop window</title>
+<link rel="stylesheet" href="apple-style.css">
+<style>
+  /* Demo-only chrome. Everything structural comes from apple-style.css. */
+  body { margin: 0; }
+  .list { margin: 0; padding: 0; list-style: none; }
+  .list li { display: flex; align-items: center; gap: 12px; min-height: 30px; padding: 0 14px;
+    font: 400 13px/16px var(--as-font-text); cursor: default; }
+  .list li + li { box-shadow: inset 0 .5px 0 var(--as-separator); }
+  .list li:focus-visible { outline: 2px solid var(--as-accent); outline-offset: -2px; }
+  /* Hover is a pointer affordance — gate it so a touch device doesn't get a
+     sticky highlight after a tap. */
+  @media (hover: hover) { .list li:not([aria-selected="true"]):hover { background: var(--as-fill-quaternary); } }
+  .list li[aria-selected="true"] { background: var(--as-accent); color: #fff; }
+  /* Secondary text on an accent fill goes opaque, not 78% alpha: white on the
+     system blue is ~3.3:1 already, and dimming it further measured 2.8:1. */
+  .list li[aria-selected="true"] .as-secondary { color: #fff; }
+  .list li .who { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Tables and lists fill the column they are in — no max-width borrowed from
+     the readable-width guide, which is about running text. Logical property so
+     the column still reads correctly in RTL. */
+  .list li .amount { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+  /* Status is carried by the label, never by colour alone. The text uses the
+     semantic label colour rather than the status hue: an orange-on-pale-orange
+     pill measured 1.9:1 in light mode. */
+  .pill { padding: 1px 7px; border-radius: 9px; color: var(--as-label);
+    font: 500 10px/14px var(--as-font-text); white-space: nowrap; }
+  .pill.wait { background: color-mix(in oklab, var(--as-orange) 22%, transparent); }
+  .pill.ok   { background: color-mix(in oklab, var(--as-green) 22%, transparent); }
+  .list li[aria-selected="true"] .pill { background: rgb(255 255 255 / .95); color: rgb(0 0 0 / .85); }
+  .col-head { display: flex; align-items: center; gap: 12px; padding: 6px 14px;
+    font: 600 11px/14px var(--as-font-text); color: var(--as-label-secondary); }
+  .col-head .amount { margin-inline-start: auto; }
+  /* Running text is the one thing that DOES get the readable width. */
+  .prose { padding: 16px 20px; color: var(--as-label-secondary); font: 400 13px/19px var(--as-font-text); }
+  /* Loading / empty / error — the chrome above stays identical across all four
+     states so the window never jumps. */
+  .skeleton { display: flex; align-items: center; gap: 12px; min-height: 30px; padding: 0 14px; }
+  .skeleton span { height: 9px; border-radius: 4px; background: var(--as-fill-tertiary); }
+  .skeleton span:nth-child(1) { flex: 1; }
+  .skeleton span:nth-child(2) { width: 52px; }
+  .skeleton span:nth-child(3) { width: 68px; }
+  @media (prefers-reduced-motion: no-preference) { .skeleton span { animation: pulse 1.4s var(--as-ease-soft) infinite; } }
+  @keyframes pulse { 50% { opacity: .45; } }
+  .state { padding: 44px 24px; text-align: center; color: var(--as-label-secondary); }
+  .state h2 { margin: 0 0 4px; font: 600 13px/16px var(--as-font-text); color: var(--as-label); }
+  .state p { margin: 0 0 14px; font: 400 13px/18px var(--as-font-text); }
+  .inspector-actions { display: flex; gap: 8px; padding: 10px 0; }
+  .measure { position: fixed; inset-inline-end: 10px; inset-block-end: 8px; z-index: 30;
+    padding: 3px 8px; border-radius: 6px; background: var(--as-fill-tertiary);
+    color: var(--as-label-secondary); font: 400 10px/14px var(--as-font-mono); }
+</style>
+</head>
+<body class="as-body">
+
+<!-- A window, not a page: menu bar · toolbar in the frame · split view.
+     Nothing critical sits on the bottom edge (hig/layout.md macOS,
+     hig/windows.md) — navigation is the leading sidebar and detail is the
+     trailing inspector. -->
+<div class="as-window" id="win">
+
+  <!-- Menu bar. data-shortcuts opts the page into LiquidGlass wiring every
+       printed ⌘-combination to its menu item; LiquidGlass.menuBar() owns the
+       roving tabindex and Left/Right navigation that role="menubar" implies. -->
+  <div class="as-menubar" role="menubar" aria-label="Main menu" data-shortcuts>
+    <button class="as-menubar-item as-menubar-app" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-menu="mAppMenu">Expenses</button>
+    <button class="as-menubar-item" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-menu="mFile">File</button>
+    <button class="as-menubar-item" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-menu="mView">View</button>
+    <div class="as-spacer"></div>
+    <span class="as-text-caption2 as-secondary" style="padding-inline:8px">⌥⌘S / ⌥⌘I toggle the panes</span>
+  </div>
+
+  <!-- Toolbar in the window frame. Items carry no bezel — "toolbar items don't
+       include a bezel" (hig/toolbars.md macOS); the frame is the container, so
+       .as-toolbar-group is spacing only, not a glass pill.
+       Grouping is by function: leading = show/hide sidebar then the title;
+       trailing = content actions, then view commands, then search, then the
+       one prominent primary action. -->
+  <header class="as-toolbar as-toolbar-window">
+    <div class="as-toolbar-group" aria-label="View">
+      <button class="as-item" id="tSidebar" aria-label="Hide sidebar" aria-pressed="true">
+        <svg class="as-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M9 5v14"/></svg>
+      </button>
+    </div>
+    <h1 class="as-toolbar-title">Pending Approvals</h1>
+    <div class="as-spacer"></div>
+    <div class="as-toolbar-group" aria-label="Claim actions">
+      <button class="as-item" id="tExport" aria-label="Export"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 14v6h14v-6"/></svg></button>
+      <button class="as-item" id="tFlag" aria-label="Flag"><svg class="as-icon" viewBox="0 0 24 24"><path d="M5 21V4h9l-1 3h6l-1 4 1 4h-8l1-3H5"/></svg></button>
+    </div>
+    <div class="as-toolbar-group" aria-label="Inspector">
+      <button class="as-item" id="tInspector" aria-label="Hide inspector" aria-pressed="true">
+        <svg class="as-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M15 5v14"/></svg>
+      </button>
+    </div>
+    <!-- Top-trailing search field on Mac (not a search tab — that is iPhone) -->
+    <div class="as-search" role="search">
+      <svg class="as-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+      <input type="search" id="q" aria-label="Search approvals" placeholder="Search">
+    </div>
+    <button class="as-button as-button-filled as-button-small" id="approveBtn">Approve</button>
+  </header>
+
+  <div class="as-split" id="split">
+
+    <!-- Two levels of hierarchy, no more (hig/sidebars.md). Nothing critical
+         at the bottom edge of the sidebar either (same page, macOS section). -->
+    <aside class="as-sidebar" aria-label="Sidebar">
+      <div class="as-section-title" id="qh">Queues</div>
+      <a class="as-row is-selected" href="#" data-queue="pending" aria-current="page"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Pending<span class="as-secondary" style="margin-inline-start:auto">24</span></a>
+      <a class="as-row" href="#" data-queue="approved"><svg class="as-icon" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Approved</a>
+      <a class="as-row" href="#" data-queue="returned"><svg class="as-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Returned</a>
+      <div class="as-section-title">Teams</div>
+      <a class="as-row" href="#" data-queue="pending"><svg class="as-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Engineering</a>
+      <a class="as-row as-row-child" href="#" data-queue="pending">Platform</a>
+      <a class="as-row as-row-child" href="#" data-queue="pending">Mobile</a>
+      <a class="as-row" href="#" data-queue="approved"><svg class="as-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Design</a>
+    </aside>
+
+    <div class="as-split-divider" data-min="180" data-max="360"></div>
+
+    <main class="as-content" id="content">
+      <!-- Each pane is its own scroll view, so each gets its own scroll edge
+           — one per scroll view, not one per window. Hard style: macOS pinned
+           column header. It stays put across loading/empty/error/populated. -->
+      <div class="as-scroll-edge as-edge-top as-edge-hard">
+        <div class="col-head"><span>Claimant</span><span>Status</span><span class="amount">Amount</span></div>
+      </div>
+      <!-- A real listbox: the selection drives the inspector, so it has to be
+           reachable and operable from the keyboard (roving tabindex, Up/Down,
+           Home/End, aria-selected). -->
+      <ul class="list" id="rows" role="listbox" aria-label="Approvals" tabindex="-1"></ul>
+      <div id="stateSlot" hidden></div>
+      <p class="prose as-readable" id="proseNote">Running text and forms get the readable width. The table above
+      deliberately does not: a list fills the column it lives in, and borrowing the 672pt
+      readable-content guide for a whole page is what leaves dead gutters on a wide display.</p>
+    </main>
+
+    <div class="as-split-divider" data-min="240" data-max="520"></div>
+
+    <aside class="as-inspector" aria-label="Inspector">
+      <div class="as-scroll-edge as-edge-top as-edge-hard">
+        <div class="col-head" id="insTitle">R. Okafor · #4821</div>
+      </div>
+      <div id="insBody">
+        <div class="as-inspector-title">Claim</div>
+        <div class="as-field"><span>Submitted</span><span>12 Mar 2026</span></div>
+        <div class="as-field"><span>Category</span><span>Travel — rail</span></div>
+        <div class="as-field"><span>Amount</span><span class="as-tabular" id="insAmount">¥128,400</span></div>
+        <div class="as-field"><span>Tax</span><span class="as-tabular">¥11,672</span></div>
+        <div class="as-inspector-title">Policy</div>
+        <div class="as-field"><span>Within limit</span><span>Yes</span></div>
+        <div class="as-field"><span>Receipts</span><span>3 of 3</span></div>
+        <div class="as-field"><span>Second approver</span><span>Not required</span></div>
+        <div class="as-inspector-title">Actions</div>
+        <div class="inspector-actions">
+          <button class="as-button as-button-filled" id="insApprove">Approve</button>
+          <button class="as-button as-button-gray" id="insReturn">Return</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Menu-bar menus. Every printed shortcut resolves to a real command. -->
+<div class="as-glass as-glass-large as-menu" id="mAppMenu" role="menu" aria-label="Expenses" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdAbout">About Expenses</button>
+  <div class="as-menu-sep" role="separator"></div>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdSettings">Settings…<span class="as-shortcut">⌘,</span></button>
+</div>
+<div class="as-glass as-glass-large as-menu" id="mFile" role="menu" aria-label="File" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdNew">New Claim<span class="as-shortcut">⌘N</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdApprove">Approve Selected<span class="as-shortcut">⌘⏎</span></button>
+  <div class="as-menu-sep" role="separator"></div>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdExport">Export…<span class="as-shortcut">⇧⌘E</span></button>
+</div>
+<div class="as-glass as-glass-large as-menu" id="mView" role="menu" aria-label="View" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdSidebar">Toggle Sidebar<span class="as-shortcut">⌥⌘S</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdInspector">Toggle Inspector<span class="as-shortcut">⌥⌘I</span></button>
+  <div class="as-menu-sep" role="separator"></div>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdReload">Reload Queue<span class="as-shortcut">⌘R</span></button>
+</div>
+
+<!-- Undo, rather than a confirmation, for a reversible action -->
+<div class="as-glass as-glass-large as-menu" id="toast" role="status" hidden
+     style="position:fixed;inset-block-start:auto;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%) scale(.9);min-width:0;padding:8px 10px;display:flex;align-items:center;gap:10px">
+  <span id="toastText" class="as-text-footnote"></span>
+  <button class="as-button as-button-small" id="toastUndo">Undo</button>
+</div>
+
+<div class="measure" id="measure">—</div>
+
+<script src="liquid-glass.js"></script>
+<script>
+  const DATA = [
+    ['R. Okafor', '#4821', 'wait', 'Pending', '¥128,400'],
+    ['M. Lindqvist', '#4820', 'wait', 'Pending', '¥9,800'],
+    ['T. Nakamura', '#4818', 'ok', 'Cleared', '¥64,250'],
+    ['A. Bauer', '#4817', 'wait', 'Pending', '¥1,204,000'],
+    ['S. Mehta', '#4815', 'ok', 'Cleared', '¥3,100'],
+    ['J. Aguilar', '#4814', 'wait', 'Pending', '¥87,640'],
+    ['K. Diallo', '#4811', 'ok', 'Cleared', '¥22,900'],
+  ];
+  const rows = document.getElementById('rows');
+  const slot = document.getElementById('stateSlot');
+  const prose = document.getElementById('proseNote');
+  const insBody = document.getElementById('insBody');
+  const insTitle = document.getElementById('insTitle');
+  let items = [], sel = 0;
+
+  /* ---- The four states. The scroll edge and column header above them never
+          move, so the window does not jump between states. ---- */
+  function showLoading() {
+    rows.hidden = true; prose.hidden = true; slot.hidden = false;
+    slot.innerHTML = Array.from({ length: 5 }, () =>
+      '<div class="skeleton" aria-hidden="true"><span></span><span></span><span></span></div>').join('');
+    rows.setAttribute('aria-busy', 'true');
+  }
+  function showMessage(title, body, actionLabel, onAction) {
+    rows.hidden = true; prose.hidden = true; slot.hidden = false;
+    rows.removeAttribute('aria-busy');
+    slot.innerHTML = `<div class="state"><h2>${title}</h2><p>${body}</p></div>`;
+    if (actionLabel) {
+      const b = document.createElement('button');
+      b.className = 'as-button as-button-gray'; b.textContent = actionLabel;
+      b.addEventListener('click', onAction);
+      slot.querySelector('.state').appendChild(b);
+    }
+  }
+  function showRows(data) {
+    slot.hidden = true; slot.innerHTML = ''; rows.hidden = false; prose.hidden = false;
+    rows.removeAttribute('aria-busy');
+    rows.innerHTML = data.map(([who, id, cls, label, amt], i) => `
+      <li role="option" id="row-${i}" tabindex="${i === 0 ? 0 : -1}" aria-selected="${i === 0}" data-i="${i}">
+        <span class="who">${who} <span class="as-secondary">${id}</span></span>
+        <span class="pill ${cls}">${label}</span>
+        <span class="amount">${amt}</span>
+      </li>`).join('');
+    items = [...rows.querySelectorAll('li')];
+    sel = 0; syncInspector();
+  }
+
+  /* ---- Selection. A split view "persistently highlights the current
+          selection in each pane that leads to the detail view"
+          (hig/split-views.md) — and it has to be operable without a mouse. ---- */
+  function select(i, { focus = true } = {}) {
+    if (!items.length) return;
+    sel = Math.max(0, Math.min(items.length - 1, i));
+    items.forEach((li, n) => {
+      li.setAttribute('aria-selected', String(n === sel));
+      li.tabIndex = n === sel ? 0 : -1;
+    });
+    rows.setAttribute('aria-activedescendant', items[sel].id);
+    if (focus) items[sel].focus();
+    syncInspector();
+  }
+  function syncInspector() {
+    const row = DATA[+items[sel]?.dataset.i] || DATA[0];
+    insTitle.textContent = `${row[0]} · ${row[1]}`;
+    document.getElementById('insAmount').textContent = row[4];
+  }
+  rows.addEventListener('click', e => { const li = e.target.closest('li'); if (li) select(items.indexOf(li)); });
+  rows.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowDown') select(sel + 1);
+    else if (k === 'ArrowUp') select(sel - 1);
+    else if (k === 'Home') select(0);
+    else if (k === 'End') select(items.length - 1);
+    else if (k === 'Enter' || k === ' ') doApprove();
+    else return;
+    e.preventDefault();
+  });
+
+  const status = LiquidGlass.init();
+  console.log('LiquidGlass', status);
+  showRows(DATA);
+
+  /* ---- Commands. Every menu item that prints a shortcut does something. ---- */
+  let undoState = null;
+  const toast = document.getElementById('toast'), toastText = document.getElementById('toastText');
+  function flash(msg, undo) {
+    toastText.textContent = msg; undoState = undo || null;
+    document.getElementById('toastUndo').hidden = !undo;
+    toast.hidden = false;
+    requestAnimationFrame(() => { toast.style.transform = 'translateX(-50%) scale(1)'; toast.style.opacity = '1'; });
+    clearTimeout(flash._t);
+    flash._t = setTimeout(() => { toast.hidden = true; undoState = null; }, 4000);
+  }
+  document.getElementById('toastUndo').addEventListener('click', () => { undoState?.(); toast.hidden = true; undoState = null; });
+
+  // Reversible edit → do it and offer Undo, rather than a confirmation dialog.
+  function doApprove() {
+    const li = items[sel]; if (!li) return;
+    const i = +li.dataset.i, prev = [...DATA[i]];
+    DATA[i][2] = 'ok'; DATA[i][3] = 'Cleared';
+    const pill = li.querySelector('.pill'); pill.className = 'pill ok'; pill.textContent = 'Cleared';
+    flash(`Approved ${prev[0]} ${prev[1]}`, () => {
+      DATA[i] = prev; pill.className = 'pill ' + prev[2]; pill.textContent = prev[3];
+    });
+  }
+  document.getElementById('approveBtn').addEventListener('click', doApprove);
+  document.getElementById('insApprove').addEventListener('click', doApprove);
+  document.getElementById('cmdApprove').addEventListener('click', doApprove);
+  document.getElementById('insReturn').addEventListener('click', () => flash('Returned to claimant'));
+  document.getElementById('cmdNew').addEventListener('click', () => flash('New claim created'));
+  document.getElementById('cmdSettings').addEventListener('click', () => flash('Settings opened'));
+  document.getElementById('cmdAbout').addEventListener('click', () => flash('Expenses 1.0'));
+  const doExport = () => flash('Exported 7 claims');
+  document.getElementById('cmdExport').addEventListener('click', doExport);
+  document.getElementById('tExport').addEventListener('click', doExport);
+  document.getElementById('tFlag').addEventListener('click', () => flash('Flagged for review'));
+  const reload = () => { showLoading(); setTimeout(() => showRows(DATA), 900); };
+  document.getElementById('cmdReload').addEventListener('click', reload);
+
+  /* ---- Queues drive the four states ---- */
+  const QUEUES = {
+    pending: () => showRows(DATA),
+    approved: () => showMessage('No approved claims yet', 'Claims you approve will appear here.'),
+    returned: () => showMessage('Couldn’t load returned claims', 'The approvals service did not respond.', 'Try Again', reload),
+  };
+  document.querySelectorAll('.as-sidebar .as-row').forEach(row => row.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.as-sidebar .as-row').forEach(r => {
+      r.classList.toggle('is-selected', r === row);
+      r === row ? r.setAttribute('aria-current', 'page') : r.removeAttribute('aria-current');
+    });
+    showLoading();
+    setTimeout(() => QUEUES[row.dataset.queue](), 600);
+  }));
+
+  /* ---- Pane toggles: hide the pane and the divider beside it ---- */
+  const split = document.getElementById('split');
+  function togglePane(sel_, btn, label) {
+    const pane = split.querySelector(sel_);
+    const div = sel_ === '.as-sidebar' ? pane.nextElementSibling : pane.previousElementSibling;
+    const show = pane.hidden;
+    pane.hidden = div.hidden = !show;
+    btn.setAttribute('aria-pressed', String(show));
+    btn.setAttribute('aria-label', (show ? 'Hide ' : 'Show ') + label);
+  }
+  const tS = document.getElementById('tSidebar'), tI = document.getElementById('tInspector');
+  tS.addEventListener('click', () => togglePane('.as-sidebar', tS, 'sidebar'));
+  tI.addEventListener('click', () => togglePane('.as-inspector', tI, 'inspector'));
+  document.getElementById('cmdSidebar').addEventListener('click', () => togglePane('.as-sidebar', tS, 'sidebar'));
+  document.getElementById('cmdInspector').addEventListener('click', () => togglePane('.as-inspector', tI, 'inspector'));
+
+  /* ---- Menu-bar menus. LiquidGlass.menuBar() owns roving focus and
+          Left/Right; opening and placing the menu stays here. ---- */
+  let open = null;
+  document.querySelectorAll('.as-menubar-item[data-menu]').forEach(btn => {
+    const menu = document.getElementById(btn.dataset.menu);
+    btn.addEventListener('click', () => {
+      if (open === menu) return closeMenu(true);
+      if (open) closeMenu(false);
+      const r = btn.getBoundingClientRect();
+      menu.hidden = false; menu.style.top = (r.bottom + 2) + 'px'; menu.style.left = r.left + 'px';
+      menu.style.setProperty('--as-origin', 'top left');
+      requestAnimationFrame(() => menu.classList.add('is-open'));
+      btn.setAttribute('aria-expanded', 'true');
+      menu.querySelector('.as-menu-item').focus();
+      open = menu; open.__btn = btn;
+    });
+  });
+  function closeMenu(restore) {
+    if (!open) return;
+    const m = open, btn = m.__btn; open = null;
+    m.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false');
+    setTimeout(() => { m.hidden = true; }, 300);
+    if (restore) btn.focus();
+  }
+  document.addEventListener('pointerdown', e => {
+    if (open && !open.contains(e.target) && !e.target.closest('.as-menubar-item')) closeMenu(false);
+  });
+  document.querySelectorAll('.as-menu[role="menu"]').forEach(menu => menu.addEventListener('keydown', e => {
+    const list = [...menu.querySelectorAll('.as-menu-item')], i = list.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); }
+    else if (e.key === 'Tab') closeMenu(false);
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.activeElement.click(); closeMenu(true); }
+    // Left/Right walks to the neighbouring menu, as in the macOS menu bar
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      const bar = [...document.querySelectorAll('.as-menubar-item[data-menu]')];
+      const at = bar.indexOf(open?.__btn); if (at < 0) return;
+      e.preventDefault();
+      bar[(at + (e.key === 'ArrowRight' ? 1 : bar.length - 1)) % bar.length].click();
+    }
+  }));
+
+  /* ---- How much of the viewport is content? The number the review checklist
+          asks for, printed live so you can drag the window and watch it. ---- */
+  const measureEl = document.getElementById('measure');
+  function measure() {
+    requestAnimationFrame(() => {
+      const w = innerWidth;
+      const c = document.getElementById('content').getBoundingClientRect().width;
+      const used = [...split.children].filter(n => !n.hidden)
+        .reduce((a, n) => a + n.getBoundingClientRect().width, 0);
+      measureEl.textContent = `${w}px viewport · content ${Math.round(c)}px · panes fill ${Math.round(used / w * 100)}%`;
+    });
+  }
+  measure();
+  new ResizeObserver(measure).observe(split);
+  [...split.children].forEach(n => new ResizeObserver(measure).observe(n));
+</script>
+</body>
+</html>

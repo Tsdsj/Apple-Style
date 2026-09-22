@@ -16,7 +16,7 @@ Source: `Apple-Style-HIG/reference/hig/design-principles.md`. Use these to break
 ## Platform mindset (from *Designing for iOS/iPadOS/macOS/…*)
 - **iPhone**: focused, vertical, one-handed reach — primary actions bottom-reachable; tab bar; large titles; full-screen content.
 - **iPad**: bridges phone and Mac; sidebars, multi-column split views, pointer + keyboard, multitasking/resizable windows, menu bar, drag & drop.
-- **Mac**: dense, wide, many windows; menu bar with full command set and shortcuts; toolbars; inspectors; precise pointer; small controls acceptable.
+- **Mac**: dense, wide, many windows; menu bar with full command set and shortcuts; toolbar in the window frame; leading sidebar + trailing **inspector** in a split view; nothing critical on the bottom edge; precise pointer, so small controls are not just acceptable but correct (web: `data-platform="macos"` + the `.as-window` skeleton — `web-implementation.md` → *Desktop windows*, *Density*).
 - **watchOS**: glanceable, seconds-long interactions, Digital Crown, complications, always-on.
 - **tvOS**: 10-foot UI, focus-driven, lockups, Top Shelf, remote/game controller.
 - **visionOS**: windows/volumes/spaces on glass, eyes + hands, 60pt targets, depth & ergonomics, keep people grounded.

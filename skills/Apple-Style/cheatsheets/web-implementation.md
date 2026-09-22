@@ -38,7 +38,16 @@ already owns `box-shadow`).
 ## Layout & responsiveness
 
 - Size classes → breakpoints. Compact ≈ `< 768px` (margins 16), regular ≈ `≥ 768px`
-  (margins 20). Prefer **container queries** for components that appear in both a
+  (margins 20).
+- **Desktop ≈ `≥ 1024px` is a third tier, not more "regular".** A pointer, a
+  resizable window, a menu bar and a multi-column split view exist here and
+  nowhere else. Treat `≥ 768px` as "the iPad rules" and `≥ 1024px` as "the Mac
+  rules"; set `data-platform="macos"` on `<html>` when the target is a desktop
+  app (see *Density*) and build the window skeleton, not a taller phone page
+  (see *Desktop windows*). Apple's *regular* is a size class, not a pixel count
+  — collapsing it to one number is what makes a 2560px display and a 768px iPad
+  the same layout.
+- Prefer **container queries** for components that appear in both a
   sidebar and a full-width page.
 - Use `100dvh`, not `100vh`, for full-height mobile layouts — `vh` ignores the
   collapsing browser chrome and cuts off your bottom bar.
@@ -49,9 +58,141 @@ already owns `box-shadow`).
   `padding-block`), never `left`/`right`. Mirror directional icons (back chevron),
   never mirror media or clocks.
 - Stacking scale used by the stylesheet — stay inside it rather than inventing
-  numbers: content `0`, scroll edge `10`, sidebar `15`, tab bar `20`, sheet backdrop
-  `30` / sheet `31`, menu/popover `40`, alert `41`, toast `60`. A new overlay picks
-  the band it belongs to.
+  numbers: content `0`, scroll edge `10`, **split divider `12`**, sidebar `15`,
+  **window toolbar `18`**, tab bar `20`, **menu bar `22`**, sheet backdrop `30` /
+  sheet `31`, menu/popover `40`, alert `41`, toast `60`. A new overlay picks the
+  band it belongs to. The three window-chrome bands sit *below* the sheet
+  backdrop on purpose: a modal dims the menu bar and the toolbar too.
+
+## Desktop windows (≥ 1024px) — `.as-window`
+
+A desktop target is a window, not a long page. Two HIG rules decide the whole
+skeleton, and both are macOS-only:
+
+> **Avoid placing controls or critical information at the bottom of a window.**
+> People often move windows so that the bottom edge is below the bottom of the
+> screen. — `hig/layout.md` (macOS)
+
+> Avoid putting critical information or actions in a bottom bar … if you have
+> more information to display, consider using an **inspector**, which typically
+> presents information on the trailing side of a split view. — `hig/windows.md`
+
+So navigation is the **leading sidebar**, detail is the **trailing inspector**,
+and the bottom edge holds nothing you would miss. A bottom tab bar at 1440px is
+a compact-width component shipped to the wrong tier.
+
+```html
+<div class="as-window">
+  <div class="as-menubar" role="menubar" data-shortcuts>…</div>  <!-- optional, in-window -->
+  <header class="as-toolbar as-toolbar-window">
+    <div class="as-toolbar-group">…sidebar toggle…</div>   <!-- no bezel: the frame is the container -->
+    <h1 class="as-toolbar-title">Window title</h1>         <!-- inline with the controls -->
+    <div class="as-spacer"></div>
+    <div class="as-toolbar-group">…content actions…</div>
+    <div class="as-toolbar-group">…inspector toggle…</div>
+    <div class="as-search">…</div>                         <!-- top-trailing on Mac -->
+    <button class="as-button as-button-filled as-button-small">Done</button>
+  </header>
+  <div class="as-split">
+    <aside class="as-sidebar">…</aside>
+    <div class="as-split-divider"></div>
+    <main class="as-content">…</main>
+    <div class="as-split-divider"></div>
+    <aside class="as-inspector">…</aside>
+  </div>
+</div>
+```
+
+Working page: `web/demo-desktop.html`. Below 1024px the same markup degrades to
+stacked panes — a fallback, not a design; ship the compact skeleton there.
+
+- **Toolbar is part of the window frame**, not a bar the content scrolls under:
+  "the toolbar resides in the frame at the top of a window … window titles can
+  display inline with controls, and toolbar items don't include a bezel"
+  (`hig/toolbars.md`, macOS). The *panes* scroll, so each pane that needs one
+  gets its own scroll edge.
+- **Item groupings** (`hig/toolbars.md`): leading = show/hide sidebar then the
+  view title; trailing = inspector toggle, search field, More menu, one
+  prominent primary action. **Max three groups**, grouped by *function* (view
+  commands are not content actions), and never a text button and an icon
+  button in the same group.
+- **No bezel on window-toolbar items.** "Toolbar items don't include a bezel"
+  (macOS), and "Borders aren't necessary because the section provides a
+  visible container" — the window frame is that container. Use
+  `.as-toolbar-group` (spacing only; bare symbols with hover and selection
+  states), **not** `.as-glass-group`: a glass pill on a blurred window frame
+  is both the iOS expression in the wrong place and glass on glass. Likewise
+  the search field is a bordered Mac field and the primary action is a small
+  filled button — neither is a glass capsule here. Floating bars on iPhone and
+  iPad keep their glass groups; this is a window-frame rule.
+- **Sidebar ≤ two levels.** "When a data hierarchy is deeper than two levels,
+  consider using a split view interface that includes a **content list** between
+  the sidebar items and detail view" (`hig/sidebars.md`) — that is the
+  `.as-list-column` middle pane. Nothing critical at the sidebar's bottom edge
+  either (same page, macOS section).
+- **Every pane highlights its own current selection**, persistently
+  (`hig/split-views.md`).
+- **The divider is a control, not a line.** `.as-split-divider` is 1px ("prefer
+  the thin divider style … one point in width") with a wider invisible grab
+  area; `LiquidGlass.init()` gives it `role="separator"`, `tabindex="0"`, drag,
+  arrow keys (Shift = 1px), Home/End, Enter to reset, and keeps `aria-valuenow`
+  equal to the width **actually drawn**. It never lets the detail column fall
+  below `--as-content-min`, and hands space back when the window shrinks.
+- **Menu-bar commands that print a shortcut must respond to it.** Nothing on the
+  web wires that up; `data-shortcuts` on `.as-menubar` makes `LiquidGlass` bind
+  every `.as-shortcut` it finds (⌘ matches Cmd *or* Ctrl). Opt-in, because a
+  page that merely *displays* `⌘C` next to a Copy item must not hijack the real
+  one. Every toolbar item should also exist as a menu command (`hig/toolbars.md`).
+
+### Pane widths — starting points, not Apple numbers
+
+The HIG only says "Set **reasonable** defaults for minimum and maximum pane
+sizes" (`hig/split-views.md`) without saying what reasonable is. These are the
+widths at which a two-level sidebar row and a key/value inspector row stop
+wrapping. Measure your own content and move them.
+
+| | ≥ 1280px | 1024–1280px | why |
+|---|---|---|---|
+| Sidebar | 264 | 220 | two levels + icon + a trailing count, unwrapped |
+| Inspector | 380 | 300 | a label/value pair with a currency amount on one line |
+| Content | rest, floor ~480 | rest, floor ~380 | below it, a list row with an amount wraps the title |
+
+The derivation matters more than the numbers: **264 + 380 in a 1024px window
+squeezes the detail column to 378px, where a row with a number in it wraps to a
+second line; 220 + 300 leaves 502px and the number comes back onto one line.**
+That is why there are two tiers instead of one set of widths.
+
+- **When to fill and when to limit.** `Readable content width ≈ 672pt`
+  (`layout-and-shapes.md`) is a guide for **running text**. Applying it — or its
+  cousin `max-width: 1280px` — to a whole page is what leaves 340px of dead
+  gutter on either side of a 2000px display. **Tables and lists fill the column
+  they live in; continuous prose and forms get `.as-readable` inside it.**
+- **Short content.** The whole vocabulary assumes content scrolls. It often
+  doesn't: four rows in a 1200px-tall window leaves a panel floating over 300px
+  of nothing. In the window tier the panes stretch to the full split height, so
+  the sidebar and inspector read as the two **edges of the window** rather than
+  two boards lying on a page. `.as-window` is `100dvh` with `overflow: hidden`;
+  the panes scroll, the window never does.
+
+## Density (macOS)
+
+`data-platform="macos"` on `<html>` is the desktop density switch, and it is
+easy to miss — set it first for any desktop target. It already carries real
+numbers, not a tweak:
+
+| | iOS default | `data-platform="macos"` |
+|---|---|---|
+| Body text | 17/22 | **13/16** |
+| `.as-button` | 44px min-height, capsule | **22px**, `--as-radius-xs` |
+| `.as-menu-item` | 44px | **28px** |
+| Large title | 34/41 | 26/32 |
+
+Inside `.as-window`, sidebar rows and inspector fields use `--as-row-min`
+(28px), and `@media (any-pointer: coarse)` raises it back to 44px — see the hit
+region note below. macOS keeps **capsules for Large/XL controls and standout
+actions only**; mini/small/medium stay rounded rectangles, which is what the
+`--as-radius-xs` override is for. A desktop window made entirely of 44pt
+capsules is the most common tell that a phone stylesheet was stretched.
 
 ## Input, pointer and scrolling
 
@@ -60,6 +201,11 @@ already owns `box-shadow`).
   mouse/touch pairs.
 - Gate hover affordances behind `@media (hover: hover)`; on `(pointer: coarse)`
   enforce the 44×44 target even when the visual is smaller (pad the hit area).
+- **Hit region: 44×44 with a finger, ≥ 24×24 with a pointer** (WCAG 2.2 Target
+  Size (Minimum)). Gate on the **input**, not the screen — `@media
+  (any-pointer: coarse)` — because a touchscreen laptop at 1440px still needs
+  finger-sized rows, and a Mac inspector at 44pt a row holds a third of what it
+  should. Keep ≥ 8pt between adjacent targets either way.
 - `overscroll-behavior: contain` on sheets, menus and any inner scroller, or
   scrolling to the end scrolls the page behind it.
 - `scrollbar-gutter: stable` on panes that toggle overflow, to stop layout jumping.
@@ -134,7 +280,9 @@ page does not jump.
 ## Verify before shipping
 
 Light + dark · Increase Contrast · Reduce Transparency · Reduce Motion · largest
-Dynamic Type · keyboard only · VoiceOver/NVDA · RTL · 320px wide · slow 3G ·
-over dark *and* light content · Safari and Firefox (no lensing there — confirm the
-fallback still reads as a material). Then run the checklist in
+Dynamic Type · keyboard only · VoiceOver/NVDA · RTL · slow 3G · over dark *and*
+light content · Safari and Firefox (no lensing there — confirm the fallback
+still reads as a material). **Widths: 320 · 390 · 768 · 1024 · 1440 · 2000** —
+a design checked only at one width is how a page ends up with dead gutters at
+2000 or a squeezed detail column at 1024. Then run the checklist in
 `../Apple-Style-Review/SKILL.md`.

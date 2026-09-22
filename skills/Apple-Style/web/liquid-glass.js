@@ -597,6 +597,244 @@
     container.querySelectorAll('.as-concentric').forEach(ch => { const r = ch.getBoundingClientRect(); const inset = Math.max(0, Math.min(r.left - cr.left, r.top - cr.top, cr.right - r.right, cr.bottom - r.bottom)); ch.style.borderRadius = Math.max(min, R - inset) + 'px'; });
   }
 
+  // Split divider (desktop window). "Prefer the thin divider style… one point
+  // in width" (hig/split-views.md), which makes it a 1px line — so it has to
+  // be a real control rather than a decoration: focusable, arrow-key operable,
+  // and reporting the width that is actually drawn. It resizes the pane on one
+  // side by writing a custom property on the .as-split, and it never lets the
+  // detail column fall below --as-content-min (the width at which a list row
+  // with a number in it starts wrapping).
+  function splitDivider(el, opts = {}) {
+    if (el.__lgDivider) return; el.__lgDivider = true;
+    const split = el.parentElement;
+    if (!split) return;
+    const prev = el.previousElementSibling, next = el.nextElementSibling;
+    const isContent = n => !!n && n.classList.contains('as-content');
+    // by default the divider drives the pane on its side that is not the
+    // detail column; data-resize="before|after" overrides
+    const side = opts.resize || el.dataset.resize || (prev && !isContent(prev) ? 'before' : 'after');
+    const pane = side === 'before' ? prev : next;
+    if (!pane) return;
+    const cssVar = opts.var || el.dataset.var
+      || (pane.classList.contains('as-inspector') ? '--as-inspector-w'
+        : pane.classList.contains('as-list-column') ? '--as-list-column-w' : '--as-sidebar-w');
+    const min = +(opts.min ?? el.dataset.min ?? 180);
+    const hardMax = +(opts.max ?? el.dataset.max ?? 560);
+    const initial = Math.round(pane.getBoundingClientRect().width);
+
+    const num = (v, f) => { const n = parseFloat(v); return Number.isFinite(n) ? n : f; };
+    const contentMin = () => num(getComputedStyle(split).getPropertyValue('--as-content-min'), 380);
+    // How wide this pane may get before the detail column hits its floor.
+    // Computed from the split's own width rather than from the content
+    // column's current width: a pane that was dragged wide in a big window
+    // has to give the space back when the window shrinks, and "current
+    // content width minus the floor" is already 0 by then.
+    const capacity = () => {
+      let others = 0;
+      for (const n of split.children) {
+        if (n === pane || n.hidden || isContent(n)) continue;
+        others += n.getBoundingClientRect().width;
+      }
+      const room = split.getBoundingClientRect().width - others - contentMin();
+      return Math.max(min, Math.min(hardMax, Math.round(room)));
+    };
+
+    el.setAttribute('role', 'separator');
+    if (!el.hasAttribute('aria-orientation')) el.setAttribute('aria-orientation', 'vertical');
+    if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+    if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
+      el.setAttribute('aria-label', (pane.getAttribute('aria-label') || 'Pane') + ' width');
+    }
+    el.setAttribute('aria-valuemin', String(min));
+
+    let syncing = 0;
+    // aria-valuenow has to be the width the browser actually drew, not the
+    // width we asked for: the flex line, the content floor or a max can all
+    // clamp it, and a value that disagrees with the layout is worse than none.
+    function publish() {
+      if (syncing) return;
+      syncing = requestAnimationFrame(() => {
+        syncing = 0;
+        const real = Math.round(pane.getBoundingClientRect().width);
+        el.setAttribute('aria-valuenow', String(real));
+        el.setAttribute('aria-valuetext', real + ' pixels');
+        el.setAttribute('aria-valuemax', String(Math.max(real, capacity())));
+      });
+    }
+    function setWidth(px, cap) {
+      split.style.setProperty(cssVar, clamp(Math.round(px), min, cap ?? capacity()) + 'px');
+      publish();
+    }
+    // Resizing the window — or any other change that eats the detail column's
+    // room — can invalidate a width the user dragged. Give the space back
+    // instead of overflowing the window. Clamping settles in one extra pass:
+    // the write shrinks the pane, the pane is then within capacity, and the
+    // next callback only publishes.
+    publish();
+    const reclamp = () => {
+      // Only a width someone actually dragged gives space back. A pane still
+      // at the stylesheet's default for its tier is left alone, or two
+      // dividers reclamping against each other would squeeze an untouched
+      // sidebar down to its minimum to pay for a wide inspector.
+      if (!split.style.getPropertyValue(cssVar)) return publish();
+      const cap = capacity();
+      if (pane.getBoundingClientRect().width > cap + .5) setWidth(cap, cap);
+      else publish();
+    };
+    const pro = new ResizeObserver(reclamp);
+    pro.observe(split);
+    pro.observe(pane);
+
+    // Measure once at gesture start; pointermove only does arithmetic.
+    let startX = 0, startW = 0, cap = 0, dir = 1;
+    el.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const rtl = getComputedStyle(split).direction === 'rtl';
+      // dragging away from the pane makes it wider; which screen direction
+      // that is depends on the side the pane is on and on the writing mode
+      dir = (side === 'before' ? 1 : -1) * (rtl ? -1 : 1);
+      startX = e.clientX; startW = pane.getBoundingClientRect().width; cap = capacity();
+      el.setPointerCapture(e.pointerId);
+      el.classList.add('is-dragging');
+      document.documentElement.style.cursor = 'col-resize';
+    });
+    el.addEventListener('pointermove', e => {
+      if (!el.classList.contains('is-dragging')) return;
+      setWidth(startW + (e.clientX - startX) * dir, cap);
+    });
+    const endDrag = () => {
+      if (!el.classList.contains('is-dragging')) return;
+      el.classList.remove('is-dragging');
+      document.documentElement.style.cursor = '';
+      publish();
+    };
+    el.addEventListener('pointerup', endDrag);
+    el.addEventListener('pointercancel', endDrag);
+    // double-click resets to the stylesheet's default for this tier
+    el.addEventListener('dblclick', () => { split.style.removeProperty(cssVar); publish(); });
+
+    el.addEventListener('keydown', e => {
+      const rtl = getComputedStyle(split).direction === 'rtl';
+      const grow = (side === 'before') === !rtl ? 'ArrowRight' : 'ArrowLeft';
+      const shrink = grow === 'ArrowRight' ? 'ArrowLeft' : 'ArrowRight';
+      const step = e.shiftKey ? 1 : 16;
+      const w = pane.getBoundingClientRect().width;
+      if (e.key === grow) setWidth(w + step);
+      else if (e.key === shrink) setWidth(w - step);
+      else if (e.key === 'Home') setWidth(min);
+      else if (e.key === 'End') setWidth(capacity());
+      else if (e.key === 'Enter') { split.style.removeProperty(cssVar); publish(); }
+      else return;
+      e.preventDefault();
+    });
+    return { setWidth, publish };
+  }
+
+  // Menu-bar keyboard shortcuts. A menu item that prints ⌘S and does nothing
+  // when you press ⌘S is a broken promise, and on the web nothing wires it up
+  // for you. Opt in with `data-shortcuts` on the .as-menubar so a page that
+  // merely *displays* ⌘C next to a Copy item doesn't hijack the real one.
+  const MODS = { '⌘': 'meta', '⌃': 'ctrl', '⌥': 'alt', '⇧': 'shift' };
+  // Glyphs Apple prints for non-character keys. These arrive in `e.key` as
+  // names and are not disturbed by modifiers, so they match on `key`.
+  const NAMED = {
+    '⏎': 'Enter', '↩': 'Enter', '⌤': 'Enter', '⌫': 'Backspace', '⌦': 'Delete',
+    '⎋': 'Escape', '⇥': 'Tab', '␣': ' ', '⇞': 'PageUp', '⇟': 'PageDown',
+    '↖': 'Home', '↘': 'End', '↑': 'ArrowUp', '↓': 'ArrowDown',
+    '←': 'ArrowLeft', '→': 'ArrowRight',
+  };
+  // Physical positions for the printable keys. Matching a letter on `e.key` is
+  // the bug this table exists to avoid: with Option held, macOS composes the
+  // character, so ⌥S arrives as key "ß" and ⌥I as a dead key — the shortcut
+  // silently never fires on the one platform it was written for. `e.code` is
+  // the physical key and is unaffected, which is also how macOS itself routes
+  // ⌘, and friends.
+  const PUNCT_CODE = {
+    ',': 'Comma', '.': 'Period', '/': 'Slash', ';': 'Semicolon', "'": 'Quote',
+    '[': 'BracketLeft', ']': 'BracketRight', '\\': 'Backslash', '`': 'Backquote',
+    '-': 'Minus', '=': 'Equal',
+  };
+  function parseShortcut(text) {
+    const s = (text || '').trim(); if (!s) return null;
+    const need = { meta: false, ctrl: false, alt: false, shift: false };
+    let i = 0;
+    while (i < s.length && MODS[s[i]]) { need[MODS[s[i]]] = true; i++; }
+    const rest = s.slice(i);
+    if (!rest || (!need.meta && !need.ctrl && !need.alt)) return null;   // bare letters are typing
+    if (NAMED[rest]) return { ...need, key: NAMED[rest].toLowerCase() };
+    if (/^[a-z]$/i.test(rest)) return { ...need, code: 'Key' + rest.toUpperCase() };
+    if (/^[0-9]$/.test(rest)) return { ...need, code: 'Digit' + rest };
+    if (PUNCT_CODE[rest]) return { ...need, code: PUNCT_CODE[rest] };
+    return { ...need, key: rest.toLowerCase() };   // multi-char names like "Enter"
+  }
+  function menuShortcuts(root = document) {
+    if (root.__lgShortcuts) return 0; root.__lgShortcuts = true;
+    // The menus themselves are usually siblings of the bar, not inside it, so
+    // the bar is only the opt-in flag; the search runs over the document.
+    if (!root.querySelector?.('.as-menubar[data-shortcuts]')) return 0;
+    const binds = [];
+    const collect = () => {
+      binds.length = 0;
+      root.querySelectorAll('.as-menu-item .as-shortcut').forEach(tag => {
+        const combo = parseShortcut(tag.textContent);
+        const item = tag.closest('.as-menu-item');
+        if (combo && item) binds.push({ combo, item });
+      });
+    };
+    collect();
+    new MutationObserver(collect).observe(document.body, { childList: true, subtree: true });
+    addEventListener('keydown', e => {
+      const cmd = e.metaKey || e.ctrlKey;          // ⌘ on Apple keyboards, Ctrl elsewhere
+      const hit = binds.find(({ combo }) => {
+        if (combo.shift !== e.shiftKey || combo.alt !== e.altKey) return false;
+        if (cmd !== (combo.meta || combo.ctrl)) return false;
+        return combo.code ? e.code === combo.code : e.key.toLowerCase() === combo.key;
+      });
+      if (!hit || hit.item.disabled || hit.item.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      hit.item.click();
+    });
+    return binds.length;
+  }
+
+  // Menu bar keyboard model. `role="menubar"` is a contract in the same way
+  // `role="menu"` is: the whole bar is ONE tab stop, Left/Right walks the
+  // titles, Down (or Enter/Space) opens one, and while a menu is open
+  // Left/Right moves to the neighbouring menu and opens that instead. Opening
+  // and placing the menu stays with the app — this only owns focus.
+  function menuBar(bar) {
+    if (bar.__lgMenuBar) return; bar.__lgMenuBar = true;
+    const items = () => [...bar.querySelectorAll('.as-menubar-item')];
+    const roving = active => items().forEach(it => { it.tabIndex = it === active ? 0 : -1; });
+    roving(items()[0]);
+    bar.addEventListener('focusin', e => {
+      if (e.target.classList?.contains('as-menubar-item')) roving(e.target);
+    });
+    bar.addEventListener('keydown', e => {
+      const list = items(), i = list.indexOf(document.activeElement);
+      if (i < 0) return;
+      const rtl = getComputedStyle(bar).direction === 'rtl';
+      const fwd = rtl ? 'ArrowLeft' : 'ArrowRight', back = rtl ? 'ArrowRight' : 'ArrowLeft';
+      let target = null;
+      if (e.key === fwd) target = list[(i + 1) % list.length];
+      else if (e.key === back) target = list[(i - 1 + list.length) % list.length];
+      else if (e.key === 'Home') target = list[0];
+      else if (e.key === 'End') target = list[list.length - 1];
+      else if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (list[i].getAttribute('aria-expanded') !== 'true') list[i].click();
+        return;
+      } else return;
+      e.preventDefault();
+      const wasOpen = list[i].getAttribute('aria-expanded') === 'true';
+      roving(target);
+      // If a menu was open, clicking the neighbour closes this one and opens
+      // that one, and the app moves focus into it; otherwise just walk focus.
+      if (wasOpen) target.click(); else target.focus();
+    });
+  }
+
   /* ---------- Attach / init ------------------------------------------------ */
   const attached = new Set();
   const onScreen = new Set();
@@ -645,6 +883,9 @@
     document.querySelectorAll('.as-tabbar[data-minimize]').forEach(b => tabBarMinimize(b));
     document.querySelectorAll('.as-toolbar-title[data-reveal-on-scroll]').forEach(t => titleOnScroll(t));
     document.querySelectorAll('.as-container[data-concentric]').forEach(c => concentric(c));
+    document.querySelectorAll('.as-split-divider').forEach(d => splitDivider(d));
+    document.querySelectorAll('.as-menubar[role="menubar"]').forEach(b => menuBar(b));
+    const shortcuts = menuShortcuts(document);
     new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => {
       if (n.nodeType !== 1) return;
       if (n.matches?.('.as-glass')) attach(n);
@@ -652,12 +893,14 @@
       if (n.matches?.('.as-segmented')) segmented(n);
       if (n.matches?.('.as-toggle')) toggle(n);
       if (n.matches?.('.as-slider')) slider(n);
+      if (n.matches?.('.as-split-divider')) splitDivider(n);
+      n.querySelectorAll?.('.as-split-divider').forEach(d => splitDivider(d));
       controls(n);
     }))).observe(document.body, { childList: true, subtree: true });
     ['(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(prefers-color-scheme: dark)'].forEach(q => matchMedia(q).addEventListener('change', () => attached.forEach(el => { el.style.removeProperty('--as-glass-filter'); if (onScreen.has(el)) applyLens(el, {}); adapt(el); })));
-    return { attached: attached.size, controls: wired, lens: supportsLens && !liteMode() };
+    return { attached: attached.size, controls: wired, shortcuts, lens: supportsLens && !liteMode() };
   }
-  global.LiquidGlass = { init, attach, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, supportsLens, refresh: scheduleAdapt };
+  global.LiquidGlass = { init, attach, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh: scheduleAdapt };
   if (document.readyState !== 'loading' && document.currentScript?.dataset.auto !== undefined) init();
   else if (document.currentScript?.dataset.auto !== undefined) addEventListener('DOMContentLoaded', () => init());
 })(window);

@@ -38,7 +38,7 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 
 然后在 Claude Code 里输入 `/Apple-Style`，或者直接描述任务——技能描述会自动触发：
 
-> 帮我做一个学生宿舍管理后台，iOS 26 的观感，标签栏在宽屏要变成侧边栏。
+> 帮我做一个学生宿舍管理后台，iOS 26 的观感；手机上用底部标签栏，1024px 以上要是一个 Mac 窗口——前导侧栏 + 内容 + 尾随检查器。
 
 在 Codex 中，技能会从 `~/.codex/skills` / `~/.agents/skills` 被自动发现。
 
@@ -117,7 +117,7 @@ curl -fsSL https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.sh |
 
 ## Web 实现
 
-`skills/Apple-Style/web/` 下的 `apple-style.css`（747 行）与 `liquid-glass.js`（663 行）可直接复制进任何项目，无依赖、无构建。
+`skills/Apple-Style/web/` 下的 `apple-style.css`（992 行）与 `liquid-glass.js`（844 行）可直接复制进任何项目，无依赖、无构建。
 
 ```html
 <link rel="stylesheet" href="apple-style.css">
@@ -151,8 +151,14 @@ curl -fsSL https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.sh |
 | 大标题 → 小标题 | `.as-toolbar-title[data-reveal-on-scroll]`，大标题滚出后才显示 |
 | 同心圆角 | `.as-container[data-concentric]` + `.as-concentric`，或 `calc(var(--as-glass-radius) - 内边距)` |
 | 滚动边缘效果 | `.as-scroll-edge.as-edge-top` / `.as-edge-bottom`，替代自定义栏背景 |
+| 桌面窗口（≥1024px） | `.as-window` + `.as-menubar` + `.as-toolbar-window` + `.as-split`（`.as-sidebar` / `.as-split-divider` / `.as-content` / `.as-inspector`）。窗口底边不放关键操作，导航在前导侧栏、详情在尾随检查器 |
+| 可拖拽分栏 | `.as-split-divider`：1px 细线 + 加宽命中区，`init()` 补上 `role="separator"`、方向键、`aria-valuenow`（等于实际绘制宽度），并守住内容栏下限 |
+| 菜单栏 | `.as-menubar[role=menubar]`：`init()` 接管 roving tabindex 与左右方向键；`[data-shortcuts]` 把 `.as-shortcut` 里印出来的 ⌘ 组合真正绑上（字母按 `e.code` 匹配——macOS 上 ⌥S 送来的是 `ß`，按 `e.key` 匹配的快捷键在 Mac 上永远不触发） |
+| 窗口工具栏项 | `.as-toolbar-group`（**无 bezel**，窗口框本身就是容器）而不是 `.as-glass-group`；玻璃药丸是 iPhone/iPad 的形态 |
 
-**JS API**：`init` `attach` `adapt` `applyLens` `morph` `materialize` `controls` `segmented` `toggle` `slider` `tabBarMinimize` `titleOnScroll` `concentric` `supportsLens` `refresh`。
+桌面档不是「更 regular 的 iPad」：`<768` 紧凑、`≥768` iPad、`≥1024` Mac 三档。桌面目标先在 `<html>` 上设 `data-platform="macos"`（正文 13/16、按钮 22px、菜单项 28px 的密度开关），再用 `.as-window` 骨架，不要把手机页面拉长。侧栏 / 检查器宽度：≥1280 用 264 / 380，1024–1280 用 220 / 300（实测起点，不是苹果给的数）。
+
+**JS API**：`init` `attach` `adapt` `applyLens` `morph` `materialize` `controls` `segmented` `toggle` `slider` `tabBarMinimize` `titleOnScroll` `concentric` `splitDivider` `menuBar` `menuShortcuts` `supportsLens` `refresh`。
 
 **无障碍**：降低透明度 / 增强对比度 / 减弱动态效果三组媒体查询全部就位；焦点环为玻璃单独调过；组件的 ARIA 映射见 `web-implementation.md`。
 
@@ -162,7 +168,9 @@ curl -fsSL https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.sh |
 
 ## 演示站
 
-`demo/` 是独立的双语（默认中文）演示站，完整展示设计语言，并带同心圆角调试台、无障碍偏好模拟与交付检查清单。**演示代码只在 `demo/` 内，`skills/` 不掺杂任何演示代码**——演示页通过相对路径直接引用技能本体的 CSS/JS，改技能、刷新页面即可看到效果。
+`demo/` 是独立的双语（默认中文）演示站，展示紧凑 / iPad 档的设计语言，并带同心圆角调试台、无障碍偏好模拟与交付检查清单。**演示代码只在 `demo/` 内，`skills/` 不掺杂任何演示代码**——演示页通过相对路径直接引用技能本体的 CSS/JS，改技能、刷新页面即可看到效果。
+
+> 桌面档（`≥1024px` 的窗口形态）目前只在技能自带的 `skills/Apple-Style/web/demo-desktop.html` 里，演示站还没收录。
 
 ```bash
 python3 -m http.server 8765        # 必须从仓库根目录起服务
@@ -173,7 +181,8 @@ python3 -m http.server 8765        # 必须从仓库根目录起服务
 
 ```bash
 python3 -m http.server 8765 --directory skills/Apple-Style/web
-# 打开 http://localhost:8765/demo.html
+# 打开 http://localhost:8765/demo.html          紧凑 / iPad 档：全部组件
+# 打开 http://localhost:8765/demo-desktop.html  桌面档：菜单栏 + 窗口工具栏 + 三栏窗口
 ```
 
 演示站的说明见 [demo/README.md](demo/README.md)。
@@ -189,7 +198,7 @@ Apple-Style/
     ├── Apple-Style/              入口技能
     │   ├── SKILL.md              工作流、硬规则、常见错误对照表
     │   ├── cheatsheets/          9 份速查表（材质/颜色/字体/布局/组件/动效/无障碍/原则/Web）
-    │   ├── web/                  apple-style.css · liquid-glass.js · demo.html
+    │   ├── web/                  apple-style.css · liquid-glass.js · demo.html · demo-desktop.html
     │   └── scripts/              hig-lookup.sh · update-reference.sh
     ├── Apple-Style-Liquid-Glass/ 材质实现与调优
     ├── Apple-Style-HIG/          离线参考库（hig/ liquid-glass/ wwdc25/ design-site/）
@@ -206,8 +215,8 @@ python3 -m http.server 8765 --directory skills/Apple-Style/web   # 打开 demo.h
 
 - 浅色 + 深色；在深色与浅色内容上各看一次玻璃
 - 系统偏好：减弱透明度、增强对比度、减弱动态效果（Chrome DevTools → Rendering 可模拟）
-- 键盘走查：每个可交互元素都要有在玻璃上看得见的焦点环
-- 窄到 320px；标签栏在 ≥1024px 应变成侧边栏
+- 键盘走查：每个可交互元素都要有在玻璃上看得见的焦点环；分栏分隔条要能用方向键拖
+- 宽度走查 320 / 390 / 768 / 1024 / 1440 / 2000：标签栏在 ≥1024px 应变成侧边栏；桌面窗口在 1440 与 2000 下内容都应占满视口宽度（两侧不留因 `max-width` 造成的空档）
 - Safari 与 Firefox：没有折射，确认降级后仍像一层材质
 
 最后用 `Apple-Style-Review` 技能跑一遍清单再交付。
@@ -314,7 +323,7 @@ The installers only write into agent directories that already exist (`~/.claude`
 
 ## The web implementation
 
-`skills/Apple-Style/web/apple-style.css` (747 lines) and `liquid-glass.js` (663 lines) drop into any project — no dependencies, no build step.
+`skills/Apple-Style/web/apple-style.css` (992 lines) and `liquid-glass.js` (844 lines) drop into any project — no dependencies, no build step.
 
 ```html
 <link rel="stylesheet" href="apple-style.css">
@@ -326,8 +335,9 @@ The installers only write into agent directories that already exist (`~/.claude`
 
 - **Material** — a refraction map displaced along the surface normal, three-channel dispersion, a contrast re-level so refracted content stays punchy instead of milky, and a 1px conic-gradient specular rim that **travels around the silhouette**. Light is *bent, not painted*: the interior stays clean, with no gloss sweep and no double bevel.
 - **Interaction** — gel flex on press, illumination starting under the pointer and spreading to nearby glass, small glass flipping light/dark with its backdrop. The segmented control, switch and slider are **draggable**: 1:1 tracking, stretch with velocity, rubber-band at the ends, spring on release. `LiquidGlass.init()` owns their state and emits `change`.
-- **Structure** — `.as-tabbar[data-sidebar]` turns the tab bar into a sidebar at regular width (pair with `.as-with-tabsidebar`); `data-minimize` collapses it on scroll; `.as-toolbar-title[data-reveal-on-scroll]` shows the compact title only after the large title scrolls away; `.as-scroll-edge` replaces custom bar backgrounds; concentric radii via `.as-container[data-concentric]`.
-- **JS API** — `init` `attach` `adapt` `applyLens` `morph` `materialize` `controls` `segmented` `toggle` `slider` `tabBarMinimize` `titleOnScroll` `concentric` `supportsLens` `refresh`.
+- **Structure** — `.as-tabbar[data-sidebar]` turns the tab bar into a sidebar at regular width (pair with `.as-with-tabsidebar`); `data-minimize` collapses it on scroll (compact width only); `.as-toolbar-title[data-reveal-on-scroll]` shows the compact title only after the large title scrolls away; `.as-scroll-edge` replaces custom bar backgrounds; concentric radii via `.as-container[data-concentric]`.
+- **Desktop (`≥1024px`) is a third tier, not "more regular"** — `.as-window` + `.as-menubar` + `.as-toolbar-window` + `.as-split` (`.as-sidebar` / `.as-split-divider` / `.as-content` / `.as-inspector`) build a window: navigation in the leading sidebar, detail in the trailing inspector, **nothing critical on the bottom edge**. Set `data-platform="macos"` — it is the density switch (13/16 body, 22px buttons, 28px menu items), not a cosmetic flag. Window-toolbar items carry **no bezel** (`.as-toolbar-group`, not `.as-glass-group`) — the frame is the container. Dividers are real controls (`role="separator"`, arrow keys, `aria-valuenow` = the width actually drawn, content-column floor enforced); `.as-menubar` gets the menubar keyboard model, and `[data-shortcuts]` wires every printed ⌘-combination to its menu item, matching letters on `e.code` because Option rewrites `e.key` on macOS. See `web/demo-desktop.html`.
+- **JS API** — `init` `attach` `adapt` `applyLens` `morph` `materialize` `controls` `segmented` `toggle` `slider` `tabBarMinimize` `titleOnScroll` `concentric` `splitDivider` `menuBar` `menuShortcuts` `supportsLens` `refresh`.
 - **Accessibility** — Reduce Transparency, Increase Contrast and Reduce Motion are handled; focus rings are tuned to stay visible on glass; per-component ARIA mapping lives in `web-implementation.md`.
 - **Performance** — no blanket layer promotion, offscreen glass drops its filter, dispersion is opt-in per element (`data-chroma="on"`), gestures do zero layout reads; `<html data-perf="lite">` turns lensing off entirely.
 
@@ -335,7 +345,9 @@ The installers only write into agent directories that already exist (`~/.claude`
 
 ## Showcase site
 
-`demo/` is a standalone bilingual showcase with a live concentric-radius playground, accessibility simulations and the pre-ship checklist. **Demo code lives in `demo/` only — nothing is mixed into `skills/`.** It loads the skill's own CSS/JS by relative path, so editing the skill and reloading shows the result.
+`demo/` is a standalone bilingual showcase of the compact / iPad tier, with a live concentric-radius playground, accessibility simulations and the pre-ship checklist. **Demo code lives in `demo/` only — nothing is mixed into `skills/`.** It loads the skill's own CSS/JS by relative path, so editing the skill and reloading shows the result.
+
+> The desktop tier (the `≥1024px` window form) currently lives only in the skill's own `skills/Apple-Style/web/demo-desktop.html`; the showcase site does not cover it yet.
 
 ```bash
 python3 -m http.server 8765          # serve from the repository root
@@ -344,7 +356,7 @@ python3 -m http.server 8765          # serve from the repository root
 
 ## Verifying a change
 
-After touching `skills/Apple-Style/web/`, serve `skills/Apple-Style/web` and check: light + dark, glass over dark *and* light content, Reduce Transparency / Increase Contrast / Reduce Motion, keyboard-only with a visible focus ring on glass, 320px width, the sidebar form at ≥1024px, and Safari/Firefox where lensing degrades to blur. Then run the `Apple-Style-Review` checklist.
+After touching `skills/Apple-Style/web/`, serve `skills/Apple-Style/web` and check both `demo.html` (compact/iPad) and `demo-desktop.html` (the window tier): light + dark, glass over dark *and* light content, Reduce Transparency / Increase Contrast / Reduce Motion, keyboard-only with a visible focus ring on glass and arrow-key-resizable split dividers, **widths 320 / 390 / 768 / 1024 / 1440 / 2000** (the tab bar becomes a sidebar at ≥1024; the window's panes should fill the viewport at 1440 and 2000 with no dead gutter), and Safari/Firefox where lensing degrades to blur. Then run the `Apple-Style-Review` checklist.
 
 ## FAQ
 

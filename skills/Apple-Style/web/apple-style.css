@@ -138,6 +138,14 @@
 /* Increased contrast variants of system colors (HIG Color spec) */
 @media (prefers-contrast: more) {
   :root {
+    /* Label and separator alphas tighten too, not just the hues. At their
+       default alphas secondaryLabel measures ~3.3:1 on secondarySystemBackground
+       — deliberate for de-emphasised text, but Increase Contrast is exactly
+       the switch that is supposed to take it past 4.5:1. */
+    --as-label-secondary:  light-dark(rgb(60 60 67 / .82), rgb(235 235 245 / .82));
+    --as-label-tertiary:   light-dark(rgb(60 60 67 / .60), rgb(235 235 245 / .58));
+    --as-label-quaternary: light-dark(rgb(60 60 67 / .40), rgb(235 235 245 / .38));
+    --as-separator:        light-dark(rgb(60 60 67 / .50), rgb(84 84 88 / .85));
     --as-red:    light-dark(rgb(233 21 45),   rgb(255 97 101));
     --as-orange: light-dark(rgb(197 83 0),    rgb(255 160 86));
     --as-yellow: light-dark(rgb(161 106 0),   rgb(254 223 67));
@@ -691,6 +699,291 @@
 .as-navbar .as-large-title { font: 700 34px/41px var(--as-font-display); letter-spacing: .4px; margin: 4px 0 8px; }
 
 /* --------------------------------------------------------------------------
+   6b. Desktop window (≥1024 px) — a Mac window, not a tall phone page
+
+   Everything above this point is organised around a phone and an iPad: a bar
+   at the top, a floating tab bar at the bottom, content scrolling under both.
+   A desktop target is a third tier, not "more regular": it has a pointer, a
+   resizable window, a menu bar and a multi-column split view, and none of
+   those exist below it. Two rules from the HIG shape the whole skeleton:
+
+     "Avoid placing controls or critical information at the bottom of a window.
+      People often move windows so that the bottom edge is below the bottom of
+      the screen."                                           (hig/layout.md, macOS)
+     "…if you have more information to display, consider using an inspector,
+      which typically presents information on the trailing side of a split
+      view."                                                     (hig/windows.md)
+
+   So: navigation is the leading sidebar, detail is the trailing inspector, and
+   nothing critical sits on the bottom edge. The panes are content-layer
+   surfaces — a split-view pane is a region of the window, not a floating
+   control, so it is solid, and the glass stays on the toolbar items inside the
+   window frame. (The floating glass `.as-sidebar` above is the iPad
+   expression; used inside `.as-split` it is restyled as a pane.)
+   -------------------------------------------------------------------------- */
+.as-window {
+  /* Pane widths are STARTING POINTS, not Apple numbers — the HIG only says
+     "Set reasonable defaults for minimum and maximum pane sizes"
+     (hig/split-views.md) without saying what reasonable is. These are the
+     widths at which a two-level sidebar row and a key/value inspector row stop
+     wrapping. Measure your own content and move them.
+       1024–1280: 220 / 300 leaves ~500px of content.
+       ≥1280:     264 / 380 — 264+380 at 1024 would squeeze content to 378px,
+                  where a list row with a number wraps it to a second line. */
+  --as-sidebar-w: 220px;
+  --as-inspector-w: 300px;
+  --as-content-min: 380px;
+  --as-row-min: 28px;              /* pointer density — see any-pointer below */
+  --as-window-chrome: 52px;
+}
+@media (min-width: 1280px) {
+  .as-window { --as-sidebar-w: 264px; --as-inspector-w: 380px; --as-content-min: 480px; }
+}
+/* A pointer is more precise than a fingertip: WCAG 2.2 Target Size (Minimum)
+   asks 24×24 CSS px, where touch wants 44×44. Gate on the INPUT, not the
+   width — a touchscreen laptop at 1440px still needs finger-sized rows, and a
+   Mac inspector at 44pt a row holds a third of what it should. */
+@media (any-pointer: coarse) { .as-window { --as-row-min: var(--as-hit-min); } }
+
+/* Below the desktop tier this is only a graceful fallback, not a design: the
+   panes stack and the window scrolls. Ship the compact skeleton (tab bar +
+   scroll-edge toolbar) for those widths. Gated on a max-width query rather
+   than left to specificity, so the desktop rules below don't have to outrank
+   it with a longer selector. */
+@media (max-width: 1023.98px) {
+  .as-window > .as-split > .as-split-divider,
+  .as-window > .as-split > .as-inspector { display: none; }
+}
+/* Used inside a split view, `.as-sidebar` is a pane, not the floating iPad
+   slab it is on its own — at every width, so the compact fallback doesn't
+   leave an absolutely-positioned column lying across the content. */
+.as-split > .as-sidebar {
+  position: static; inset: auto; z-index: auto;
+  inline-size: auto; box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .as-window {
+    display: grid;
+    grid-template-rows: auto auto 1fr;   /* menu bar · toolbar · split */
+    /* minmax(0,1fr), not the implicit `auto`: a grid item's automatic minimum
+       size is its max-content, so a split row whose panes total more than the
+       window would silently widen the track instead of reporting the squeeze
+       — and the divider would never learn it has to give space back. */
+    grid-template-columns: minmax(0, 1fr);
+    block-size: 100dvh;
+    overflow: hidden;                    /* the panes scroll, the window doesn't */
+    background: var(--as-bg-grouped);
+  }
+
+  /* Menu bar. On a Mac this lives outside the window and iPadOS 26 puts it at
+     the top of the screen; on the web it has to be drawn in-window. Quiet
+     chrome, not a floating control — no glass. Every toolbar item should also
+     be a command here ("Make every toolbar item available as a command in the
+     menu bar", hig/toolbars.md), and a printed shortcut must actually work. */
+  .as-menubar {
+    position: relative; z-index: 22;
+    display: flex; align-items: center; gap: 1px;
+    min-block-size: 28px; padding-inline: 8px;
+    background: color-mix(in srgb, var(--as-bg) 80%, transparent);
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    backdrop-filter: blur(30px) saturate(1.8);
+    box-shadow: 0 .5px 0 var(--as-separator);
+  }
+  .as-menubar .as-menubar-item {
+    appearance: none; -webkit-appearance: none; border: 0; background: transparent;
+    min-block-size: 22px; padding: 0 9px; border-radius: var(--as-radius-xs);
+    color: var(--as-label); font: 400 13px/16px var(--as-font-text); cursor: default;
+  }
+  .as-menubar .as-menubar-item:hover { background: var(--as-fill-tertiary); }
+  .as-menubar .as-menubar-item[aria-expanded="true"] { background: var(--as-accent); color: #fff; }
+  .as-menubar .as-menubar-item:focus-visible { outline: 2px solid var(--as-accent); outline-offset: -1px; }
+  .as-menubar .as-menubar-app { font-weight: 600; }
+  .as-menubar .as-spacer { flex: 1; }
+
+  /* Toolbar in the window frame. macOS: "the toolbar resides in the frame at
+     the top of a window… window titles can display inline with controls, and
+     toolbar items don't include a bezel" (hig/toolbars.md). That is a
+     different model from iOS, where the bar floats and content scrolls under
+     it — here the frame is chrome and the PANES below own the scrolling, so
+     each pane gets its own scroll edge rather than the window having one.
+     Item groupings (hig/toolbars.md): leading = sidebar toggle then the view
+     title; trailing = inspector toggle, search, More; max three groups; never
+     a text button and an icon button in the same group. */
+  .as-toolbar-window {
+    position: relative; z-index: 18;
+    min-block-size: var(--as-window-chrome); gap: 8px; padding-inline: 10px;
+    background: color-mix(in srgb, var(--as-bg) 72%, transparent);
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    backdrop-filter: blur(30px) saturate(1.8);
+    box-shadow: 0 .5px 0 var(--as-separator);
+  }
+  /* Inline with the controls, not centred over them, and not a second copy of
+     a large title — a window frame has no large-title state to defer to. */
+  .as-toolbar-window .as-toolbar-title {
+    font: 600 13px/16px var(--as-font-text); letter-spacing: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* Bezel-less toolbar items. "In a macOS app, the toolbar resides in the
+     frame at the top of a window … and toolbar items don't include a bezel"
+     (hig/toolbars.md, macOS), reinforced by "Prefer system-provided symbols
+     without borders … Borders aren't necessary because the section provides
+     a visible container". The window frame IS the container, so on this tier
+     a group is spacing and nothing else — no glass pill around the icons.
+     `.as-glass-group` is the iOS/iPadOS expression; use `.as-toolbar-group`
+     here. (Glass still belongs on floating bars — just not on a window frame,
+     where it also reads as glass on glass over the blurred frame.) */
+  .as-toolbar-window .as-toolbar-group { display: inline-flex; align-items: center; gap: 2px; }
+  .as-toolbar-window .as-toolbar-group + .as-toolbar-group { margin-inline-start: 8px; }
+  .as-toolbar-window .as-toolbar-group > .as-item {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-block-size: 28px; min-inline-size: 28px; padding: 0 8px;
+    appearance: none; -webkit-appearance: none; border: 0;
+    background: transparent; border-radius: var(--as-radius-xs);
+    color: var(--as-label); font: 400 13px/16px var(--as-font-text); cursor: default;
+    transition: background var(--as-dur-fast) var(--as-ease-soft);
+  }
+  .as-toolbar-window .as-toolbar-group > .as-item:hover { background: var(--as-fill-tertiary); }
+  .as-toolbar-window .as-toolbar-group > .as-item:active,
+  .as-toolbar-window .as-toolbar-group > .as-item[aria-pressed="true"] { background: var(--as-fill); }
+  .as-toolbar-window .as-toolbar-group > .as-item:focus-visible { outline: 2px solid var(--as-accent); outline-offset: -1px; }
+  .as-toolbar-window .as-toolbar-group > .as-item:disabled { opacity: .35; }
+  /* Mac search field: a bordered field in the frame, not a floating glass pill. */
+  .as-toolbar-window .as-search {
+    min-block-size: 24px; inline-size: 200px; padding-inline: 8px; gap: 6px;
+    border-radius: var(--as-radius-xs);
+    background: var(--as-fill-tertiary);
+    box-shadow: inset 0 0 0 .5px var(--as-separator);
+  }
+  .as-toolbar-window .as-search input { font: 400 13px/16px var(--as-font-text); }
+  .as-toolbar-window .as-item svg { inline-size: 16px; block-size: 16px; }
+  /* A touchscreen at this width still enters the desktop tier, and iOS Safari
+     zooms the page on focus for any input under 16px. */
+  @media (any-pointer: coarse) {
+    .as-toolbar-window .as-search { min-block-size: var(--as-hit-min); }
+    .as-toolbar-window .as-search input { font-size: 16px; }
+  }
+
+  /* Split view. Flex rather than grid so a pane can be hidden with [hidden]
+     and the row simply closes up. */
+  .as-split { display: flex; min-block-size: 0; min-inline-size: 0; }
+  /* Pane widths are the widths you asked for: with the default content-box,
+     a pane's padding would be added on top of its flex-basis and every
+     column would come out 16–28px wider than the token says. */
+  .as-split > * { box-sizing: border-box; }
+  .as-split > [hidden] { display: none; }
+
+  /* The leading pane. `.as-sidebar` keeps its row/section-title vocabulary but
+     stops being a floating absolutely-positioned glass slab. */
+  .as-split > .as-sidebar {
+    flex: 0 0 var(--as-sidebar-w); min-inline-size: 0;
+    padding: 8px; --as-sidebar-pad: 8px;
+    background: var(--as-bg-secondary);
+    box-shadow: inset -.5px 0 0 var(--as-separator);
+  }
+  .as-split > .as-sidebar .as-row {
+    min-block-size: var(--as-row-min);
+    border-radius: var(--as-radius-xs);
+    color: var(--as-label); font: 400 13px/16px var(--as-font-text);
+  }
+  /* "Persistently highlight the current selection in each pane that leads to
+     the detail view" (hig/split-views.md) — and everything inside the
+     highlighted row has to come with it, or a secondary count keeps its
+     30%-alpha gray and disappears against the accent fill.
+
+     Contrast note, because this is the one place the 4.5:1 rule cannot be
+     met head-on: white on the system blue is ~3.3:1, and no colour clears
+     4.5:1 against that fill (it would need a relative luminance above 1).
+     That is the system's own selected-row appearance, so the rules here are
+     (a) secondary text is never *worse* than the primary label — opaque
+     white, not 78% alpha, which measured 2.8:1 — and (b) Increase Contrast
+     drops the accent entirely for black/white, the same move .as-glass makes. */
+  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-accent); color: #fff; }
+  .as-split > .as-sidebar .as-row.is-selected svg { color: currentColor; }
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: #fff; }
+  .as-split > .as-sidebar .as-row svg { inline-size: 16px; block-size: 16px; }
+  .as-split > .as-sidebar .as-section-title { padding: 10px 8px 4px; font: 600 11px/14px var(--as-font-text); color: var(--as-label-secondary); }
+  /* Two levels of hierarchy, no more: "In general, show no more than two
+     levels of hierarchy in a sidebar. When a data hierarchy is deeper than two
+     levels, consider using a split view interface that includes a content list
+     between the sidebar items and detail view." (hig/sidebars.md) */
+  .as-split > .as-sidebar .as-row.as-row-child { padding-inline-start: 30px; }
+
+  /* Content list — the middle column when the hierarchy is three deep. */
+  .as-split > .as-list-column {
+    flex: 0 0 var(--as-list-column-w, 300px); min-inline-size: 0;
+    overflow: auto; overscroll-behavior: contain;
+    background: var(--as-bg);
+  }
+
+  /* Detail. Fills whatever is left; no max-width — the readable-width guide is
+     for running text, and applying it to a whole column is what leaves dead
+     gutters on a 2000px display. Limit prose and forms inside it instead
+     (.as-readable), and let tables and lists fill the column. */
+  .as-split > .as-content {
+    flex: 1 1 auto; min-inline-size: var(--as-content-min);
+    position: relative; overflow: auto; overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    background: var(--as-bg);
+  }
+
+  /* Inspector: "information on the trailing side of a split view"
+     (hig/windows.md). Supplementary detail about the current selection. */
+  .as-split > .as-inspector {
+    display: block;
+    flex: 0 0 var(--as-inspector-w); min-inline-size: 0;
+    overflow: auto; overscroll-behavior: contain;
+    padding: 4px 14px 16px;
+    background: var(--as-bg-secondary);
+    box-shadow: inset .5px 0 0 var(--as-separator);
+  }
+  .as-inspector .as-inspector-title { margin: 14px 0 6px; font: 600 11px/14px var(--as-font-text); color: var(--as-label-secondary); }
+  .as-inspector .as-field { display: flex; align-items: center; gap: 12px; min-block-size: var(--as-row-min); font: 400 13px/16px var(--as-font-text); }
+  .as-inspector .as-field > :first-child { color: var(--as-label-secondary); }
+  .as-inspector .as-field > :last-child { margin-inline-start: auto; text-align: end; }
+  .as-inspector .as-field + .as-field { box-shadow: inset 0 .5px 0 var(--as-separator); }
+
+  /* Divider. "Prefer the thin divider style. The thin divider measures one
+     point in width" (hig/split-views.md) — so the line is 1px and the grab
+     area is widened with a pseudo-element instead of fattening the line.
+     liquid-glass.js gives it the drag + arrow-key behaviour and keeps
+     aria-valuenow equal to the width actually drawn. */
+  .as-split > .as-split-divider {
+    display: block;
+    position: relative; z-index: 12;
+    flex: 0 0 1px; align-self: stretch;
+    border: 0; padding: 0;
+    background: var(--as-separator);
+    cursor: col-resize; touch-action: none;
+  }
+  .as-split > .as-split-divider::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline: -3px;
+    background: transparent; transition: background var(--as-dur-fast) var(--as-ease-soft);
+  }
+  .as-split > .as-split-divider:hover::before,
+  .as-split > .as-split-divider.is-dragging::before { background: color-mix(in oklab, var(--as-accent) 55%, transparent); }
+  .as-split > .as-split-divider:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 1px; }
+  .as-split > .as-split-divider[aria-orientation="horizontal"] {
+    flex: 0 0 1px; inline-size: auto; block-size: 1px; cursor: row-resize;
+  }
+  .as-split > .as-split-divider[aria-orientation="horizontal"]::before { inset-block: -3px; inset-inline: 0; }
+
+  /* Panes run the full height of the split row, so the sidebar and inspector
+     read as the two edges of the window rather than two boards floating on a
+     page when the content happens to be short. */
+  .as-split > * { align-self: stretch; }
+
+  /* A desktop window has several scroll views, and each one that has pinned
+     chrome above it gets its own edge — one per scroll view, not one per
+     window. Inside a pane the sticky edge positions against the pane. */
+  .as-split .as-scroll-edge.as-edge-top { top: 0; }
+
+  /* The compact chrome has no business inside a window. */
+  .as-window .as-tabbar { display: none; }
+}
+
+/* --------------------------------------------------------------------------
    7. Accessibility + user preferences (applied system-wide, automatically)
    -------------------------------------------------------------------------- */
 /* Reduce Transparency → frostier, obscures more of what's behind */
@@ -700,6 +993,9 @@
   .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
   .as-segmented.is-scrubbing .as-seg-indicator,
   .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(rgb(255 255 255 / .96), rgb(120 120 124 / .96)); }
+  /* Window chrome is not .as-glass, so it needs its own opt-out: a menu bar
+     and a window toolbar still blur their backdrop otherwise. */
+  .as-menubar, .as-toolbar-window { background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 :root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
 /* Increase Contrast → predominantly black/white with a contrasting border */
@@ -722,6 +1018,18 @@
   .as-glass-clear, .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
   .as-segmented.is-scrubbing .as-seg-indicator,
   .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(#fff, #000); box-shadow: inset 0 0 0 1.5px var(--as-label); }
+  /* Window chrome is not .as-glass, so it needs its own high-contrast pass:
+     opaque frame, a real separator, and no translucency. */
+  .as-menubar, .as-toolbar-window {
+    background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: 0 0 0 0 transparent, inset 0 -1px 0 var(--as-label);
+  }
+  .as-split > .as-split-divider { background: var(--as-label); }
+  /* An accent fill tops out near 3.3:1 with white on it, so Increase Contrast
+     drops the accent for black/white — the same move .as-glass makes above. */
+  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-label); color: var(--as-bg); }
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: var(--as-bg); }
 }
 /* Reduce Motion → no elastic / morphing, keep opacity changes */
 @media (prefers-reduced-motion: reduce) {

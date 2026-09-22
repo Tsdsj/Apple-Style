@@ -10,7 +10,7 @@ Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheat
 ## Procedure
 1. **Inventory**: list every surface and control on the screen and assign each to *content layer* or *control/navigation layer*. Anything glass in the content layer is finding #1.
 2. **Run the checklist** below; for each failure write: element → rule violated → HIG page (`../Apple-Style-HIG/reference/hig/<slug>.md`) → concrete fix (token/class/API). Severity: **Blocker** (breaks the material or accessibility), **Major** (looks un-Apple), **Minor** (polish).
-3. **Check states**: light, dark, Increase Contrast, Reduce Transparency, Reduce Motion, largest Dynamic Type, RTL, keyboard focus, hover (pointer platforms), over dark *and* light content, empty/loading/error states.
+3. **Check states**: light, dark, Increase Contrast, Reduce Transparency, Reduce Motion, largest Dynamic Type, RTL, keyboard focus, hover (pointer platforms), over dark *and* light content, empty/loading/error states, and **window width — 390 / 768 / 1024 / 1440 / 2000**. Reviewing at one width hides both the dead gutter on a wide display and the squeezed detail column at 1024.
 4. **Report** as a table sorted by severity, then a 3–5 line summary of what would most change the impression. Quote the HIG sentence when the user might push back.
 
 ## Checklist
@@ -34,11 +34,27 @@ Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheat
 - [ ] Bold, left-aligned titles in alerts/sheets/onboarding; title-style section headers (no ALL CAPS); title case buttons, sentence case body
 
 **Shape & layout**
-- [ ] 44×44 pt targets (60 visionOS); ≥ 8pt between controls; 16/20pt margins; safe areas respected; content extends under bars
+- [ ] 44×44 pt targets with a finger (60 visionOS), ≥ 24×24 with a pointer (WCAG 2.2, gated on `any-pointer: coarse` — not on width); ≥ 8pt between controls; 16/20pt margins; safe areas respected; content extends under bars
 - [ ] Capsules for touch controls/bars; concentric radii for nested shapes (no pinched/flared corners); macOS small controls rounded-rect, large/XL capsule
-- [ ] Layout driven by size classes; tab bar ↔ sidebar adaptation; arbitrary window sizes; split views for columns
+- [ ] Layout driven by size classes; tab bar ↔ sidebar adaptation; arbitrary window sizes; split views for columns. **Three tiers, not two**: compact `<768`, iPad `≥768`, desktop `≥1024` — see the *Desktop window* section below for the ≥1024 rules
 - [ ] Toolbar grouping by function; no icon+text in one group; primary action separate & tinted; overflow into More menu
 - [ ] Search placement: trailing search tab (iPhone) / top-trailing field (iPad, Mac)
+
+**Desktop window** (targets with a pointer and a resizable window — `≥1024px`)
+- [ ] **Measured**: content occupies ≥ 90% of the viewport width at 1440 *and* at 2000 — no dead gutter from a `max-width` meant for body copy (`layout-and-shapes.md`'s 672pt readable width is about text, not pages). Tables/lists fill their column; prose and forms are limited inside it
+- [ ] Navigation is a **leading sidebar**, not a bottom bar (`layout`: "Avoid placing controls or critical information at the bottom of a window"; `windows`)
+- [ ] Extra detail is a **trailing inspector**, not a bottom bar (`windows`)
+- [ ] Toolbar spans the **window frame**, title **inline with the controls**, ≤ 3 groups, text and icon buttons in separate groups (`toolbars` → macOS, Item groupings)
+- [ ] **Toolbar items carry no bezel** — "toolbar items don't include a bezel" (`toolbars` → macOS); "Borders aren't necessary because the section provides a visible container". The window frame *is* the container, so no glass pill around window-toolbar icons (that also reads as glass on glass over a blurred frame). Bare symbols with hover/selection states; glass groups are the iOS/iPadOS expression. Web: `.as-toolbar-group`, not `.as-glass-group`
+- [ ] The search field in the frame is a **bordered Mac field**, not a floating glass pill; the primary action is a small filled/prominent button, not a glass capsule
+- [ ] Sidebar ≤ **two levels**; a third level is a **content list** in the middle column (`sidebars`); nothing critical at its bottom edge (`sidebars` → macOS)
+- [ ] **Each pane persistently highlights its own current selection** (`split-views`)
+- [ ] The split divider is a **keyboard control**: `role="separator"`, focusable, arrow keys, thin (1pt) style, sane min/max, and `aria-valuenow` equal to the width **actually drawn**
+- [ ] Menu-bar commands that **print a shortcut actually respond to it**; every toolbar item also exists as a menu command (`toolbars` → macOS)
+- [ ] **Pointer density**: `data-platform="macos"` set; controls are not all 44pt capsules (pointer targets ≥ 24×24, WCAG 2.2; macOS capsules only for Large/XL and standout actions)
+- [ ] **Panes run the full height** when content is short — the sidebar and inspector read as the window's edges, not boards floating on a page
+- [ ] One scroll edge **per scroll view**, not one per window; panes that don't scroll get none
+- [ ] Checked at **1024 / 1440 / 2000** — and 768 and 390 still work
 
 **Motion & feedback**
 - [ ] Press state on every button; springs, interruptible, transform/opacity only; materialize not fade
@@ -58,7 +74,7 @@ Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheat
 - [ ] No SF Symbols and no self-hosted SF fonts shipped to the browser (licence); icons are own-drawn on a 24×24 / 1.8-stroke grid; type scale still reads on the Windows/Android fallback face
 - [ ] Correct roles: tab bar is `<nav>` not `tablist`; segmented = tablist/radiogroup with roving `tabindex`; switch/slider use real semantics; dialogs trap focus, `inert` the background, close on Escape and restore focus
 - [ ] `:focus-visible` ring on every interactive element, visible on glass; nothing relies on `outline: none`
-- [ ] `100dvh` not `100vh`; `viewport-fit=cover` + `env(safe-area-inset-*)`; logical properties for RTL; overlays inside the documented z-index bands
+- [ ] `100dvh` not `100vh`; `viewport-fit=cover` + `env(safe-area-inset-*)`; logical properties for RTL; overlays inside the documented z-index bands (incl. split divider `12`, window toolbar `18`, menu bar `22`)
 - [ ] `touch-action` on draggable controls; hover effects gated by `@media (hover: hover)`; 44×44 enforced on `(pointer: coarse)`; `overscroll-behavior: contain` on sheets/menus/inner scrollers
 - [ ] Forms: `<label for>`, `autocomplete`/`inputmode`, ≥16px inputs (no iOS zoom), errors via `aria-describedby` + `aria-invalid`, not colour alone
 - [ ] Theme applied before first paint (no flash); `color-scheme` set; `theme-color` per scheme

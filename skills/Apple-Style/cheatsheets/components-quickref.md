@@ -3,7 +3,7 @@
 Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug>.md` (buttons, toolbars, tab-bars, sidebars, sheets, menus, alerts, popovers, action-sheets, search-fields, segmented-controls, sliders, toggles, steppers, pickers, text-fields, lists-and-tables, split-views, windows, the-menu-bar, context-menus, labels, progress-indicators, …).
 
 ## Buttons (`hig/buttons.md`)
-- Hit region ≥ 44×44 (visionOS 60). **Always a press state.** Verb labels in title case ("Add Item"), no trailing period; icon-only buttons need accessibility labels.
+- Hit region ≥ 44×44 with a finger (visionOS 60), **≥ 24×24 with a pointer** (WCAG 2.2) — gate on `any-pointer: coarse`, not on width. **Always a press state.** Verb labels in title case ("Add Item"), no trailing period; icon-only buttons need accessibility labels.
 - **Style, not size, distinguishes the preferred option.** One or two prominent buttons per view.
 - Styles: plain / gray / tinted / filled (prominent) / bordered (macOS) / **glass** / **glassProminent**; sizes mini, small, regular(medium), large, **extra-large**. Capsule default on iOS; macOS small controls rounded-rect.
 - Don't build glass buttons by hand — use `.buttonStyle(.glass)` / `UIButton.Configuration.glass()` / `NSButton.BezelStyle.glass`.
@@ -15,6 +15,8 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 - Prefer symbols over text; every icon has an accessibility label; monochrome rendering by default. Crowded → move secondary actions into a More (…) menu.
 - Remove custom bar backgrounds/borders/darkening. Hide the whole toolbar item, not its inner view. Badges via `.badge`.
 - Search in toolbar: bottom on iPhone, top-trailing on iPad/Mac.
+- **Minimize the number of groups — aim for a maximum of three.** Placements: leading (back / show-hide sidebar, then the view title), center (customizable, collapses into the system overflow menu), trailing (inspector toggle, search, More, primary action — always visible).
+- **macOS: the toolbar lives in the window frame**, below or integrated with the title bar; **window titles can display inline with controls** and **toolbar items don't include a bezel** — the frame is the visible container, so bare symbols with hover/selection states, no glass pill (web: `.as-toolbar-group`, not `.as-glass-group`). That is a different model from iOS, where the bar floats and content scrolls under it. Every toolbar item must also exist as a menu-bar command, and a printed shortcut must actually work.
 
 ## Tab bars (`hig/tab-bars.md`)
 - Floating capsule at the bottom (iPhone); 3–5 tabs; **Search is a dedicated tab at the trailing end** (`Tab(role: .search)`), visually separated.
@@ -23,7 +25,12 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 - Tabs navigate; don't use them for actions. Same symbols on every platform.
 
 ## Sidebars & split views (`hig/sidebars.md`, `hig/split-views.md`)
-- Inset, floating glass; content extends beneath; use background extension effect for hero images; inspector on the trailing side (`inspector(isPresented:)`, `UISplitViewController.Column.inspector`).
+- A sidebar appears on the **leading side** and navigates between areas of the app. Inset, floating glass on iPad; a pane of the window on Mac. Content extends beneath; use the background extension effect for hero images.
+- **Two levels of hierarchy, no more.** Deeper → a split view with a **content list** column between sidebar and detail.
+- **Inspector on the trailing side** (`inspector(isPresented:)`, `UISplitViewController.Column.inspector`) — that is where extra detail goes on a desktop window, never a bottom bar ("people often relocate a window in a way that hides its bottom edge", `hig/windows.md`).
+- **Nothing critical at the bottom of a sidebar** (`hig/sidebars.md` macOS). Let people hide the sidebar, and provide more than one way to bring it back (toolbar button *and* a menu command with a shortcut).
+- **Each pane persistently highlights its own current selection** (`hig/split-views.md`).
+- Dividers: **thin (1pt) style preferred**; set reasonable min/max pane sizes so the divider stays visible and hittable. Sizes → `layout-and-shapes.md` (Desktop panes).
 - Large glass: does not flip light/dark; picks up ambient color from nearby content.
 
 ## Navigation bars (`hig/navigation-bars.md` in `hig/toolbars.md` family)

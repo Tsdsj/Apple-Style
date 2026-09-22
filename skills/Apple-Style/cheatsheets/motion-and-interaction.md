@@ -15,7 +15,7 @@ Source: HIG *Motion*, *Feedback*, *Gestures*, *Playing haptics*, *Loading*, *Lau
 - **Morph** between states (`matchedGeometry`) within a `GlassEffectContainer`; shapes blend when closer than the container spacing.
 - **Transient lift**: knobs (slider/toggle) turn into glass only while manipulated; the resting state stays quiet.
 - **Scrubbing**: the standard controls are drag targets. Press the *selected* segment of a segmented control and slide to move the selection; throw a switch knob and it lands on the nearer side; a slider thumb tracks the finger. The moving part follows 1:1, **stretches along the drag axis** with velocity (gel flex), rubber-bands past the ends and settles on a spring. Selection updates live during the drag, not on release. Click-only versions of these controls are the most common tell of a non-Apple UI.
-- **Tab bar minimize** on scroll down; **sheet** grows/opaques as it's dragged up; **focus recedes** when a window is inactive.
+- **Tab bar minimize** on scroll down — **compact width only**: it exists to buy back vertical space on a phone, and a sidebar (or any desktop-tier navigation) stays put. `web/apple-style.css` already suppresses it for `.as-tabbar[data-sidebar]` at ≥1024px. **Sheet** grows/opaques as it's dragged up; **focus recedes** when a window is inactive.
 
 ## Web spring/easing defaults (`web/apple-style.css`)
 `--as-ease-spring` (bouncy linear() spring), `--as-ease-soft` (cubic-bezier .2 .8 .2 1); durations 160 / 320 / 560 ms. Use `transform`/`opacity` only for 60 fps; avoid animating `backdrop-filter`.
