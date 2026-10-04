@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased — reliability hardening
+## v0.1.0 — 2026-10-04
+
+Reliability hardening.
 
 - 安装：外置安装凭据、复制内容/文件名/权限指纹、未知归属与修改内容保留、源目标重叠拒绝、暂存替换和失败回滚。旧安装不自动认领；无 Git 下载端点支持分支与标签。
 - 控件：区分 tabs 和 radio group，roving tabindex、焦点同步、禁用项跳过、标准 click；拖拽只提交一次，取消不激活。
@@ -10,4 +12,4 @@
 - 参考库：208 个现有来源纳入 manifest；覆盖四类内容、自动 INDEX、抓取时间/内容与源响应哈希、失败不覆盖、事务回滚和变更报告。
 - 验证/交付：安装器与参考夹具、真实 Chromium 交互/资源/样式/布局回归、CI、固定 Skill 评测任务、统一演示链接与尚未启用的发布配置。
 
-没有发布版本、创建 Release、启用站点或合并 main。具体执行证据与未验证项见 `docs/validation.md`。
+具体执行证据、发布状态与未验证项见 `docs/validation.md`。
