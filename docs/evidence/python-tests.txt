@@ -1,0 +1,33 @@
+test_manifest_hashes_and_index_cover_all_reference_files (test_delivery.Delivery.test_manifest_hashes_and_index_cover_all_reference_files) ... ok
+test_static_package_excludes_reference_and_preserves_runtime (test_delivery.Delivery.test_static_package_excludes_reference_and_preserves_runtime) ... ok
+test_alias_overlap_preserved (test_installers.Installer.test_alias_overlap_preserved) ... ok
+test_cache_unowned_preserved (test_installers.Installer.test_cache_unowned_preserved) ... ok
+test_conflict (test_installers.Installer.test_conflict) ... ok
+test_foreign_link_preserved (test_installers.Installer.test_foreign_link_preserved) ... ok
+test_incomplete_source_does_not_partially_install (test_installers.Installer.test_incomplete_source_does_not_partially_install) ... ok
+test_modified_permissions_preserved (test_installers.Installer.test_modified_permissions_preserved) ... ok
+test_modified_preserved (test_installers.Installer.test_modified_preserved) ... ok
+test_nested_change_and_missing_receipt_preserved (test_installers.Installer.test_nested_change_and_missing_receipt_preserved) ... ok
+test_no_git_branch_and_tag_archive_and_failed_update (test_installers.Installer.test_no_git_branch_and_tag_archive_and_failed_update) ... ok
+test_repeat_update_uninstall (test_installers.Installer.test_repeat_update_uninstall) ... ok
+test_unowned_preserved (test_installers.Installer.test_unowned_preserved) ... ok
+test_added_file_and_missing_receipt_preserved (test_powershell.PowerShellInstaller.test_added_file_and_missing_receipt_preserved) ... ok
+test_incomplete_source_does_not_partially_install (test_powershell.PowerShellInstaller.test_incomplete_source_does_not_partially_install) ... ok
+test_native_parser (test_powershell.PowerShellInstaller.test_native_parser) ... ok
+test_no_git_branch_tag_and_failed_download (test_powershell.PowerShellInstaller.test_no_git_branch_tag_and_failed_download) ... ok
+test_repeat_update_uninstall (test_powershell.PowerShellInstaller.test_repeat_update_uninstall) ... ok
+test_source_conflict (test_powershell.PowerShellInstaller.test_source_conflict) ... ok
+test_unowned_and_modified_preserved (test_powershell.PowerShellInstaller.test_unowned_and_modified_preserved) ... ok
+test_empty_document_rejected (test_reference.Parser.test_empty_document_rejected) ... ok
+test_title_only_document_rejected (test_reference.Parser.test_title_only_document_rejected) ... ok
+test_all_categories_metadata_and_index (test_reference.Update.test_all_categories_metadata_and_index) ... ok
+test_discovery_adds_page (test_reference.Update.test_discovery_adds_page) ... ok
+test_errors_preserve_every_file (test_reference.Update.test_errors_preserve_every_file) ... ok
+test_failed_commit_rolls_back (test_reference.Update.test_failed_commit_rolls_back) ... ok
+test_partial_success_is_not_committed (test_reference.Update.test_partial_success_is_not_committed) ... ok
+test_path_traversal_rejected (test_reference.Update.test_path_traversal_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 31.213s
+
+OK

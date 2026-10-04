@@ -1,0 +1,7 @@
+test_manifest_hashes_and_index_cover_all_reference_files (test_delivery.Delivery.test_manifest_hashes_and_index_cover_all_reference_files) ... ok
+test_static_package_excludes_reference_and_preserves_runtime (test_delivery.Delivery.test_static_package_excludes_reference_and_preserves_runtime) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.053s
+
+OK

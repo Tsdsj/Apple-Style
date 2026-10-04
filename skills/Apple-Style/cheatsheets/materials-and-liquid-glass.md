@@ -1,5 +1,7 @@
 # Materials & Liquid Glass — rules that decide a design
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Materials*, HIG *Color → Liquid Glass color*, *Adopting Liquid Glass*, WWDC25 219 "Meet Liquid Glass", WWDC25 356. Full text: `Apple-Style-HIG/reference/hig/materials.md`, `reference/liquid-glass/`, `reference/wwdc25/219-*.md`.
 
 ## What it is

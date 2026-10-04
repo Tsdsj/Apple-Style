@@ -1,0 +1,47 @@
+name: Reliability checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - run: npm test
+      - run: git diff --check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.os }}
+          path: test-results/
+  windows-installers:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        powershell: [pwsh, powershell]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test native installer
+        shell: pwsh
+        run: |
+          $env:APPLE_STYLE_PWSH = (Get-Command '${{ matrix.powershell }}').Source
+          python -m unittest discover -s tests -p test_powershell.py -v

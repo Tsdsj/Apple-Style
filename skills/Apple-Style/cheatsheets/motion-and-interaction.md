@@ -1,5 +1,7 @@
 # Motion, feedback & interaction
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Motion*, *Feedback*, *Gestures*, *Playing haptics*, *Loading*, *Launching*; WWDC25 219; WWDC18 "Designing Fluid Interfaces". Full text: `Apple-Style-HIG/reference/hig/motion.md` etc.
 
 ## Principles

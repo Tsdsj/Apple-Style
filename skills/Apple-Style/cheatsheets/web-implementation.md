@@ -1,5 +1,7 @@
 # Web implementation — the last mile from HIG rules to shipped code
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 The other cheatsheets carry Apple's design rules. This one carries what the web
 needs on top of them, and the places where a literal reading of the HIG produces
 broken or illegal web code. Pair with `web/apple-style.css` + `web/liquid-glass.js`.
@@ -22,8 +24,8 @@ broken or illegal web code. Pair with `web/apple-style.css` + `web/liquid-glass.
 | Component | Markup |
 |---|---|
 | Tab bar | `<nav>` + links, **not** `role="tablist"` — it navigates between sections. `aria-current="page"` on the active tab. `role="tablist"` only for in-page views that swap content. |
-| Segmented control | `role="tablist"` + `role="tab"` `aria-selected` when it swaps views; `role="radiogroup"` + `role="radio"` `aria-checked` when it picks a value. Roving `tabindex` (one `0`, rest `-1`), arrow keys move selection. |
-| Toggle | `role="switch"` + `aria-checked`, or a real `<input type="checkbox" role="switch">`. Label describes the **on** state. |
+| Segmented control | `role="tablist"` + `role="tab"` `aria-selected` when it swaps views; `role="radiogroup"` + `role="radio"` `aria-checked` when it picks a value. Roving `tabindex` (one enabled item `0`, rest `-1`); arrows move focus and, by default, selection. Tabs require linked panels; `data-activation="manual"` defers selection to Enter/Space. Disabled items are skipped. |
+| Toggle | `role="switch"` + `aria-checked`, or a real `<input type="checkbox" role="switch">`. Use a stable label such as “Wi-Fi”, independent of the checked state. The runtime upgrades `.as-toggle` button/custom hosts, not native checkbox state. |
 | Slider | Real `<input type="range">` — never rebuild it; you lose keyboard, AT and `aria-valuetext` for free. Add `aria-valuetext` when the number needs units. |
 | Sheet / alert | `<dialog>` (or `role="dialog"`/`alertdialog` + `aria-modal`), `aria-labelledby` the title. Trap focus, `inert` the background, **Escape closes**, restore focus to the opener on close. |
 | Menu | `role="menu"`/`menuitem`, opener has `aria-haspopup="menu"` + `aria-expanded`. Up/Down move, Escape closes and returns focus, Tab closes. If it is really a listbox or a nav popover, use those roles instead — the menu keyboard model is a contract. |
@@ -37,16 +39,9 @@ already owns `box-shadow`).
 
 ## Layout & responsiveness
 
-- Size classes → breakpoints. Compact ≈ `< 768px` (margins 16), regular ≈ `≥ 768px`
-  (margins 20).
-- **Desktop ≈ `≥ 1024px` is a third tier, not more "regular".** A pointer, a
-  resizable window, a menu bar and a multi-column split view exist here and
-  nowhere else. Treat `≥ 768px` as "the iPad rules" and `≥ 1024px` as "the Mac
-  rules"; set `data-platform="macos"` on `<html>` when the target is a desktop
-  app (see *Density*) and build the window skeleton, not a taller phone page
-  (see *Desktop windows*). Apple's *regular* is a size class, not a pixel count
-  — collapsing it to one number is what makes a 2560px display and a 768px iPad
-  the same layout.
+- Determine platform, application type and input independently of width (see `rules-and-evidence.md`). The CSS uses 768/1024/1280px as project layout defaults. They do not identify iPad or Mac.
+- A wide iPad retains touch/keyboard conventions. A narrow Mac window retains Mac density and commands while panes collapse or stack. Cross-platform websites keep page navigation; a native-looking window is optional.
+- `data-platform="macos"` explicitly opts into this stylesheet's Mac density. It is not automatically set by resize. `data-sidebar` explicitly opts into a responsive sidebar transformation.
 - Prefer **container queries** for components that appear in both a
   sidebar and a full-width page.
 - Use `100dvh`, not `100vh`, for full-height mobile layouts — `vh` ignores the
@@ -64,22 +59,11 @@ already owns `box-shadow`).
   band it belongs to. The three window-chrome bands sit *below* the sheet
   backdrop on purpose: a modal dims the menu bar and the toolbar too.
 
-## Desktop windows (≥ 1024px) — `.as-window`
+## Optional Mac-like windows — `.as-window`
 
-A desktop target is a window, not a long page. Two HIG rules decide the whole
-skeleton, and both are macOS-only:
+Use this composition when the product is a native Mac app or an explicitly requested Web approximation. Apple's [Layout](https://developer.apple.com/design/human-interface-guidelines/layout) and [Windows](https://developer.apple.com/design/human-interface-guidelines/windows) recommend avoiding critical actions near a movable window's bottom edge. They suggest an inspector when extra detail needs it; they do not require every app to have a sidebar and inspector.
 
-> **Avoid placing controls or critical information at the bottom of a window.**
-> People often move windows so that the bottom edge is below the bottom of the
-> screen. — `hig/layout.md` (macOS)
-
-> Avoid putting critical information or actions in a bottom bar … if you have
-> more information to display, consider using an **inspector**, which typically
-> presents information on the trailing side of a split view. — `hig/windows.md`
-
-So navigation is the **leading sidebar**, detail is the **trailing inspector**,
-and the bottom edge holds nothing you would miss. A bottom tab bar at 1440px is
-a compact-width component shipped to the wrong tier.
+The example uses leading navigation and trailing detail. For a content website, landing page, single-pane tool or established product, keep the appropriate information structure. Width alone cannot make a bottom navigation bar or readable page max-width a violation.
 
 ```html
 <div class="as-window">
@@ -104,7 +88,7 @@ a compact-width component shipped to the wrong tier.
 ```
 
 Working page: `web/demo-desktop.html`. Below 1024px the same markup degrades to
-stacked panes — a fallback, not a design; ship the compact skeleton there.
+stacked panes. The Mac platform attribute remains; test narrow-window content order and overflow before using that fallback in a product.
 
 - **Toolbar is part of the window frame**, not a bar the content scrolls under:
   "the toolbar resides in the frame at the top of a window … window titles can
@@ -113,7 +97,7 @@ stacked panes — a fallback, not a design; ship the compact skeleton there.
   gets its own scroll edge.
 - **Item groupings** (`hig/toolbars.md`): leading = show/hide sidebar then the
   view title; trailing = inspector toggle, search field, More menu, one
-  prominent primary action. **Max three groups**, grouped by *function* (view
+  prominent primary action. **Prefer up to three groups** in the cited Mac toolbar pattern, grouped by *function* (view
   commands are not content actions), and never a text button and an icon
   button in the same group.
 - **No bezel on window-toolbar items.** "Toolbar items don't include a bezel"
@@ -125,7 +109,7 @@ stacked panes — a fallback, not a design; ship the compact skeleton there.
   the search field is a bordered Mac field and the primary action is a small
   filled button — neither is a glass capsule here. Floating bars on iPhone and
   iPad keep their glass groups; this is a window-frame rule.
-- **Sidebar ≤ two levels.** "When a data hierarchy is deeper than two levels,
+- **Sidebar hierarchy recommendation.** In general prefer no more than two levels. "When a data hierarchy is deeper than two levels,
   consider using a split view interface that includes a **content list** between
   the sidebar items and detail view" (`hig/sidebars.md`) — that is the
   `.as-list-column` middle pane. Nothing critical at the sidebar's bottom edge
@@ -265,17 +249,47 @@ page does not jump.
 - `data-perf="lite"` on `<html>` disables lensing wholesale — ship it as an escape
   hatch for low-end devices and for `Save-Data`.
 
-## Frameworks
+## Runtime lifecycle and frameworks
 
-- React/Vue: render the same classes; `LiquidGlass.attach(ref.current)` in an effect
-  for nodes created later (a `MutationObserver` also auto-attaches). Controls own
-  their own DOM state and emit `change` — treat them as uncontrolled inputs, or sync
-  from `change`, but do not re-render them on every pointermove.
-- SSR: the glass renders fine without JS (blur + highlights); lensing, dispersion and
-  the drag gestures are progressive enhancements added on hydration.
-- Tailwind: keep `apple-style.css` as the source of the material; do not rebuild it
-  with `backdrop-blur-*` utilities — you lose lensing, adaptivity and the
-  accessibility media queries.
+- `init(root = document)` includes the root element and its descendants. Repeated calls reuse bindings. The returned status object retains `attached`, `controls`, `shortcuts`, `lens` and adds `destroy()` for that root.
+- Dynamic descendants inside an initialized root are upgraded automatically. Removed components are released after MutationObserver delivery; removing an initialized root destroys its scope. Reinserted roots need `init(root)` again; descendants reinserted under a live root are upgraded automatically.
+- `detach(el)` releases the element/subtree's runtime bindings, generated knobs/indicators/filters and scheduled work. `destroy(root = document)` additionally stops initialization observers for that scope. Call cleanup before unmounting for deterministic teardown. Unrelated sibling roots remain active. An explicitly destroyed subtree is not immediately rebound by an initialized ancestor; explicitly initialize that component root to resume it.
+- `attach(el, {scale, rim, chroma, lens, adapt})` attaches one glass surface, not its controls. Repeated calls merge explicit options. Numeric scale (including 0) and rim, chroma, lens:false and adapt:false survive resize, viewport re-entry and appearance regeneration. Omitted values retain previous choices. `data-lens="off"` / `data-adapt="off"` also opt out.
+- Controls keep DOM state and emit bubbling `change`. Read `aria-checked`, `.is-selected`, or native range `value`. Do not independently toggle state again in `click`. Keep framework ownership boundaries stable; replace the subtree with destroy/init when changing the control's structural role.
+- Native button switches generate keyboard click; custom switch hosts get keyboard activation. Pointer taps use click, drag commits once, and cancel/lost capture cancels selection. Tabs manage the linked panel's hidden state; authors provide labels and meaningful panel content.
+
+React (load the browser script once before mounting):
+
+```jsx
+function GlassControls() {
+  const root = React.useRef(null);
+  React.useEffect(() => {
+    const element = root.current;
+    const runtime = window.LiquidGlass.init(element);
+    return () => runtime.destroy(); // also safe in Strict Mode's effect replay
+  }, []);
+  return <div ref={root}><button className="as-toggle" role="switch"
+    aria-checked="false" aria-label="Wi-Fi"><span className="as-knob" /></button></div>;
+}
+```
+
+Vue:
+
+```vue
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+const root = ref(null);
+let runtime;
+onMounted(() => { runtime = window.LiquidGlass.init(root.value); });
+onBeforeUnmount(() => { runtime?.destroy(); });
+</script>
+<template>
+  <div ref="root"><button class="as-toggle" role="switch" aria-checked="false"
+    aria-label="Wi-Fi"><span class="as-knob" /></button></div>
+</template>
+```
+
+SSR: call the runtime only after mounting in the browser. CSS supplies the static appearance, but custom switches/segmented controls require JS for interaction; native ranges keep native behavior. Tailwind can use the existing classes without rebuilding the material utilities. Framework snippets are integration guidance, not a claim of an executed React/Vue application test.
 
 ## Verify before shipping
 
@@ -284,5 +298,4 @@ Dynamic Type · keyboard only · VoiceOver/NVDA · RTL · slow 3G · over dark *
 light content · Safari and Firefox (no lensing there — confirm the fallback
 still reads as a material). **Widths: 320 · 390 · 768 · 1024 · 1440 · 2000** —
 a design checked only at one width is how a page ends up with dead gutters at
-2000 or a squeezed detail column at 1024. Then run the checklist in
-`../Apple-Style-Review/SKILL.md`.
+2000 or a squeezed detail column at 1024. Record checked / not checked / not applicable with commands, browser and revision in `../../Apple-Style-Review/SKILL.md`. Reading the checklist is not runtime validation.

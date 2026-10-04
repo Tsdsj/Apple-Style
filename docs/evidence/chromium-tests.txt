@@ -1,0 +1,43 @@
+Running 41 tests using 1 worker
+[1/41] tests/browser/demo.spec.js:3:1 › showcase menu and modal have keyboard access and restore focus
+[2/41] tests/browser/lifecycle.spec.js:3:1 › all runtime observers, listeners, frames and timers are released
+[3/41] tests/browser/runtime.spec.js:14:1 › radio keyboard skips disabled and moves focus
+[4/41] tests/browser/runtime.spec.js:19:1 › standard click activates switch once and cancel leaves it unchanged
+[5/41] tests/browser/runtime.spec.js:27:1 › destroy releases and remounts controls
+[6/41] tests/browser/runtime.spec.js:34:1 › lens options survive resize
+[7/41] tests/browser/runtime.spec.js:40:1 › pointer click, keyboard, drag and cancel each commit at most once
+[8/41] tests/browser/runtime.spec.js:57:1 › manual tabs wire panels, focus and explicit activation
+[9/41] tests/browser/runtime.spec.js:68:1 › scope excludes neighbors, removed root releases filters, remount works
+[10/41] tests/browser/runtime.spec.js:79:1 › lens false stays off; adapt false survives refresh and preference changes
+[11/41] tests/browser/runtime.spec.js:85:1 › segmented drag cancel restores selection; disabled controls and secondary pointers do nothing
+[12/41] tests/browser/runtime.spec.js:98:1 › subtree moved outside its initialized scope is released
+[13/41] tests/browser/runtime.spec.js:102:1 › zero scale, chroma and explicit theme regeneration preserve options
+[14/41] tests/browser/runtime.spec.js:110:1 › segmented roving semantics and repeated init preserve rendered pixels
+[15/41] tests/browser/runtime.spec.js:123:1 › disabling a selected segment and filling an empty control repairs roving state
+[16/41] tests/browser/runtime.spec.js:133:1 › real segmented drag commits once and the following click cannot reset selection
+[17/41] tests/browser/runtime.spec.js:141:1 › custom switch supports keyboard and assistive click
+[18/41] tests/browser/runtime.spec.js:147:1 › component destroy stays destroyed under an initialized document until explicit remount
+[19/41] tests/browser/styles.spec.js:4:3 › default meaningful white text contrast: light
+[20/41] tests/browser/styles.spec.js:4:3 › default meaningful white text contrast: dark
+[21/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 320
+[22/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 390
+[23/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 768
+[24/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 1024
+[25/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 1440
+[26/41] tests/browser/styles.spec.js:18:5 › layout /demo/index.html at 2000
+[27/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 320
+[28/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 390
+[29/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 768
+[30/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 1024
+[31/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 1440
+[32/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo.html at 2000
+[33/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 320
+[34/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 390
+[35/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 768
+[36/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 1024
+[37/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 1440
+[38/41] tests/browser/styles.spec.js:18:5 › layout /skills/Apple-Style/web/demo-desktop.html at 2000
+[39/41] tests/browser/styles.spec.js:30:1 › real accessibility preferences and theme keep lenses off or configured
+[40/41] tests/browser/styles.spec.js:40:44 › prominent glass semantic tint light
+[41/41] tests/browser/styles.spec.js:40:44 › prominent glass semantic tint dark
+  41 passed (5.2s)

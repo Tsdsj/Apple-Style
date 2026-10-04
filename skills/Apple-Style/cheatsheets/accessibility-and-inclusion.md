@@ -1,5 +1,7 @@
 # Accessibility, inclusion, privacy, writing
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Accessibility*, *Inclusion*, *VoiceOver*, *Privacy*, *Writing*, *Right to left*, *Dark Mode*. Full text in `Apple-Style-HIG/reference/hig/`.
 
 ## Non-negotiables
@@ -25,3 +27,10 @@ Source: HIG *Accessibility*, *Inclusion*, *VoiceOver*, *Privacy*, *Writing*, *Ri
 
 ## Dark Mode (`hig/dark-mode.md`)
 - Semantic colors; elevated surfaces via secondary/tertiary backgrounds; reduce saturation glare; dark-mode variants for images/icons where needed; test with Increase Contrast; the user may schedule appearance — never force a mode unless the content demands it (e.g., media).
+
+## Web controls and evidence
+
+- A value selector uses radiogroup/radio and aria-checked. Content tabs use tablist/tab, aria-selected and aria-controls-linked panels. Roving tabindex moves focus with selection; manual tabs defer activation to Enter/Space.
+- Standard click, keyboard and drag must work without double activation. Skip disabled items; cancel/lost capture does not commit. Native buttons supply keyboard click for switches.
+- Measure default ordinary text at 4.5:1 in light and dark, including white labels on filled buttons and selected rows. Increase Contrast is additional support, not an exemption.
+- Record keyboard/browser/assistive-technology checks separately as checked, not checked or not applicable. A source-code review cannot claim VoiceOver validation.

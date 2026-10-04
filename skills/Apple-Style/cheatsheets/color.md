@@ -1,5 +1,7 @@
 # Color — system palette and rules
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Color* (`Apple-Style-HIG/reference/hig/color.md`), *Dark Mode*, WWDC25 356. Values are for design reference; on Apple platforms use the semantic APIs (`Color.red`, `UIColor.systemBackground`) — they may shift between releases.
 
 ## System colors (RGB)
@@ -30,9 +32,13 @@ Never redefine a semantic color's meaning (separator as text color, secondaryLab
 - **Avoid using the same color for interactive and non-interactive elements.**
 - **Consider color-blindness**: don't rely on color alone; add shape/text (red/green pairs are the classic failure).
 - **Test in Light, Dark, Increased Contrast, and on real devices** in different lighting. Provide light/dark + increased-contrast variants for every custom color.
-- **Contrast**: aim for WCAG-style ratios (4.5:1 body text, 3:1 large text/UI); use system colors which are tuned for both appearances.
+- **Contrast**: ordinary meaningful text needs 4.5:1; large text 3:1. Check non-text UI under its applicable criterion. A system color value is not a guarantee for an arbitrary foreground/background pairing.
 - **Color management**: work in sRGB or Display P3 (wide gamut for images where supported); don't assume P3 colors reproduce on sRGB displays.
 - **Liquid Glass color**: glass has no inherent color. Tint only the background of the single primary action (prominent style). Keep bar symbols monochrome; colorful content → monochrome bars or a strongly differentiated accent. See `materials-and-liquid-glass.md`.
 - **App accent color** (iOS/iPadOS/macOS): one brand color applied via the system; on macOS the user's chosen accent may override — design controls to look right with any accent and with graphite.
 - **Dark Mode**: use semantic colors and elevated backgrounds (secondary/tertiary system backgrounds for layering), reduce white-point of saturated colors, avoid pure white text on pure black for large blocks, test with Increase Contrast + Reduce Transparency.
 - Platform notes: tvOS — vibrant colors on dark, avoid large saturated fields; visionOS — content sits on glass, prefer vibrancy over opaque colors, saturated color can be overwhelming; watchOS — black background, color for meaning.
+
+## Accessible Web action colors (project defaults)
+
+`--as-blue` preserves the Apple system samples. White on those samples measures about 3.52:1 light / 3.23:1 dark and is insufficient for ordinary text. The runtime stylesheet uses `--as-action-bg: light-dark(#0066cc, #006bd6)` and `--as-action-fg: #fff` for filled buttons, prominent glass and selected rows. These opaque action surfaces meet 4.5:1 without Increase Contrast. `--as-action-destructive` provides a separate white-text destructive fill. `--as-accent` is for foreground accents, not white-text filled surfaces. Custom `--as-tint`, opacity, inherited foregrounds and backgrounds still require measurement. See `tests/browser/styles.spec.js` for the measured default pairs.

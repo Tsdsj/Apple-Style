@@ -5,93 +5,45 @@ description: Use when auditing, reviewing or critiquing an existing screen, comp
 
 # Apple-Style-Review
 
-Read-only audit that produces a prioritized fix list. Uses **Apple-Style** cheatsheets for rules and **Apple-Style-HIG** for citations. Do not fix while auditing; report first, then fix on request (or immediately if the user asked for fixes).
+Audit the authorized scope, using `../Apple-Style/cheatsheets/rules-and-evidence.md` for rule strength and platform applicability. Report findings first unless the user has already asked for fixes; existing repair authorization remains valid.
 
 ## Procedure
-1. **Inventory**: list every surface and control on the screen and assign each to *content layer* or *control/navigation layer*. Anything glass in the content layer is finding #1.
-2. **Run the checklist** below; for each failure write: element → rule violated → HIG page (`../Apple-Style-HIG/reference/hig/<slug>.md`) → concrete fix (token/class/API). Severity: **Blocker** (breaks the material or accessibility), **Major** (looks un-Apple), **Minor** (polish).
-3. **Check states**: light, dark, Increase Contrast, Reduce Transparency, Reduce Motion, largest Dynamic Type, RTL, keyboard focus, hover (pointer platforms), over dark *and* light content, empty/loading/error states, and **window width — 390 / 768 / 1024 / 1440 / 2000**. Reviewing at one width hides both the dead gutter on a wide display and the squeezed detail column at 1024.
-4. **Report** as a table sorted by severity, then a 3–5 line summary of what would most change the impression. Quote the HIG sentence when the user might push back.
 
-## Checklist
+1. Record platform, app type, inputs, container sizes, tested revision and environment. A viewport width is not evidence of macOS. Preserve an existing product's navigation and design system.
+2. Inventory relevant surfaces and controls. Identify content/control layers and the source supporting a recommendation. Distinguish accessibility defects from aesthetic preferences.
+3. For every check below, record **checked** (pass/fail plus evidence), **not checked** (reason), or **not applicable** (scope). A checkbox tick or source-code claim alone is not a successful runtime test.
+4. Prioritize actionable findings: Blocker for inaccessible core interaction/data loss; Major for broken behavior or hierarchy; Minor for polish. Do not label a layout “not Apple” solely for deviating from project defaults.
 
-**Layering & material**
-- [ ] Glass only on floating controls/navigation; none on cards, rows, page bg (`materials`)
-- [ ] No glass on glass; toolbar/tab items share one background per group (`toolbars`, `tab-bars`)
-- [ ] Regular by default; clear only over media with bold bright content and dimming; never mixed
-- [ ] No custom bar backgrounds/borders/dark overlays; scroll edge effect present under pinned bars, one per view, soft (iOS) / hard (macOS pinned headers)
-- [ ] Large glass (sidebar/menu/sheet) thicker & non-flipping; small glass flips light/dark with content
-- [ ] Sheets inset with large radius, opaque at full height; menus/sheets/dialogs morph from their source control
-- [ ] Standard materials + vibrant labels used in the content layer where translucency is needed
+## Checks
 
-**Color**
-- [ ] One tinted primary action (background tinted, white label); bar icons monochrome; brand color in content layer (`color`)
-- [ ] Semantic colors (label/secondaryLabel/separator/backgrounds/fills) — no hard-coded grays/#007AFF
-- [ ] Light + dark + increased-contrast variants for custom colors; ≥ 4.5:1 text contrast; no color-only meaning
+| Area | What to inspect |
+|---|---|
+| Layers/material | Appropriate content/control separation, legibility over actual backgrounds, restrained nesting, regular/clear variants chosen for context; platform exceptions checked in HIG Materials |
+| Color | Semantic colors; default light/dark ordinary text ≥4.5:1; selected rows and white-on-tint buttons included; custom tints measured; color is not the only meaning |
+| Type/shapes | Readable fallback fonts and text scaling; concentric nested corners; shapes/density fit input and product; avoid enforcing project spacing as official numbers |
+| Layout | Platform, product and container considered separately; wide iPad and narrow Mac remain their platform; ordinary websites need no artificial window, sidebar or inspector; zoom/reflow and key widths checked |
+| Native Mac window, if applicable | HIG macOS Layout/Windows recommendations about critical bottom-edge actions; optional sidebar/inspector justified; toolbar groups and shortcuts fit the product; pane widths remain usable |
+| Segmented controls | tabs for panels with aria-controls/labelled panels; radio group for values; one tab stop, focus follows arrows, wrap/Home/End, activation model explicit, disabled skipped, ARIA matches value |
+| Switches/drag | standard click (including synthetic/AT click), keyboard and drag all operate; no double commit; pointercancel/lost capture restore or cancel; disabled controls do nothing |
+| Other controls | native range semantics, labeled buttons, visible focus; divider keyboard and actual-width ARIA; menu keyboard model only where a menu role is used |
+| Overlays | dialog labels, initial focus, Tab containment, inert background, Escape and focus return; menu dismissal and arrow navigation tested |
+| Motion/preferences | Reduced motion/transparency and increased contrast observed, not just media queries located; motion interruptible; no unnecessary bounce |
+| Lifecycle | repeated init, root scope, dynamic insertion/removal/remount, destroy; Observer/listener/timer/frame/filter cleanup; attach options survive resize/theme updates |
+| Resources/performance | Avoid unnecessary filters/promotions; characterize actual devices and workload before claiming performance gains; budgets are project defaults |
+| Delivery | Loading/empty/error/populated as applicable, mobile/coarse input and key widths, browser errors, source/manifest consistency and reference limitations |
+| Browser/assistive technology | Chromium, Safari, Firefox, VoiceOver/NVDA each have separate evidence; unrun checks remain not checked |
 
-**Typography**
-- [ ] SF text styles with correct size/leading/weight (`typography` tables); Dynamic Type reflow to AX5; ≥ 11pt
-- [ ] Bold, left-aligned titles in alerts/sheets/onboarding; title-style section headers (no ALL CAPS); title case buttons, sentence case body
+Sources: `../Apple-Style-HIG/reference/INDEX.md` and `sources.json`; shared rule scope links the canonical HIG, WCAG and APG pages. Consult the matching platform section before suggesting native window conventions.
 
-**Shape & layout**
-- [ ] 44×44 pt targets with a finger (60 visionOS), ≥ 24×24 with a pointer (WCAG 2.2, gated on `any-pointer: coarse` — not on width); ≥ 8pt between controls; 16/20pt margins; safe areas respected; content extends under bars
-- [ ] Capsules for touch controls/bars; concentric radii for nested shapes (no pinched/flared corners); macOS small controls rounded-rect, large/XL capsule
-- [ ] Layout driven by size classes; tab bar ↔ sidebar adaptation; arbitrary window sizes; split views for columns. **Three tiers, not two**: compact `<768`, iPad `≥768`, desktop `≥1024` — see the *Desktop window* section below for the ≥1024 rules
-- [ ] Toolbar grouping by function; no icon+text in one group; primary action separate & tinted; overflow into More menu
-- [ ] Search placement: trailing search tab (iPhone) / top-trailing field (iPad, Mac)
+## Report format
 
-**Desktop window** (targets with a pointer and a resizable window — `≥1024px`)
-- [ ] **Measured**: content occupies ≥ 90% of the viewport width at 1440 *and* at 2000 — no dead gutter from a `max-width` meant for body copy (`layout-and-shapes.md`'s 672pt readable width is about text, not pages). Tables/lists fill their column; prose and forms are limited inside it
-- [ ] Navigation is a **leading sidebar**, not a bottom bar (`layout`: "Avoid placing controls or critical information at the bottom of a window"; `windows`)
-- [ ] Extra detail is a **trailing inspector**, not a bottom bar (`windows`)
-- [ ] Toolbar spans the **window frame**, title **inline with the controls**, ≤ 3 groups, text and icon buttons in separate groups (`toolbars` → macOS, Item groupings)
-- [ ] **Toolbar items carry no bezel** — "toolbar items don't include a bezel" (`toolbars` → macOS); "Borders aren't necessary because the section provides a visible container". The window frame *is* the container, so no glass pill around window-toolbar icons (that also reads as glass on glass over a blurred frame). Bare symbols with hover/selection states; glass groups are the iOS/iPadOS expression. Web: `.as-toolbar-group`, not `.as-glass-group`
-- [ ] The search field in the frame is a **bordered Mac field**, not a floating glass pill; the primary action is a small filled/prominent button, not a glass capsule
-- [ ] Sidebar ≤ **two levels**; a third level is a **content list** in the middle column (`sidebars`); nothing critical at its bottom edge (`sidebars` → macOS)
-- [ ] **Each pane persistently highlights its own current selection** (`split-views`)
-- [ ] The split divider is a **keyboard control**: `role="separator"`, focusable, arrow keys, thin (1pt) style, sane min/max, and `aria-valuenow` equal to the width **actually drawn**
-- [ ] Menu-bar commands that **print a shortcut actually respond to it**; every toolbar item also exists as a menu command (`toolbars` → macOS)
-- [ ] **Pointer density**: `data-platform="macos"` set; controls are not all 44pt capsules (pointer targets ≥ 24×24, WCAG 2.2; macOS capsules only for Large/XL and standout actions)
-- [ ] **Panes run the full height** when content is short — the sidebar and inspector read as the window's edges, not boards floating on a page
-- [ ] One scroll edge **per scroll view**, not one per window; panes that don't scroll get none
-- [ ] Checked at **1024 / 1440 / 2000** — and 768 and 390 still work
+| Check | Applicability | State | Result | Evidence / limitation |
+|---|---|---|---|---|
+| Keyboard | Web radio selector | checked | pass/fail | command, revision, browser, relevant output |
+| VoiceOver | macOS assistive technology | not checked | unknown | manual session not run |
+| Native window | ordinary content website | not applicable | — | no native window in scope |
 
-**Motion & feedback**
-- [ ] Press state on every button; springs, interruptible, transform/opacity only; materialize not fade
-- [ ] Glass **flexes** on press (gel, ~+6%) and illuminates from under the pointer, spreading to nearby glass; the specular highlight **travels around the silhouette** rather than sitting on one edge
-- [ ] Segmented control, switch and slider are **draggable**, not click-only: 1:1 tracking, live selection during the drag, stretch with velocity, spring on release (`segmented-controls`, `sliders`, `toggles`)
-- [ ] Knobs lift into glass **only while manipulated**; quiet at rest
-- [ ] Reduce Motion honored (no parallax/elastic/morph/drag stretch); no autoplay you can't pause
-- [ ] Loading shows content early; haptics/system sounds consistent; undo for destructive edits; confirmations for destructive actions
+| Priority | Element | Finding | Rule strength and source | Concrete fix |
+|---|---|---|---|---|
 
-**Accessibility & content**
-- [ ] Labels on icon-only controls; VoiceOver order; focus visible; Full Keyboard Access; Voice Control names match visible text
-- [ ] Reduce Transparency → frostier; Increase Contrast → B/W + border (custom glass must implement)
-- [ ] Copy: concise, "you", no "please"/exclamations, actionable errors; RTL mirroring via leading/trailing
-- [ ] Privacy prompts in context with purpose; no fake pre-prompts
-
-**Web implementation** (web targets only — `../Apple-Style/cheatsheets/web-implementation.md`)
-- [ ] No SF Symbols and no self-hosted SF fonts shipped to the browser (licence); icons are own-drawn on a 24×24 / 1.8-stroke grid; type scale still reads on the Windows/Android fallback face
-- [ ] Correct roles: tab bar is `<nav>` not `tablist`; segmented = tablist/radiogroup with roving `tabindex`; switch/slider use real semantics; dialogs trap focus, `inert` the background, close on Escape and restore focus
-- [ ] `:focus-visible` ring on every interactive element, visible on glass; nothing relies on `outline: none`
-- [ ] `100dvh` not `100vh`; `viewport-fit=cover` + `env(safe-area-inset-*)`; logical properties for RTL; overlays inside the documented z-index bands (incl. split divider `12`, window toolbar `18`, menu bar `22`)
-- [ ] `touch-action` on draggable controls; hover effects gated by `@media (hover: hover)`; 44×44 enforced on `(pointer: coarse)`; `overscroll-behavior: contain` on sheets/menus/inner scrollers
-- [ ] Forms: `<label for>`, `autocomplete`/`inputmode`, ≥16px inputs (no iOS zoom), errors via `aria-describedby` + `aria-invalid`, not colour alone
-- [ ] Theme applied before first paint (no flash); `color-scheme` set; `theme-color` per scheme
-- [ ] Media reserves space (`aspect-ratio`), lazy below the fold; cross-origin images given `data-glass-scheme-hint`
-- [ ] Loading / empty / error / populated states all designed, chrome stable across them
-- [ ] Perf: no blanket `will-change` on glass, ≤ ~20 lensed elements, dispersion only on a few non-fixed elements, no layout reads in `pointermove`, only `transform`/`opacity` animated
-- [ ] Checked in Safari and Firefox, where lensing degrades to blur — the fallback still reads as a material
-
-**Platform fit**
-- [ ] iPhone one-handed reach & tab bar; iPad sidebar/menu bar/pointer; Mac menu bar + shortcuts + inspectors; watch glanceable; tvOS focus; visionOS depth + 60pt targets (`designing-for-*`)
-- [ ] App icon layered (Icon Composer), no text/photos, all appearance variants
-
-## Output template
-```
-| # | Sev | Element | Violation | HIG | Fix |
-|---|-----|---------|-----------|-----|-----|
-| 1 | Blocker | Card list | Liquid Glass in content layer | materials: "Don't use Liquid Glass in the content layer." | .as-glass → var(--as-bg-grouped-2) |
-…
-Summary: <what to change first and why it matters most>
-```
+Conclude with remaining decisions and coverage gaps. Do not claim conformance, cross-browser compatibility, performance improvement or Skill quality improvement beyond the evidence.

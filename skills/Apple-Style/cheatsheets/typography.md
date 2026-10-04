@@ -1,5 +1,7 @@
 # Typography — SF, text styles, Dynamic Type
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Typography* (`Apple-Style-HIG/reference/hig/typography.md`).
 
 ## Fonts

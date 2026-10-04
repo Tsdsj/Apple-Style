@@ -1,5 +1,7 @@
 # Apple design principles (HIG, reintroduced June 2026)
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: `Apple-Style-HIG/reference/hig/design-principles.md`. Use these to break ties between competing options; state which principle drove a decision.
 
 | Principle | One line | Apply by asking |

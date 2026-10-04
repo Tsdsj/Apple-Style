@@ -1,5 +1,7 @@
 # Layout, shapes & concentricity
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Source: HIG *Layout*, *Buttons*, *Windows*, *Sheets*; WWDC25 356 "Get to know the new design system"; SwiftUI `ConcentricRectangle`. Full text in `Apple-Style-HIG/reference/`.
 
 ## Metrics
@@ -8,10 +10,10 @@ Source: HIG *Layout*, *Buttons*, *Windows*, *Sheets*; WWDC25 356 "Get to know th
 - 4pt / 8pt spacing grid. Standard control height iOS: 44 (buttons in bars 44; list rows ≥ 44, iOS 26 rows/padding larger). macOS control sizes: mini / small / medium / **large** / **extra-large** (new; capsule, uses Liquid Glass for emphasis in spacious areas). Mini/small/medium stay rounded rectangles for dense inspectors.
 - tvOS safe area: inset 60pt top/bottom, 80pt sides; grid columns 2–9 with 40pt horizontal / 100pt vertical spacing (table in `hig/layout.md`).
 - Respect **safe areas** (Dynamic Island, home indicator, camera housing on Mac, window controls). Extend full-screen backgrounds under bars/sidebars/tab bars; controls stay inside safe areas.
-- Size classes (compact/regular × horizontal/vertical) drive layout — **never device type or orientation.** Keep functionality identical across size classes; switch tab bar ↔ sidebar as width grows.
+- Platform and app type set conventions; size classes and available container space drive reflow. Keep functionality across sizes. Switch tab bar/sidebar only if appropriate to the navigation model.
 - Support **arbitrary window sizes** (iPadOS continuous resizing, macOS); use split views for fluid column reflow; support Dynamic Type reflow.
 
-## Desktop panes (≥1024px) — starting points, not Apple numbers
+## Optional Mac-like panes (example breakpoint ≥1024px) — starting points, not Apple numbers
 `hig/split-views.md` only says "Set **reasonable** defaults for minimum and maximum pane sizes" without saying what reasonable is. These are measured widths at which a two-level sidebar row and a key/value inspector row stop wrapping — **measure your own content and move them.**
 
 | | ≥1280px | 1024–1280px | why |
@@ -21,8 +23,8 @@ Source: HIG *Layout*, *Buttons*, *Windows*, *Sheets*; WWDC25 356 "Get to know th
 | Content | rest, floor ~480 | rest, floor ~380 | below it a list row with an amount wraps its title |
 
 The derivation is the reusable part: **264 + 380 in a 1024px window squeezes the detail column to 378px, where the amount wraps to a second line; 220 + 300 leaves 502px and it comes back onto one line.** Hence two tiers, not one set of widths.
-- **Nothing critical on the bottom edge of a window** — "People often move windows so that the bottom edge is below the bottom of the screen" (`hig/layout.md` macOS, repeated in `hig/windows.md`). Navigation is the leading sidebar; extra detail is the trailing **inspector**. A bottom tab bar on a desktop target is a compact component on the wrong tier.
-- **Sidebar ≤ two levels**; deeper hierarchies get a **content list** column between sidebar and detail (`hig/sidebars.md`). Nothing critical at the sidebar's bottom edge either.
+- **Nothing critical on the bottom edge of a window** — "People often move windows so that the bottom edge is below the bottom of the screen" (`hig/layout.md` macOS, repeated in `hig/windows.md`). For a Mac window, consider leading navigation and a trailing inspector if the task needs them. This does not apply automatically to ordinary websites.
+- **Prefer ≤ two sidebar levels** in the HIG pattern; deeper hierarchies get a **content list** column between sidebar and detail (`hig/sidebars.md`). Nothing critical at the sidebar's bottom edge either.
 - Divider: **thin (1px) style preferred**; widen the grab area, not the line. Set minimum/maximum pane sizes so the divider never becomes hard to hit.
 - **When content is shorter than the window**, panes still run the full height — the sidebar and inspector are the two edges of the window, not boards floating on a page.
 - Web: `.as-window` / `.as-menubar` / `.as-toolbar-window` / `.as-split` / `.as-split-divider` / `.as-inspector` in `web/apple-style.css`; `web/demo-desktop.html`.

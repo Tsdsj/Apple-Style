@@ -5,7 +5,7 @@ description: Use when you need Apple's actual Human Interface Guidelines text or
 
 # Apple-Style-HIG — offline reference library
 
-Verbatim-text markdown renderings of developer.apple.com/design (crawled 2026-09-14 from Apple's DocC JSON; images replaced with their alt text, which often describes the do/don't examples). ~300k words. Companion to **Apple-Style** (rules/tokens) and **Apple-Style-Liquid-Glass** (implementation).
+Markdown renderings (not byte-for-byte copies) of developer.apple.com/design (legacy snapshot reported as 2026-09-14; exact original timestamps unknown; later fetches recorded in reference/sources.json; images replaced with their alt text, which often describes the do/don't examples). ~300k words. Companion to **Apple-Style** (rules/tokens) and **Apple-Style-Liquid-Glass** (implementation).
 
 ## How to use
 1. Open `reference/INDEX.md` — every page with its one-line abstract, grouped as on Apple's site (Getting started · Foundations · Patterns · Components · Inputs · Technologies), plus Liquid Glass docs, WWDC25 transcripts, and design-site pages.
@@ -35,7 +35,9 @@ reference/
 - Pages with hard numbers: `typography` (all Dynamic Type tables), `color` (RGB for every system color/gray in 4 appearances), `layout` (tvOS safe areas/grids), `app-icons` (sizes), `buttons` (44pt), `sf-symbols`, `widgets`, `complications`, `live-activities`, `materials`.
 - Platform pages `designing-for-<platform>` set the mindset; `<component>` pages have a "Platform considerations" section for each OS.
 - Newest guidance (June 2026): `design-principles`, `siri`, `snippets`, `app-shortcuts`, `branding`, `layout`, `menus`, `shareplay`. `design-site/whats-new.md` lists dates.
-- Treat the transcripts as design rationale; the HIG pages as normative.
+- HIG combines recommendations and platform constraints; do not turn “consider” or “prefer” into universal requirements. Transcripts provide rationale. Use `../Apple-Style/cheatsheets/rules-and-evidence.md` to label rule strength and applicability.
+- Width does not determine platform: read the relevant platform section for the actual target.
+- `reference/sources.json` records canonical URL, fetch URL, fetched_at and content SHA-256. Null timestamps identify legacy content; they are not fresh validation.
 
 ## Refreshing
-`../Apple-Style/scripts/update-reference.sh` re-crawls everything (curl + python3, no dependencies). Regenerate INDEX by hand if new pages appear.
+`../Apple-Style/scripts/update-reference.sh` refreshes all manifest entries (HIG, Liquid Glass APIs, design-site, WWDC) with Python 3 standard library and generates INDEX automatically. HIG links discover new pages on a full run. `--only hig/layout.md` or `--limit 5` bounds online checks; `--index-only` is offline. A failed batch does not overwrite valid reference pages. Read the report and recheck the listed cheatsheets; a refreshed source does not automatically validate derived rules.

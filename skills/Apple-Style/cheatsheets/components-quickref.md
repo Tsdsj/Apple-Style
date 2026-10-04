@@ -1,5 +1,7 @@
 # Components quick reference (new design, iOS/iPadOS/macOS 26)
 
+Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendations, project defaults and visual heuristics are distinct; apply the cited platform section.
+
 Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug>.md` (buttons, toolbars, tab-bars, sidebars, sheets, menus, alerts, popovers, action-sheets, search-fields, segmented-controls, sliders, toggles, steppers, pickers, text-fields, lists-and-tables, split-views, windows, the-menu-bar, context-menus, labels, progress-indicators, …).
 
 ## Buttons (`hig/buttons.md`)
@@ -67,3 +69,7 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 
 ## App icons (`hig/app-icons.md`)
 - Layered design composed in **Icon Composer** (foreground/middle/background), solid filled overlapping semi-transparent shapes, system applies mask/blur/highlights; 1024×1024 square (iOS/iPadOS/macOS), rounded-rect mask; appearances default/dark/clear light/clear dark/tinted light/tinted dark; watchOS 1088 circular; tvOS 800×480 parallax; visionOS 1024 circular 3D. Keep elements centered; no text unless brand; no photos/screenshots.
+
+## Web control contracts
+
+`LiquidGlass.init(root)` upgrades controls in that scope; pair it with `destroy(root)` on unmount. Single surfaces use `attach(el, options)` / `detach(el)`. See [Web implementation](web-implementation.md) for tabs versus radio groups, click/keyboard/drag cancellation, default contrast tokens and framework cleanup examples. Native checkbox switches retain their own checked property and do not use the `.as-toggle` custom-host API.
