@@ -2,7 +2,7 @@
   "date": "2026-10-04",
   "sha256": {
     "install.sh": "cc5f66bb189f3e2460b7ede3ec041c4e742752bc1e6479d399ff654c23052a95",
-    "install.ps1": "d35c04592e2cd11c6dee7171bafe7911e2621ce7207b0f5e5a8c25aaa19535f6",
+    "install.ps1": "6c71869840665cd9eca55a00d5c50ae79b9ee6ea2dc13ee390c143e60725cf9d",
     "skills/Apple-Style/web/liquid-glass.js": "0316e216063a5e521dc94aa865f7173a9032e4b3e06787cf48e5a018daa1ae86",
     "skills/Apple-Style/web/apple-style.css": "930af7fab23746f624183f940d150219ab14d2608ad71eb65aa1edf36de1a9f9",
     "skills/Apple-Style/scripts/update_reference.py": "6bd6be2e56dd5d5ddc6f893b0da973eab20645612d343709d4d5d54858cf5dac"

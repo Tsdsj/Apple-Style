@@ -8,7 +8,7 @@
 
 真实验证范围、命令和剩余限制见 [validation](../docs/validation.md)。Playwright 保持后台运行，在 `test-results/` 保存 390/1440px 示例截图，并检查六个关键宽度的溢出、键盘行为、对比度和资源释放。Safari、Firefox、VoiceOver 未执行的项目保持未验证。
 
-截图为固定随机种子的可重复示例，尚无跨操作系统的整页像素黄金基线。部署准备使用 `scripts/prepare-demo.sh`，不会发布参考库；公开发布需要额外授权。
+截图为固定随机种子的可重复示例，尚无跨操作系统的整页像素黄金基线。部署准备使用 `scripts/prepare-demo.sh`，不会发布参考库；本次已按作者授权公开部署到 https://tsdsj.github.io/Apple-Style/ 。
 
 ## English
 

@@ -10,6 +10,7 @@ Reliability hardening.
 - 生命周期：新增 detach/destroy，重复 init 复用绑定，根节点作用域、动态增删/重挂载、配置持久化和资源清理；补充 React/Vue cleanup 示例。
 - 技能：目标平台、产品形态、输入和容器尺寸分开判断；区分官方要求/建议、项目默认和视觉经验；Review 明确证据状态。
 - 参考库：208 个现有来源纳入 manifest；覆盖四类内容、自动 INDEX、抓取时间/内容与源响应哈希、失败不覆盖、事务回滚和变更报告。
+- 发布补验：Windows PowerShell 5.1/7 的原生 junction、Linux/macOS 回归已在真实 CI 通过；补齐 .NET 文件哈希兼容和确定的浏览器媒体测试基线。
 - 验证/交付：安装器与参考夹具、真实 Chromium 交互/资源/样式/布局回归、CI、固定 Skill 评测任务、统一演示链接与尚未启用的发布配置。
 
 具体执行证据、发布状态与未验证项见 `docs/validation.md`。

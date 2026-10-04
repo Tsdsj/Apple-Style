@@ -2,7 +2,7 @@
 
 Apple HIG 与 Liquid Glass 的四个 Agent 技能，以及可直接引入的 Web CSS / JavaScript。**Web 使用无运行时依赖、无构建步骤**；Node、Playwright 和 Python 仅用于维护与回归验证。
 
-[English summary](#english) · [统一演示](demo/index.html) · [验证记录](docs/validation.md) · [变更说明](CHANGELOG.md)
+[English summary](#english) · [在线演示](https://tsdsj.github.io/Apple-Style/) · [演示源码](demo/index.html) · [验证记录](docs/validation.md) · [变更说明](CHANGELOG.md)
 
 ## 安装
 
@@ -128,7 +128,7 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 git diff --check
 ```
 
-PowerShell 用例自动发现 `pwsh`/`powershell`；也可通过 `APPLE_STYLE_PWSH=/absolute/path/pwsh` 指定。缺少运行时会明确 skip。CI 配置覆盖 Linux/macOS Chromium，以及 Windows PowerShell 5.1/7 安装器；**配置存在不代表 CI 已运行**。
+PowerShell 用例自动发现 `pwsh`/`powershell`；也可通过 `APPLE_STYLE_PWSH=/absolute/path/pwsh` 指定。缺少运行时会明确 skip。CI 覆盖 Linux/macOS Chromium，以及 Windows PowerShell 5.1/7 安装器。实际运行链接与结果见 [发布验证记录](docs/validation.md#发布补验)。
 
 覆盖安装归属/修改/更新/卸载、分支/标签下载夹具，浏览器键盘/click/拖拽/取消/焦点/ARIA，资源计数/卸载/重挂载/配置，浅深色对比度、偏好与三个示例的 320/390/768/1024/1440/2000px 布局。保存示例截图，另用 ARIA snapshot、尺寸/溢出断言和重复 init 的控件像素一致性作可重复检查；不宣称已有跨平台全页面像素黄金基线。
 
@@ -147,7 +147,7 @@ skills/Apple-Style/scripts/update-reference.sh --report /tmp/reference-update.js
 
 ## 发布准备与许可
 
-[CHANGELOG](CHANGELOG.md)、[发布检查项](docs/release-checklist.md)、[未启用的 Pages 配置模板](docs/deploy-pages.yml.example) 已准备。`scripts/prepare-demo.sh NEW_DIRECTORY` 只打包演示和 Web 资产，排除 Apple 离线参考和本机文件。Release、公开站点、仓库设置、tag 和合并 main 尚未执行，需另行授权。
+[CHANGELOG](CHANGELOG.md)、[发布检查项](docs/release-checklist.md)、[Pages 部署工作流](.github/workflows/deploy-pages.yml) 已启用为手动触发，模板仍保留作参考。`scripts/prepare-demo.sh NEW_DIRECTORY` 只打包演示和 Web 资产，排除 Apple 离线参考和本机文件。本次按作者授权发布 `v0.1.0`，演示站通过 Actions 部署。后续部署使用手动触发；正式许可证保持原有声明。
 
 Apple 参考文本版权归 Apple Inc.，保留来源记录；未捆绑 SF 字体与 SF Symbols。原项目声明“本仓库自身的代码（CSS / JS / 脚本 / 速查表写作）可自由使用”保持不变。当前没有标准 LICENSE，本次不新增授权范围。正式许可证由作者选择，见 [许可证决策](docs/license-decision.md)。
 
@@ -161,6 +161,6 @@ Choose platform, app type, input methods and container size independently. A wid
 
 Call `LiquidGlass.init(root)` after mount and `destroy(root)` before unmount. Initialization is idempotent and scoped; single surfaces support `attach(el, options)` / `detach(el)`. Options survive resize and appearance regeneration. Radio groups select values; tabs require linked panels. Keyboard, click and drag are supported without duplicate activation; cancellation does not commit. Default white-text actions use accessible semantic colors while retaining Apple system swatches.
 
-Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Safari, Firefox, VoiceOver, Windows-native junctions and model on/off comparisons are not established by local Chromium or macOS PowerShell results. CI and deployment templates are prepared, not reported as executed releases.
+Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Windows-native junctions are covered by the Windows CI jobs, separately from macOS copy fallback tests. Safari, Firefox, VoiceOver and model on/off comparisons remain unverified. See the linked release verification record for actual CI and deployment runs.
 
 Reference refreshes use a source manifest, hashes, timestamps, local fixtures and a transactional commit. Missing legacy fetch times remain unknown. Apple reference content is not relicensed. The existing free-use statement for original project code is retained; choosing a standard LICENSE remains the author's decision.

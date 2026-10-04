@@ -67,13 +67,25 @@ skills/Apple-Style/scripts/update-reference.sh \
 
 | 项目 | 状态 | 说明 |
 |---|---|---|
-| Windows 原生 junction / PowerShell 5.1 | 未验证 | CI 已准备；macOS PowerShell 复制回退不能替代 Windows。没有提交远端 CI 运行结果 |
-| Linux CI、GitHub Actions 实际运行 | 未验证 | 配置已提交准备；未 push/触发远端运行 |
+| Windows 原生 junction / PowerShell 5.1 / 7 | 已检查，通过 | 发布补验已在 Windows runner 实际运行，两套 shell 各 8 项，断言原生 junction 安装 |
+| Linux/macOS CI、GitHub Actions | 已检查，通过 | 发布补验的四个矩阵任务全部成功，见下方链接 |
 | Safari、Firefox、VoiceOver/NVDA | 未验证 | 没有虚构跨浏览器或辅助技术验收 |
 | React/Vue 实际应用 | 未验证 | 提供 mount/unmount 示例；浏览器回归验证了对应生命周期 API，没有运行框架应用 |
 | 长时内存、低端设备、性能提升 | 未验证 | 没有匹配基线的性能测量；无性能提升声明 |
 | 模型启用/关闭 Skill 比较 | 未运行 | 五个固定任务、配对方法和结果字段已准备，见 `evals/` |
 | 全站所有文本/自定义色对比度 | 未全量验证 | 已测默认白字操作面/选中行；任意背景、品牌覆盖和辅助文本仍需产品级检查 |
-| 发布站点、Release、合并 main | 未执行 | 需作者另行授权；没有修改仓库设置 |
+| 发布站点、Release、合并 main | 已授权 | 本轮按作者要求发布 v0.1.0；发布记录见仓库 Releases，部署记录见 Actions |
 | 正式许可证 | 待作者决定 | 原自由使用声明保留；MIT/BSD-3-Clause/Apache-2.0 等选项见 `license-decision.md`，未给 Apple 内容新增许可 |
 | 原生 Apple App 自动合规 | 不适用 | 本次产物是 Web 近似实现和技能资料，不是原生应用认证 |
+
+## 发布补验
+
+作者随后授权“提交且推送发布”。[发布前 CI](https://github.com/Tsdsj/Apple-Style/actions/runs/37202831652) 对提交 `87f4fc5` 的四个任务全部通过，原始结构化记录见 [release-ci.json](evidence/release-ci.json)。
+
+- Linux/macOS：Python 29 项与 Chromium 41 项；包含安装、参考、打包一致性和浏览器回归。
+- Windows PowerShell 5.1 / PowerShell 7：各 8 个安装器用例，明确断言 receipt 为 link，实际覆盖原生 junction。
+- 首轮 Windows 5.1 无法自动加载 Get-FileHash，现使用 .NET 流式 SHA-256，保留同样的指纹格式，并增加缺少该 cmdlet 的夹具。
+- macOS runner 默认 `prefers-reduced-transparency: reduce` 为 true；旧正向折射测试因此看不到滤镜。现记录宿主偏好并为正向用例设定明确媒体基线，独立偏好用例仍验证减少透明度/增强对比度下禁用滤镜。
+- 在真实 CI 失败后修复并重跑，没有把原本未运行的 Windows 检查补写为历史通过。
+
+Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验证。正式许可证维持原声明，不新增授权。版本及在线演示的最终公开记录：[v0.1.0](https://github.com/Tsdsj/Apple-Style/releases/tag/v0.1.0)、[演示站](https://tsdsj.github.io/Apple-Style/)、[部署工作流](https://github.com/Tsdsj/Apple-Style/actions/workflows/deploy-pages.yml)。
