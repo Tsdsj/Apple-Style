@@ -84,47 +84,96 @@ if ($Help) {
 function Test-Checkout {
     param([string] $Path)
     if (-not $Path) { return $false }
-    return (Test-Path -LiteralPath (Join-Path $Path 'skills\Apple-Style\SKILL.md'))
+    foreach ($name in $SkillNames) {
+        $skill = Join-Path $Path "skills/$name"
+        if (-not (Test-Path -LiteralPath (Join-Path $skill 'SKILL.md'))) { return $false }
+        if ((Get-Item -LiteralPath $skill -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) { return $false }
+    }
+    return $true
 }
 
-function Get-Sources {
-    param([string] $Destination)
-
-    $git = Get-Command git -ErrorAction SilentlyContinue
-    if ($git -and (Test-Path -LiteralPath (Join-Path $Destination '.git'))) {
-        Write-Step "updating $Destination"
-        & git -C $Destination fetch --depth 1 origin $Ref --quiet
-        & git -C $Destination checkout --quiet FETCH_HEAD
-    }
-    elseif ($git) {
-        Write-Step "cloning $RepoSlug@$Ref into $Destination"
-        if (Test-Path -LiteralPath $Destination) { Remove-Item -LiteralPath $Destination -Recurse -Force }
-        & git clone --depth 1 --branch $Ref --quiet "https://github.com/$RepoSlug.git" $Destination
-    }
-    else {
-        Write-Step "downloading $RepoSlug@$Ref into $Destination"
-        # Windows PowerShell 5.1 still defaults to TLS 1.0 on older builds
-        try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch { }
-        $stage = Join-Path ([IO.Path]::GetTempPath()) ("apple-style-" + [Guid]::NewGuid().ToString('n'))
-        New-Item -ItemType Directory -Path $stage -Force | Out-Null
-        $zip = Join-Path $stage 'source.zip'
-        try {
-            Invoke-WebRequest -Uri "https://codeload.github.com/$RepoSlug/zip/refs/heads/$Ref" -OutFile $zip -UseBasicParsing
-            Expand-Archive -LiteralPath $zip -DestinationPath $stage -Force
+function Get-Fingerprint([string] $Path) {
+    $rows = New-Object 'System.Collections.Generic.List[string]'
+    $base = (Get-Item -LiteralPath $Path -Force).FullName
+    $queue = New-Object 'System.Collections.Generic.Queue[string]'
+    $queue.Enqueue($base)
+    while ($queue.Count) {
+        foreach ($item in Get-ChildItem -LiteralPath $queue.Dequeue() -Force) {
+            if ($item.FullName -eq (Join-Path $base '.git')) { continue }
+            $rel = $item.FullName.Substring($base.Length)
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { $value = 'L:' + ($item.Target -join '|') }
+            elseif ($item.PSIsContainer) { $value = 'D'; $queue.Enqueue($item.FullName) }
+            else { $value = 'F:' + (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash }
+            $modeBits = if ($env:OS -ne 'Windows_NT' -and $item.PSObject.Properties['UnixFileMode']) { ':' + $item.UnixFileMode } else { '' }
+            $rows.Add($rel + ':' + $item.Attributes + $modeBits + ':' + $value)
         }
-        catch {
-            Stop-WithError "download failed: $($_.Exception.Message)"
-        }
-        $extracted = Get-ChildItem -LiteralPath $stage -Directory | Select-Object -First 1
-        if (-not $extracted) { Stop-WithError 'the downloaded archive was empty' }
-        if (Test-Path -LiteralPath $Destination) { Remove-Item -LiteralPath $Destination -Recurse -Force }
-        New-Item -ItemType Directory -Path (Split-Path -Parent $Destination) -Force | Out-Null
-        Move-Item -LiteralPath $extracted.FullName -Destination $Destination
-        Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue
     }
-
-    if (-not (Test-Checkout $Destination)) {
-        Stop-WithError "the copy at $Destination does not look like the Apple-Style repository"
+    $rows.Sort([StringComparer]::Ordinal)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(($rows -join "`n"))))).Replace('-', '') }
+    finally { $sha.Dispose() }
+}
+function Write-Receipt($Path, $Mode, $SourcePath, $Value) {
+    @{ installer='apple-style-installer-v1'; mode=$Mode; source=$SourcePath; value=$Value } | ConvertTo-Json | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+function Test-Owned($Path, $Record) {
+    try {
+        if (-not (Test-Path -LiteralPath $Record) -or (Test-ReparsePoint $Record)) { return $false }
+        $r = Get-Content -LiteralPath $Record -Raw | ConvertFrom-Json
+        if ($r.installer -ne 'apple-style-installer-v1') { return $false }
+        $item = Get-Item -LiteralPath $Path -Force
+        if ($r.mode -eq 'link') { return (Test-ReparsePoint $Path) -and (($item.Target -join '|') -ceq $r.value) }
+        return $r.mode -eq 'copy' -and $item.PSIsContainer -and -not (Test-ReparsePoint $Path) -and (Get-Fingerprint $Path) -ceq $r.value
+    } catch { return $false }
+}
+function Test-ReparsePoint([string] $Path) {
+    return (((Get-Item -LiteralPath $Path -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0)
+}
+function Remove-Target([string] $Path) {
+    if (Test-ReparsePoint $Path) { [IO.Directory]::Delete($Path) }
+    else { Remove-Item -LiteralPath $Path -Recurse -Force }
+}
+function Get-Sources([string] $Destination) {
+    $record = "$Destination.receipt"
+    $parent = Split-Path -Parent $Destination
+    New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    $cacheLockPath = "$Destination.lock"
+    $cacheLock = [IO.File]::Open($cacheLockPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+    try {
+    if ((Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue) -and -not (Test-Owned $Destination $record)) {
+        throw "Cache unowned or modified; preserve it and use -Dir: $Destination"
+    }
+    } catch { $cacheLock.Dispose(); Remove-Item -LiteralPath $cacheLockPath; throw }
+    $committed = $false
+    $stage = Join-Path $parent ('.apple-style-download-' + [Guid]::NewGuid().ToString('n'))
+    New-Item -ItemType Directory -Path $stage | Out-Null
+    $repo = Join-Path $stage 'repo'
+    try {
+        if (Get-Command git -ErrorAction SilentlyContinue) {
+            & git clone --depth 1 --branch $Ref --quiet "https://github.com/$RepoSlug.git" $repo
+            if ($LASTEXITCODE -ne 0) { throw "git clone failed ($LASTEXITCODE)" }
+        } else {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $zip = Join-Path $stage 'source.zip'
+            Invoke-WebRequest -Uri "https://codeload.github.com/$RepoSlug/zip/$Ref" -OutFile $zip -UseBasicParsing
+            $extract = Join-Path $stage 'extract'
+            Expand-Archive -LiteralPath $zip -DestinationPath $extract
+            $dirs = @(Get-ChildItem -LiteralPath $extract -Directory)
+            if ($dirs.Count -ne 1) { throw 'Unexpected archive layout' }
+            Move-Item -LiteralPath $dirs[0].FullName -Destination $repo
+        }
+        if (-not (Test-Checkout $repo)) { throw 'Invalid source archive' }
+        Write-Receipt (Join-Path $stage 'receipt') 'copy' "https://github.com/$RepoSlug@$Ref" (Get-Fingerprint $repo)
+        $previous = Join-Path $stage 'previous'
+        if (Test-Path -LiteralPath $Destination) { Move-Item -LiteralPath $Destination -Destination $previous }
+        try { Move-Item -LiteralPath $repo -Destination $Destination }
+        catch { if (Test-Path -LiteralPath $previous) { Move-Item -LiteralPath $previous -Destination $Destination }; throw }
+        Move-Item -LiteralPath (Join-Path $stage 'receipt') -Destination $record -Force
+        $committed = $true
+    } finally {
+        if ($committed) { Remove-Item -LiteralPath $stage -Recurse -Force }
+        else { Write-Note "Failed download/update; any staged recovery data is preserved at $stage" }
+        $cacheLock.Dispose(); Remove-Item -LiteralPath $cacheLockPath
     }
 }
 
@@ -175,86 +224,91 @@ else {
     }
 }
 
-# ---------------------------------------------------------------- helpers ---
-function Test-ReparsePoint {
-    param([string] $Path)
-    $item = Get-Item -LiteralPath $Path -Force
-    return (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0)
+# Resolve each directory component, including junction aliases.
+function Get-Canonical([string] $Path, [int] $Depth = 0) {
+    if ($Depth -gt 32) { throw "Too many directory links: $Path" }
+    $full = [IO.Path]::GetFullPath($Path)
+    $root = [IO.Path]::GetPathRoot($full)
+    $current = $root
+    foreach ($part in $full.Substring($root.Length).Split([IO.Path]::DirectorySeparatorChar)) {
+        if (-not $part) { continue }
+        $current = Join-Path $current $part
+        $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+        if ($item -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+            $next = @($item.Target)[0]
+            if (-not [IO.Path]::IsPathRooted($next)) { $next = Join-Path ([IO.Path]::GetDirectoryName($current)) $next }
+            $current = Get-Canonical $next ($Depth + 1)
+        }
+    }
+    if ($current -eq [IO.Path]::GetPathRoot($current)) { return $current }
+    return $current.TrimEnd([IO.Path]::DirectorySeparatorChar)
 }
-
-# Deleting a junction with Remove-Item -Recurse can delete the *target's*
-# contents on Windows PowerShell. Directory.Delete removes only the link.
-function Remove-Target {
-    param([string] $Path)
-    if (-not (Test-Path -LiteralPath $Path)) { return }
-    if (Test-ReparsePoint $Path) { [IO.Directory]::Delete((Get-Item -LiteralPath $Path -Force).FullName) }
-    else { Remove-Item -LiteralPath $Path -Recurse -Force }
-}
-
-# ---------------------------------------------------------------- install ---
 $mode = if ($Uninstall) { 'uninstall' } elseif ($Copy) { 'copy' } else { 'link' }
-Write-Step "Apple-Style - $mode from $source"
-
-$installed = 0
+$installed = 0; $skipped = 0
 foreach ($target in $targets) {
     if ($mode -ne 'uninstall') { New-Item -ItemType Directory -Path $target -Force | Out-Null }
     if (-not (Test-Path -LiteralPath $target)) { continue }
-    Write-Step $target
-
-    foreach ($skill in $SkillNames) {
-        $dst = Join-Path $target $skill
-        $src = Join-Path $source "skills\$skill"
-
-        switch ($mode) {
-            'uninstall' {
-                if (Test-Path -LiteralPath $dst) {
-                    if ((Test-ReparsePoint $dst) -or (Test-Path -LiteralPath (Join-Path $dst 'SKILL.md'))) {
-                        Remove-Target $dst
-                        Write-Ok "removed $skill"
-                    }
-                }
+    $target = Get-Canonical $target
+    if (-not $Uninstall) {
+        $source = Get-Canonical $source
+        $sep = [IO.Path]::DirectorySeparatorChar
+        if (($target.TrimEnd($sep) + $sep).StartsWith($source.TrimEnd($sep) + $sep, [StringComparison]::OrdinalIgnoreCase) -or
+            ($source.TrimEnd($sep) + $sep).StartsWith($target.TrimEnd($sep) + $sep, [StringComparison]::OrdinalIgnoreCase)) { throw "Source/target overlap: $target" }
+    }
+    $records = Join-Path $target '.apple-style-install'
+    if ((Test-Path -LiteralPath $records) -and (Test-ReparsePoint $records)) { throw 'Receipt directory is a link' }
+    New-Item -ItemType Directory -Path $records -Force | Out-Null
+    $lockPath = Join-Path $records 'lock'
+    $lock = [IO.File]::Open($lockPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+    try {
+        foreach ($skill in $SkillNames) {
+            $dst = Join-Path $target $skill; $src = Join-Path $source "skills/$skill"; $record = Join-Path $records $skill
+            $existing = Get-Item -LiteralPath $dst -Force -ErrorAction SilentlyContinue
+            if ($existing -and -not (Test-Owned $dst $record)) {
+                Write-Note "Preserved unowned or modified content: $dst"; $skipped++; continue
             }
-            'copy' {
-                Remove-Target $dst
-                Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
-                Write-Ok "copied $skill"
-                $installed++
+            if ($Uninstall) {
+                if ($existing) { Remove-Target $dst; Remove-Item -LiteralPath $record; Write-Ok "removed owned $skill" }
+                continue
             }
-            'link' {
-                if ((Test-Path -LiteralPath $dst) -and -not (Test-ReparsePoint $dst)) {
-                    Write-Note "$dst exists and is a real directory - left alone (use -Copy to overwrite)"
-                }
-                else {
-                    Remove-Target $dst
+            if (-not (Test-Path -LiteralPath (Join-Path $src 'SKILL.md')) -or (Test-ReparsePoint $src)) { throw "Missing or linked source skill: $src" }
+            $stage = Join-Path $target ('.apple-style-stage-' + [Guid]::NewGuid().ToString('n'))
+            New-Item -ItemType Directory -Path $stage | Out-Null
+            $new = Join-Path $stage 'new'; $previous = Join-Path $stage 'previous'
+            try {
+                $actualMode = $mode
+                if ($mode -eq 'link') {
                     try {
-                        New-Item -ItemType Junction -Path $dst -Value $src -ErrorAction Stop | Out-Null
-                        Write-Ok "linked $skill"
+                        if ($env:OS -ne 'Windows_NT') { throw 'Junctions require Windows' }
+                        New-Item -ItemType Junction -Path $new -Value $src -ErrorAction Stop | Out-Null
+                        if (-not (Test-Path -LiteralPath $new) -or -not (Test-ReparsePoint $new)) { throw 'Junction was not created' }
                     }
                     catch {
-                        # Junctions fail across volumes and on some network paths
-                        Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
-                        Write-Note "junction not possible here, copied $skill instead"
+                        if (Get-Item -LiteralPath $new -Force -ErrorAction SilentlyContinue) { Remove-Target $new }
+                        $actualMode = 'copy'; Write-Note 'Junction unavailable; using a protected copy'
                     }
-                    $installed++
                 }
+                if ($actualMode -eq 'copy') {
+                    # Copy-Item behavior around nested links varies across PowerShell versions.
+                    if (Get-ChildItem -LiteralPath $src -Recurse -Force | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }) { throw 'Copy source contains links; use -Link' }
+                    Copy-Item -LiteralPath $src -Destination $new -Recurse
+                    $value = Get-Fingerprint $new
+                } else { $value = (Get-Item -LiteralPath $new -Force).Target -join '|' }
+                Write-Receipt (Join-Path $stage 'receipt') $actualMode $src $value
+                if ($existing) { Move-Item -LiteralPath $dst -Destination $previous }
+                try { Move-Item -LiteralPath $new -Destination $dst }
+                catch { if (Get-Item -LiteralPath $previous -Force -ErrorAction SilentlyContinue) { Move-Item -LiteralPath $previous -Destination $dst }; throw }
+                Move-Item -LiteralPath (Join-Path $stage 'receipt') -Destination $record -Force
+                if (Get-Item -LiteralPath $previous -Force -ErrorAction SilentlyContinue) { Remove-Target $previous }
+                $installed++; Write-Ok "$actualMode $skill"
+            } finally {
+                # Never recursively remove a staging directory containing a junction.
+                if (Get-Item -LiteralPath $new -Force -ErrorAction SilentlyContinue) { Remove-Target $new }
+                if (-not (Get-Item -LiteralPath $previous -Force -ErrorAction SilentlyContinue)) { Remove-Item -LiteralPath $stage -Recurse -Force }
             }
         }
-    }
+    } finally { $lock.Dispose(); Remove-Item -LiteralPath $lockPath }
 }
-
-if ($mode -eq 'uninstall') {
-    Write-Step ''
-    Write-Step "Uninstalled. The source checkout at $source was left in place."
-    exit 0
-}
-
-if ($installed -eq 0) { Stop-WithError 'nothing was installed' }
-
-Write-Step ''
-Write-Step "Done. $installed skill(s) installed."
-Write-Step '  Claude Code : type /Apple-Style, or just describe the UI you want.'
-Write-Step '  Codex       : the skills are discovered from ~\.codex\skills and ~\.agents\skills.'
-if ($mode -eq 'link') {
-    Write-Step "  Junctions, so 'git pull' in $source (or -Update) refreshes every install."
-}
+Write-Step "Done: $installed installed; $skipped preserved. Source checkout left in place."
+if ($skipped) { exit 2 }
 exit 0

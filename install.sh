@@ -83,6 +83,7 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
+case "$SRC$REF${TARGETS[*]:-}" in *$'\n'*|*$'\r'*) die "newlines in paths/refs are unsupported";; esac
 
 # ---------------------------------------------------------------- source ----
 # A clone is recognised by the skills it carries, so running the script from a
@@ -93,31 +94,75 @@ script_dir() {
   cd "$(dirname "$s")" >/dev/null 2>&1 && pwd
 }
 
-is_checkout() { [ -f "$1/skills/Apple-Style/SKILL.md" ]; }
+is_checkout() {
+  local name
+  for name in "${SKILLS[@]}"; do
+    [ -f "$1/skills/$name/SKILL.md" ] && [ ! -L "$1/skills/$name" ] || return 1
+  done
+}
 
+# Receipts are outside installed content. Never infer ownership from a name.
+hash_stream() {
+  if command -v shasum >/dev/null 2>&1; then shasum -a 256 | cut -d ' ' -f 1
+  else sha256sum | cut -d ' ' -f 1; fi
+}
+fingerprint() (
+  cd "$1" || exit 1
+  local stat_style; stat_style="$(uname -s)"
+  find . ! -path './.git' ! -path './.git/*' -print0 | while IFS= read -r -d '' path; do
+    { printf '%s\0' "$path"
+      if [ "$stat_style" = Darwin ]; then stat -f '%Lp' "$path" || exit 1; else stat -c '%a' "$path" || exit 1; fi
+      if [ -L "$path" ]; then printf 'L'; readlink "$path"
+      elif [ -f "$path" ]; then printf 'F'; cat "$path"
+      elif [ -d "$path" ]; then printf 'D'
+      else exit 1; fi
+    } | hash_stream || exit 1
+  done | LC_ALL=C sort | hash_stream
+)
+receipt() { printf 'apple-style-installer-v1\n%s\n%s\n%s\n' "$1" "$2" "$3"; }
+owned() {
+  local dst="$1" record="$2" mode value actual
+  [ -f "$record" ] && [ ! -L "$record" ] || return 1
+  [ "$(sed -n '1p' "$record")" = apple-style-installer-v1 ] || return 1
+  mode="$(sed -n '2p' "$record")"; value="$(sed -n '4p' "$record")"
+  if [ "$mode" = link ]; then
+    [ -L "$dst" ] && [ "$(readlink "$dst")" = "$value" ]
+  elif [ "$mode" = copy ]; then
+    [ -d "$dst" ] && [ ! -L "$dst" ] || return 1
+    actual="$(fingerprint "$dst")" || return 1
+    [ "$actual" = "$value" ]
+  else return 1; fi
+}
+remove_owned() { if [ -L "$1" ]; then rm "$1"; else rm -rf "$1"; fi; }
 download() {
-  local dest="$1"
-  mkdir -p "$(dirname "$dest")"
-  if [ -d "$dest/.git" ] && command -v git >/dev/null 2>&1; then
-    say "${DIM}updating $dest${RST}"
-    git -C "$dest" fetch --depth 1 origin "$REF" --quiet
-    git -C "$dest" checkout --quiet FETCH_HEAD
-  elif command -v git >/dev/null 2>&1; then
-    say "${DIM}cloning $REPO_SLUG@$REF into $dest${RST}"
-    rm -rf "$dest"
-    git clone --depth 1 --branch "$REF" --quiet "https://github.com/$REPO_SLUG.git" "$dest"
-  else
-    command -v curl >/dev/null 2>&1 || die "need git or curl to download the skills"
-    say "${DIM}downloading $REPO_SLUG@$REF into $dest${RST}"
-    local tmp; tmp="$(mktemp -d)"
-    curl -fsSL "https://codeload.github.com/$REPO_SLUG/tar.gz/refs/heads/$REF" | tar -xz -C "$tmp" \
-      || die "download failed (check the network, or the --ref value)"
-    rm -rf "$dest"
-    mkdir -p "$(dirname "$dest")"
-    mv "$tmp"/*/ "$dest"
-    rm -rf "$tmp"
+  local dest="$1" parent stage record
+  parent="$(dirname "$dest")"; mkdir -p "$parent"
+  record="$dest.receipt"
+  mkdir "$dest.lock" 2>/dev/null || die "cache locked: $dest.lock"
+  trap 'rmdir "$CACHE_DIR.lock" 2>/dev/null || true' EXIT
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    owned "$dest" "$record" || die "cache is unowned or modified: $dest; preserve it and choose --dir"
   fi
-  is_checkout "$dest" || die "downloaded copy at $dest does not look like the Apple-Style repository"
+  stage="$(mktemp -d "$parent/.apple-style-download.XXXXXX")"
+  if command -v git >/dev/null 2>&1; then
+    git clone --depth 1 --branch "$REF" --quiet "https://github.com/$REPO_SLUG.git" "$stage/repo" || { rm -rf "$stage"; die "clone failed"; }
+  else
+    command -v curl >/dev/null 2>&1 || die "need git or curl"
+    # The generic archive endpoint resolves both branch names and tags.
+    curl -fSL --retry 2 "https://codeload.github.com/$REPO_SLUG/tar.gz/$REF" -o "$stage/source.tar.gz" &&
+      mkdir "$stage/extracted" && tar -xzf "$stage/source.tar.gz" -C "$stage/extracted" || { rm -rf "$stage"; die "download/extract failed"; }
+    mv "$stage"/extracted/* "$stage/repo"
+  fi
+  is_checkout "$stage/repo" || { rm -rf "$stage"; die "invalid downloaded repository"; }
+  receipt copy "https://github.com/$REPO_SLUG@$REF" "$(fingerprint "$stage/repo")" > "$stage/receipt"
+  if [ -e "$dest" ]; then mv "$dest" "$stage/previous"; fi
+  if ! mv "$stage/repo" "$dest"; then
+    [ ! -e "$stage/previous" ] || mv "$stage/previous" "$dest"
+    die "cache replacement failed; previous source restored"
+  fi
+  mv "$stage/receipt" "$record"
+  rm -rf "$stage"
+  rmdir "$dest.lock"; trap - EXIT
 }
 
 if [ -z "$SRC" ]; then
@@ -131,7 +176,7 @@ if [ -z "$SRC" ]; then
     SRC="$CACHE_DIR"
   fi
 fi
-if [ -d "$SRC" ]; then SRC="$(cd "$SRC" && pwd)"; fi
+if [ -d "$SRC" ]; then SRC="$(cd "$SRC" && pwd -P)"; fi
 if [ "$MODE" != "uninstall" ] && ! is_checkout "$SRC"; then
   die "$SRC is not an Apple-Style checkout"
 fi
@@ -156,56 +201,54 @@ if [ "$SCOPE" != "explicit" ]; then
 fi
 
 # --------------------------------------------------------------- install ----
-say "${B}Apple-Style${RST} ${DIM}·${RST} ${MODE} ${DIM}from${RST} $SRC"
-
+command -v shasum >/dev/null 2>&1 || command -v sha256sum >/dev/null 2>&1 || die "need shasum or sha256sum"
 installed=0
+skipped=0
 for target in "${TARGETS[@]}"; do
   [ "$MODE" = uninstall ] || mkdir -p "$target"
   [ -d "$target" ] || continue
-  say "${DIM}$target${RST}"
+  target="$(cd "$target" && pwd -P)"
+  # Reject any overlap, including a symlink alias of the source tree.
+  if [ "$MODE" != uninstall ]; then
+    case "$target/" in "$SRC/"*) die "source/target overlap: $target";; esac
+    case "$SRC/" in "$target/"*) die "source/target overlap: $target";; esac
+  fi
+  records="$target/.apple-style-install"
+  [ ! -L "$records" ] || die "receipt directory is a link: $records"
+  mkdir -p "$records"
+  mkdir "$records/lock" 2>/dev/null || die "installation locked: $records/lock (inspect interrupted run before removing)"
+  trap 'rmdir "$records/lock" 2>/dev/null || true' EXIT
   for skill in "${SKILLS[@]}"; do
-    dst="$target/$skill"
-    src="$SRC/skills/$skill"
-    case "$MODE" in
-      uninstall)
-        if [ -L "$dst" ]; then
-          rm -f "$dst"; ok "removed link $skill"
-        elif [ -d "$dst" ] && [ -f "$dst/SKILL.md" ]; then
-          rm -rf "$dst"; ok "removed $skill"
-        fi
-        ;;
-      copy)
-        rm -rf "$dst"
-        cp -R "$src" "$dst"
-        ok "copied $skill"
-        installed=$((installed + 1))
-        ;;
-      link)
-        if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-          warn "$dst exists and is not a symlink — left alone (use --copy to overwrite)"
-        else
-          ln -sfn "$src" "$dst"
-          ok "linked $skill"
-          installed=$((installed + 1))
-        fi
-        ;;
-    esac
+    dst="$target/$skill"; src="$SRC/skills/$skill"; record="$records/$skill"
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+      if ! owned "$dst" "$record"; then
+        warn "preserved unowned or modified content: $dst"; skipped=$((skipped + 1)); continue
+      fi
+    elif [ "$MODE" = uninstall ]; then
+      continue
+    fi
+    if [ "$MODE" = uninstall ]; then
+      remove_owned "$dst"; rm -f "$record"; ok "removed owned $skill"; continue
+    fi
+    [ -f "$src/SKILL.md" ] && [ ! -L "$src" ] || die "missing or linked source skill: $src"
+    stage="$(mktemp -d "$target/.apple-style-stage.XXXXXX")"
+    if [ "$MODE" = copy ]; then
+      cp -R "$src" "$stage/new"
+      receipt copy "$src" "$(fingerprint "$stage/new")" > "$stage/receipt"
+    else
+      ln -s "$src" "$stage/new"
+      receipt link "$src" "$src" > "$stage/receipt"
+    fi
+    if [ -e "$dst" ] || [ -L "$dst" ]; then mv "$dst" "$stage/previous"; fi
+    if ! mv "$stage/new" "$dst"; then
+      [ ! -e "$stage/previous" ] && [ ! -L "$stage/previous" ] || mv "$stage/previous" "$dst"
+      die "replacement failed; previous installation restored"
+    fi
+    mv "$stage/receipt" "$record"
+    rm -rf "$stage"
+    installed=$((installed + 1)); ok "$MODE $skill"
   done
-done
-
-if [ "$MODE" = uninstall ]; then
-  say ""
-  say "Uninstalled. The source checkout at $SRC was left in place."
-  exit 0
-fi
-
-[ "$installed" -gt 0 ] || die "nothing was installed"
-
-say ""
-say "${GRN}Done.${RST} $installed skill(s) installed."
-say "  Claude Code : type ${B}/Apple-Style${RST}, or just describe the UI you want."
-say "  Codex       : the skills are discovered from ~/.codex/skills and ~/.agents/skills."
-if [ "$MODE" = "link" ]; then
-  say "  ${DIM}Linked, so 'git pull' in $SRC (or --update) refreshes every install.${RST}"
-fi
-exit 0
+  rmdir "$records/lock"; trap - EXIT
+ done
+say "Done: $installed installed; $skipped preserved. Source checkout left in place."
+[ "$skipped" -eq 0 ] || exit 2
