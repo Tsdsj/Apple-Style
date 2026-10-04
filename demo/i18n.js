@@ -3,6 +3,9 @@
  * Default language: zh. Add both locales for every key; missing keys warn in console. */
 window.I18N = {
   zh: {
+    'demo.mobile': '移动端组件', 'demo.desktop': '桌面窗口', 'demo.accessibility': '无障碍演示',
+    'ck.state.not-checked': '未检查', 'ck.state.pass': '已检查 · 通过', 'ck.state.fail': '已检查 · 不通过', 'ck.state.na': '不适用', 'ck.manual': '手动记录，非自动验证',
+
     'doc.title': 'Apple-Style · 设计系统演示',
     'app.title': 'Apple-Style 演示',
 
@@ -278,6 +281,9 @@ window.I18N = {
   },
 
   en: {
+    'demo.mobile': 'Mobile components', 'demo.desktop': 'Desktop window', 'demo.accessibility': 'Accessibility',
+    'ck.state.not-checked': 'Not checked', 'ck.state.pass': 'Checked · pass', 'ck.state.fail': 'Checked · fail', 'ck.state.na': 'Not applicable', 'ck.manual': 'Manual record, not automatic validation',
+
     'doc.title': 'Apple-Style · Design system demo',
     'app.title': 'Apple-Style Demo',
 

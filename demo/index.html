@@ -44,12 +44,12 @@
 </header>
 
 <!-- 共享菜单：从触发它的按钮形变而来 -->
-<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" hidden>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg><span data-i18n="menu.copy">Copy</span><span class="as-shortcut">⌘C</span></div>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg><span data-i18n="menu.share">Share…</span></div>
-  <div class="as-menu-item" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg><span data-i18n="menu.addhome">Add to Home Screen</span></div>
+<div class="as-glass as-glass-large as-menu" id="shareMenu" role="menu" aria-label="Share" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 16V4h12"/></svg><span data-i18n="menu.copy">Copy</span><span class="as-shortcut">⌘C</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg><span data-i18n="menu.share">Share…</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 20h16M6 20V10l6-6 6 6v10"/></svg><span data-i18n="menu.addhome">Add to Home Screen</span></button>
   <div class="as-menu-sep"></div>
-  <div class="as-menu-item as-destructive" role="menuitem"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg><span data-i18n="menu.delete">Delete</span></div>
+  <button class="as-menu-item as-destructive" role="menuitem" tabindex="-1"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg><span data-i18n="menu.delete">Delete</span></button>
 </div>
 
 <!-- ── Hero：媒体内容之上使用 Clear 变体 ─────────────────────────────── -->
@@ -344,10 +344,10 @@
 
       <div class="card">
         <h3 class="as-text-headline" data-i18n="ct.segmented">Segmented control</h3>
-        <div class="as-segmented" role="tablist">
-          <button class="as-segment is-selected" role="tab" aria-selected="true" data-i18n="ct.seg.map">Map</button>
-          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.transit">Transit</button>
-          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.satellite">Satellite</button>
+        <div class="as-segmented" role="radiogroup" aria-label="Map style">
+          <button class="as-segment is-selected" role="radio" aria-checked="true" data-i18n="ct.seg.map">Map</button>
+          <button class="as-segment" role="radio" aria-checked="false" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-segment" role="radio" aria-checked="false" data-i18n="ct.seg.satellite">Satellite</button>
         </div>
         <p class="note as-text-footnote as-secondary drag-hint" data-i18n="ct.drag.seg"></p>
         <h3 class="as-text-headline spaced" data-i18n="ct.toggle">Toggle</h3>
@@ -481,10 +481,10 @@
       <div class="card">
         <h3 class="as-text-headline" data-i18n="mo.scrub">Scrubbing</h3>
         <p class="note as-text-footnote as-secondary" data-i18n="mo.scrub.d"></p>
-        <div class="as-segmented spaced" role="tablist">
-          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.map">Map</button>
-          <button class="as-segment is-selected" role="tab" aria-selected="true" data-i18n="ct.seg.transit">Transit</button>
-          <button class="as-segment" role="tab" aria-selected="false" data-i18n="ct.seg.satellite">Satellite</button>
+        <div class="as-segmented spaced" role="radiogroup" aria-label="Map style">
+          <button class="as-segment" role="radio" aria-checked="false" data-i18n="ct.seg.map">Map</button>
+          <button class="as-segment is-selected" role="radio" aria-checked="true" data-i18n="ct.seg.transit">Transit</button>
+          <button class="as-segment" role="radio" aria-checked="false" data-i18n="ct.seg.satellite">Satellite</button>
         </div>
         <p class="note as-text-footnote as-tertiary drag-hint" data-i18n="mo.scrub.hint"></p>
       </div>
@@ -545,6 +545,11 @@
   </section>
 
   <footer class="footer">
+    <nav aria-label="Demo examples" class="row">
+      <a href="../skills/Apple-Style/web/demo.html" data-i18n="demo.mobile">Mobile components</a>
+      <a href="../skills/Apple-Style/web/demo-desktop.html" data-i18n="demo.desktop">Desktop window</a>
+      <a href="#s-a11y" data-i18n="demo.accessibility">Accessibility</a>
+    </nav>
     <p class="as-text-footnote as-secondary" data-i18n="ft.note"></p>
   </footer>
   </main>
@@ -552,14 +557,14 @@
 
 <!-- ── 浮动标签栏（真实组件，搜索单独成尾部标签，滚动时收起） ─────────── -->
 <nav class="as-tabbar" data-minimize aria-label="Tab bar">
-  <div class="as-glass as-glass-group" role="tablist">
-    <button class="as-tab is-selected" role="tab" aria-selected="true">
+  <div class="as-glass as-glass-group">
+    <button class="as-tab is-selected" aria-current="page">
       <svg class="as-icon" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span data-i18n="nav.overview">About</span>
     </button>
-    <button class="as-tab" role="tab">
+    <button class="as-tab">
       <svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span data-i18n="nav.controls">Controls</span>
     </button>
-    <button class="as-tab" role="tab">
+    <button class="as-tab">
       <svg class="as-icon" viewBox="0 0 24 24"><path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/></svg><span data-i18n="nav.check">Checklist</span>
     </button>
   </div>
@@ -572,7 +577,7 @@
 
 <!-- 工作表 -->
 <div class="as-sheet-backdrop" id="sheetBackdrop"></div>
-<div class="as-glass as-glass-large as-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" data-lens="off">
+<div class="as-glass as-glass-large as-sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle" data-lens="off">
   <div class="as-grabber"></div>
   <h2 class="as-sheet-title" id="sheetTitle" data-i18n="nv.sheet.title">Yosemite National Park</h2>
   <p class="as-text-body sheet-body" data-i18n="nv.sheet.body"></p>

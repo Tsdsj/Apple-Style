@@ -118,10 +118,10 @@
       </div>
       <div class="card">
         <h3>Segmented control · selection lifts</h3>
-        <div class="as-segmented" role="tablist">
-          <button class="as-segment is-selected" role="tab" aria-selected="true">Map</button>
-          <button class="as-segment" role="tab">Transit</button>
-          <button class="as-segment" role="tab">Satellite</button>
+        <div class="as-segmented" role="radiogroup" aria-label="Map style">
+          <button class="as-segment is-selected" role="radio" aria-checked="true">Map</button>
+          <button class="as-segment" role="radio">Transit</button>
+          <button class="as-segment" role="radio">Satellite</button>
         </div>
       </div>
       <div class="card">
@@ -170,17 +170,17 @@
 
 <!-- Floating tab bar with separate search tab -->
 <nav class="as-tabbar" data-minimize aria-label="Tab bar">
-  <div class="as-glass as-glass-group" role="tablist">
-    <button class="as-tab is-selected" role="tab" aria-selected="true"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span>Home</span></button>
-    <button class="as-tab" role="tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg><span>Favorites</span></button>
-    <button class="as-tab" role="tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span>Collections</span></button>
+  <div class="as-glass as-glass-group">
+    <button class="as-tab is-selected" aria-current="page"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span>Home</span></button>
+    <button class="as-tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/></svg><span>Favorites</span></button>
+    <button class="as-tab"><svg class="as-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 10h16"/></svg><span>Collections</span></button>
   </div>
   <div class="as-glass as-glass-group"><button class="as-tab as-tab-search" aria-label="Search"><svg class="as-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button></div>
 </nav>
 
 <!-- Half sheet -->
 <div class="as-sheet-backdrop" id="sheetBackdrop"></div>
-<div class="as-glass as-glass-large as-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+<div class="as-glass as-glass-large as-sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="as-grabber"></div>
   <h2 class="as-sheet-title" id="sheetTitle">Yosemite National Park</h2>
   <p class="as-text-body" style="margin:0 0 16px">Half sheets are inset from the display edge so content peeks through. Expanding to full height makes the material opaque.</p>
@@ -224,15 +224,41 @@
     else if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); }
     else if (e.key === 'Tab') closeMenu(false);
   });
-  // Sheet
-  const sheet = document.getElementById('sheet'), bd = document.getElementById('sheetBackdrop');
-  document.getElementById('openSheet').addEventListener('click', () => { bd.classList.add('is-open'); sheet.classList.add('is-open'); });
-  document.getElementById('sheetClose').addEventListener('click', close); bd.addEventListener('click', close);
-  function close() { bd.classList.remove('is-open'); sheet.classList.remove('is-open', 'is-full'); }
+  function modal(panel, backdrop) {
+    let source = null, previous = [];
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true; panel.classList.remove('is-open', 'is-full'); backdrop.classList.remove('is-open');
+      previous.forEach(([el, inert]) => { el.inert = inert; }); previous = [];
+      source?.focus(); source = null;
+    }
+    function open() {
+      if (!panel.hidden) return;
+      source = document.activeElement;
+      previous = [...document.body.children].filter(el => !el.contains(panel) && el !== backdrop && el.tagName !== 'SCRIPT').map(el => [el, el.inert]);
+      previous.forEach(([el]) => { el.inert = true; });
+      panel.hidden = false; panel.classList.add('is-open'); backdrop.classList.add('is-open');
+      panel.querySelector('button, [href], input, [tabindex="0"]')?.focus();
+    }
+    panel.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (e.key !== 'Tab') return;
+      const items = [...panel.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),[tabindex="0"]')].filter(el => el.getClientRects().length);
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    backdrop.addEventListener('click', close);
+    return { open, close };
+  }
+  const sheet = document.getElementById('sheet');
+  const sheetController = modal(sheet, document.getElementById('sheetBackdrop'));
+  document.getElementById('openSheet').addEventListener('click', sheetController.open);
+  document.getElementById('sheetClose').addEventListener('click', sheetController.close);
   document.getElementById('sheetFull').addEventListener('click', () => sheet.classList.toggle('is-full'));
   // Toggles, segmented controls and sliders are owned by LiquidGlass.init():
   // it adds the drag gesture and keeps their state, and emits `change`.
-  document.querySelectorAll('.as-glass-group[role=tablist] .as-tab, .as-glass-group .as-item:not([aria-label])').forEach(b => b.addEventListener('click', () => { const g = b.parentElement; if (g.closest('.pref')) return; g.querySelectorAll('.as-tab,.as-item').forEach(x => x.classList.toggle('is-selected', x === b)); }));
+  document.querySelectorAll('.as-glass-group .as-tab, .as-glass-group .as-item:not([aria-label])').forEach(b => b.addEventListener('click', () => { const g = b.parentElement; if (g.closest('.pref')) return; g.querySelectorAll('.as-tab,.as-item').forEach(x => { x.classList.toggle('is-selected', x === b); if (x.classList.contains('as-tab')) { if (x === b) x.setAttribute('aria-current', 'location'); else x.removeAttribute('aria-current'); } }); }));
   // Preferences
   const html = document.documentElement; const themes = ['Auto', 'light', 'dark']; let ti = 0;
   document.getElementById('themeBtn').addEventListener('click', e => { ti = (ti + 1) % 3; const t = themes[ti]; t === 'Auto' ? html.removeAttribute('data-theme') : html.dataset.theme = t; e.target.textContent = t[0].toUpperCase() + t.slice(1); LiquidGlass.refresh(); });

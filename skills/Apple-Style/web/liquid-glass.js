@@ -36,6 +36,51 @@
     } catch { return false; }
   })();
 
+  // Every listener, observer and scheduled callback has a component owner.
+  const resources = new Map(), roots = new Map(), suspended = new WeakSet();
+  function isSuspended(el) {
+    for (let node = el; node; node = node.parentNode || node.host) if (suspended.has(node)) return true;
+    return false;
+  }
+  function state(owner) {
+    if (owner.nodeType) startShared();
+    if (!resources.has(owner)) resources.set(owner, { cleanup: [], frames: new Set(), timers: new Set(), animations: new Set() });
+    return resources.get(owner);
+  }
+  function cleanup(owner, fn) {
+    const st = state(owner); st.cleanup.push(fn);
+    return () => { const i = st.cleanup.indexOf(fn); if (i >= 0) st.cleanup.splice(i, 1); };
+  }
+  function cancelFrame(owner, id) { cancelAnimationFrame(id); resources.get(owner)?.frames.delete(id); }
+  function cancelTimer(owner, id) { clearTimeout(id); resources.get(owner)?.timers.delete(id); }
+  function listen(owner, target, type, fn, options) {
+    target.addEventListener(type, fn, options);
+    cleanup(owner, () => target.removeEventListener(type, fn, options));
+  }
+  function frame(owner, fn) {
+    const st = state(owner);
+    const id = requestAnimationFrame(() => { st.frames.delete(id); if (resources.get(owner) === st) fn(); });
+    st.frames.add(id); return id;
+  }
+  function timer(owner, fn, delay) {
+    const st = state(owner);
+    const id = setTimeout(() => { st.timers.delete(id); if (resources.get(owner) === st) fn(); }, delay);
+    st.timers.add(id); return id;
+  }
+  function observe(owner, Type, callback, options) {
+    const st = state(owner);
+    const ob = new Type((...args) => { if (resources.get(owner) === st) callback(...args); }, options);
+    cleanup(owner, () => ob.disconnect()); return ob;
+  }
+  function animate(owner, el, frames, options) {
+    const st = state(owner), animation = el.animate(frames, options);
+    st.animations.add(animation);
+    animation.finished.then(() => st.animations.delete(animation), () => st.animations.delete(animation));
+    return animation;
+  }
+  const members = (root, selector) => [...(root.matches?.(selector) ? [root] : []), ...root.querySelectorAll(selector)].filter(el => !isSuspended(el));
+  const disabled = el => !el || el.matches(':disabled,[aria-disabled="true"]') || !!el.closest('[inert]');
+
   let svgRoot = null, uid = 0, chromaBudget = 8;
   const liteMode = () => document.documentElement.dataset.perf === 'lite';
   function ensureSvg() {
@@ -123,14 +168,17 @@
   }
 
   function applyLens(el, opts = {}) {
+    if (!attached.has(el)) attach(el, opts);
     if (!supportsLens || liteMode() || reduceTransparency() || moreContrast()) return;
     const rect = el.getBoundingClientRect();
     if (rect.width < 8 || rect.height < 8) return;
     const cs = getComputedStyle(el);
     const radius = parseFloat(cs.borderTopLeftRadius) || 0;
     const large = el.classList.contains('as-glass-large');
-    const rim = opts.rim || Math.max(12, Math.min(rect.height * .5, 30));
-    const scale = opts.scale || (large ? 14 : 30);
+    opts = { ...el.__lgOptions, ...opts };
+    if (opts.lens === false || el.dataset.lens === 'off') return;
+    const rim = opts.rim ?? Math.max(12, Math.min(rect.height * .5, 30));
+    const scale = opts.scale ?? (large ? 14 : 30);
     const blur = parseFloat(cs.getPropertyValue('--_blur')) || 14;
     // Dispersion triples the cost of the most expensive stage, so it is
     // OPT-IN (`data-chroma="on"`) and budgeted. Spend it on a couple of hero
@@ -144,7 +192,8 @@
     const id = el.__lgId || (el.__lgId = 'as-lens-' + (++uid));
     let f = document.getElementById(id);
     if (!f || el.__lgChroma !== chroma) {
-      if (f) f.remove(); else if (chroma) chromaBudget--;
+      if (f) { if (el.__lgChroma) chromaBudget++; f.remove(); }
+      if (chroma) chromaBudget--;
       f = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
       f.id = id;
       f.setAttribute('x', '0'); f.setAttribute('y', '0');
@@ -175,6 +224,7 @@
   /* ---------- 2. Illumination, travelling light, gel flex ------------------ */
   function wireInteraction(el) {
     if (el.__lgWired) return; el.__lgWired = true;
+    cleanup(el, () => spreadToNeighbors(el, null, false));
     let raf = 0, px = 50, py = 50, angle = null, box = null;
 
     const paint = () => {
@@ -195,7 +245,7 @@
         const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
         angle = Math.round(Math.atan2(dy, dx) * 180 / Math.PI + 90);
       }
-      if (!raf) raf = requestAnimationFrame(paint);
+      if (!raf) raf = frame(el, paint);
     };
     const enter = e => { box = el.getBoundingClientRect(); el.classList.add('is-lit'); move(e); };
     el.__lgInvalidate = () => { box = null; };
@@ -205,13 +255,13 @@
       angle = null; box = null;
       spreadToNeighbors(el, null, false);
     };
-    el.addEventListener('pointerenter', enter);
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerdown', e => { move(e); el.classList.add('is-pressed'); spreadToNeighbors(el, e, true); });
+    listen(el, el, 'pointerenter', enter);
+    listen(el, el, 'pointermove', move);
+    listen(el, el, 'pointerdown', e => { move(e); el.classList.add('is-pressed'); spreadToNeighbors(el, e, true); });
     const up = () => { el.classList.remove('is-pressed'); spreadToNeighbors(el, null, false); };
-    el.addEventListener('pointerup', up);
-    el.addEventListener('pointercancel', up);
-    el.addEventListener('pointerleave', leave);
+    listen(el, el, 'pointerup', up);
+    listen(el, el, 'pointercancel', up);
+    listen(el, el, 'pointerleave', leave);
   }
   // "the glow spreads onto any Liquid Glass elements nearby" — only ever a
   // neighbour that is actually on screen, so this stays a handful of rect
@@ -268,6 +318,7 @@
     return { scheme: avg < .3 ? 'dark' : avg > .5 ? 'light' : null, overText };
   }
   function adapt(el) {
+    if (el.hasAttribute('data-glass-scheme-fixed')) return;
     if (el.classList.contains('as-glass-large') || el.classList.contains('as-glass-clear')) return;
     const { scheme, overText } = sampleBehind(el);
     if (scheme) el.dataset.glassScheme = scheme; else if (!el.hasAttribute('data-glass-scheme-fixed')) el.removeAttribute('data-glass-scheme');
@@ -276,26 +327,44 @@
 
   /* ---------- 4. Morphing / materialize ------------------------------------ */
   function morph(from, to, o = {}) {
-    const dur = reduceMotion() ? 1 : (o.duration || 460);
+    const dur = reduceMotion() ? 1 : (o.duration ?? 460);
     const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     const ra = getComputedStyle(from).borderRadius, rb = getComputedStyle(to).borderRadius;
-    const ghost = from.cloneNode(false); ghost.className = from.className.replace(/\bas-glass-interactive\b/, ''); ghost.innerHTML = '';
+    const ghost = from.cloneNode(false);
+    ghost.removeAttribute('id'); ghost.setAttribute('aria-hidden', 'true'); ghost.inert = true;
+    ghost.className = from.className.replace(/\bas-glass-interactive\b/, '');
     ghost.style.cssText = `position:fixed;left:${a.left}px;top:${a.top}px;width:${a.width}px;height:${a.height}px;margin:0;z-index:9999;pointer-events:none;border-radius:${ra};transition:none`;
     document.body.appendChild(ghost);
+    const fromVisibility = from.style.visibility, toVisibility = to.style.visibility;
     to.style.visibility = 'hidden'; from.style.visibility = 'hidden';
-    const anim = ghost.animate([
+    const st = state(from);
+    const anim = animate(from, ghost, [
       { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', borderRadius: ra },
       { left: b.left + 'px', top: b.top + 'px', width: b.width + 'px', height: b.height + 'px', borderRadius: rb }
     ], { duration: dur, easing: 'cubic-bezier(.32,1.25,.4,1)', fill: 'forwards' });
-    return anim.finished.then(() => { ghost.remove(); to.style.visibility = ''; if (o.keepSource !== false) from.style.visibility = ''; to.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur * .35, fill: 'both' }); if (o.lens !== false) applyLens(to, {}); });
+    let cancelled = false;
+    const restore = () => { cancelled = true; anim.cancel(); ghost.remove(); to.style.visibility = toVisibility; from.style.visibility = fromVisibility; };
+    const offFrom = cleanup(from, restore), offTo = cleanup(to, restore);
+    return anim.finished.then(() => {
+      if (cancelled || resources.get(from) !== st) return;
+      ghost.remove(); to.style.visibility = toVisibility;
+      if (o.keepSource !== false) from.style.visibility = fromVisibility;
+      anim.cancel();
+      if (o.lens !== false) applyLens(to);
+    }, restore).finally(() => { offFrom(); offTo(); });
   }
-  // "objects materialize in and out by gradually modulating lensing" (not a plain fade)
   function materialize(el, show, o = {}) {
-    const dur = reduceMotion() ? 1 : (o.duration || 380);
+    const st = state(el);
+    if (el.__lgAnimation) el.__lgAnimation.cancel();
+    const dur = reduceMotion() ? 1 : (o.duration ?? 380);
     const kf = show ? [{ opacity: 0, transform: 'scale(.86)', filter: 'blur(6px) saturate(.6)' }, { opacity: 1, transform: 'none', filter: 'none' }]
                     : [{ opacity: 1, transform: 'none', filter: 'none' }, { opacity: 0, transform: 'scale(.92)', filter: 'blur(6px) saturate(.6)' }];
     if (show) el.hidden = false;
-    return el.animate(kf, { duration: dur, easing: show ? 'cubic-bezier(.2,1.2,.3,1)' : 'cubic-bezier(.4,0,.6,1)', fill: 'forwards' }).finished.then(() => { if (!show) el.hidden = true; });
+    const anim = el.__lgAnimation = animate(el, el, kf, { duration: dur, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
+    return anim.finished.then(() => {
+      if (resources.get(el) === st && el.__lgAnimation === anim) { el.hidden = !show; delete el.__lgAnimation; }
+      anim.cancel();
+    }, () => {});
   }
 
   /* ---------- 5. Scrubbable controls ---------------------------------------
@@ -313,9 +382,10 @@
   const fire = el => el.dispatchEvent(new Event('change', { bubbles: true }));
 
   function segmented(el) {
-    if (el.__lgSeg) return; el.__lgSeg = true;
+    if (el.__lgSeg) return;
     const segs = () => Array.from(el.querySelectorAll('.as-segment'));
     if (!segs().length) return;
+    el.__lgSeg = true;
 
     const ind = document.createElement('span');
     ind.className = 'as-seg-indicator';
@@ -323,18 +393,33 @@
     el.insertBefore(ind, el.firstChild);
     el.dataset.indicator = '';
 
-    let idx = Math.max(0, segs().findIndex(s => s.classList.contains('is-selected')));
+    cleanup(el, () => { ind.remove(); delete el.dataset.indicator; });
+    const tabs = el.getAttribute('role') === 'tablist';
+    el.setAttribute('role', tabs ? 'tablist' : 'radiogroup');
+    let idx = segs().findIndex(s => !disabled(s) && s.classList.contains('is-selected'));
+    if (idx < 0) idx = segs().findIndex(s => !disabled(s));
+    const rove = active => segs().forEach(s => { s.tabIndex = !disabled(el) && !disabled(s) && s === active ? 0 : -1; });
 
-    function select(i, { silent = false } = {}) {
+    function select(i, { silent = false, restore = false } = {}) {
       const list = segs();
-      i = clamp(i, 0, list.length - 1);
+      if (!restore && (i < 0 || disabled(list[i]) || disabled(el))) return false;
       const changed = i !== idx;
       idx = i;
       list.forEach((s, n) => {
         s.classList.toggle('is-selected', n === i);
-        if (s.getAttribute('role') === 'tab') s.setAttribute('aria-selected', String(n === i));
-        else if (s.hasAttribute('aria-checked')) s.setAttribute('aria-checked', String(n === i));
+        s.setAttribute('role', tabs ? 'tab' : 'radio');
+        s.setAttribute(tabs ? 'aria-selected' : 'aria-checked', String(n === i));
+        s.removeAttribute(tabs ? 'aria-checked' : 'aria-selected');
+        if (tabs) {
+          const panel = document.getElementById(s.getAttribute('aria-controls'));
+          if (panel) {
+            if (!s.id) s.id = 'as-tab-' + (++uid);
+            panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', s.id);
+            panel.hidden = n !== i;
+          }
+        }
       });
+      rove(list[i]);
       if (changed && !silent) fire(el);
       return changed;
     }
@@ -358,15 +443,23 @@
       let best = 0, bestD = Infinity;
       for (let i = 0; i < cache.length; i++) {
         const d = Math.abs(cache[i].center - centerX);
-        if (d < bestD) { bestD = d; best = i; }
+        if (!disabled(segs()[i]) && d < bestD) { bestD = d; best = i; }
       }
       return best;
     }
 
+    select(idx, { silent: true, restore: true });
     place(idx);
-    new ResizeObserver(() => { if (!el.classList.contains('is-scrubbing')) place(idx); }).observe(el);
+    observe(el, ResizeObserver, () => { if (!el.classList.contains('is-scrubbing')) place(idx); }).observe(el);
+    observe(el, MutationObserver, () => {
+      const list = segs();
+      let next = list.findIndex(s => s.classList.contains('is-selected') && !disabled(s));
+      if (next < 0) next = list.findIndex(s => !disabled(s));
+      select(next, { silent: true, restore: true }); place(idx);
+    }).observe(el, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
 
-    let drag = null, raf = 0, pending = null;
+
+    let drag = null, raf = 0, pending = null, suppressClick = false;
     // one style write per frame, and never a read
     function flush() {
       raf = 0;
@@ -377,23 +470,24 @@
       if (i !== idx) select(i, { silent: true });
     }
 
-    el.addEventListener('pointerdown', e => {
+    listen(el, el, 'pointerdown', e => {
       const seg = e.target.closest('.as-segment');
-      if (!seg) return;
+      if (!seg || disabled(seg) || disabled(el) || e.button !== 0 || drag) return;
+      suppressClick = false;
       const cache = measure();
       const hit = segs().indexOf(seg);
       const onSelected = hit === idx;
       drag = {
-        id: e.pointerId, startX: e.clientX, lastX: e.clientX, lastT: e.timeStamp,
+        capture: seg, id: e.pointerId, startX: e.clientX, lastX: e.clientX, lastT: e.timeStamp,
         v: 0, moved: false, cache, from: cache[idx], scrub: onSelected, hit, startIdx: idx
       };
-      try { el.setPointerCapture(e.pointerId); } catch { /* synthetic pointer */ }
+      try { seg.setPointerCapture(e.pointerId); } catch { /* synthetic pointer */ }
       // pressing the selected segment grabs the knob; pressing another one
       // arms a tap that commits on release (matching UISegmentedControl)
       if (onSelected) { el.classList.add('is-scrubbing'); ind.style.setProperty('--as-ind-sx', String(stretchFor(0, .06))); }
     });
 
-    el.addEventListener('pointermove', e => {
+    listen(el, el, 'pointermove', e => {
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.startX;
       if (!drag.moved && Math.abs(dx) > 3) {
@@ -413,36 +507,63 @@
       if (x > maxX) x = maxX + Math.pow(x - maxX, .55);
       // selection updates live so the labels track the knob
       pending = { x, sx: String(stretchFor(drag.v)), i: nearest(cache, x + drag.from.w / 2) };
-      if (!raf) raf = requestAnimationFrame(flush);
+      if (!raf) raf = frame(el, flush);
     });
 
     const end = e => {
-      if (!drag || (e && e.pointerId !== drag.id)) return;
-      const { moved, hit, startIdx, cache } = drag;
+      if (!drag || e.pointerId !== drag.id) return;
+      const { moved, startIdx, cache, id, capture } = drag;
+      const cancelled = e.type !== 'pointerup' || disabled(el);
       drag = null;
-      if (raf) { cancelAnimationFrame(raf); raf = 0; }
-      if (pending) { const i = pending.i; pending = null; if (i !== idx) select(i, { silent: true }); }
-      el.classList.remove('is-scrubbing');
-      ind.style.setProperty('--as-ind-sx', '1');
-      if (!moved) select(hit, { silent: true });   // plain tap
+      if (raf) { cancelFrame(el, raf); raf = 0; }
+      if (pending && !cancelled && moved) select(pending.i, { silent: true });
+      pending = null;
+      el.classList.remove('is-scrubbing'); ind.style.setProperty('--as-ind-sx', '1');
+      if (cancelled) select(startIdx, { silent: true, restore: true });
+      suppressClick = moved || cancelled;
       place(idx, cache);
-      if (idx !== startIdx) fire(el);
+      if (moved && !cancelled) { segs()[idx]?.focus(); if (idx !== startIdx) fire(el); }
+      if (capture.hasPointerCapture(id)) capture.releasePointerCapture(id);
     };
-    el.addEventListener('pointerup', end);
-    el.addEventListener('pointercancel', end);
-
-    el.addEventListener('keydown', e => {
-      const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
+    listen(el, el, 'pointerup', end);
+    listen(el, el, 'pointercancel', end);
+    listen(el, el, 'lostpointercapture', end);
+    listen(el, el, 'click', e => {
+      if (suppressClick && e.detail !== 0) { suppressClick = false; e.preventDefault(); return; }
+      suppressClick = false;
+      const seg = e.target.closest('.as-segment');
+      if (!seg || disabled(seg) || disabled(el)) return;
+      select(segs().indexOf(seg)); place(idx); seg.focus();
+    });
+    listen(el, el, 'keydown', e => {
+      const list = segs().filter(s => !disabled(s));
+      if (!list.length || disabled(el)) return;
+      let current = list.indexOf(e.target), next = current;
+      if (current < 0) return;
+      const vertical = el.getAttribute('aria-orientation') === 'vertical';
+      const rtl = getComputedStyle(el).direction === 'rtl';
+      const forward = vertical ? 'ArrowDown' : rtl ? 'ArrowLeft' : 'ArrowRight';
+      const backward = vertical ? 'ArrowUp' : rtl ? 'ArrowRight' : 'ArrowLeft';
+      if (e.key === forward || (!tabs && e.key === 'ArrowDown')) next = (current + 1) % list.length;
+      else if (e.key === backward || (!tabs && e.key === 'ArrowUp')) next = (current + list.length - 1) % list.length;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = list.length - 1;
+      else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!e.repeat) { select(segs().indexOf(list[current])); place(idx); } return; }
+      else return;
       e.preventDefault();
-      if (select(idx + step)) place(idx, null);
+      // Manual tabs and toolbar radio groups move focus without changing value.
+      if (!(tabs && el.dataset.activation === 'manual') && !( !tabs && el.closest('[role="toolbar"]'))) {
+        select(segs().indexOf(list[next])); place(idx);
+      }
+      rove(list[next]); list[next].focus();
     });
   }
 
   function toggle(el) {
-    if (el.__lgToggle) return; el.__lgToggle = true;
+    if (el.__lgToggle) return;
     const knob = el.querySelector('.as-knob');
     if (!knob) return;
+    el.__lgToggle = true;
     // Resting knob is a circle inset 2px on each side, so it is clientHeight−4
     // wide and its travel is clientWidth−clientHeight. While held it widens,
     // and the reachable travel shrinks by exactly that growth — otherwise the
@@ -452,56 +573,72 @@
       const grow = Math.max(0, knob.offsetWidth - rest);
       return { max: Math.max(0, el.clientWidth - el.clientHeight - grow) };
     }
-    let drag = null;
-
-    el.addEventListener('pointerdown', e => {
+    let drag = null, suppressClick = false;
+    el.setAttribute('role', 'switch');
+    if (!el.hasAttribute('aria-checked')) el.setAttribute('aria-checked', 'false');
+    if (el.tagName !== 'BUTTON' && !el.hasAttribute('tabindex')) el.tabIndex = 0;
+    const commit = on => {
+      const wasOn = el.getAttribute('aria-checked') === 'true';
+      el.setAttribute('aria-checked', String(on)); if (wasOn !== on) fire(el);
+    };
+    listen(el, el, 'click', e => {
+      if (disabled(el)) return;
+      if (suppressClick && e.detail !== 0) { suppressClick = false; e.preventDefault(); return; }
+      suppressClick = false; commit(el.getAttribute('aria-checked') !== 'true');
+    });
+    listen(el, el, 'pointerdown', e => {
+      if (disabled(el) || e.button !== 0 || drag) return;
+      suppressClick = false;
       try { el.setPointerCapture(e.pointerId); } catch { /* synthetic pointer */ }
-      const { max } = metrics();   // read after :active applies, so grow is included
+      const { max } = metrics();
       drag = { id: e.pointerId, startX: e.clientX, moved: false, max, from: el.getAttribute('aria-checked') === 'true' ? max : 0 };
     });
-    el.addEventListener('pointermove', e => {
+    listen(el, el, 'pointermove', e => {
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.startX;
-      if (!drag.moved && Math.abs(dx) > 3) { drag.moved = true; el.classList.add('is-scrubbing'); }
-      if (!drag.moved) return;
-      el.style.setProperty('--as-knob-x', clamp(drag.from + dx, 0, drag.max) + 'px');
+      if (Math.abs(dx) > 3) { drag.moved = true; el.classList.add('is-scrubbing'); }
+      if (drag.moved) el.style.setProperty('--as-knob-x', clamp(drag.from + dx, 0, drag.max) + 'px');
     });
     const end = e => {
-      if (!drag || (e && e.pointerId !== drag.id)) return;
-      const t = drag.max;
-      const x = parseFloat(el.style.getPropertyValue('--as-knob-x'));
-      const wasOn = el.getAttribute('aria-checked') === 'true';
-      // a drag lands wherever it was thrown; a tap flips
-      const on = drag.moved && !Number.isNaN(x) ? x > t / 2 : !wasOn;
-      drag = null;
-      el.classList.remove('is-scrubbing');
-      el.style.removeProperty('--as-knob-x');
-      el.setAttribute('aria-checked', String(on));
-      if (on !== wasOn) fire(el);
+      if (!drag || e.pointerId !== drag.id) return;
+      const { moved, max, id } = drag, x = parseFloat(el.style.getPropertyValue('--as-knob-x'));
+      const cancelled = e.type !== 'pointerup' || disabled(el);
+      drag = null; suppressClick = moved || cancelled;
+      el.classList.remove('is-scrubbing'); el.style.removeProperty('--as-knob-x');
+      if (moved && !cancelled && Number.isFinite(x)) commit(x > max / 2);
+      if (el.hasPointerCapture(id)) el.releasePointerCapture(id);
     };
-    el.addEventListener('pointerup', end);
-    el.addEventListener('pointercancel', end);
-    el.addEventListener('keydown', e => {
-      if (e.key !== ' ' && e.key !== 'Enter') return;
-      e.preventDefault();
-      el.setAttribute('aria-checked', String(el.getAttribute('aria-checked') !== 'true'));
-      fire(el);
+    listen(el, el, 'pointerup', end); listen(el, el, 'pointercancel', end); listen(el, el, 'lostpointercapture', end);
+    // Native buttons generate click for Enter/Space; custom switch hosts need it.
+    listen(el, el, 'keydown', e => {
+      if (disabled(el) || el.tagName === 'BUTTON' || ![' ', 'Enter'].includes(e.key)) return;
+      e.preventDefault(); if (!e.repeat) el.click();
     });
   }
 
   function slider(input) {
-    if (input.__lgSlider) return; input.__lgSlider = true;
+    if (input.__lgSlider) return;
     // Overlay a real glass knob as a *sibling* rather than wrapping the input:
     // a wrapper would replace the input as the grid/flex item and, having no
     // intrinsic width of its own, would collapse the track it sits in.
     const host = input.parentElement;
     if (!host) return;
-    if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    input.__lgSlider = true;
+    if (!host.__lgSliderHost) host.__lgSliderHost = { count: 0, original: host.style.position, changed: getComputedStyle(host).position === 'static' };
+    const hostState = host.__lgSliderHost; hostState.count++;
+    if (hostState.changed) host.style.position = 'relative';
+    cleanup(input, () => {
+      if (--hostState.count === 0) {
+        if (hostState.changed && host.style.position === 'relative') host.style.position = hostState.original;
+        delete host.__lgSliderHost;
+      }
+    });
     const knob = document.createElement('span');
     knob.className = 'as-slider-knob';
     knob.setAttribute('aria-hidden', 'true');
     host.appendChild(knob);
     input.classList.add('is-upgraded');
+    cleanup(input, () => { knob.remove(); input.classList.remove('is-upgraded'); });
 
     let lastV = null, lastT = 0, geom = null, raf = 0, pendingF = null;
     function frac() {
@@ -530,37 +667,38 @@
       if (!geom) remeasure();
       pendingF = frac();
       if (!track) { lastV = null; paint(); return; }        // immediate, no stretch
-      if (!raf) raf = requestAnimationFrame(paint);          // one write per frame
+      if (!raf) raf = frame(input, paint);          // one write per frame
     }
     place(false);
-    requestAnimationFrame(() => { remeasure(); place(false); });   // after first layout
-    input.addEventListener('input', () => place(true));
-    new ResizeObserver(() => { remeasure(); place(false); }).observe(input);
+    frame(input, () => { remeasure(); place(false); });   // after first layout
+    listen(input, input, 'input', () => place(true));
+    observe(input, ResizeObserver, () => { remeasure(); place(false); }).observe(input);
 
     const stop = () => { knob.classList.remove('is-scrubbing'); knob.style.setProperty('--as-knob-sx', '1'); };
-    input.addEventListener('pointerdown', () => { remeasure(); knob.classList.add('is-scrubbing'); lastV = null; });
-    addEventListener('pointerup', stop);
-    addEventListener('pointercancel', stop);
-    input.addEventListener('focus', () => knob.classList.add('is-focused'));
-    input.addEventListener('blur', () => { knob.classList.remove('is-focused'); stop(); });
+    listen(input, input, 'pointerdown', () => { remeasure(); knob.classList.add('is-scrubbing'); lastV = null; });
+    listen(input, window, 'pointerup', stop);
+    listen(input, window, 'pointercancel', stop);
+    listen(input, input, 'focus', () => knob.classList.add('is-focused'));
+    listen(input, input, 'blur', () => { knob.classList.remove('is-focused'); stop(); });
     // keyboard changes should lift the knob briefly too
-    input.addEventListener('keydown', () => { knob.classList.add('is-scrubbing'); clearTimeout(knob.__t); knob.__t = setTimeout(stop, 400); });
+    listen(input, input, 'keydown', () => { knob.classList.add('is-scrubbing'); cancelTimer(input, knob.__t); knob.__t = timer(input, stop, 400); });
   }
 
   function controls(root = document) {
     let n = 0;
-    root.querySelectorAll('.as-segmented').forEach(el => { segmented(el); n++; });
-    root.querySelectorAll('.as-toggle').forEach(el => { toggle(el); n++; });
-    root.querySelectorAll('.as-slider').forEach(el => { slider(el); n++; });
+    members(root, '.as-segmented').forEach(el => { segmented(el); n++; });
+    members(root, '.as-toggle').forEach(el => { toggle(el); n++; });
+    members(root, '.as-slider').forEach(el => { slider(el); n++; });
     return n;
   }
 
   /* ---------- 6. Structure helpers ----------------------------------------- */
   function tabBarMinimize(bar, opts = {}) {
+    if (bar.__lgMinimize) return; bar.__lgMinimize = true;
     const scroller = opts.scroller || window; let last = scroller === window ? scrollY : scroller.scrollTop, acc = 0;
     const onScroll = () => { const y = scroller === window ? scrollY : scroller.scrollTop; const dy = y - last; last = y; acc = Math.sign(dy) === Math.sign(acc) ? acc + dy : dy;
       if (acc > 24 && y > 40) bar.classList.add('is-minimized'); else if (acc < -24 || y <= 40) bar.classList.remove('is-minimized'); };
-    scroller.addEventListener('scroll', onScroll, { passive: true });
+    listen(bar, scroller, 'scroll', onScroll, { passive: true });
   }
   // Navigation bar title behaviour (HIG): the large title owns the top of the
   // view, and the compact toolbar title only appears once that large title has
@@ -572,24 +710,25 @@
   function titleOnScroll(title, opts = {}) {
     if (title.__lgTitle) return; title.__lgTitle = true;
     const sel = opts.selector || title.dataset.revealOnScroll || '.as-large-title';
+    const scope = opts.root || title.getRootNode();
     const seen = new Map();
     const update = () => {
       let largeVisible = false;
       seen.forEach((inter, el) => { if (inter && el.isConnected) largeVisible = true; });
       title.classList.toggle('is-visible', !largeVisible);
     };
-    const io = new IntersectionObserver(es => { es.forEach(e => seen.set(e.target, e.isIntersecting)); update(); });
+    const io = observe(title, IntersectionObserver, es => { es.forEach(e => seen.set(e.target, e.isIntersecting)); update(); });
     const sync = () => {
-      document.querySelectorAll(sel).forEach(t => { if (!seen.has(t)) { seen.set(t, false); io.observe(t); } });
-      seen.forEach((_, el) => { if (!el.isConnected) seen.delete(el); });
+      scope.querySelectorAll(sel).forEach(t => { if (!seen.has(t)) { seen.set(t, false); io.observe(t); } });
+      seen.forEach((_, el) => { if (!scope.contains(el)) { io.unobserve(el); seen.delete(el); }; });
       update();
     };
     sync();
     // views that swap with [hidden], and lists that re-render, both need a
     // resync — coalesced into one frame so a re-render storm costs one pass
     let queued = 0;
-    const resync = () => { if (queued) return; queued = requestAnimationFrame(() => { queued = 0; sync(); }); };
-    new MutationObserver(resync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+    const resync = () => { if (queued) return; queued = frame(title, () => { queued = 0; sync(); }); };
+    observe(title, MutationObserver, resync).observe(opts.root || document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
   }
   // Concentric: child radius = container radius − child's inset from container edge
   function concentric(container, min = 0) {
@@ -653,7 +792,7 @@
     // clamp it, and a value that disagrees with the layout is worse than none.
     function publish() {
       if (syncing) return;
-      syncing = requestAnimationFrame(() => {
+      syncing = frame(el, () => {
         syncing = 0;
         const real = Math.round(pane.getBoundingClientRect().width);
         el.setAttribute('aria-valuenow', String(real));
@@ -681,13 +820,14 @@
       if (pane.getBoundingClientRect().width > cap + .5) setWidth(cap, cap);
       else publish();
     };
-    const pro = new ResizeObserver(reclamp);
+    const pro = observe(el, ResizeObserver, reclamp);
     pro.observe(split);
     pro.observe(pane);
+    cleanup(el, () => { if (el.classList.contains('is-dragging')) document.documentElement.style.cursor = ''; });
 
     // Measure once at gesture start; pointermove only does arithmetic.
     let startX = 0, startW = 0, cap = 0, dir = 1;
-    el.addEventListener('pointerdown', e => {
+    listen(el, el, 'pointerdown', e => {
       if (e.button !== 0) return;
       e.preventDefault();
       const rtl = getComputedStyle(split).direction === 'rtl';
@@ -699,7 +839,7 @@
       el.classList.add('is-dragging');
       document.documentElement.style.cursor = 'col-resize';
     });
-    el.addEventListener('pointermove', e => {
+    listen(el, el, 'pointermove', e => {
       if (!el.classList.contains('is-dragging')) return;
       setWidth(startW + (e.clientX - startX) * dir, cap);
     });
@@ -709,12 +849,12 @@
       document.documentElement.style.cursor = '';
       publish();
     };
-    el.addEventListener('pointerup', endDrag);
-    el.addEventListener('pointercancel', endDrag);
+    listen(el, el, 'pointerup', endDrag);
+    listen(el, el, 'pointercancel', endDrag);
     // double-click resets to the stylesheet's default for this tier
-    el.addEventListener('dblclick', () => { split.style.removeProperty(cssVar); publish(); });
+    listen(el, el, 'dblclick', () => { split.style.removeProperty(cssVar); publish(); });
 
-    el.addEventListener('keydown', e => {
+    listen(el, el, 'keydown', e => {
       const rtl = getComputedStyle(split).direction === 'rtl';
       const grow = (side === 'before') === !rtl ? 'ArrowRight' : 'ArrowLeft';
       const shrink = grow === 'ArrowRight' ? 'ArrowLeft' : 'ArrowRight';
@@ -769,10 +909,11 @@
     return { ...need, key: rest.toLowerCase() };   // multi-char names like "Enter"
   }
   function menuShortcuts(root = document) {
-    if (root.__lgShortcuts) return 0; root.__lgShortcuts = true;
+    if (root.__lgShortcuts) return 0;
     // The menus themselves are usually siblings of the bar, not inside it, so
     // the bar is only the opt-in flag; the search runs over the document.
     if (!root.querySelector?.('.as-menubar[data-shortcuts]')) return 0;
+    root.__lgShortcuts = true;
     const binds = [];
     const collect = () => {
       binds.length = 0;
@@ -783,8 +924,9 @@
       });
     };
     collect();
-    new MutationObserver(collect).observe(document.body, { childList: true, subtree: true });
-    addEventListener('keydown', e => {
+    observe(root, MutationObserver, collect).observe(root, { childList: true, subtree: true });
+    listen(root, root === document ? window : root, 'keydown', e => {
+      if (e.defaultPrevented) return;
       const cmd = e.metaKey || e.ctrlKey;          // ⌘ on Apple keyboards, Ctrl elsewhere
       const hit = binds.find(({ combo }) => {
         if (combo.shift !== e.shiftKey || combo.alt !== e.altKey) return false;
@@ -808,10 +950,10 @@
     const items = () => [...bar.querySelectorAll('.as-menubar-item')];
     const roving = active => items().forEach(it => { it.tabIndex = it === active ? 0 : -1; });
     roving(items()[0]);
-    bar.addEventListener('focusin', e => {
+    listen(bar, bar, 'focusin', e => {
       if (e.target.classList?.contains('as-menubar-item')) roving(e.target);
     });
-    bar.addEventListener('keydown', e => {
+    listen(bar, bar, 'keydown', e => {
       const list = items(), i = list.indexOf(document.activeElement);
       if (i < 0) return;
       const rtl = getComputedStyle(bar).direction === 'rtl';
@@ -836,71 +978,132 @@
   }
 
   /* ---------- Attach / init ------------------------------------------------ */
-  const attached = new Set();
-  const onScreen = new Set();
-  // Lens only what is actually in (or near) the viewport. A long page can hold
-  // dozens of glass surfaces; filtering the ones nobody can see is pure cost.
-  const vo = new IntersectionObserver(entries => entries.forEach(e => {
-    const el = e.target;
-    if (e.isIntersecting) {
-      onScreen.add(el);
-      if (el.__lgLens !== false && el.dataset.lens !== 'off') applyLens(el, {});
-    } else {
-      onScreen.delete(el);
-      el.style.removeProperty('--as-glass-filter');
-      el.style.setProperty('--as-glass-lens', '0');
-    }
-  }), { rootMargin: '240px' });
-
-  function attach(el, opts = {}) {
-    if (attached.has(el)) return; attached.add(el);
-    if (el.classList.contains('as-glass-interactive') || el.querySelector('.as-item,.as-tab')) wireInteraction(el);
-    // observed even when lensing is off: membership of onScreen is what gates
-    // the per-scroll backdrop sampling too
-    el.__lgLens = opts.lens !== false;
-    vo.observe(el);
-    if (opts.adapt !== false && el.dataset.adapt !== 'off') adapt(el);
-    ro.observe(el);
+  const attached = new Set(), onScreen = new Set();
+  let vo = null, ro = null, shared = null, ticking = 0;
+  function clearLens(el) {
+    if (el.__lgId) document.getElementById(el.__lgId)?.remove();
+    if (el.__lgChroma) chromaBudget++;
+    delete el.__lgId; delete el.__lgChroma;
+    el.style.removeProperty('--as-glass-filter'); el.style.removeProperty('--as-glass-lens');
   }
-  const ro = new ResizeObserver(entries => entries.forEach(e => { if (onScreen.has(e.target)) applyLens(e.target, {}); }));
-  let ticking = false;
-  // Backdrop sampling is the most expensive thing here (elementsFromPoint plus
-  // getComputedStyle, three probes per element) and it runs on scroll — so it
-  // only ever visits glass that is currently on screen.
+  function relens(el) {
+    clearLens(el);
+    if (onScreen.has(el)) applyLens(el, el.__lgOptions || {});
+  }
+  function startShared() {
+    if (shared) return;
+    shared = {};
+    vo = observe(shared, IntersectionObserver, entries => entries.forEach(e => {
+      if (!attached.has(e.target)) return;
+      if (e.isIntersecting) { onScreen.add(e.target); relens(e.target); }
+      else { onScreen.delete(e.target); clearLens(e.target); }
+    }), { rootMargin: '240px' });
+    ro = observe(shared, ResizeObserver, entries => entries.forEach(e => { if (attached.has(e.target)) relens(e.target); }));
+    listen(shared, window, 'scroll', scheduleAdapt, { passive: true, capture: true });
+    listen(shared, window, 'resize', scheduleAdapt);
+    for (const q of ['(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(prefers-color-scheme: dark)']) {
+      listen(shared, matchMedia(q), 'change', () => { attached.forEach(relens); scheduleAdapt(); });
+    }
+    observe(shared, MutationObserver, records => {
+      if (records.some(r => r.type === 'attributes' && r.target === document.documentElement)) { attached.forEach(relens); scheduleAdapt(); }
+      for (const root of roots.keys()) if (root !== document && !root.isConnected) destroy(root);
+      for (const [owner, st] of [...resources]) if (owner.nodeType === 1) {
+        const movedOut = st.scope && !st.scope.contains(owner) && ![...roots.keys()].some(r => r.contains(owner));
+        if (!owner.isConnected || movedOut) detach(owner, true);
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-theme', 'data-perf', 'data-liquid-glass'] });
+  }
+  function attach(el, opts = {}) {
+    suspended.delete(el);
+    startShared(); state(el);
+    el.__lgOptions = { ...el.__lgOptions, ...opts };
+    if (!attached.has(el)) {
+      attached.add(el);
+      if (el.classList.contains('as-glass-interactive') || el.querySelector('.as-item,.as-tab')) wireInteraction(el);
+      vo.observe(el); ro.observe(el);
+    }
+    relens(el);
+    if (el.__lgOptions.adapt !== false && el.dataset.adapt !== 'off') adapt(el);
+    return { detach: () => detach(el) };
+  }
   function scheduleAdapt() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      ticking = false;
-      onScreen.forEach(el => { if (el.isConnected && el.dataset.adapt !== 'off') adapt(el); });
+    if (!shared || ticking) return;
+    ticking = frame(shared, () => {
+      ticking = 0;
+      onScreen.forEach(el => { if (el.isConnected && el.__lgOptions?.adapt !== false && el.dataset.adapt !== 'off') adapt(el); });
       attached.forEach(el => el.__lgInvalidate?.());
     });
   }
-  function init(root = document) {
-    root.querySelectorAll('.as-glass').forEach(el => attach(el));
-    const wired = controls(root);
-    addEventListener('scroll', scheduleAdapt, { passive: true, capture: true }); addEventListener('resize', scheduleAdapt);
-    document.querySelectorAll('.as-tabbar[data-minimize]').forEach(b => tabBarMinimize(b));
-    document.querySelectorAll('.as-toolbar-title[data-reveal-on-scroll]').forEach(t => titleOnScroll(t));
-    document.querySelectorAll('.as-container[data-concentric]').forEach(c => concentric(c));
-    document.querySelectorAll('.as-split-divider').forEach(d => splitDivider(d));
-    document.querySelectorAll('.as-menubar[role="menubar"]').forEach(b => menuBar(b));
-    const shortcuts = menuShortcuts(document);
-    new MutationObserver(m => m.forEach(x => x.addedNodes.forEach(n => {
-      if (n.nodeType !== 1) return;
-      if (n.matches?.('.as-glass')) attach(n);
-      n.querySelectorAll?.('.as-glass').forEach(attach);
-      if (n.matches?.('.as-segmented')) segmented(n);
-      if (n.matches?.('.as-toggle')) toggle(n);
-      if (n.matches?.('.as-slider')) slider(n);
-      if (n.matches?.('.as-split-divider')) splitDivider(n);
-      n.querySelectorAll?.('.as-split-divider').forEach(d => splitDivider(d));
-      controls(n);
-    }))).observe(document.body, { childList: true, subtree: true });
-    ['(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(prefers-color-scheme: dark)'].forEach(q => matchMedia(q).addEventListener('change', () => attached.forEach(el => { el.style.removeProperty('--as-glass-filter'); if (onScreen.has(el)) applyLens(el, {}); adapt(el); })));
-    return { attached: attached.size, controls: wired, shortcuts, lens: supportsLens && !liteMode() };
+  function refresh() { attached.forEach(relens); scheduleAdapt(); }
+  function release(owner) {
+    const st = resources.get(owner);
+    if (!st) return;
+    resources.delete(owner);
+    st.frames.forEach(cancelAnimationFrame); st.timers.forEach(clearTimeout); st.animations.forEach(a => a.cancel());
+    st.cleanup.reverse().forEach(fn => fn());
+    if (owner.nodeType === 1 || owner === document) {
+      if (attached.has(owner)) { vo?.unobserve(owner); ro?.unobserve(owner); clearLens(owner); }
+      attached.delete(owner); onScreen.delete(owner);
+      if (owner.style) {
+        ['--as-px','--as-py','--as-glow','--as-glass-light-angle','--as-knob-x','--as-value'].forEach(p => owner.style.removeProperty(p));
+        owner.classList.remove('is-lit','is-pressed','is-scrubbing','is-dragging');
+      }
+      Object.keys(owner).filter(k => k.startsWith('__lg')).forEach(k => delete owner[k]);
+    }
   }
-  global.LiquidGlass = { init, attach, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh: scheduleAdapt };
+  function stopIfIdle() {
+    if (!roots.size && ![...resources.keys()].some(o => o !== shared)) {
+      const old = shared; shared = null; release(old); vo = ro = null; ticking = 0;
+      svgRoot?.remove(); svgRoot = null; chromaBudget = 8;
+    }
+    if (svgRoot && !svgRoot.children.length) { svgRoot.remove(); svgRoot = null; }
+  }
+  function detach(el, automatic = false) {
+    if (!automatic && el !== document) suspended.add(el);
+    for (const owner of [...resources.keys()]) if (owner === el || el.contains?.(owner.nodeType ? owner : null)) release(owner);
+    stopIfIdle();
+  }
+  function destroy(root = document) {
+    if (root !== document) suspended.add(root);
+    for (const [scope, observer] of [...roots]) if (root === document || scope === root || (scope.nodeType && root.contains?.(scope))) {
+      observer.disconnect(); roots.delete(scope);
+    }
+    for (const owner of [...resources.keys()]) if (owner !== shared && (root === document || owner === root || (owner.nodeType && root.contains?.(owner)))) release(owner);
+    stopIfIdle();
+  }
+  function scan(root, scope) {
+    if (isSuspended(root)) return 0;
+    members(root, '.as-glass').forEach(el => attach(el));
+    const wired = controls(root);
+    members(root, '.as-tabbar[data-minimize]').forEach(b => tabBarMinimize(b));
+    members(root, '.as-toolbar-title[data-reveal-on-scroll]').forEach(t => titleOnScroll(t, { root: scope }));
+    members(root, '.as-container[data-concentric]').forEach(c => concentric(c));
+    members(root, '.as-split-divider').forEach(d => splitDivider(d));
+    members(root, '.as-menubar[role="menubar"]').forEach(b => menuBar(b));
+    for (const owner of resources.keys()) if (owner.nodeType === 1 && (owner === root || root.contains(owner))) state(owner).scope = scope;
+    return wired;
+  }
+  function init(root = document) {
+    suspended.delete(root);
+    startShared();
+    const wired = scan(root, root), shortcuts = menuShortcuts(root);
+    if (!roots.has(root)) {
+      const observer = new MutationObserver(records => {
+        for (const record of records) {
+          for (const node of record.addedNodes) if (node.nodeType === 1 && root.contains(node)) scan(node, root);
+          if (root.contains(record.target) && !isSuspended(record.target) && record.target.matches?.('.as-segmented')) segmented(record.target);
+          if (root.contains(record.target) && !isSuspended(record.target) && record.target.matches?.('.as-toggle')) toggle(record.target);
+        }
+        for (const owner of [...resources.keys()]) if (owner.nodeType === 1 && !owner.isConnected) detach(owner, true);
+        menuShortcuts(root);
+      });
+      observer.observe(root, { childList: true, subtree: true }); roots.set(root, observer);
+    }
+    return { attached: attached.size, controls: wired, shortcuts, lens: supportsLens && !liteMode(), destroy: () => destroy(root) };
+  }
+  global.LiquidGlass = { init, attach, detach, destroy, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh };
   if (document.readyState !== 'loading' && document.currentScript?.dataset.auto !== undefined) init();
-  else if (document.currentScript?.dataset.auto !== undefined) addEventListener('DOMContentLoaded', () => init());
+  else if (document.currentScript?.dataset.auto !== undefined) {
+    startShared(); listen(shared, document, 'DOMContentLoaded', () => init(), { once: true });
+  }
 })(window);

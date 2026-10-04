@@ -40,7 +40,7 @@
     store.set('lang', lang);
     translate();
     renderTypeScale();          // 字阶表的用途列随语言变化
-    syncPrefLabels();
+    syncPrefLabels(); renderChecklist();
   }
 
   /* ----------------------------------------------------------- 动态内容 */
@@ -128,29 +128,20 @@
 
   const CHECK_COUNT = 12;
   function renderChecklist() {
-    const done = store.get('check', []);
+    const records = store.get('check-evidence', {});
     $('#checklist').innerHTML = Array.from({ length: CHECK_COUNT }, (_, i) => {
       const n = i + 1;
-      return `<li class="${done.includes(n) ? 'is-done' : ''}" data-n="${n}" role="checkbox" aria-checked="${done.includes(n)}" tabindex="0">
-          <span class="box">✓</span><span class="label" data-i18n="ck.i${n}"></span></li>`;
+      return `<li><label for="check-${n}" class="label" data-i18n="ck.i${n}"></label>
+        <select id="check-${n}" data-n="${n}">${['not-checked', 'pass', 'fail', 'na'].map(value =>
+          `<option value="${value}" ${records[n] === value ? 'selected' : ''} data-i18n="ck.state.${value}"></option>`).join('')}</select></li>`;
     }).join('');
-    translate($('#checklist'));
-    updateProgress();
+    translate($('#checklist')); updateProgress();
   }
   function updateProgress() {
-    const done = store.get('check', []).length;
-    $('#ckBar').style.width = (done / CHECK_COUNT * 100) + '%';
-    $('#ckCount').textContent = done + '/' + CHECK_COUNT;
-  }
-  function toggleCheck(li) {
-    const n = +li.dataset.n;
-    const done = store.get('check', []);
-    const i = done.indexOf(n);
-    i === -1 ? done.push(n) : done.splice(i, 1);
-    store.set('check', done);
-    li.classList.toggle('is-done', i === -1);
-    li.setAttribute('aria-checked', String(i === -1));
-    updateProgress();
+    const records = store.get('check-evidence', {});
+    const checked = Object.values(records).filter(s => s === 'pass' || s === 'fail').length;
+    $('#ckBar').style.width = (checked / CHECK_COUNT * 100) + '%';
+    $('#ckCount').textContent = checked + '/' + CHECK_COUNT + ' · ' + t('ck.manual');
   }
 
   /* ------------------------------------------------------ Hero 画布内容 */
@@ -189,41 +180,75 @@
   }
 
   function wireMenu() {
-    const menu = $('#shareMenu');
+    const menu = $('#shareMenu'); let source;
+    const close = (restore = true) => {
+      menu.hidden = true; menu.classList.remove('is-open'); source?.setAttribute('aria-expanded', 'false');
+      if (restore) source?.focus();
+    };
     const open = src => {
+      source = src;
       const r = src.getBoundingClientRect();
       menu.hidden = false;
       menu.style.top = (r.bottom + window.scrollY + 8) + 'px';
       menu.style.left = Math.max(8, Math.min(r.left + window.scrollX, innerWidth - 266)) + 'px';
-      menu.style.setProperty('--as-origin', 'top left');
-      requestAnimationFrame(() => menu.classList.add('is-open'));
-      menu.__src = src;
+      menu.style.setProperty('--as-origin', 'top left'); menu.classList.add('is-open');
+      src.setAttribute('aria-expanded', 'true'); $('.as-menu-item', menu)?.focus();
     };
-    const close = () => { menu.classList.remove('is-open'); setTimeout(() => { menu.hidden = true; }, 300); };
-    [$('#shareBtn'), $('#menuDemoBtn')].forEach(b => b && b.addEventListener('click', e => { e.stopPropagation(); menu.hidden ? open(b) : close(); }));
-    document.addEventListener('pointerdown', e => {
-      if (menu.hidden || menu.contains(e.target) || e.target === menu.__src || menu.__src?.contains(e.target)) return;
-      close();
+    [$('#shareBtn'), $('#menuDemoBtn')].forEach(b => {
+      if (!b) return;
+      b.setAttribute('aria-haspopup', 'menu'); b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-controls', menu.id);
+      b.addEventListener('click', () => menu.hidden ? open(b) : close());
     });
-    $$('.as-menu-item', menu).forEach(i => i.addEventListener('click', close));
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !menu.contains(e.target) && !source?.contains(e.target)) close(false); });
+    menu.addEventListener('keydown', e => {
+      const items = $$('.as-menu-item:not(:disabled)', menu), index = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault(); items[(index + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length]?.focus();
+      } else if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); items[e.key === 'Home' ? 0 : items.length - 1]?.focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'Tab') close(false);
+    });
+    $$('.as-menu-item', menu).forEach(i => i.addEventListener('click', () => close()));
   }
 
+  // Demo-only dialog behavior; the material runtime does not own app modality.
+  function modal(panel, backdrop) {
+    let source = null, previous = [];
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true; panel.classList.remove('is-open', 'is-full'); backdrop.classList.remove('is-open');
+      previous.forEach(([el, inert]) => { el.inert = inert; }); previous = [];
+      source?.focus(); source = null;
+    }
+    function open() {
+      if (!panel.hidden) return;
+      source = document.activeElement;
+      previous = [...document.body.children].filter(el => !el.contains(panel) && el !== backdrop && el.tagName !== 'SCRIPT').map(el => [el, el.inert]);
+      previous.forEach(([el]) => { el.inert = true; });
+      panel.hidden = false; panel.classList.add('is-open'); backdrop.classList.add('is-open');
+      panel.querySelector('button, [href], input, [tabindex="0"]')?.focus();
+    }
+    panel.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (e.key !== 'Tab') return;
+      const items = [...panel.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),[tabindex="0"]')].filter(el => el.getClientRects().length);
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    backdrop.addEventListener('click', close);
+    return { open, close };
+  }
   function wireSheet() {
-    const sheet = $('#sheet'), bd = $('#sheetBackdrop');
-    const open = () => { bd.classList.add('is-open'); sheet.classList.add('is-open'); };
-    const close = () => { bd.classList.remove('is-open'); sheet.classList.remove('is-open', 'is-full'); };
-    [$('#heroSheet'), $('#sheetDemoBtn')].forEach(b => b && b.addEventListener('click', open));
-    $('#sheetClose').addEventListener('click', close);
-    bd.addEventListener('click', close);
+    const sheet = $('#sheet'), controller = modal(sheet, $('#sheetBackdrop'));
+    [$('#heroSheet'), $('#sheetDemoBtn')].forEach(b => b?.addEventListener('click', controller.open));
+    $('#sheetClose').addEventListener('click', controller.close);
     $('#sheetFull').addEventListener('click', () => sheet.classList.toggle('is-full'));
-    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
   }
-
   function wireAlert() {
-    const al = $('#alert'), bd = $('#alertBackdrop');
-    const close = () => { bd.classList.remove('is-open'); LiquidGlass.materialize(al, false); };
-    $('#alertDemoBtn').addEventListener('click', () => { bd.classList.add('is-open'); LiquidGlass.materialize(al, true); });
-    [$('#alertCancel'), $('#alertOk'), bd].forEach(b => b.addEventListener('click', close));
+    const controller = modal($('#alert'), $('#alertBackdrop'));
+    $('#alertDemoBtn').addEventListener('click', controller.open);
+    [$('#alertCancel'), $('#alertOk')].forEach(b => b.addEventListener('click', controller.close));
   }
 
   function wireMotion() {
@@ -254,17 +279,18 @@
         $$('.as-item, .as-tab', g).forEach(x => {
           if (x.classList.contains('as-tab-search')) return;
           x.classList.toggle('is-selected', x === b);
-          if (x.getAttribute('role') === 'tab') x.setAttribute('aria-selected', String(x === b));
+          if (x.classList.contains('as-tab')) { if (x === b) x.setAttribute('aria-current', 'location'); else x.removeAttribute('aria-current'); }
         });
+        if (b.classList.contains('as-tab')) { const index = $$('.as-tab', g).indexOf(b); $(['#s-overview', '#s-controls', '#s-check'][index])?.scrollIntoView(); }
       });
     });
-    // 清单
-    $('#checklist').addEventListener('click', e => { const li = e.target.closest('li'); if (li) toggleCheck(li); });
-    $('#checklist').addEventListener('keydown', e => {
-      if (e.key !== ' ' && e.key !== 'Enter') return;
-      const li = e.target.closest('li'); if (li) { e.preventDefault(); toggleCheck(li); }
+    // This is a manual record, never a claim that automated checks passed.
+    $('#checklist').addEventListener('change', e => {
+      if (!e.target.matches('select[data-n]')) return;
+      const records = store.get('check-evidence', {}); records[e.target.dataset.n] = e.target.value;
+      store.set('check-evidence', records); updateProgress();
     });
-    $('#ckReset').addEventListener('click', () => { store.set('check', []); renderChecklist(); });
+    $('#ckReset').addEventListener('click', () => { store.set('check-evidence', {}); renderChecklist(); });
   }
 
   // 同心圆角调试台
@@ -311,8 +337,7 @@
   function refreshGlass() {
     const suppress = html.hasAttribute('data-sim-rt') || html.hasAttribute('data-sim-ct');
     $$('.as-glass').forEach(el => {
-      if (suppress || el.dataset.lens === 'off') el.style.removeProperty('--as-glass-filter');
-      else LiquidGlass.applyLens(el, {});
+      LiquidGlass.attach(el, { lens: !suppress && el.dataset.lens !== 'off' });
     });
     LiquidGlass.refresh();
   }

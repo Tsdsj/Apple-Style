@@ -16,9 +16,8 @@
   /* Hover is a pointer affordance — gate it so a touch device doesn't get a
      sticky highlight after a tap. */
   @media (hover: hover) { .list li:not([aria-selected="true"]):hover { background: var(--as-fill-quaternary); } }
-  .list li[aria-selected="true"] { background: var(--as-accent); color: #fff; }
-  /* Secondary text on an accent fill goes opaque, not 78% alpha: white on the
-     system blue is ~3.3:1 already, and dimming it further measured 2.8:1. */
+  .list li[aria-selected="true"] { background: var(--as-action-bg); color: var(--as-action-fg); }
+  /* Selected-row text remains opaque on the accessible semantic action fill. */
   .list li[aria-selected="true"] .as-secondary { color: #fff; }
   .list li .who { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* Tables and lists fill the column they are in — no max-width borrowed from

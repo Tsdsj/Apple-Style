@@ -58,7 +58,10 @@
   --as-gray4:  light-dark(rgb(209 209 214), rgb(58 58 60));
   --as-gray5:  light-dark(rgb(229 229 234), rgb(44 44 46));
   --as-gray6:  light-dark(rgb(242 242 247), rgb(28 28 30));
-  --as-accent: var(--as-blue);   /* app accent color; override per brand */
+  --as-action-bg: light-dark(#0066cc, #006bd6); /* white text: 5.57:1 / 5.15:1 */
+  --as-action-fg: #fff;
+  --as-action-destructive: light-dark(#b42318, #b92b20);
+  --as-accent: light-dark(#0066cc, #64b5ff);   /* app accent color; override per brand */
 
   /* Semantic (dynamic) colors — UIKit semantic values, adapt light/dark */
   --as-label:            light-dark(rgb(0 0 0),              rgb(255 255 255));
@@ -68,7 +71,7 @@
   --as-placeholder:      var(--as-label-tertiary);
   --as-separator:        light-dark(rgb(60 60 67 / .29),     rgb(84 84 88 / .60));
   --as-separator-opaque: light-dark(rgb(198 198 200),        rgb(56 56 58));
-  --as-link:             var(--as-blue);
+  --as-link:             var(--as-accent);
   --as-bg:               light-dark(rgb(255 255 255),        rgb(0 0 0));
   --as-bg-secondary:     light-dark(rgb(242 242 247),        rgb(28 28 30));
   --as-bg-tertiary:      light-dark(rgb(255 255 255),        rgb(44 44 46));
@@ -344,7 +347,7 @@
 }
 .as-glass-tinted, .as-glass-prominent {
   /* Stained glass. Tint the BACKGROUND (not the label) for primary actions. */
-  --as-glass-tint: color-mix(in oklab, var(--as-tint, var(--as-accent)) 78%, transparent);
+  --as-glass-tint: var(--as-tint, var(--as-action-bg));
   color: #fff;
   --as-glass-rim-hi: rgb(255 255 255 / .46);
 }
@@ -430,7 +433,7 @@
 }
 .as-button:active { transform: scale(.96); opacity: .7; }           /* always a press state */
 .as-button:disabled { opacity: .35; pointer-events: none; }
-.as-button-filled { background: var(--as-accent); color: #fff; }
+.as-button-filled { background: var(--as-action-bg); color: var(--as-action-fg); }
 .as-button-tinted { background: color-mix(in oklab, var(--as-accent) 15%, transparent); }
 .as-button-gray   { background: var(--as-fill); color: var(--as-label); }
 .as-button-bordered { box-shadow: inset 0 0 0 1px var(--as-separator-opaque); color: var(--as-label); }
@@ -445,7 +448,7 @@
 .as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
 .as-button-icon   { width: var(--as-hit-min); padding: 0; }
 .as-button-destructive { color: var(--as-red); }
-.as-button-destructive.as-button-filled { background: var(--as-red); color: #fff; }
+.as-button-destructive.as-button-filled { background: var(--as-action-destructive); color: var(--as-action-fg); }
 [data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
 [data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
 
@@ -692,7 +695,7 @@
 .as-grouped { background: var(--as-bg-grouped); }
 
 /* Badge / status */
-.as-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-red); color: #fff; font: 600 12px/18px var(--as-font-text); text-align: center; }
+.as-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-action-destructive); color: var(--as-action-fg); font: 600 12px/18px var(--as-font-text); text-align: center; }
 
 /* Navigation bar large title */
 .as-navbar { display: flex; flex-direction: column; padding: 0 var(--as-margin); }
@@ -745,14 +748,10 @@
    Mac inspector at 44pt a row holds a third of what it should. */
 @media (any-pointer: coarse) { .as-window { --as-row-min: var(--as-hit-min); } }
 
-/* Below the desktop tier this is only a graceful fallback, not a design: the
-   panes stack and the window scrolls. Ship the compact skeleton (tab bar +
-   scroll-edge toolbar) for those widths. Gated on a max-width query rather
-   than left to specificity, so the desktop rules below don't have to outrank
-   it with a longer selector. */
+/* Narrow-container fallback preserves platform identity and all pane content.
+   Panes stack; only resize handles disappear when there is no horizontal split. */
 @media (max-width: 1023.98px) {
-  .as-window > .as-split > .as-split-divider,
-  .as-window > .as-split > .as-inspector { display: none; }
+  .as-window > .as-split > .as-split-divider { display: none; }
 }
 /* Used inside a split view, `.as-sidebar` is a pane, not the floating iPad
    slab it is on its own — at every width, so the compact fallback doesn't
@@ -796,7 +795,7 @@
     color: var(--as-label); font: 400 13px/16px var(--as-font-text); cursor: default;
   }
   .as-menubar .as-menubar-item:hover { background: var(--as-fill-tertiary); }
-  .as-menubar .as-menubar-item[aria-expanded="true"] { background: var(--as-accent); color: #fff; }
+  .as-menubar .as-menubar-item[aria-expanded="true"] { background: var(--as-action-bg); color: var(--as-action-fg); }
   .as-menubar .as-menubar-item:focus-visible { outline: 2px solid var(--as-accent); outline-offset: -1px; }
   .as-menubar .as-menubar-app { font-weight: 600; }
   .as-menubar .as-spacer { flex: 1; }
@@ -891,14 +890,9 @@
      highlighted row has to come with it, or a secondary count keeps its
      30%-alpha gray and disappears against the accent fill.
 
-     Contrast note, because this is the one place the 4.5:1 rule cannot be
-     met head-on: white on the system blue is ~3.3:1, and no colour clears
-     4.5:1 against that fill (it would need a relative luminance above 1).
-     That is the system's own selected-row appearance, so the rules here are
-     (a) secondary text is never *worse* than the primary label — opaque
-     white, not 78% alpha, which measured 2.8:1 — and (b) Increase Contrast
-     drops the accent entirely for black/white, the same move .as-glass makes. */
-  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-accent); color: #fff; }
+     Selected rows use an opaque semantic action color. Apple system blue is
+     retained as a swatch, not used as a white-text contrast guarantee. */
+  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-action-bg); color: var(--as-action-fg); }
   .as-split > .as-sidebar .as-row.is-selected svg { color: currentColor; }
   .as-split > .as-sidebar .as-row.is-selected .as-secondary,
   .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: #fff; }
@@ -1014,7 +1008,7 @@
   .as-glass[data-glass-scheme] { --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary); color: var(--as-label); }
   .as-glass::before, .as-glass::after { display: none; }
   .as-glass-tinted, .as-glass-prominent,
-  .as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-accent)); color: #fff; }
+  .as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-action-bg)); color: var(--as-action-fg); }
   .as-glass-clear, .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
   .as-segmented.is-scrubbing .as-seg-indicator,
   .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(#fff, #000); box-shadow: inset 0 0 0 1.5px var(--as-label); }
@@ -1025,8 +1019,7 @@
     box-shadow: 0 0 0 0 transparent, inset 0 -1px 0 var(--as-label);
   }
   .as-split > .as-split-divider { background: var(--as-label); }
-  /* An accent fill tops out near 3.3:1 with white on it, so Increase Contrast
-     drops the accent for black/white — the same move .as-glass makes above. */
+  /* Increase Contrast additionally uses monochrome selected rows. */
   .as-split > .as-sidebar .as-row.is-selected { background: var(--as-label); color: var(--as-bg); }
   .as-split > .as-sidebar .as-row.is-selected .as-secondary,
   .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: var(--as-bg); }
@@ -1053,3 +1046,19 @@
 .as-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .as-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .as-safe-bottom { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* Prominent controls keep the accessible foreground when adaptivity samples
+   a light backdrop. Custom --as-tint overrides need their own contrast check. */
+.as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { color: var(--as-action-fg); }
+.as-segment:disabled, .as-segment[aria-disabled="true"],
+.as-toggle:disabled, .as-toggle[aria-disabled="true"] { opacity: .45; cursor: default; }
+
+/* Keep content and navigation usable in narrow containers. */
+.as-alert { box-sizing: border-box; max-inline-size: 100%; }
+.as-tabbar .as-tab { box-sizing: border-box; }
+@media (max-width: 600px) {
+  .as-toolbar { flex-wrap: wrap; gap: 8px; }
+  .as-toolbar-title { min-inline-size: 0; overflow-wrap: anywhere; }
+  .as-toolbar .as-search { min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; }
+  .as-toolbar .as-search input { min-inline-size: 0; }
+}

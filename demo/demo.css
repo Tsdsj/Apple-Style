@@ -296,7 +296,7 @@ html[data-sim-ct] .as-glass {
 html[data-sim-ct] .as-glass[data-glass-scheme] { --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary); color: var(--as-label); }
 html[data-sim-ct] .as-glass::before, html[data-sim-ct] .as-glass::after { display: none; }
 html[data-sim-ct] .as-glass-tinted, html[data-sim-ct] .as-glass-prominent,
-html[data-sim-ct] .as-glass-tinted[data-glass-scheme], html[data-sim-ct] .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-accent)); color: #fff; }
+html[data-sim-ct] .as-glass-tinted[data-glass-scheme], html[data-sim-ct] .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-action-bg)); color: #fff; }
 html[data-sim-ct] .as-glass-clear, html[data-sim-ct] .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
 
 html[data-sim-rm] .as-glass, html[data-sim-rm] .as-glass *, html[data-sim-rm] .as-button,
@@ -324,3 +324,6 @@ html[data-sim-dt] .as-menu .as-menu-item { font-size: 21px; min-height: 52px; }
 html[data-sim-dt] .as-segment { font-size: 19px; min-height: 40px; }
 html[data-sim-dt] .as-glass-group > .as-item { font-size: 19px; }
 html[data-sim-dt] .as-tabbar .as-tab { font-size: 13px; line-height: 15px; }
+
+#checklist select { max-inline-size: 100%; font: inherit; color: var(--as-label); background: var(--as-bg); border: 1px solid var(--as-separator); border-radius: 6px; padding: 6px; }
+#checklist li { flex-wrap: wrap; cursor: default; }
