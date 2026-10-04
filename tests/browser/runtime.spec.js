@@ -2,6 +2,18 @@ const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:8767';
 async function fixture(page) {
   await page.goto(base);
+  const hostPreferences = await page.evaluate(() => Object.fromEntries(
+    ['prefers-reduced-transparency: reduce', 'prefers-contrast: more', 'prefers-reduced-motion: reduce'].map(q => [q, matchMedia('(' + q + ')').matches])));
+  test.info().annotations.push({ type: 'host-media-preferences', description: JSON.stringify(hostPreferences) });
+  if (Object.values(hostPreferences).some(Boolean)) console.info('Host accessibility defaults:', JSON.stringify(hostPreferences));
+  // Positive lens tests need a deterministic baseline. Separate preference tests
+  // explicitly exercise the no-lens reduced-transparency/contrast branches.
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setEmulatedMedia', { features: [
+    { name: 'prefers-reduced-transparency', value: 'no-preference' },
+    { name: 'prefers-contrast', value: 'no-preference' },
+    { name: 'prefers-reduced-motion', value: 'no-preference' }
+  ] });
   await page.setContent(`<link rel="stylesheet" href="${base}/skills/Apple-Style/web/apple-style.css">
     <main id="root"><div class="as-segmented" role="radiogroup" aria-label="View">
     <button class="as-segment is-selected">One</button><button class="as-segment" disabled>Disabled</button><button class="as-segment">Three</button></div>

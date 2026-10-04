@@ -92,6 +92,19 @@ function Test-Checkout {
     return $true
 }
 
+# Use the .NET baseline available in both Windows PowerShell 5.1 and pwsh.
+# Get-FileHash can be absent when the Utility module cannot be auto-loaded.
+function Get-ContentHash([string] $Path) {
+    $sha = [Security.Cryptography.SHA256]::Create()
+    $stream = $null
+    try {
+        $stream = [IO.File]::OpenRead($Path)
+        return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-', '')
+    } finally {
+        if ($stream) { $stream.Dispose() }
+        $sha.Dispose()
+    }
+}
 function Get-Fingerprint([string] $Path) {
     $rows = New-Object 'System.Collections.Generic.List[string]'
     $base = (Get-Item -LiteralPath $Path -Force).FullName
@@ -103,7 +116,7 @@ function Get-Fingerprint([string] $Path) {
             $rel = $item.FullName.Substring($base.Length)
             if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { $value = 'L:' + ($item.Target -join '|') }
             elseif ($item.PSIsContainer) { $value = 'D'; $queue.Enqueue($item.FullName) }
-            else { $value = 'F:' + (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash }
+            else { $value = 'F:' + (Get-ContentHash $item.FullName) }
             $modeBits = if ($env:OS -ne 'Windows_NT' -and $item.PSObject.Properties['UnixFileMode']) { ':' + $item.UnixFileMode } else { '' }
             $rows.Add($rel + ':' + $item.Attributes + $modeBits + ':' + $value)
         }

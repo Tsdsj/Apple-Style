@@ -77,3 +77,10 @@ function global:Invoke-WebRequest { [CmdletBinding()] param($Uri,$OutFile,[switc
         shutil.rmtree(self.src/'skills'/NAMES[-1])
         result=self.install('-Copy');self.assertNotEqual(result.returncode,0)
         self.assertFalse((self.dest/NAMES[0]).exists())
+    def test_fingerprinting_without_get_file_hash_cmdlet(self):
+        wrapper=self.base/'without-hash-cmdlet.ps1'
+        wrapper.write_text("$ErrorActionPreference = 'Stop'\nfunction global:Get-FileHash { throw 'Get-FileHash unavailable' }\n& $env:INSTALL_SCRIPT -Dir $env:INSTALL_SOURCE -To $env:INSTALL_TARGET -Copy\n")
+        env=dict(shell_env(),INSTALL_SCRIPT=str(REPO/'install.ps1'),INSTALL_SOURCE=str(self.src),INSTALL_TARGET=str(self.dest))
+        result=subprocess.run([PWSH,'-NoProfile','-File',str(wrapper)],env=env,capture_output=True,encoding='utf-8',errors='backslashreplace')
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertEqual((self.dest/NAMES[0]/'SKILL.md').read_text(),'original')
