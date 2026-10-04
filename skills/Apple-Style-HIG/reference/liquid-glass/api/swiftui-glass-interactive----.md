@@ -2,6 +2,10 @@
 
 Returns a copy of the structure configured to be interactive.
 
+```swift
+func interactive(_ isEnabled: Bool = true) -> Glass
+```
+
 ## See also: Styling views with Liquid Glass
 
 - [Applying Liquid Glass to custom views](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views)

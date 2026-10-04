@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-10-04T12:23:18.664932+00:00",
+  "applied": true,
+  "added": [],
+  "modified": [
+    "design-site/resources.md",
+    "wwdc25/219-meet-liquid-glass.md"
+  ],
+  "unchanged": [
+    "hig/layout.md",
+    "liquid-glass/adopting-liquid-glass.md",
+    "liquid-glass/api/swiftui-glass-interactive----.md"
+  ],
+  "failed": [],
+  "recheck_cheatsheets": [
+    "skills/Apple-Style/cheatsheets/design-principles.md",
+    "skills/Apple-Style/cheatsheets/materials-and-liquid-glass.md",
+    "skills/Apple-Style/cheatsheets/color.md",
+    "skills/Apple-Style/cheatsheets/typography.md",
+    "skills/Apple-Style/cheatsheets/layout-and-shapes.md",
+    "skills/Apple-Style/cheatsheets/components-quickref.md",
+    "skills/Apple-Style/cheatsheets/motion-and-interaction.md",
+    "skills/Apple-Style/cheatsheets/accessibility-and-inclusion.md",
+    "skills/Apple-Style/cheatsheets/web-implementation.md"
+  ]
+}

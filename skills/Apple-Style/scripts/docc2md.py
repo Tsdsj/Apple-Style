@@ -97,6 +97,10 @@ def inline_cell(cell, refs):
     return block(cell, refs).strip().replace("\n"," ")
 
 def render(doc):
+    if not isinstance(doc, dict) or not doc.get("metadata", {}).get("title"):
+        raise ValueError("DocC document has no title")
+    if not any(doc.get(k) for k in ("abstract", "primaryContentSections", "topicSections")):
+        raise ValueError("DocC document has no content")
     refs = doc.get("references",{})
     md = []
     title = doc.get("metadata",{}).get("title","")
@@ -104,6 +108,9 @@ def render(doc):
     ab = inline(doc.get("abstract"), refs)
     if ab: md.append(ab + "\n")
     for sec in doc.get("primaryContentSections",[]):
+        if sec.get("kind") == "declarations":
+            for declaration in sec.get("declarations", []):
+                md.append("```swift\n" + "".join(t.get("text", "") for t in declaration.get("tokens", [])) + "\n```\n")
         if sec.get("kind") == "content":
             md.append(block(sec.get("content"), refs))
     for ts in doc.get("topicSections",[]):
