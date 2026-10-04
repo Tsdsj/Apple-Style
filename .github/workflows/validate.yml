@@ -8,6 +8,7 @@ permissions:
 jobs:
   portable:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
@@ -33,6 +34,7 @@ jobs:
   windows-installers:
     runs-on: windows-latest
     strategy:
+      fail-fast: false
       matrix:
         powershell: [pwsh, powershell]
     steps:
