@@ -61,6 +61,12 @@
   --as-action-bg: light-dark(#0066cc, #006bd6); /* white text: 5.57:1 / 5.15:1 */
   --as-action-fg: #fff;
   --as-action-destructive: light-dark(#b42318, #b92b20);
+  /* Red text for destructive actions (.as-button-destructive, destructive menu
+     items). The system red sample measures 3.57:1 on white and 3.20:1 on
+     secondarySystemBackground, and even its Increase Contrast value misses
+     4.5:1 there, so text has its own shades: ≥ 5.04:1 light and ≥ 4.94:1
+     dark on the standard backgrounds up to tertiary and over large glass. */
+  --as-destructive-text: light-dark(#d1001f, #ff6961);
   --as-accent: light-dark(#0066cc, #64b5ff);   /* app accent color; override per brand */
   /* Accent text on an accent tint (.as-button-tinted): the tint lowers the
      contrast, so light mode uses a darker shade — 5.57:1 on white, 5.04:1 on
@@ -168,6 +174,7 @@
     --as-purple: light-dark(rgb(176 47 194),  rgb(234 141 255));
     --as-pink:   light-dark(rgb(231 18 77),   rgb(255 138 196));
     --as-brown:  light-dark(rgb(149 109 81),  rgb(219 166 121));
+    --as-destructive-text: light-dark(#b42318, #ff8a80);   /* ≥ 5.8:1 / ≥ 6.1:1 */
     --as-gray:   light-dark(rgb(108 108 112), rgb(174 174 178));
     --as-gray2:  light-dark(rgb(142 142 147), rgb(124 124 128));
     --as-gray3:  light-dark(rgb(174 174 178), rgb(84 84 86));
@@ -460,7 +467,7 @@
 .as-button-large  { min-height: 50px; padding: 0 24px; }
 .as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
 .as-button-icon   { width: var(--as-hit-min); padding: 0; }
-.as-button-destructive { color: var(--as-red); }
+.as-button-destructive { color: var(--as-destructive-text); }
 .as-button-destructive.as-button-filled { background: var(--as-action-destructive); color: var(--as-action-fg); }
 [data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
 [data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
@@ -594,7 +601,7 @@
 .as-menu .as-menu-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
 .as-menu .as-menu-item svg { width: 20px; height: 20px; opacity: .9; }
 .as-menu .as-menu-item .as-shortcut { margin-inline-start: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
-.as-menu .as-menu-item.as-destructive { color: var(--as-red); }
+.as-menu .as-menu-item.as-destructive { color: var(--as-destructive-text); }
 .as-menu .as-menu-sep { height: .5px; margin: 6px 0; background: var(--as-separator); }
 [data-platform="macos"] .as-menu .as-menu-item { min-height: 28px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
 

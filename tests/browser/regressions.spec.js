@@ -417,3 +417,35 @@ for (const colorScheme of ['light', 'dark']) {
     }
   });
 }
+
+// Destructive red text (follow-up to D3). Composites every ancestor background
+// from the root down, so text on translucent glass is measured over the page.
+async function stackedContrast(page, selector) {
+  return page.evaluate(sel => {
+    const el = document.querySelector(sel), c = document.createElement('canvas'); c.width = c.height = 1;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    const chain = []; for (let n = el; n; n = n.parentElement) chain.unshift(n);
+    x.fillStyle = '#fff'; x.fillRect(0, 0, 1, 1);
+    for (const n of chain) { x.fillStyle = getComputedStyle(n).backgroundColor; x.fillRect(0, 0, 1, 1); }
+    const bg = [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
+    x.fillStyle = getComputedStyle(el).color; x.fillRect(0, 0, 1, 1);
+    const fg = [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
+    const lum = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
+    const [a, b] = [lum(fg), lum(bg)];
+    return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+  }, selector);
+}
+for (const colorScheme of ['light', 'dark']) for (const contrast of ['no-preference', 'more']) {
+  test(`destructive text meets 4.5:1 in ${colorScheme}, contrast ${contrast}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme, contrast, reducedMotion: 'reduce' });
+    const backgrounds = ['--as-bg', '--as-bg-secondary', '--as-bg-grouped', '--as-bg-grouped-2', '--as-bg-tertiary'];
+    await load(page, backgrounds.map((bg, i) => `<div style="background:var(${bg});padding:8px">
+      <button class="as-button as-button-destructive" id="b${i}">Delete</button>
+      <div class="as-glass as-glass-large as-menu is-open" style="position:static" role="menu"><button class="as-menu-item as-destructive" role="menuitem" id="m${i}">Delete</button></div></div>`).join(''));
+    await page.waitForFunction(() => document.getAnimations().length === 0);
+    for (let i = 0; i < backgrounds.length; i++) {
+      expect(await stackedContrast(page, `#b${i}`), `destructive button on ${backgrounds[i]}`).toBeGreaterThanOrEqual(4.5);
+      expect(await stackedContrast(page, `#m${i}`), `destructive menu item on glass over ${backgrounds[i]}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+}
