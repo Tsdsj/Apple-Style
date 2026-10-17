@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas 工单中心</title>
+<link rel="icon" href="data:,">
+<!-- Built with the Apple-Style skill as a cross-platform desktop web app:
+     platform = desktop browsers (not a native Mac window), app type = web
+     application, input = pointer + keyboard, container = 1024–1920 px.
+     Library: ../../../skills/Apple-Style/web/{apple-style.css, liquid-glass.mjs}.
+     Page CSS below is only what the library does not provide; every block is
+     tagged [gap] or [page] so the evaluation can count it. -->
+<link rel="stylesheet" href="../../../skills/Apple-Style/web/apple-style.css">
+<style>
+  /* [gap] CJK: the font stacks have no CJK face and the type scale uses Latin
+     tracking (web-implementation.md says to add one and drop the tracking). */
+  :root {
+    --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+    --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  }
+
+
+  /* [page] application frame: .as-window assumes an in-window menu bar, so a
+     web app without one needs its own full-height frame around .as-split. */
+  html, body { margin: 0; block-size: 100%; }
+  .app { block-size: 100dvh; display: grid; grid-template-rows: minmax(0, 1fr); background: var(--as-bg-grouped); }
+  .app > .as-split { min-block-size: 0; }
+  /* [defect] .as-split's panes read --as-sidebar-w, --as-inspector-w,
+     --as-content-min and --as-row-min, but those are defined only on
+     .as-window. Outside a Mac-style window every pane collapses to its
+     content width and every row to zero minimum height. Same values here. */
+  .app { --as-sidebar-w: 220px; --as-inspector-w: 300px; --as-content-min: 380px; --as-row-min: 28px; }
+  @media (min-width: 1280px) { .app { --as-sidebar-w: 240px; --as-inspector-w: 340px; --as-content-min: 480px; } }
+  @media (any-pointer: coarse) { .app { --as-row-min: var(--as-hit-min); } }
+  .brand { display: flex; align-items: center; gap: 8px; padding: 10px 8px 14px; font: 600 15px/20px var(--as-font-text); color: var(--as-label); }
+  .brand svg { inline-size: 22px; block-size: 22px; color: var(--as-accent); }
+  .as-sidebar .as-row .count { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+
+  /* [gap] desktop-web density: the library has an iOS tier (17 px text, 44 px
+     controls) and a macOS tier (13 px, 22 px) but nothing for a cross-platform
+     desktop web app; panes inside .as-split are already 13 px while buttons,
+     segmented controls and search stay at the iOS size. */
+  /* Scoped to the body, not .app: a modal <dialog> renders in the top layer
+     outside the app frame and would otherwise fall back to the iOS tier. */
+  body.as-body { font: 400 14px/20px var(--as-font-text); color: var(--as-label); }
+  body .as-button { min-block-size: 32px; padding-inline: 14px; font-size: 14px; line-height: 20px; }
+  body .as-segmented .as-segment { min-block-size: 28px; padding-inline: 12px; font-size: 13px; line-height: 18px; }
+  .app .as-toolbar-window .as-search { inline-size: 220px; }
+
+  /* [defect] --as-label-secondary keeps Apple's light value (≈3.5:1 on white),
+     below WCAG 1.4.3 for the meaningful small text it is used for (section
+     titles, field labels, metadata). The stylesheet only raises it under
+     Increase Contrast. AA values for the default appearance (5.63:1 on white): */
+  :root { --as-label-secondary: light-dark(rgb(60 60 67 / .78), rgb(235 235 245 / .64)); }
+  * { letter-spacing: 0 !important; }
+
+  /* [gap] selectable list rows (a listbox): .as-list is the iOS inset grouped
+     list and .as-list-column has no row styles. */
+  .tickets { margin: 0; padding: 4px 12px 24px; }
+  .ticket { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 10px 12px; border-radius: var(--as-radius-s); cursor: default; outline-offset: -2px; }
+  .ticket + .ticket { box-shadow: inset 0 .5px 0 var(--as-separator); }
+  .ticket:hover { background: var(--as-fill-quaternary); }
+  .ticket[aria-selected="true"] { background: var(--as-action-bg); color: var(--as-action-fg); box-shadow: none; }
+  .ticket[aria-selected="true"] + .ticket { box-shadow: none; }
+  .ticket:focus-visible { outline: 2px solid var(--as-accent); }
+  .ticket .title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ticket .meta { grid-column: 1; display: flex; gap: 10px; align-items: center; color: var(--as-label-secondary); font-size: 13px; }
+  .ticket .when { grid-row: 1; grid-column: 2; color: var(--as-label-secondary); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .ticket[aria-selected="true"] .meta, .ticket[aria-selected="true"] .when { color: var(--as-action-fg); }
+
+  /* [gap] status pills: only a red count badge exists. Text colours are
+     measured against both appearances (see evaluation). */
+  .pill { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: var(--as-radius-capsule); font: 500 12px/20px var(--as-font-text); }
+  .pill::before { content: ""; inline-size: 6px; block-size: 6px; border-radius: 50%; background: currentColor; }
+  .pill.open { background: light-dark(rgb(0 102 204 / .10), rgb(100 181 255 / .16)); color: light-dark(#004f9e, #8ec8ff); }
+  .pill.waiting { background: light-dark(rgb(178 90 0 / .10), rgb(255 179 64 / .16)); color: light-dark(#8a4600, #ffc266); }
+  .pill.done { background: light-dark(rgb(0 128 60 / .10), rgb(74 217 104 / .16)); color: light-dark(#006b32, #7ee495); }
+  .ticket[aria-selected="true"] .pill { background: rgb(0 0 0 / .22); color: #fff; }
+
+  /* [gap] empty and loading states (required by web-implementation.md, not provided) */
+  .empty[hidden] { display: none; }
+  .empty { display: grid; place-items: center; gap: 6px; padding: 72px 24px; text-align: center; color: var(--as-label-secondary); }
+  .empty strong { color: var(--as-label); font-size: 15px; }
+  .skeleton { block-size: 56px; margin: 0 12px 8px; border-radius: var(--as-radius-s); background: linear-gradient(90deg, var(--as-fill-quaternary), var(--as-fill-tertiary), var(--as-fill-quaternary)); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+  /* [page] inspector content */
+  .detail-title { margin: 14px 0 4px; font: 600 17px/22px var(--as-font-display); }
+  .detail-body { margin: 6px 0 12px; color: var(--as-label-secondary); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 14px; }
+  .timeline { margin: 0; padding: 0; list-style: none; }
+  .timeline li { padding: 6px 0; font-size: 13px; color: var(--as-label-secondary); }
+  .timeline li + li { box-shadow: inset 0 .5px 0 var(--as-separator); }
+
+  /* [gap] form fields — text field, text area, pop-up button (select), labels,
+     help and error text. The library styles only the glass search field. */
+  .form { display: grid; gap: 14px; }
+  .field { display: grid; gap: 6px; }
+  .field > span { font-weight: 500; }
+  .field input, .field textarea, .field select { box-sizing: border-box; inline-size: 100%; min-block-size: 32px; padding: 6px 10px; border: 0; border-radius: var(--as-radius-xs);
+    background: var(--as-fill-tertiary); box-shadow: inset 0 0 0 .5px var(--as-separator); color: var(--as-label); font: inherit; }
+  .field textarea { min-block-size: 84px; resize: vertical; }
+  .field :is(input, textarea, select):focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 1px; }
+  .field .hint { color: var(--as-label-secondary); font-size: 12px; }
+  .field .error { color: light-dark(#b42318, #ff8a80); font-size: 12px; }
+  .field [aria-invalid="true"] { box-shadow: inset 0 0 0 1px light-dark(#b42318, #ff8a80); }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  /* Customizable select where supported (Chrome 135+, Safari 27); the native pop-up otherwise. */
+  @supports (appearance: base-select) {
+    .field select, .field select::picker(select) { appearance: base-select; }
+    .field select::picker(select) { border: 0; border-radius: var(--as-radius-m); padding: 4px; background: var(--as-glass-fill-large); box-shadow: var(--as-glass-shadow-large); backdrop-filter: blur(30px) saturate(1.6); }
+    .field select option { border-radius: var(--as-radius-xs); padding: 6px 10px; }
+    .field select option:checked { background: var(--as-action-bg); color: var(--as-action-fg); }
+  }
+
+  /* [gap] modal dialog: .as-sheet is an iPhone half-sheet that needs custom JS;
+     a desktop modal uses <dialog>.showModal() for focus, inert and Escape. */
+  dialog.create { inline-size: min(520px, calc(100vw - 48px)); padding: 0; border: 0; color: var(--as-label); }
+  dialog.create::backdrop { background: rgb(0 0 0 / .32); }
+  dialog.create[open] { animation: rise var(--as-dur-base) var(--as-ease-soft); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+  @media (prefers-reduced-motion: reduce) { dialog.create[open] { animation: none; } }
+  .dialog-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 12px 14px; box-shadow: inset 0 -.5px 0 var(--as-separator); }
+  .dialog-head h2 { margin: 0; font: 600 15px/20px var(--as-font-text); }
+  .dialog-head .as-button:last-child { justify-self: end; }
+  .dialog-body { padding: 16px 18px 20px; }
+
+  /* [gap] forced colours for the page's own components: the stylesheet
+     redraws its controls, but a custom listbox or pill has to do the same. */
+  @media (forced-colors: active) {
+    .ticket[aria-selected="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+    .ticket[aria-selected="true"] :is(.meta, .when, .pill) { color: HighlightText; }
+    .pill { border: 1px solid CanvasText; }
+  }
+
+  /* [gap] modal material: large glass (≈70 % fill) lets list text show through
+     a form; a desktop modal form wants an (almost) opaque surface. */
+  dialog.create { --_fill: light-dark(rgb(250 250 252 / .94), rgb(38 38 42 / .94)); }
+
+  /* [gap] toast */
+  .toast { position: fixed; inset-block-end: 24px; inset-inline-start: 50%; translate: -50% 0; padding: 10px 16px; --as-glass-radius: var(--as-radius-capsule);
+    opacity: 0; visibility: hidden; transition: opacity var(--as-dur-base) var(--as-ease-soft), visibility 0s linear var(--as-dur-base); z-index: 60; }
+  .toast.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+</style>
+</head>
+<body class="as-body">
+<div class="app">
+  <div class="as-split">
+    <nav class="as-sidebar" aria-label="工单导航">
+      <div class="brand"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4"/></svg>Atlas 工单中心</div>
+      <div class="as-section-title">工作区</div>
+      <a class="as-row is-selected" href="#inbox" aria-current="page"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3zM3 13h5l1 3h6l1-3h5"/></svg>收件箱<span class="count as-secondary" id="countAll">0</span></a>
+      <a class="as-row" href="#mine"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>我的工单<span class="count as-secondary">5</span></a>
+      <a class="as-row" href="#done"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>已解决<span class="count as-secondary">31</span></a>
+      <div class="as-section-title">标签</div>
+      <a class="as-row" href="#billing"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1"/></svg>账单</a>
+      <a class="as-row" href="#login"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1"/></svg>登录</a>
+      <a class="as-row" href="#perf"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1"/></svg>性能</a>
+    </nav>
+    <div class="as-split-divider" aria-label="导航栏宽度"></div>
+    <main class="as-content" id="main">
+      <header class="as-toolbar as-toolbar-window as-scroll-edge as-edge-top as-edge-hard">
+        <h1 class="as-toolbar-title">收件箱</h1>
+        <div class="as-spacer"></div>
+        <label class="as-search"><svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input type="search" id="q" aria-label="搜索工单" placeholder="搜索工单"></label>
+        <div class="as-segmented" role="radiogroup" aria-label="状态筛选" id="status">
+          <button class="as-segment is-selected" data-v="all">全部</button><button class="as-segment" data-v="open">待处理</button><button class="as-segment" data-v="done">已解决</button>
+        </div>
+        <button class="as-button as-button-filled" id="new" aria-haspopup="dialog">新建工单</button>
+      </header>
+      <section aria-labelledby="listLabel">
+        <h2 class="as-sr-only" id="listLabel">工单列表</h2>
+        <div id="loading" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+        <div class="tickets" id="list" role="listbox" aria-label="工单" hidden></div>
+        <div class="empty" id="empty" hidden><strong>没有符合条件的工单</strong><span>换个关键词，或清除状态筛选。</span><button class="as-button as-button-gray" id="clear">清除筛选</button></div>
+      </section>
+    </main>
+    <div class="as-split-divider" aria-label="详情栏宽度"></div>
+    <aside class="as-inspector" aria-label="工单详情" id="inspector">
+      <p class="detail-body">选择一个工单查看详情。</p>
+    </aside>
+  </div>
+</div>
+
+<dialog class="create as-glass as-glass-large" id="create" aria-labelledby="createTitle">
+  <form id="createForm" novalidate>
+    <div class="dialog-head">
+      <button class="as-button" type="button" id="cancel">取消</button>
+      <h2 id="createTitle">新建工单</h2>
+      <button class="as-button as-button-filled" type="submit">创建</button>
+    </div>
+    <div class="dialog-body form">
+      <label class="field"><span>标题</span><input name="title" id="title" required autocomplete="off" aria-describedby="titleError"><span class="error" id="titleError" hidden>请填写标题。</span></label>
+      <label class="field"><span>描述</span><textarea name="body" aria-describedby="bodyHint"></textarea><span class="hint" id="bodyHint">可选。描述复现步骤与影响范围。</span></label>
+      <div class="field"><span id="prioLabel">优先级</span>
+        <div class="as-segmented" role="radiogroup" aria-labelledby="prioLabel" id="prio"><button type="button" class="as-segment" data-v="低">低</button><button type="button" class="as-segment is-selected" data-v="中">中</button><button type="button" class="as-segment" data-v="高">高</button></div></div>
+      <label class="field"><span>指派给</span><select name="owner"><option>未指派</option><option>林晓</option><option>陈默</option><option>王一凡</option></select></label>
+      <div class="row"><span id="urgentLabel">标记为紧急</span><button type="button" class="as-toggle" role="switch" aria-checked="false" aria-labelledby="urgentLabel" id="urgent"><span class="as-knob"></span></button></div>
+    </div>
+  </form>
+</dialog>
+<div class="toast as-glass" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+  import { init } from '../../../skills/Apple-Style/web/liquid-glass.mjs';
+  const $ = s => document.querySelector(s);
+  const people = ['林晓', '陈默', '王一凡', '未指派'];
+  const subjects = ['发票金额与订单不一致', '无法通过短信验证码登录', '仪表盘加载超过 10 秒', '导出 CSV 时缺少时区', '团队成员邀请邮件未送达', '自动续费后未开具发票',
+    '移动端无法上传附件', 'API 速率限制提示不明确', '深色模式下图表看不清', '单点登录回调报错 400', '搜索结果排序异常', '工单附件预览失败', '通知重复发送', '账单地址无法修改'];
+  const tickets = subjects.map((title, i) => ({ id: 'T-' + (1042 + i), title, status: i % 4 === 3 ? 'done' : i % 3 === 1 ? 'waiting' : 'open',
+    priority: ['高', '中', '低'][i % 3], owner: people[i % 4], updated: new Date(Date.UTC(2026, 9, 17, 9 - (i % 9), 50 - i * 3)), body: '用户反馈：' + title + '。已收集浏览器版本与复现步骤，等待进一步排查。' }));
+  const label = { open: '待处理', waiting: '等待回复', done: '已解决' };
+  const time = new Intl.DateTimeFormat('zh-Hans', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai' });
+  let filter = 'all', query = '', selected = tickets[0].id;
+
+  function visible() {
+    return tickets.filter(t => (filter === 'all' || (filter === 'done' ? t.status === 'done' : t.status !== 'done'))
+      && (!query || (t.title + t.id + t.owner).toLowerCase().includes(query)));
+  }
+  function render() {
+    const rows = visible(), list = $('#list');
+    $('#countAll').textContent = tickets.filter(t => t.status !== 'done').length;
+    $('#empty').hidden = rows.length > 0; list.hidden = rows.length === 0;
+    if (rows.length && !rows.some(t => t.id === selected)) selected = rows[0].id;
+    list.innerHTML = rows.map(t => `<div class="ticket" role="option" id="${t.id}" aria-selected="${t.id === selected}" tabindex="${t.id === selected ? 0 : -1}">
+      <span class="title">${t.title}</span><span class="when">${time.format(t.updated)}</span>
+      <span class="meta"><span class="pill ${t.status === 'waiting' ? 'waiting' : t.status}">${label[t.status]}</span><span>${t.id}</span><span>优先级 ${t.priority}</span><span>${t.owner}</span></span></div>`).join('');
+    if (rows.length) list.setAttribute('aria-activedescendant', selected); else list.removeAttribute('aria-activedescendant');
+    inspect(tickets.find(t => t.id === selected && rows.includes(t)));
+  }
+  function inspect(t) {
+    const box = $('#inspector');
+    if (!t) { box.innerHTML = '<p class="detail-body">没有选中的工单。</p>'; return; }
+    box.innerHTML = `<h2 class="detail-title">${t.title}</h2><p class="detail-body">${t.body}</p>
+      <div class="as-inspector-title">属性</div>
+      <div class="as-field"><span>编号</span><span class="as-tabular">${t.id}</span></div>
+      <div class="as-field"><span>状态</span><span><span class="pill ${t.status === 'waiting' ? 'waiting' : t.status}">${label[t.status]}</span></span></div>
+      <div class="as-field"><span>优先级</span><span>${t.priority}</span></div>
+      <div class="as-field"><span>负责人</span><span>${t.owner}</span></div>
+      <div class="as-field"><span id="notifyLabel">邮件通知</span><button class="as-toggle" role="switch" aria-checked="true" aria-labelledby="notifyLabel" id="notify"><span class="as-knob"></span></button></div>
+      <div class="actions"><button class="as-button as-button-bordered" id="assign">指派给我</button>
+        <button class="as-button as-button-tinted" id="resolve" ${t.status === 'done' ? 'disabled' : ''}>标记为已解决</button></div>
+      <div class="as-inspector-title">动态</div>
+      <ul class="timeline"><li>${time.format(t.updated)} · ${t.owner} 更新了工单</li><li>09:12 · 系统 自动分类为「${t.title.slice(0, 4)}」</li></ul>`;
+  }
+  function toast(text) {
+    const el = $('#toast'); el.textContent = text; el.classList.add('is-on');
+    clearTimeout(el.timer); el.timer = setTimeout(() => el.classList.remove('is-on'), 2200);
+  }
+  function select(id, focus) {
+    selected = id; render();
+    if (focus) document.getElementById(id)?.focus();
+  }
+
+  // Listbox: one tab stop, arrows move the selection (single-select listbox, APG).
+  $('#list').addEventListener('click', e => { const row = e.target.closest('.ticket'); if (row) select(row.id, true); });
+  $('#list').addEventListener('keydown', e => {
+    const ids = visible().map(t => t.id), i = ids.indexOf(selected);
+    const next = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: ids.length - 1 }[e.key];
+    if (next === undefined) return;
+    e.preventDefault(); select(ids[Math.max(0, Math.min(ids.length - 1, next))], true);
+  });
+  $('#status').addEventListener('change', e => { filter = e.currentTarget.querySelector('.is-selected').dataset.v; render(); });
+  $('#q').addEventListener('input', e => { query = e.target.value.trim().toLowerCase(); render(); });
+  $('#clear').addEventListener('click', () => { query = ''; $('#q').value = ''; $('#status .as-segment').click(); render(); });
+  $('#inspector').addEventListener('click', e => {
+    const t = tickets.find(x => x.id === selected);
+    if (e.target.id === 'assign') { t.owner = '林晓'; render(); toast('已指派给你'); }
+    if (e.target.id === 'resolve') { t.status = 'done'; render(); toast(t.id + ' 已标记为已解决'); }
+  });
+  $('#inspector').addEventListener('change', e => { if (e.target.id === 'notify') toast(e.target.getAttribute('aria-checked') === 'true' ? '已开启邮件通知' : '已关闭邮件通知'); });
+
+  // Create dialog: <dialog>.showModal() supplies focus containment, inert background, Escape and focus return.
+  const dialog = $('#create'), form = $('#createForm');
+  $('#new').addEventListener('click', () => { form.reset(); $('#title').removeAttribute('aria-invalid'); $('#titleError').hidden = true; dialog.showModal(); $('#title').focus(); });
+  $('#cancel').addEventListener('click', () => dialog.close());
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const title = form.title.value.trim();
+    if (!title) { $('#title').setAttribute('aria-invalid', 'true'); $('#titleError').hidden = false; $('#title').focus(); return; }
+    const t = { id: 'T-' + (1042 + tickets.length), title, status: 'open', priority: $('#prio .is-selected').dataset.v, owner: form.owner.value,
+      updated: new Date(), body: form.body.value.trim() || '（无描述）' };
+    tickets.unshift(t); filter = 'all'; $('#status .as-segment').click(); query = ''; $('#q').value = '';
+    dialog.close(); select(t.id, true); toast('已创建 ' + t.id + ($('#urgent').getAttribute('aria-checked') === 'true' ? '（紧急）' : ''));
+  });
+
+  init(document);
+  setTimeout(() => { $('#loading').remove(); render(); }, 400);   // simulated fetch so the loading state is real
+</script>
+</body>
+</html>

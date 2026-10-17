@@ -1,0 +1,77 @@
+[
+  {
+    "name": "tab order",
+    "value": [
+      "收件箱11 [a]",
+      "我的工单5 [a]",
+      "已解决31 [a]",
+      "账单 [a]",
+      "登录 [a]",
+      "性能 [a]",
+      "导航栏宽度 [separator]",
+      "搜索工单 [input]",
+      "全部 [radio]",
+      "新建工单 [button]",
+      "发票金额与订单不一致17 [option]",
+      "详情栏宽度 [separator]",
+      "BUTTON [switch]",
+      "指派给我 [button]"
+    ]
+  },
+  {
+    "name": "listbox ArrowDown ×2",
+    "value": {
+      "focused": "T-1044",
+      "selected": "T-1044",
+      "inspector": "仪表盘加载超过 10 秒"
+    }
+  },
+  {
+    "name": "status ArrowRight",
+    "value": {
+      "checked": "待处理",
+      "rows": 11
+    }
+  },
+  {
+    "name": "dialog opens with focus in",
+    "value": "title"
+  },
+  {
+    "name": "Tab inside the modal",
+    "value": [
+      "dialog:body",
+      "dialog:中",
+      "dialog:owner",
+      "dialog:urgent",
+      "browser-ui",
+      "dialog:cancel",
+      "dialog:创建",
+      "dialog:title",
+      "dialog:body",
+      "dialog:中",
+      "dialog:owner",
+      "dialog:urgent"
+    ]
+  },
+  {
+    "name": "empty submit",
+    "value": {
+      "invalid": "true",
+      "errorShown": true,
+      "focus": "title"
+    }
+  },
+  {
+    "name": "Escape returns focus to",
+    "value": "new"
+  },
+  {
+    "name": "created",
+    "value": {
+      "toast": "已创建 T-1056（紧急）",
+      "selected": "键盘新建的工单",
+      "focus": "T-1056"
+    }
+  }
+]

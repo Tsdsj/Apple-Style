@@ -1,0 +1,78 @@
+{
+  "light": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "#resolve"
+        ]
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "nodes": 2,
+        "targets": [
+          "div[aria-label=\"导航栏宽度\"]",
+          "div[aria-label=\"详情栏宽度\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "targets": [
+          "h1",
+          "#q",
+          "button[data-v=\"all\"]",
+          "button[data-v=\"open\"]"
+        ]
+      }
+    ]
+  },
+  "dark": {
+    "violations": [
+      {
+        "id": "region",
+        "impact": "moderate",
+        "nodes": 2,
+        "targets": [
+          "div[aria-label=\"导航栏宽度\"]",
+          "div[aria-label=\"详情栏宽度\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "targets": [
+          "h1",
+          "#q",
+          "button[data-v=\"all\"]",
+          "button[data-v=\"open\"]"
+        ]
+      }
+    ]
+  },
+  "dialog": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15,
+        "targets": [
+          "#cancel",
+          "#createTitle",
+          "button[type=\"submit\"]",
+          "label:nth-child(1) > span:nth-child(1)"
+        ]
+      }
+    ]
+  }
+}
