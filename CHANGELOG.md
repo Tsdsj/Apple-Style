@@ -28,6 +28,17 @@
 - 新增桌面 Web 尺寸档 `data-density="desktop"`：正文 14/20、按钮与搜索框 32px、分段控件整体 32px、菜单/侧栏/分栏行 32px、开关 40×24、滑块 20px 拇指，并有对应的文字样式阶梯；所有组件一起缩放。触屏（`any-pointer: coarse`）下保持 44px 命中区、16px 输入文字和触屏尺寸的开关与滑块。项目默认值，不是 Apple 规范。
 - 新增 `--as-destructive-text`，危险按钮与危险菜单项的文字不再使用系统红色样本（白底 3.57:1）：浅色 `#d1001f`、深色 `#ff6961`，在标准背景与大玻璃上 ≥ 4.94:1；增强对比度下为 `#b42318` / `#ff8a80`。
 
+Web 应用组件（评估第 5 节列出的缺口），测试在 `tests/browser/components.spec.js`：
+
+- 表单字段：`.as-form`、`.as-form-field`、`.as-form-label`、`.as-form-hint`、`.as-form-error`、`.as-form-row`，`.as-input` 用于文本框、文本区和 `<select>`；`aria-invalid="true"` 显示红色边，错误与提示文字 ≥ 4.5:1；跟随三个尺寸档，触屏 44px / 16px。
+- Pop-up 按钮：`<select class="as-input">` 在支持的浏览器、有指针时使用可定制 select（`appearance: base-select`），选单为大玻璃材质、前置勾选标记；触屏和不支持的浏览器保留系统选择器。
+- 可选择列表：`.as-listbox` / `.as-option`，运行时 `listbox()`（`init()` 自动升级）提供单选 listbox 键盘模型：一个 Tab 停靠点，方向键、Home/End、按字母跳转，`aria-orientation="horizontal"` 与 RTL，`data-activation="manual"`，跳过禁用项，发出 `change`。页面重绘行或用 `aria-selected` 从代码选中时，运行时同步角色与停靠点；被重绘的行原本有焦点时，焦点移到新的选中行。选中行为强调色白字，其中的次要文字与状态标签一起变白，焦点环画在行外。
+- 模态对话框：`<dialog class="as-dialog">`（配合 `showModal()`），不透明表面 `--as-modal-bg`，头部与底部在长内容滚动时固定，底部操作靠后、主操作在最后；用 `@starting-style` 做进出场。
+- Toast：运行时 `toast(message, { duration })`，每次一条，`role="status"` 播报，相同内容重复也会再次播报；有模态对话框时放进对话框内（背景不可操作的区域不会播报）；页面有浮动标签栏时显示在标签栏之上；`destroy()` 清理。
+- 空状态 `.as-empty`、骨架屏 `.as-skeleton`（减弱动态效果时停止脉动）、状态标签 `.as-pill` 及 info / success / warning / critical 变体（两种外观下都 ≥ 4.5:1）、`.as-pill-dot`。
+- 强制颜色、降低透明度、增强对比度与减弱动态效果覆盖以上组件；`.as-root` / `.as-body` 设置 `accent-color`，原生复选框与单选框使用强调色。
+- `demo.html` 新增组件示例；评估页改用库组件，页面 CSS 从 76 行降到 24 行（`[gap]` 只剩 CJK 字体 5 行）。
+
 ## v0.1.0 — 2026-10-04
 
 Reliability hardening.

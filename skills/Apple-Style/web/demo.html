@@ -165,6 +165,58 @@
     <li>Glass belongs to the navigation layer</li>
     <li>Never glass on glass</li>
   </ul>
+  <section class="section">
+    <h2 class="as-text-title2 as-em">Web app components</h2>
+    <p class="prose as-text-footnote">Built on the native elements — input, select, dialog — plus two runtime pieces: a listbox keyboard model and an announced toast.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Form fields · label, hint, error</h3>
+        <form class="as-form" id="demoForm" novalidate>
+          <label class="as-form-field"><span class="as-form-label">Name</span>
+            <input class="as-input" id="demoName" required autocomplete="off" aria-describedby="demoNameError">
+            <span class="as-form-error" id="demoNameError" hidden>Enter a name for the landmark.</span></label>
+          <label class="as-form-field"><span class="as-form-label">Region</span>
+            <select class="as-input" id="demoRegion"><option>California</option><option>Utah</option><option>Wyoming</option></select></label>
+          <label class="as-form-field"><span class="as-form-label">Notes</span>
+            <textarea class="as-input" aria-describedby="demoNotesHint"></textarea><span class="as-form-hint" id="demoNotesHint">Optional.</span></label>
+          <div class="row"><button class="as-button as-button-filled">Save</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Selectable list · arrows, Home/End, type-ahead</h3>
+        <div class="as-listbox" id="demoList" aria-label="Landmarks" style="margin:0 -4px">
+          <div class="as-option" aria-selected="true">Yosemite <span class="as-pill as-pill-success" style="margin-inline-start:auto">Open</span></div>
+          <div class="as-option">Zion <span class="as-pill as-pill-warning" style="margin-inline-start:auto">Busy</span></div>
+          <div class="as-option">Arches <span class="as-pill as-pill-info" style="margin-inline-start:auto">New</span></div>
+          <div class="as-option" aria-disabled="true">Denali <span class="as-pill" style="margin-inline-start:auto">Closed</span></div>
+        </div>
+        <p class="as-text-footnote as-secondary" style="margin:12px 0 0" id="demoListNote">Selected: Yosemite</p>
+      </div>
+      <div class="card">
+        <h3>Dialog and toast</h3>
+        <div class="row">
+          <button class="as-button as-button-tinted" id="demoDialogBtn" aria-haspopup="dialog">New collection…</button>
+          <button class="as-button as-button-gray" id="demoToastBtn">Copy link</button>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <span class="as-pill as-pill-dot as-pill-info">Info</span><span class="as-pill as-pill-dot as-pill-success">Success</span>
+          <span class="as-pill as-pill-dot as-pill-warning">Warning</span><span class="as-pill as-pill-dot as-pill-critical">Critical</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Loading and empty states</h3>
+        <div id="demoStates" aria-busy="true">
+          <div id="demoSkeleton" aria-hidden="true"><span class="as-skeleton" style="--as-skeleton-h:20px;inline-size:70%"></span><span class="as-skeleton" style="--as-skeleton-h:20px;margin-block:8px"></span><span class="as-skeleton" style="--as-skeleton-h:20px;inline-size:85%"></span></div>
+          <div class="as-empty" id="demoEmpty" hidden style="padding:16px 0">
+            <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4"/></svg>
+            <p class="as-empty-title">No collections</p><p>Collections you create appear here.</p>
+            <button class="as-button as-button-tinted as-button-small" id="demoEmptyBtn">New collection…</button>
+          </div>
+        </div>
+        <button class="as-button as-button-bordered as-button-small" id="demoStateBtn" style="margin-top:12px">Finish loading</button>
+      </div>
+    </div>
+  </section>
   <section class="section"><p class="prose as-text-footnote">Long content so the tab bar can minimize on scroll…</p><div style="height: 60vh"></div></section>
 </main>
 
@@ -193,6 +245,18 @@
   <button class="as-item" id="platBtn">iOS</button>
   <button class="as-item" id="glassBtn">Clear</button>
 </div>
+
+<dialog class="as-dialog" id="demoDialog" aria-labelledby="demoDialogTitle">
+  <form method="dialog" id="demoDialogForm">
+    <header class="as-dialog-header"><h2 class="as-dialog-title" id="demoDialogTitle">New collection</h2></header>
+    <div class="as-dialog-body as-form">
+      <label class="as-form-field"><span class="as-form-label">Name</span><input class="as-input" id="demoCollection" value="Summer trip" autocomplete="off"></label>
+      <div class="as-form-row"><span id="demoShareLabel">Share with family</span><button type="button" class="as-toggle" role="switch" aria-checked="false" aria-labelledby="demoShareLabel"><span class="as-knob"></span></button></div>
+    </div>
+    <!-- Cancel is type="button": the first submit button is the form's default, and Enter must create. -->
+    <footer class="as-dialog-footer"><button type="button" class="as-button" id="demoDialogCancel">Cancel</button><button class="as-button as-button-filled" value="create">Create</button></footer>
+  </form>
+</dialog>
 
 <script src="liquid-glass.js"></script>
 <script>
@@ -259,6 +323,32 @@
   // Toggles, segmented controls and sliders are owned by LiquidGlass.init():
   // it adds the drag gesture and keeps their state, and emits `change`.
   document.querySelectorAll('.as-glass-group .as-tab, .as-glass-group .as-item:not([aria-label])').forEach(b => b.addEventListener('click', () => { const g = b.parentElement; if (g.closest('.pref')) return; g.querySelectorAll('.as-tab,.as-item').forEach(x => { x.classList.toggle('is-selected', x === b); if (x.classList.contains('as-tab')) { if (x === b) x.setAttribute('aria-current', 'location'); else x.removeAttribute('aria-current'); } }); }));
+  // Web app components: native form validation feedback, the listbox's change
+  // event, <dialog>.showModal() and the announced toast.
+  const demoForm = document.getElementById('demoForm'), demoName = document.getElementById('demoName');
+  demoForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const empty = !demoName.value.trim();
+    if (empty) demoName.setAttribute('aria-invalid', 'true'); else demoName.removeAttribute('aria-invalid');
+    document.getElementById('demoNameError').hidden = !empty;
+    if (empty) demoName.focus(); else LiquidGlass.toast(`Saved ${demoName.value.trim()}`);
+  });
+  document.getElementById('demoList').addEventListener('change', e => {
+    document.getElementById('demoListNote').textContent = 'Selected: ' + e.currentTarget.querySelector('[aria-selected="true"]').firstChild.textContent.trim();
+  });
+  const demoDialog = document.getElementById('demoDialog');
+  const openDemoDialog = () => demoDialog.showModal();
+  document.getElementById('demoDialogBtn').addEventListener('click', openDemoDialog);
+  document.getElementById('demoDialogCancel').addEventListener('click', () => demoDialog.close());
+  document.getElementById('demoEmptyBtn').addEventListener('click', openDemoDialog);
+  demoDialog.addEventListener('close', () => { if (demoDialog.returnValue === 'create') LiquidGlass.toast(`Created “${document.getElementById('demoCollection').value.trim() || 'Untitled'}”`); demoDialog.returnValue = ''; });
+  document.getElementById('demoToastBtn').addEventListener('click', () => LiquidGlass.toast('Link copied'));
+  document.getElementById('demoStateBtn').addEventListener('click', e => {
+    const loading = document.getElementById('demoStates').getAttribute('aria-busy') === 'true';
+    document.getElementById('demoStates').setAttribute('aria-busy', String(!loading));
+    document.getElementById('demoSkeleton').hidden = loading; document.getElementById('demoEmpty').hidden = !loading;
+    e.target.textContent = loading ? 'Show loading' : 'Finish loading';
+  });
   // Preferences
   const html = document.documentElement; const themes = ['Auto', 'light', 'dark']; let ti = 0;
   document.getElementById('themeBtn').addEventListener('click', e => { ti = (ti + 1) % 3; const t = themes[ti]; t === 'Auto' ? html.removeAttribute('data-theme') : html.dataset.theme = t; e.target.textContent = t[0].toUpperCase() + t.slice(1); LiquidGlass.refresh(); });

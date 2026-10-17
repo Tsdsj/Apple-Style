@@ -54,6 +54,8 @@ Bundlers and frameworks import `web/liquid-glass.mjs` (keep it next to `liquid-g
 
 `init(root)` includes root itself, is idempotent and watches additions/removals within its scope. `destroy(root)` releases that scope; `detach(el)` releases a component. `attach(el, {scale, rim, chroma, lens, adapt})` stores options for resize/theme regeneration. See `web-implementation.md` for lifecycle details and React/Vue cleanup examples.
 
+Web app components: `.as-form-field` + `.as-input` (text field, text area, `<select>` pop-up button), `.as-listbox` / `.as-option` (selectable list — the runtime adds the keyboard model; selection is `aria-selected`), `<dialog class="as-dialog">` with `showModal()`, `LiquidGlass.toast(message)`, `.as-empty`, `.as-skeleton` and `.as-pill`. Markup and contracts: `web-implementation.md` → *Forms*, *States*, *Selectable lists and toasts*.
+
 Optional structures: `.as-tabbar[data-sidebar]` opts into the project's width-based sidebar layout; `.as-window` / `.as-split` / `.as-inspector` compose a window where appropriate. A wide iPad retains iPad intent; a narrow Mac retains Mac intent; ordinary websites retain their page structure.
 
 ## Files

@@ -2,7 +2,7 @@
 
 审计日期：2026-10-16　·　审计对象：`af1efad`（v0.1.0 之后的 main）　·　视角：2026 年 10 月的 Apple 平台与 Web 平台现状
 
-> **修复状态（2026-10-17）**：§2.1–2.10 已全部修复并加了回归测试（`tests/browser/regressions.spec.js`、`tests/test_reference.py`），参考库已全量刷新，见 CHANGELOG 的 Unreleased 与 `docs/validation.md` 末两节。第 3 节以后的建议尚未处理。§2.7 的处理方式是保持样式表默认不分层（避免破坏现有未分层 reset），并文档化 `@import … layer()` 的接入写法。
+> **修复状态（2026-10-17）**：§2.1–2.10 已全部修复并加了回归测试（`tests/browser/regressions.spec.js`、`tests/test_reference.py`），参考库已全量刷新，见 CHANGELOG 的 Unreleased 与 `docs/validation.md` 末两节。第 3 节以后的建议中，第 9 条（真实应用组件）已部分完成：表单字段与错误态、基于可定制 `<select>` 的 pop-up 按钮、可选择列表、`<dialog>` 模态、Toast、空状态、骨架屏、状态标签（见 CHANGELOG）；复选与单选只设了 `accent-color`，步进器、进度与活动指示器、pull-down 菜单按钮、基础表格和内容网站模式未做。其余建议尚未处理。§2.7 的处理方式是保持样式表默认不分层（避免破坏现有未分层 reset），并文档化 `@import … layer()` 的接入写法。
 
 > 结论先行：这套技能的**方法论**（规则强度分级、证据状态、不从宽度推断平台、对比度安全的操作色、生命周期清理、安装保护）在同类项目里属于上乘；但作为“拿来开发真实网站/应用”的工具，它目前在 **时效性（仍以 iOS 26 / WWDC25 为基准，而 iOS 27 / Safari 27 已于 2026-09 正式发布）**、**工程集成（无 ESM/SSR/Tailwind 层级/版本化分发）**、**组件覆盖（表单、选择器、进度、提示、表格全缺）**、**平台原生能力利用（未使用 `<dialog>`、popover、anchor positioning、可定制 `<select>`、View Transitions、scroll-driven animations）** 四个方面明显落后，并有 **8 个已实测复现的缺陷**（含 Windows 高对比度下开关不可见、RTL 滑块错位、快捷键劫持输入框）。
 

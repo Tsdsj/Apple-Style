@@ -132,7 +132,19 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 
 执行日期：2026-10-17，环境同上。
 
-- 新增 `data-density="desktop"`（`apple-style.css` 第 6c 节）与 `tests/browser/density.spec.js` 5 项：不设属性时 iOS 档尺寸不变；桌面档下正文、文字样式（含 `.as-em` 字重）、各尺寸按钮、图标按钮、分段控件、搜索框、开关、玻璃分组项、列表行、菜单项、侧栏与详情栏行的尺寸；40×24 开关的行程（开启后旋钮距两端 18px / 2px）与拖拽回关；20px 滑块覆盖旋钮与原生拇指中心对齐；RTL 下开关镜像；`hasTouch` 上下文（`any-pointer: coarse`）中保持 44px、16px 输入文字与 51×31 开关。
+- 新增 `data-density="desktop"`（`apple-style.css` 第 6d 节）与 `tests/browser/density.spec.js` 5 项：不设属性时 iOS 档尺寸不变；桌面档下正文、文字样式（含 `.as-em` 字重）、各尺寸按钮、图标按钮、分段控件、搜索框、开关、玻璃分组项、列表行、菜单项、侧栏与详情栏行的尺寸；40×24 开关的行程（开启后旋钮距两端 18px / 2px）与拖拽回关；20px 滑块覆盖旋钮与原生拇指中心对齐；RTL 下开关镜像；`hasTouch` 上下文（`any-pointer: coarse`）中保持 44px、16px 输入文字与 51×31 开关。
 - 全部测试：**Chromium 76 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`git diff --check` 通过。
 - 评估页改用该属性并删除自写的密度覆盖后，`evals/runs/2026-10-17-pc-web/check.spec.js` 4 项通过，axe 结果不变。
 - 范围：只在 Chromium 中验证；真实触屏笔记本、Safari、Firefox 未测。
+
+## Web 应用组件（未发布）
+
+执行日期：2026-10-17，环境同上。对应 [PC 端网页评估](../evals/runs/2026-10-17-pc-web/report.md) 第 5 节的组件缺口。
+
+- 新增 `apple-style.css` 第 6c 节（表单字段、pop-up 按钮、可选择列表、模态对话框、Toast、空状态、骨架屏、状态标签）与运行时 `listbox()`、`toast()`（`liquid-glass.mjs` 同步导出，无 DOM 时为空操作）。
+- 新增 `tests/browser/components.spec.js` 21 项：表单字段三档尺寸与触屏回退、焦点环、`aria-invalid` 红边与 `aria-describedby`、错误与提示文字对比度；可定制 select 的 `appearance` 与键盘选择；listbox 的单一停靠点、方向键 / Home / End / 不循环、点击、跳过禁用项、按字母跳转（含前缀无匹配时从新字母重来）、手动激活、页面在 `change` 里重绘全部行与从代码设置 `aria-selected` 后的选中 / 停靠点 / 焦点、水平方向与 RTL、选中行文字与标签对比度及行外焦点环、重复调用与 `destroy()`；对话框的不透明背景与圆角、焦点进入、Esc 关闭与焦点回归、长内容时底部操作可见且主操作在最后；Toast 的 `role="status"`、到时隐藏与清空、重复内容再次播报、旧消息的 `hide()` 不影响新消息、模态打开时放进对话框且位于视口内、有浮动标签栏时位于其上方、复用页面已有元素且 `destroy()` 不删除它；空状态 `hidden`、骨架屏在减弱动态效果下停止；浅色 / 深色下 5 种背景上 5 种标签变体 ≥ 4.5:1；强制颜色下选中项、标签边框、骨架屏与输入框边可见；Node 中导入 `listbox` / `toast`。
+- 在修复前的库上运行（`git stash` 库文件）：**17 项失败、3 项通过**（当时 20 项）。通过的是两项标签对比度（无样式时为黑字白底）与对话框基础行为（浏览器默认对话框也满足）；随后给对话框用例加上圆角与内边距断言，使其依赖库样式。
+- Chrome 在移除带焦点的元素时会先触发 `focusout`（此时元素仍在文档中），listbox 因此在微任务里再判断焦点是否被有意移走；这一点用独立探针确认过。
+- 全部测试：**Chromium 97 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`node --check` 与 `git diff --check` 通过。`demo.html` 新增组件示例，在 320 / 1024px、浅色 / 深色下另跑了交互探针（表单校验、列表键盘、对话框回车创建、Toast），无溢出、无脚本错误。
+- 评估页改用库组件后重跑 `check.spec.js`：4 项通过；对话框打开态 axe 违规 0、incomplete 1（空文本区，工具无法计算），此前为 incomplete 15；浅色 / 深色结果不变（D4 `region` 2 处）。测量方法同时修正：对话框淡入完成后再运行 axe，否则会把淡入中途的半透明文字当作对比度失败。
+- 范围：只在 Chromium 141 中验证。可定制 select 在 Safari 27 与 Firefox 上的表现、真实读屏软件对 Toast 与 listbox 的播报均未实测。

@@ -54,6 +54,7 @@ test('axe: light, dark and with the dialog open', async ({ page }) => {
   }
   await open(page);
   await page.click('#new');
+  await page.waitForFunction(() => document.getAnimations().length === 0);   // measure the open dialog, not its fade-in
   results.dialog = await axe(page);
   await page.screenshot({ path: path.join(out, 'dialog-light.png') });
   record('axe', results);
@@ -104,7 +105,8 @@ test('keyboard: list, filters, dialog, validation and focus return', async ({ pa
   await page.locator('#urgent').focus(); await page.keyboard.press('Space');
   await page.keyboard.press('Control+Enter');   // not bound: must not submit or break typing
   await page.locator('#createForm [type=submit]').click();
-  note('created', await page.evaluate(() => ({ toast: toast.textContent, selected: document.querySelector('.ticket[aria-selected="true"] .title').textContent, focus: document.activeElement.id })));
+  await expect(page.locator('.as-toast')).toHaveText(/已创建/);
+  note('created', await page.evaluate(() => ({ toast: document.querySelector('.as-toast').textContent, selected: document.querySelector('.ticket[aria-selected="true"] .title').textContent, focus: document.activeElement.id })));
   record('keyboard', steps);
 });
 

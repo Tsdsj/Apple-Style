@@ -55,13 +55,18 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 - **Toggle**: capsule, green when on; label describes the *on* state; no "Enable/Disable" text toggles. **Draggable**: the knob can be thrown and lands on the nearer side; a tap still flips it.
 - **Slider**: knob becomes a transparent lens on drag (and only on drag — quiet at rest); show value/min-max icons where useful; continuous vs discrete; give live feedback as the value changes.
 - **Stepper**: small integer ranges; show the value nearby.
-- **Text fields**: rounded; placeholder is a hint, not a label; clear button; appropriate keyboard type; secure entry for passwords; capsule search field on its own glass surface; search field slides up with keyboard on iPhone.
-- **Pickers**: wheel (iPhone) vs menu/pop-up (Mac/iPad); date pickers compact/inline.
+- **Text fields**: rounded; placeholder is a hint, not a label; clear button; appropriate keyboard type; secure entry for passwords; capsule search field on its own glass surface; search field slides up with keyboard on iPhone. Web: `.as-form-field` + `.as-input`.
+- **Pickers**: wheel (iPhone) vs menu/pop-up (Mac/iPad); date pickers compact/inline. Web: a pop-up button is `<select class="as-input">` (customizable picker with a pointer, the platform picker with touch).
 - **Progress indicators**: determinate bar when duration known; indeterminate spinner otherwise; never freeze the UI.
 - **Labels/status**: use semantic colors and SF Symbols; badges red with count.
 
 ## Lists & tables (`hig/lists-and-tables.md`)
 - Inset grouped style with larger radius and taller rows; **title-style section headers**; disclosure chevrons for navigation; swipe actions mirror context menu; selection with checkmarks in edit mode; use `Form(.grouped)` for settings.
+- Web: `.as-list` is the inset grouped list (settings, static rows). A list whose selection drives a detail view is `.as-listbox` with `.as-option` rows (single select, keyboard model from the runtime); loading, empty and status use `.as-skeleton`, `.as-empty` and `.as-pill`.
+
+## Feedback (web)
+- **Modal dialog**: `<dialog class="as-dialog">` + `showModal()`; opaque surface, header / body / footer, footer actions trailing with the primary last. A sheet (`.as-sheet`) is the iPhone presentation.
+- **Toast**: `LiquidGlass.toast('Saved')` for a confirmation that needs no action; announced through `role="status"`, gone after ~2.6 s. Undo or any other action belongs in a control that stays put.
 
 ## Icons & symbols (`hig/icons.md`, `hig/sf-symbols.md`)
 - Prefer **SF Symbols** (7,000+), weights match text weight, scales small/medium/large; rendering modes monochrome / hierarchical / palette / multicolor; symbol animations (bounce, replace, wiggle, breathe, rotate, draw). Use the *preferred glyph* list for common actions (share, add, edit, delete, favorite…). When there's no clear shorthand, use a **text label** (Select, Edit).
@@ -72,4 +77,4 @@ Each line is the decisive rule. Full pages: `Apple-Style-HIG/reference/hig/<slug
 
 ## Web control contracts
 
-`LiquidGlass.init(root)` upgrades controls in that scope; pair it with `destroy(root)` on unmount. Single surfaces use `attach(el, options)` / `detach(el)`. See [Web implementation](web-implementation.md) for tabs versus radio groups, click/keyboard/drag cancellation, default contrast tokens and framework cleanup examples. Native checkbox switches retain their own checked property and do not use the `.as-toggle` custom-host API.
+`LiquidGlass.init(root)` upgrades controls in that scope (segmented controls, switches, sliders, listboxes); pair it with `destroy(root)` on unmount. Single surfaces use `attach(el, options)` / `detach(el)`. See [Web implementation](web-implementation.md) for tabs versus radio groups, click/keyboard/drag cancellation, default contrast tokens and framework cleanup examples. Native checkbox switches retain their own checked property and do not use the `.as-toggle` custom-host API.

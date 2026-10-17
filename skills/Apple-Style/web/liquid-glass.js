@@ -13,14 +13,17 @@
  *    5. Scrubbable controls: segmented control, switch and slider track the
  *       pointer 1:1, stretch with the drag, and settle on a spring.
  *    6. Tab bar minimize-on-scroll; scroll-edge activation; concentric radii.
+ *    7. Web app components: selectable list (listbox) and announced toast.
  *  Usage:  LiquidGlass.init()   // auto-wires [class*="as-glass"] + controls
  *          LiquidGlass.attach(el, {lens:true, adapt:true, chroma:true})
  *          LiquidGlass.morph(fromEl, toEl, {duration:420})
  *          LiquidGlass.materialize(el, true|false)
- *          LiquidGlass.controls(root)      // or .segmented(el) / .toggle(el) / .slider(input)
+ *          LiquidGlass.controls(root)      // or .segmented(el) / .toggle(el) / .slider(input) / .listbox(el)
+ *          LiquidGlass.toast('Saved')      // returns hide()
  *          LiquidGlass.concentric(container)
  *  Controls dispatch a bubbling `change` event; read state from the element
- *  (aria-checked, .is-selected, input.value) rather than tracking it yourself.
+ *  (aria-checked, .is-selected, aria-selected, input.value) rather than
+ *  tracking it yourself.
  *  Loading: a classic <script> sets window.LiquidGlass; CommonJS gets it as
  *  module.exports; liquid-glass.mjs re-exports it for ES modules. Without a
  *  DOM (server rendering, workers, DOM-less tests) the same API is inert, so
@@ -42,7 +45,7 @@
       init: () => ({ attached: 0, controls: 0, shortcuts: 0, lens: false, destroy: none }),
       attach: () => ({ detach: none }), detach: none, destroy: none, adapt: none, applyLens: none,
       morph: () => Promise.resolve(), materialize: () => Promise.resolve(), controls: () => 0,
-      segmented: none, toggle: none, slider: none, tabBarMinimize: none, titleOnScroll: none,
+      segmented: none, toggle: none, slider: none, listbox: none, toast: () => none, tabBarMinimize: none, titleOnScroll: none,
       concentric: none, splitDivider: none, menuBar: none, menuShortcuts: () => 0, supportsLens: false, refresh: none
     });
   }
@@ -736,11 +739,142 @@
     listen(input, input, 'keydown', () => { knob.classList.add('is-scrubbing'); cancelTimer(input, knob.__t); knob.__t = timer(input, stop, 400); });
   }
 
+  /* ---------- 5b. Selectable list and toast -------------------------------
+   * listbox(): single-select listbox (APG). One tab stop — the selected option
+   * — and arrows move the selection with focus (data-activation="manual":
+   * focus only, Space/Enter selects). Home/End, type-ahead, disabled options
+   * skipped. aria-selected is the state: the page renders rows and sets it,
+   * the runtime keeps roles and the tab stop in step and keeps keyboard focus
+   * in the list when the focused row is re-rendered.                         */
+  function listbox(el) {
+    if (el.__lgListbox) return;
+    el.__lgListbox = true;
+    el.setAttribute('role', 'listbox');
+    const options = () => [...el.querySelectorAll('[role="option"], .as-option')].filter(o => o.closest('[role="listbox"], .as-listbox') === el);
+    const optionOf = node => options().find(o => o === node || o.contains(node));
+    const selected = list => list.find(o => o.getAttribute('aria-selected') === 'true') || null;
+    let focused = null, typed = '', typedAt = 0;
+
+    function sync(target, stop) {
+      const list = options();
+      list.forEach(o => {
+        if (o.getAttribute('role') !== 'option') o.setAttribute('role', 'option');
+        const on = String(o === target);
+        if (o.getAttribute('aria-selected') !== on) o.setAttribute('aria-selected', on);
+      });
+      stop = list.includes(stop) ? stop : target || list.find(o => !disabled(o));
+      list.forEach(o => { o.tabIndex = o === stop && !disabled(el) ? 0 : -1; });
+      return stop;
+    }
+    function select(o) {
+      if (!o || disabled(o) || disabled(el)) return;
+      const changed = o !== selected(options());
+      sync(o, o);
+      if (changed) fire(el);
+    }
+
+    sync(selected(options()), null);
+    listen(el, el, 'focusin', e => { focused = optionOf(e.target) || null; });
+    // Chrome also blurs a focused row that is being removed, so decide once the
+    // removal is done: a row still in the document lost focus on purpose.
+    listen(el, el, 'focusout', e => {
+      if (!el.contains(e.relatedTarget)) queueMicrotask(() => { if (focused === e.target && e.target.isConnected) focused = null; });
+    });
+    observe(el, MutationObserver, records => {
+      const list = options();
+      // The page selects from code by setting aria-selected="true"; the newest wins.
+      const set = records.filter(r => r.attributeName === 'aria-selected' && r.target.getAttribute('aria-selected') === 'true' && list.includes(r.target)).pop()?.target;
+      const active = list.includes(document.activeElement) ? document.activeElement : null;
+      const stop = sync(set || selected(list), active);
+      if (focused && !focused.isConnected && stop && (!document.activeElement || document.activeElement === document.body)) stop.focus();
+    }).observe(el, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-selected', 'aria-disabled', 'disabled'] });
+
+    listen(el, el, 'click', e => {
+      const o = optionOf(e.target);
+      if (!o || disabled(o) || disabled(el)) return;
+      select(o); o.focus();
+    });
+    listen(el, el, 'keydown', e => {
+      if (disabled(el) || e.altKey || e.ctrlKey || e.metaKey) return;
+      const list = options().filter(o => !disabled(o)), from = optionOf(e.target);
+      if (!list.length) return;
+      const at = list.indexOf(from);
+      const horizontal = el.getAttribute('aria-orientation') === 'horizontal';
+      const rtl = horizontal && getComputedStyle(el).direction === 'rtl';
+      const next = horizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
+      const prev = horizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
+      let to;
+      if (e.key === next) to = list[Math.min(list.length - 1, at + 1)];
+      else if (e.key === prev) to = list[Math.max(0, at - 1)];
+      else if (e.key === 'Home') to = list[0];
+      else if (e.key === 'End') to = list[list.length - 1];
+      else if (e.key === ' ' || e.key === 'Enter') {
+        if (e.key === ' ') e.preventDefault();
+        if (from && !e.repeat) select(from);
+        return;
+      } else if (e.key.length === 1 && e.key.trim()) {
+        // Type-ahead: characters typed within half a second build a prefix;
+        // the same letter repeated cycles through the items that start with it,
+        // and a prefix that matches nothing starts over from the new letter.
+        const now = performance.now(), key = e.key.toLocaleLowerCase();
+        const name = o => (o.getAttribute('aria-label') || o.textContent).trim().toLocaleLowerCase();
+        const find = text => {
+          const query = /^(.)\1+$/u.test(text) ? text[0] : text;
+          const start = query.length === 1 ? at + 1 : Math.max(at, 0);
+          return [...list.slice(start), ...list.slice(0, start)].find(o => name(o).startsWith(query));
+        };
+        typed = (now - typedAt > 500 ? '' : typed) + key; typedAt = now;
+        to = find(typed);
+        if (!to && typed.length > 1) to = find(typed = key);
+        if (!to) return;
+      } else return;
+      e.preventDefault();
+      if (el.dataset.activation === 'manual') sync(selected(options()), to);
+      else select(to);
+      to.focus();
+    });
+  }
+
+  // toast(): one message at a time, announced through role="status". It goes
+  // into the open modal dialog when there is one — the rest of the page is
+  // inert then, and an inert live region is not announced. Returns hide().
+  function toast(message, { duration = 2600 } = {}) {
+    let host = document.body;
+    try { const open = document.querySelectorAll('dialog:modal'); if (open.length) host = open[open.length - 1]; } catch { /* no :modal */ }
+    let el = [...host.children].find(c => c.classList.contains('as-toast')), created = false;
+    if (!el) { el = document.createElement('div'); el.className = 'as-toast'; host.appendChild(el); created = true; }
+    el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); el.setAttribute('aria-atomic', 'true');
+    if (!el.__lgToast) {
+      el.__lgToast = true;
+      cleanup(el, () => { el.classList.remove('is-on'); if (created) el.remove(); else el.textContent = ''; });
+    }
+    const st = state(el), seq = el.__lgToastSeq = (el.__lgToastSeq || 0) + 1;
+    st.timers.forEach(clearTimeout); st.timers.clear();
+    // hide() of an earlier message must not hide the one that replaced it
+    const hide = () => {
+      if (resources.get(el) !== st || el.__lgToastSeq !== seq) return;
+      el.classList.remove('is-on');
+      timer(el, () => { el.textContent = ''; }, 400);
+    };
+    const show = () => {
+      // The same words twice still change the region (a zero-width space), so
+      // a repeated message is announced again.
+      el.textContent = el.textContent === message ? message + '​' : message;
+      el.classList.add('is-on');
+      if (duration > 0 && duration !== Infinity) timer(el, hide, duration);
+    };
+    // A region inserted just now has to reach the accessibility tree before
+    // its content changes, or the first message is lost.
+    if (created) timer(el, show, 100); else show();
+    return hide;
+  }
+
   function controls(root = document) {
     let n = 0;
     members(root, '.as-segmented').forEach(el => { segmented(el); n++; });
     members(root, '.as-toggle').forEach(el => { toggle(el); n++; });
     members(root, '.as-slider').forEach(el => { slider(el); n++; });
+    members(root, '.as-listbox').forEach(el => { listbox(el); n++; });
     return n;
   }
 
@@ -1220,7 +1354,7 @@
     }
     return { attached: attached.size, controls: wired, shortcuts, lens: supportsLens && !liteMode(), destroy: () => destroy(root) };
   }
-  const api = { init, attach, detach, destroy, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh };
+  const api = { init, attach, detach, destroy, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, listbox, toast, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh };
   Object.defineProperty(api, '__runtime', { value: 'browser' });
   if (document.readyState !== 'loading' && document.currentScript?.dataset.auto !== undefined) init();
   else if (document.currentScript?.dataset.auto !== undefined) {

@@ -11,6 +11,6 @@ const LiquidGlass = globalThis.LiquidGlass;
 export default LiquidGlass;
 export const {
   init, attach, detach, destroy, refresh, adapt, applyLens, morph, materialize,
-  controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric,
+  controls, segmented, toggle, slider, listbox, toast, tabBarMinimize, titleOnScroll, concentric,
   splitDivider, menuBar, menuShortcuts, supportsLens
 } = LiquidGlass;

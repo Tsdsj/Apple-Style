@@ -107,6 +107,7 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 - `data-shortcuts`：⌘ 在 Apple 平台为 Command、其他平台为 Ctrl；焦点在文本框或富文本中时，全选、复制/剪切/粘贴、撤销/重做、光标移动与删除留给输入框，其他命令（如 ⌘S）照常执行。
 - 强制颜色（Windows 对比度主题）下，开关、分段选中、滑块与选中的标签/行改用系统色绘制；`dir="rtl"` 下滑块与开关按 HIG 镜像。
 - 尺寸档：默认是 iOS 档（17px 正文、44px 控件）；跨平台桌面 Web 应用在 `<html>` 上设 `data-density="desktop"`（14/20 正文、32px 控件，触屏时仍保持 44px 命中区）；Mac 风格界面用 `data-platform="macos"`。三者都按产品与输入方式选择，不按宽度推断。
+- Web 应用组件：表单字段 `.as-form-field` + `.as-input`（文本框、文本区、`<select>` pop-up 按钮；有指针时用可定制 select 选单，触屏保留系统选择器）、可选择列表 `.as-listbox` / `.as-option`（运行时提供单选键盘模型：一个 Tab 停靠点、方向键、Home/End、按字母跳转；选中状态就是 `aria-selected`）、`<dialog class="as-dialog">` 不透明模态（`showModal()` 负责焦点、Esc 和背景不可操作）、`LiquidGlass.toast('已保存')`（`role="status"` 播报，有模态时放进对话框内）、空状态 `.as-empty`、骨架屏 `.as-skeleton`、状态标签 `.as-pill`。全部跟随尺寸档，并处理强制颜色、减弱动态效果与增强对比度。用法见 [Web 实现速查](skills/Apple-Style/cheatsheets/web-implementation.md#selectable-lists-and-toasts-runtime)。
 
 系统蓝色样本 `--as-blue` 保留；普通白字操作面使用 `--as-action-bg` / `--as-action-fg`，默认浅深色均满足 4.5:1。自定义 tint、透明度、图片背景和辅助文字仍应检查实际组合。增强对比度、降低透明度、减弱动态效果是额外支持，不是默认可读性的替代。
 

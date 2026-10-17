@@ -57,12 +57,9 @@
       {
         "id": "color-contrast",
         "impact": "serious",
-        "nodes": 15,
+        "nodes": 1,
         "targets": [
-          "#cancel",
-          "#createTitle",
-          "button[type=\"submit\"]",
-          "label:nth-child(1) > span:nth-child(1)"
+          "textarea"
         ]
       }
     ]

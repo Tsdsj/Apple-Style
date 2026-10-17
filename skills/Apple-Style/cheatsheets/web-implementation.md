@@ -28,6 +28,11 @@ broken or illegal web code. Pair with `web/apple-style.css` + `web/liquid-glass.
 | Toggle | `role="switch"` + `aria-checked`, or a real `<input type="checkbox" role="switch">`. Use a stable label such as “Wi-Fi”, independent of the checked state. The runtime upgrades `.as-toggle` button/custom hosts, not native checkbox state. |
 | Slider | Real `<input type="range">` — never rebuild it; you lose keyboard, AT and `aria-valuetext` for free. Add `aria-valuetext` when the number needs units. |
 | Sheet / alert | `<dialog>` (or `role="dialog"`/`alertdialog` + `aria-modal`), `aria-labelledby` the title. Trap focus, `inert` the background, **Escape closes**, restore focus to the opener on close. |
+| Modal dialog (`.as-dialog`) | `<dialog class="as-dialog" aria-labelledby>` opened with `showModal()` — the browser supplies all four of the sheet requirements above. Header, body, footer; footer actions trailing, primary last. A Cancel button inside the form is `type="button"`: the first submit button is the form's default, and Enter must not cancel. |
+| Selectable list (`.as-listbox`) | `role="listbox"` + `role="option"` `aria-selected`, `aria-label` on the list. Single select: one tab stop on the selection; Up/Down (Left/Right with `aria-orientation="horizontal"`), Home/End and type-ahead move it; `data-activation="manual"` moves focus only and Space/Enter selects. No interactive content inside an option. Rows that need columns or row actions are a grid or a table instead. |
+| Pop-up button | A real `<select class="as-input">`. The stylesheet opts into customizable select (`appearance: base-select`) for pointer input and keeps the platform picker elsewhere. A pull-down *command* menu is a menu button, not a select. |
+| Toast | `role="status"` (polite, atomic) — `LiquidGlass.toast()` creates it. For confirmations only; never the only place an error or an action appears. Errors go next to the field or in an alert. |
+| Status pill (`.as-pill`) | Plain text in a `<span>` — the word carries the status; the colour repeats it. |
 | Menu | `role="menu"`/`menuitem`, opener has `aria-haspopup="menu"` + `aria-expanded`. Up/Down move, Escape closes and returns focus, Tab closes. If it is really a listbox or a nav popover, use those roles instead — the menu keyboard model is a contract. |
 | Toolbar | `role="toolbar"` with arrow-key navigation; every icon-only button needs an accessible name. |
 | Glass group | Decorative container — do **not** give it a role; the buttons inside carry the semantics. |
@@ -57,7 +62,8 @@ already owns `box-shadow`).
 - Stacking scale used by the stylesheet — stay inside it rather than inventing
   numbers: content `0`, scroll edge `10`, **split divider `12`**, sidebar `15`,
   **window toolbar `18`**, tab bar `20`, **menu bar `22`**, sheet backdrop `30` /
-  sheet `31`, menu/popover `40`, alert `41`, toast `60`. A new overlay picks the
+  sheet `31`, menu/popover `40`, alert `41`, toast `60` (`<dialog>` and the
+  customizable select picker render in the top layer, above all of these). A new overlay picks the
   band it belongs to. The three window-chrome bands sit *below* the sheet
   backdrop on purpose: a modal dims the menu bar and the toolbar too.
 
@@ -186,6 +192,8 @@ any app container):
 | `.as-button` | 44px, capsule | **32px**, capsule | **22px**, `--as-radius-xs` |
 | Segmented control | 38px | **32px** | (iOS size) |
 | Search field | 44px | **32px** | (window toolbar: 24px) |
+| `.as-input` (text field, select) | 44px, 17px text | **32px**, 14px | **22px**, 13px |
+| `.as-option` (listbox row) | 44px | **32px** | **28px** |
 | `.as-menu-item`, sidebar and pane rows | 44px | **32px** | **28px** |
 | Switch | 51×31 | **40×24** | (iOS size) |
 | Large title | 34/41 | 28/34 | 26/32 |
@@ -224,7 +232,24 @@ capsules is the most common tell that a phone stylesheet was stretched.
 
 ## Forms
 
-- A real `<label for>` for every field; placeholder is a hint, never the label.
+The library's fields: `.as-form` (grid), `.as-form-field` (label + control +
+hint/error), `.as-form-label`, `.as-form-hint`, `.as-form-error`, `.as-form-row`
+(label and a switch on one line) and `.as-input` on `<input>`, `<textarea>` and
+`<select>`. They follow the density: 44px / 17px by default, 32px / 14px with
+`data-density="desktop"`, 44px / 16px with touch, 22px / 13px with
+`data-platform="macos"`.
+
+```html
+<form class="as-form" novalidate>
+  <label class="as-form-field"><span class="as-form-label">Title</span>
+    <input class="as-input" name="title" required autocomplete="off" aria-describedby="title-error">
+    <span class="as-form-error" id="title-error" hidden>Enter a title.</span></label>
+  <label class="as-form-field"><span class="as-form-label">Owner</span>
+    <select class="as-input" name="owner"><option>Unassigned</option><option>Lin</option></select></label>
+</form>
+```
+
+- A real `<label for>` (or a wrapping `<label>`) for every field; placeholder is a hint, never the label.
 - `autocomplete` tokens (`email`, `new-password`, `one-time-code`…) and `inputmode`
   (`numeric`, `decimal`, `email`) — this is most of what makes a form feel native on
   iOS. `type="number"` only for true numbers, never phone or card fields.
@@ -233,6 +258,12 @@ capsules is the most common tell that a phone stylesheet was stretched.
   next to the field in plain language saying how to fix it — not a red border alone
   (colour-only meaning fails contrast rules).
 - Validate on blur and on submit, not on every keystroke; never block typing.
+- `.as-input[aria-invalid="true"]` draws the red edge; the `.as-form-error`
+  text is what carries the message. On a failed submit, focus the first invalid
+  field.
+- The field fill is the boundary (an iOS-style filled field); Increase Contrast
+  adds a ≥ 3:1 edge. If your product requires an always-visible outlined field,
+  override `border-color` on `.as-input`.
 
 ## Theming
 
@@ -247,7 +278,8 @@ capsules is the most common tell that a phone stylesheet was stretched.
   plus `forced-colors: active` (Windows contrast themes). Forced colours flatten
   backgrounds to `Canvas` and remove shadows, so any state you paint with a fill
   disappears. The stylesheet redraws switches, segmented selection, sliders and
-  selected tabs/rows with system colours (`Highlight`, `CanvasText`); a custom
+  selected tabs/rows, selected listbox options, pills, skeletons and field
+  edges with system colours (`Highlight`, `CanvasText`, `GrayText`); a custom
   control needs the same treatment.
 
 ## Media
@@ -264,6 +296,56 @@ Every list/collection needs four: loading (skeletons that match the final layout
 not a spinner), empty (says what goes here and how to add it), error (what failed
 and a retry), and populated. Keep the glass chrome stable across all four so the
 page does not jump.
+
+- Loading: `.as-skeleton` blocks shaped like the rows (`--as-skeleton-h` sets
+  the height), `aria-hidden="true"` on them and `aria-busy="true"` on the
+  region; remove both when the data arrives. The pulse stops with Reduce Motion.
+- Empty and error: `.as-empty` with an optional icon, `.as-empty-title`, one
+  sentence, and the action that fixes it (`.as-button`). Toggle it with `hidden`.
+- Status: `.as-pill` plus `.as-pill-info` / `-success` / `-warning` /
+  `-critical` (neutral without one), `.as-pill-dot` for a leading dot. Every
+  variant keeps ≥ 4.5:1 in both appearances; inside a selected option it turns
+  white on the accent.
+
+## Selectable lists and toasts (runtime)
+
+`LiquidGlass.init()` upgrades every `.as-listbox` in scope; `listbox(el)` does
+one. The page owns the data and renders the rows; the runtime owns the keyboard
+model and the tab stop:
+
+```html
+<div class="as-listbox" id="tickets" aria-label="Tickets">
+  <div class="as-option" aria-selected="true" tabindex="-1">Invoice does not match</div>
+  <div class="as-option" tabindex="-1">Cannot sign in <span class="as-pill as-pill-warning">Waiting</span></div>
+</div>
+```
+
+```js
+tickets.addEventListener('change', () => show(tickets.querySelector('[aria-selected="true"]').id));
+```
+
+- Selection is `aria-selected`. To select from code, set `aria-selected="true"`
+  on a row; the runtime clears the others (the newest wins) and moves the tab
+  stop. Programmatic changes do not fire `change`.
+- Re-rendering every row in a change handler is fine: the runtime gives new
+  rows their role and tab stop, and if the focused row was replaced, focus moves
+  to the new selected row instead of falling back to `<body>`.
+- Render rows with `tabindex="-1"` if you focus one straight after rendering;
+  the runtime sets the tab stop after the DOM mutation is delivered.
+- `aria-disabled="true"` on an option skips it; on the list, disables it.
+- Selected rows use `--as-action-bg` with white text, and `.as-secondary`,
+  `.as-tertiary` and `.as-pill` inside them turn white too. Any other coloured
+  text you put in a row needs the same treatment, in forced colours as well
+  (`HighlightText`).
+
+`LiquidGlass.toast(message, { duration = 2600 })` shows one message at a time
+and returns `hide()`. It reuses a direct `.as-toast` child of the page or, when a
+modal `<dialog>` is open, of that dialog — the page behind a modal is inert, and
+an inert live region is never announced. Put an empty
+`<div class="as-toast" role="status" aria-live="polite" aria-atomic="true"></div>`
+in the page's markup: a live region created on demand can miss its first
+message on some screen readers. A repeated message is announced again. With a
+floating `.as-tabbar` the toast sits above the bar.
 
 ## Performance (glass is expensive — budget it)
 
