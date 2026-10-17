@@ -50,6 +50,8 @@ Entry point for four companion skills: this skill covers composition and Web imp
 
 Use `tablist` only when switching panels; every tab needs `aria-controls` pointing to its panel. `data-activation="manual"` separates arrow-key focus from Enter/Space activation. Value selectors use `radiogroup`. Both support click, roving tabindex and disabled-item skipping. Listen for `change`; do not add a second state-toggle click handler.
 
+Bundlers and frameworks import `web/liquid-glass.mjs` (keep it next to `liquid-glass.js`); importing is safe during server rendering, and init still belongs after mount. With Tailwind v4 or other cascade layers, import the stylesheet into a layer below utilities: `@import "./apple-style.css" layer(components);`.
+
 `init(root)` includes root itself, is idempotent and watches additions/removals within its scope. `destroy(root)` releases that scope; `detach(el)` releases a component. `attach(el, {scale, rim, chroma, lens, adapt})` stores options for resize/theme regeneration. See `web-implementation.md` for lifecycle details and React/Vue cleanup examples.
 
 Optional structures: `.as-tabbar[data-sidebar]` opts into the project's width-based sidebar layout; `.as-window` / `.as-split` / `.as-inspector` compose a window where appropriate. A wide iPad retains iPad intent; a narrow Mac retains Mac intent; ordinary websites retain their page structure.
@@ -57,7 +59,7 @@ Optional structures: `.as-tabbar[data-sidebar]` opts into the project's width-ba
 ## Files
 
 - `cheatsheets/`: topic references plus shared rule scope and evidence definitions.
-- `web/apple-style.css`, `web/liquid-glass.js`: dependency-free Web assets.
+- `web/apple-style.css`, `web/liquid-glass.js`, `web/liquid-glass.mjs`: dependency-free Web assets (classic script / CommonJS, and its ES module entry).
 - `web/demo.html`, `web/demo-desktop.html`: minimal examples, linked from `../../demo/index.html`.
 - `scripts/hig-lookup.sh`: search local references.
 - `scripts/update-reference.sh`: transactional manifest-backed refresh; failures leave the previous library intact.

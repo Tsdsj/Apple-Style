@@ -51,7 +51,9 @@ already owns `box-shadow`).
   already do).
 - RTL: logical properties everywhere (`margin-inline-start`, `inset-inline`,
   `padding-block`), never `left`/`right`. Mirror directional icons (back chevron),
-  never mirror media or clocks.
+  never mirror media or clocks. Controls that show progress from one value to
+  another flip (`hig/right-to-left.md`): `.as-slider` fills and draws its knob
+  from the right and `.as-toggle` turns on toward the left under `dir="rtl"`.
 - Stacking scale used by the stylesheet — stay inside it rather than inventing
   numbers: content `0`, scroll edge `10`, **split divider `12`**, sidebar `15`,
   **window toolbar `18`**, tab bar `20`, **menu bar `22`**, sheet backdrop `30` /
@@ -124,9 +126,15 @@ stacked panes. The Mac platform attribute remains; test narrow-window content or
   below `--as-content-min`, and hands space back when the window shrinks.
 - **Menu-bar commands that print a shortcut must respond to it.** Nothing on the
   web wires that up; `data-shortcuts` on `.as-menubar` makes `LiquidGlass` bind
-  every `.as-shortcut` it finds (⌘ matches Cmd *or* Ctrl). Opt-in, because a
-  page that merely *displays* `⌘C` next to a Copy item must not hijack the real
-  one. Every toolbar item should also exist as a menu command (`hig/toolbars.md`).
+  every `.as-shortcut` it finds. ⌘ means Command on Apple platforms and Ctrl
+  elsewhere; ⌃ is always Control. Opt-in, because a page that merely
+  *displays* `⌘C` next to a Copy item must not hijack the real one. While a
+  text field or rich-text editor has focus, its own editing keys win — select
+  all, copy/cut/paste, undo/redo, arrow movement and deletion (plus ⌘B/⌘I/⌘U
+  in rich text) — and other bound commands such as ⌘S still run. Do not print
+  shortcuts the browser reserves (⌘/Ctrl+N, T, W, Q, Ctrl+Tab); on Windows
+  and Linux ⌘R becomes Ctrl+R and replaces Reload. Every toolbar item should
+  also exist as a menu command (`hig/toolbars.md`).
 
 ### Pane widths — starting points, not Apple numbers
 
@@ -217,7 +225,12 @@ capsules is the most common tell that a phone stylesheet was stretched.
 - `<meta name="theme-color">` with `media="(prefers-color-scheme: …)"` so mobile
   browser chrome matches.
 - Test all four preference axes in DevTools → Rendering: `prefers-color-scheme`,
-  `prefers-reduced-motion`, `prefers-contrast`, `prefers-reduced-transparency`.
+  `prefers-reduced-motion`, `prefers-contrast`, `prefers-reduced-transparency`,
+  plus `forced-colors: active` (Windows contrast themes). Forced colours flatten
+  backgrounds to `Canvas` and remove shadows, so any state you paint with a fill
+  disappears. The stylesheet redraws switches, segmented selection, sliders and
+  selected tabs/rows with system colours (`Highlight`, `CanvasText`); a custom
+  control needs the same treatment.
 
 ## Media
 
@@ -258,14 +271,25 @@ page does not jump.
 - Controls keep DOM state and emit bubbling `change`. Read `aria-checked`, `.is-selected`, or native range `value`. Do not independently toggle state again in `click`. Keep framework ownership boundaries stable; replace the subtree with destroy/init when changing the control's structural role.
 - Native button switches generate keyboard click; custom switch hosts get keyboard activation. Pointer taps use click, drag commits once, and cancel/lost capture cancels selection. Tabs manage the linked panel's hidden state; authors provide labels and meaningful panel content.
 
-React (load the browser script once before mounting):
+Loading the runtime: copy `liquid-glass.js` **and** `liquid-glass.mjs` side by
+side. A classic `<script src="liquid-glass.js">` sets `window.LiquidGlass`;
+CommonJS `require()` returns the API; ES modules import
+`liquid-glass.mjs` (`import LiquidGlass, { init } from './liquid-glass.mjs'`).
+Importing is safe during server rendering, in workers and in DOM-less test
+environments: without `document`, `matchMedia` and the observers, every
+function is an inert no-op. Loading the script and the module on one page
+shares a single runtime.
+
+React:
 
 ```jsx
+import { init } from './liquid-glass.mjs';
+
 function GlassControls() {
   const root = React.useRef(null);
   React.useEffect(() => {
     const element = root.current;
-    const runtime = window.LiquidGlass.init(element);
+    const runtime = init(element);
     return () => runtime.destroy(); // also safe in Strict Mode's effect replay
   }, []);
   return <div ref={root}><button className="as-toggle" role="switch"
@@ -278,9 +302,10 @@ Vue:
 ```vue
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { init } from './liquid-glass.mjs';
 const root = ref(null);
 let runtime;
-onMounted(() => { runtime = window.LiquidGlass.init(root.value); });
+onMounted(() => { runtime = init(root.value); });
 onBeforeUnmount(() => { runtime?.destroy(); });
 </script>
 <template>
@@ -289,7 +314,16 @@ onBeforeUnmount(() => { runtime?.destroy(); });
 </template>
 ```
 
-SSR: call the runtime only after mounting in the browser. CSS supplies the static appearance, but custom switches/segmented controls require JS for interaction; native ranges keep native behavior. Tailwind can use the existing classes without rebuilding the material utilities. Framework snippets are integration guidance, not a claim of an executed React/Vue application test.
+SSR: call the runtime only after mounting in the browser. CSS supplies the static appearance, but custom switches/segmented controls require JS for interaction; native ranges keep native behavior. Framework snippets are integration guidance, not a claim of an executed React/Vue application test.
+
+Cascade layers and Tailwind: `apple-style.css` ships unlayered, so a plain `<link>` keeps working next to unlayered resets. Unlayered rules beat every layered rule, though, so Tailwind v4 utilities (which live in `@layer utilities`) cannot adjust an `as-*` component until the stylesheet is imported into a layer below them:
+
+```css
+@import "tailwindcss";
+@import "./apple-style.css" layer(components);   /* after base/preflight, before utilities */
+```
+
+Without Tailwind, declare the order yourself — `@layer base, apple-style, utilities;` followed by `@import url("apple-style.css") layer(apple-style);` (in a stylesheet or a `<style>` block; `<link>` cannot assign a layer). Keep the stylesheet rather than rebuilding blur with `backdrop-blur-*`.
 
 ## Verify before shipping
 

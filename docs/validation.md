@@ -89,3 +89,15 @@ skills/Apple-Style/scripts/update-reference.sh \
 - 在真实 CI 失败后修复并重跑，没有把原本未运行的 Windows 检查补写为历史通过。
 
 Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验证。正式许可证维持原声明，不新增授权。版本及在线演示的最终公开记录：[v0.1.0](https://github.com/Tsdsj/Apple-Style/releases/tag/v0.1.0)、[演示站](https://tsdsj.github.io/Apple-Style/)、[部署工作流](https://github.com/Tsdsj/Apple-Style/actions/workflows/deploy-pages.yml)。
+
+## 审计缺陷修复（未发布）
+
+执行日期：2026-10-17。环境：Linux 容器、Node 22.22.0、Python 3.13.16、Playwright 1.58.2、Chromium 141.0.7390.37（通过 `launchOptions.executablePath` 使用预装浏览器）。对应 [实用性审计](audit/2026-10-16-practicality-audit.md) §2.1–2.7。
+
+- 修复前，基线测试在本环境 **40 通过 / 1 失败**（`layout /demo/index.html at 320`，搜索框按本机字体度量溢出 6px；CI 机器字体未触发）。
+- 新增 `tests/browser/regressions.spec.js` 共 14 项。先在未修复代码上运行：**12 失败、2 通过**。通过的两项是预期的：深色外观下的 vibrant 用例是对照组；级联层用例验证的是文档化的导入方式本就可行，作为守护测试保留。
+- 修复后：**Chromium 55 通过**（原 41 项 + 新 14 项，含原先失败的 320px 布局），**Python 29 通过（PowerShell 8 项因容器无 pwsh 跳过）**；`node --check`、`bash -n scripts/prepare-demo.sh` 与 `git diff --check` 通过。
+- Node 直接验证：`require('liquid-glass.js')` 与 `import('liquid-glass.mjs')` 返回空操作 API；在 `"type": "module"` 的包中从 `.mjs` 导入同样可用（`.js` 在该包中不能作为默认导入，这是 `.mjs` 入口存在的原因）。
+- 强制颜色下的开关、分段、滑块、分组选中与填充按钮另做了截图人工检查。
+
+范围限制不变：只验证了 Chromium 的强制颜色模拟与 RTL；真实 Windows 对比度主题、Safari、Firefox、VoiceOver/NVDA 仍未验证。快捷键的平台判断在测试中通过覆盖 `navigator.platform` / `userAgentData` 模拟，未在真实 macOS Safari 上按键验证。

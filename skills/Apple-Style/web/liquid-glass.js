@@ -21,9 +21,34 @@
  *          LiquidGlass.concentric(container)
  *  Controls dispatch a bubbling `change` event; read state from the element
  *  (aria-checked, .is-selected, input.value) rather than tracking it yourself.
+ *  Loading: a classic <script> sets window.LiquidGlass; CommonJS gets it as
+ *  module.exports; liquid-glass.mjs re-exports it for ES modules. Without a
+ *  DOM (server rendering, workers, DOM-less tests) the same API is inert, so
+ *  importing never throws — call init() after mounting in the browser.
  */
-(function (global) {
+(function (root, factory) {
   'use strict';
+  // One runtime per page: the classic script and the ES module entry (or the
+  // same file included twice) share it instead of wiring every control twice.
+  const existing = root && root.LiquidGlass;
+  const api = existing && existing.__runtime === 'browser' ? existing : factory(root);
+  if (root) root.LiquidGlass = api;
+  if (typeof module === 'object' && module && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (global) {
+  'use strict';
+  function inertApi() {
+    const none = () => {};
+    return Object.freeze({
+      init: () => ({ attached: 0, controls: 0, shortcuts: 0, lens: false, destroy: none }),
+      attach: () => ({ detach: none }), detach: none, destroy: none, adapt: none, applyLens: none,
+      morph: () => Promise.resolve(), materialize: () => Promise.resolve(), controls: () => 0,
+      segmented: none, toggle: none, slider: none, tabBarMinimize: none, titleOnScroll: none,
+      concentric: none, splitDivider: none, menuBar: none, menuShortcuts: () => 0, supportsLens: false, refresh: none
+    });
+  }
+  if (!global || !global.document || typeof global.matchMedia !== 'function'
+    || typeof global.ResizeObserver !== 'function' || typeof global.IntersectionObserver !== 'function'
+    || typeof global.MutationObserver !== 'function') return inertApi();
   const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const reduceTransparency = () => matchMedia('(prefers-reduced-transparency: reduce)').matches;
   const moreContrast = () => matchMedia('(prefers-contrast: more)').matches;
@@ -591,21 +616,27 @@
       suppressClick = false;
       try { el.setPointerCapture(e.pointerId); } catch { /* synthetic pointer */ }
       const { max } = metrics();
-      drag = { id: e.pointerId, startX: e.clientX, moved: false, max, from: el.getAttribute('aria-checked') === 'true' ? max : 0 };
+      // Travel is measured from the inline start, so a mirrored (RTL) switch
+      // turns on by moving its knob toward the left.
+      const dir = getComputedStyle(el).direction === 'rtl' ? -1 : 1;
+      const from = el.getAttribute('aria-checked') === 'true' ? max : 0;
+      drag = { id: e.pointerId, startX: e.clientX, moved: false, max, dir, from, pos: from };
     });
     listen(el, el, 'pointermove', e => {
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.startX;
       if (Math.abs(dx) > 3) { drag.moved = true; el.classList.add('is-scrubbing'); }
-      if (drag.moved) el.style.setProperty('--as-knob-x', clamp(drag.from + dx, 0, drag.max) + 'px');
+      if (!drag.moved) return;
+      drag.pos = clamp(drag.from + dx * drag.dir, 0, drag.max);
+      el.style.setProperty('--as-knob-x', drag.pos * drag.dir + 'px');
     });
     const end = e => {
       if (!drag || e.pointerId !== drag.id) return;
-      const { moved, max, id } = drag, x = parseFloat(el.style.getPropertyValue('--as-knob-x'));
+      const { moved, max, id, pos } = drag;
       const cancelled = e.type !== 'pointerup' || disabled(el);
       drag = null; suppressClick = moved || cancelled;
       el.classList.remove('is-scrubbing'); el.style.removeProperty('--as-knob-x');
-      if (moved && !cancelled && Number.isFinite(x)) commit(x > max / 2);
+      if (moved && !cancelled) commit(pos > max / 2);
       if (el.hasPointerCapture(id)) el.releasePointerCapture(id);
     };
     listen(el, el, 'pointerup', end); listen(el, el, 'pointercancel', end); listen(el, el, 'lostpointercapture', end);
@@ -647,7 +678,9 @@
     }
     // measured on layout changes only — not on every input event
     function remeasure() {
-      geom = { w: input.clientWidth, kw: knob.offsetWidth || 28, l: input.offsetLeft, y: input.offsetTop + input.offsetHeight / 2 };
+      // A range input runs right to left in RTL, so the drawn knob mirrors the value.
+      geom = { w: input.clientWidth, kw: knob.offsetWidth || 28, l: input.offsetLeft, y: input.offsetTop + input.offsetHeight / 2,
+        rtl: getComputedStyle(input).direction === 'rtl' };
       knob.style.setProperty('--as-knob-l', geom.l + 'px');
       knob.style.setProperty('--as-knob-y', geom.y + 'px');
     }
@@ -656,7 +689,7 @@
       const f = pendingF; pendingF = null;
       if (f === null || !geom) return;
       input.style.setProperty('--as-value', (f * 100) + '%');
-      knob.style.setProperty('--as-knob-x', (geom.kw / 2 + f * (geom.w - geom.kw)) + 'px');
+      knob.style.setProperty('--as-knob-x', (geom.kw / 2 + (geom.rtl ? 1 - f : f) * (geom.w - geom.kw)) + 'px');
       const now = performance.now();
       if (lastV !== null && now > lastT) {
         knob.style.setProperty('--as-knob-sx', String(stretchFor((f - lastV) * geom.w / (now - lastT) * 1000, .35)));
@@ -908,6 +941,34 @@
     if (PUNCT_CODE[rest]) return { ...need, code: PUNCT_CODE[rest] };
     return { ...need, key: rest.toLowerCase() };   // multi-char names like "Enter"
   }
+  // ⌘ means Command on Apple platforms and Ctrl elsewhere, the mapping apps
+  // use when they ship on both. The Windows key never stands in for Ctrl, and
+  // on a Mac Ctrl never stands in for Command.
+  const applePlatform = (() => {
+    try { return /mac|iphone|ipad|ipod/i.test(navigator.userAgentData?.platform || navigator.platform || ''); }
+    catch { return false; }
+  })();
+  // Keys a focused text field already owns: select all, clipboard, undo/redo,
+  // and word/line movement and deletion (plus bold/italic/underline in rich
+  // text). An app command bound to one of them — ⌘A for "Select All Rows" —
+  // must not take it away from the field, just as a Mac sends Edit ▸ Select
+  // All to the focused text view. Other commands (⌘S, ⌘⏎) still run.
+  const FIELD_CODES = new Set(['KeyA', 'KeyC', 'KeyV', 'KeyX', 'KeyZ', 'KeyY']);
+  const RICH_CODES = new Set(['KeyB', 'KeyI', 'KeyU']);
+  const FIELD_KEYS = new Set(['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'backspace', 'delete', 'home', 'end']);
+  const NON_TEXT_INPUTS = /^(checkbox|radio|range|color|file|button|submit|reset|image|hidden)$/;
+  function fieldOwns(target, combo) {
+    if (!target || target.nodeType !== 1) return false;
+    const rich = target.isContentEditable;
+    const field = rich || target.tagName === 'TEXTAREA' || (target.tagName === 'INPUT' && !NON_TEXT_INPUTS.test(target.type));
+    if (!field) return false;
+    return combo.code ? FIELD_CODES.has(combo.code) || (rich && RICH_CODES.has(combo.code)) : FIELD_KEYS.has(combo.key);
+  }
+  function modifiersMatch(combo, e) {
+    if (combo.shift !== e.shiftKey || combo.alt !== e.altKey) return false;
+    if (applePlatform) return combo.meta === e.metaKey && combo.ctrl === e.ctrlKey;
+    return !e.metaKey && (combo.meta || combo.ctrl) === e.ctrlKey;
+  }
   function menuShortcuts(root = document) {
     if (root.__lgShortcuts) return 0;
     // The menus themselves are usually siblings of the bar, not inside it, so
@@ -927,13 +988,10 @@
     observe(root, MutationObserver, collect).observe(root, { childList: true, subtree: true });
     listen(root, root === document ? window : root, 'keydown', e => {
       if (e.defaultPrevented) return;
-      const cmd = e.metaKey || e.ctrlKey;          // ⌘ on Apple keyboards, Ctrl elsewhere
-      const hit = binds.find(({ combo }) => {
-        if (combo.shift !== e.shiftKey || combo.alt !== e.altKey) return false;
-        if (cmd !== (combo.meta || combo.ctrl)) return false;
-        return combo.code ? e.code === combo.code : e.key.toLowerCase() === combo.key;
-      });
+      const hit = binds.find(({ combo }) => modifiersMatch(combo, e)
+        && (combo.code ? e.code === combo.code : e.key.toLowerCase() === combo.key));
       if (!hit || hit.item.disabled || hit.item.getAttribute('aria-disabled') === 'true') return;
+      if (fieldOwns(e.composedPath?.()[0] || e.target, hit.combo)) return;
       e.preventDefault();
       hit.item.click();
     });
@@ -1101,9 +1159,11 @@
     }
     return { attached: attached.size, controls: wired, shortcuts, lens: supportsLens && !liteMode(), destroy: () => destroy(root) };
   }
-  global.LiquidGlass = { init, attach, detach, destroy, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh };
+  const api = { init, attach, detach, destroy, adapt, applyLens, morph, materialize, controls, segmented, toggle, slider, tabBarMinimize, titleOnScroll, concentric, splitDivider, menuBar, menuShortcuts, supportsLens, refresh };
+  Object.defineProperty(api, '__runtime', { value: 'browser' });
   if (document.readyState !== 'loading' && document.currentScript?.dataset.auto !== undefined) init();
   else if (document.currentScript?.dataset.auto !== undefined) {
     startShared(); listen(shared, document, 'DOMContentLoaded', () => init(), { once: true });
   }
-})(window);
+  return api;
+});

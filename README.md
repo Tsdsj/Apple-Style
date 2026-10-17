@@ -102,6 +102,10 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 - `refresh()` 刷新滤镜与背景采样；`morph` / `materialize` 返回 Promise，销毁期间取消不会造成未处理的 rejection。直接操作原有 helper 的 API 仍保留。
 - `radiogroup` 选择值；`tablist` 切换内容，作者必须提供每个 tab 的 `aria-controls` 与对应 panel。默认箭头同步焦点和选择；`data-activation="manual"` 的 tabs 用 Enter/Space 激活。禁用项跳过，click/键盘/拖拽均可用，取消不提交。
 - 控件维护 DOM 状态并发出冒泡 `change`；不要在 click 中再次切换同一状态。React/Vue 请在 mount 后 init、unmount 前 destroy；[完整示例](skills/Apple-Style/cheatsheets/web-implementation.md#runtime-lifecycle-and-frameworks)。
+- 打包工具与框架：把 `liquid-glass.mjs` 与 `liquid-glass.js` 放在同一目录，`import LiquidGlass, { init } from './liquid-glass.mjs'`。服务端渲染、Worker 和无 DOM 的测试环境中导入不会报错（API 为空操作）；同一页面同时用 `<script>` 和模块时只有一个运行时。
+- Tailwind v4 / 级联层：样式表默认不分层，普通 `<link>` 行为不变；需要让工具类覆盖组件时，用 `@import "./apple-style.css" layer(components);` 导入到工具类之下的层。
+- `data-shortcuts`：⌘ 在 Apple 平台为 Command、其他平台为 Ctrl；焦点在文本框或富文本中时，全选、复制/剪切/粘贴、撤销/重做、光标移动与删除留给输入框，其他命令（如 ⌘S）照常执行。
+- 强制颜色（Windows 对比度主题）下，开关、分段选中、滑块与选中的标签/行改用系统色绘制；`dir="rtl"` 下滑块与开关按 HIG 镜像。
 
 系统蓝色样本 `--as-blue` 保留；普通白字操作面使用 `--as-action-bg` / `--as-action-fg`，默认浅深色均满足 4.5:1。自定义 tint、透明度、图片背景和辅助文字仍应检查实际组合。增强对比度、降低透明度、减弱动态效果是额外支持，不是默认可读性的替代。
 
@@ -159,7 +163,7 @@ Four Apple design skills plus dependency-free, build-free CSS/JS. Install from a
 
 Choose platform, app type, input methods and container size independently. A wide iPad is not a Mac, and a desktop web page does not require a native window. Rules distinguish official constraints, recommendations, project defaults and visual heuristics.
 
-Call `LiquidGlass.init(root)` after mount and `destroy(root)` before unmount. Initialization is idempotent and scoped; single surfaces support `attach(el, options)` / `detach(el)`. Options survive resize and appearance regeneration. Radio groups select values; tabs require linked panels. Keyboard, click and drag are supported without duplicate activation; cancellation does not commit. Default white-text actions use accessible semantic colors while retaining Apple system swatches.
+Call `LiquidGlass.init(root)` after mount and `destroy(root)` before unmount. Bundlers import `liquid-glass.mjs`; importing is safe during server rendering. To let Tailwind v4 utilities adjust components, import the stylesheet into a layer below utilities. Initialization is idempotent and scoped; single surfaces support `attach(el, options)` / `detach(el)`. Options survive resize and appearance regeneration. Radio groups select values; tabs require linked panels. Keyboard, click and drag are supported without duplicate activation; cancellation does not commit. Default white-text actions use accessible semantic colors while retaining Apple system swatches.
 
 Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Windows-native junctions are covered by the Windows CI jobs, separately from macOS copy fallback tests. Safari, Firefox, VoiceOver and model on/off comparisons remain unverified. See the linked release verification record for actual CI and deployment runs.
 

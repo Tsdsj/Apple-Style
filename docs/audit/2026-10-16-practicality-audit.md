@@ -2,6 +2,8 @@
 
 审计日期：2026-10-16　·　审计对象：`af1efad`（v0.1.0 之后的 main）　·　视角：2026 年 10 月的 Apple 平台与 Web 平台现状
 
+> **修复状态（2026-10-17）**：§2.1–2.7 的 P0/P1 缺陷已修复并加了回归测试（`tests/browser/regressions.spec.js`），见 CHANGELOG 的 Unreleased 与 `docs/validation.md` 末节。§2.8–2.10 及第 3 节以后的建议尚未处理。§2.7 的处理方式是保持样式表默认不分层（避免破坏现有未分层 reset），并文档化 `@import … layer()` 的接入写法。
+
 > 结论先行：这套技能的**方法论**（规则强度分级、证据状态、不从宽度推断平台、对比度安全的操作色、生命周期清理、安装保护）在同类项目里属于上乘；但作为“拿来开发真实网站/应用”的工具，它目前在 **时效性（仍以 iOS 26 / WWDC25 为基准，而 iOS 27 / Safari 27 已于 2026-09 正式发布）**、**工程集成（无 ESM/SSR/Tailwind 层级/版本化分发）**、**组件覆盖（表单、选择器、进度、提示、表格全缺）**、**平台原生能力利用（未使用 `<dialog>`、popover、anchor positioning、可定制 `<select>`、View Transitions、scroll-driven animations）** 四个方面明显落后，并有 **8 个已实测复现的缺陷**（含 Windows 高对比度下开关不可见、RTL 滑块错位、快捷键劫持输入框）。
 
 ---

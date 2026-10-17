@@ -240,8 +240,10 @@
 .as-material-ultrathin { background: var(--as-material-ultrathin); }
 .as-material-thin      { background: var(--as-material-thin); }
 .as-material-thick     { background: var(--as-material-thick); }
-/* Vibrant labels/fills on materials (use these instead of plain grays) */
-.as-vibrant            { color: var(--as-label); mix-blend-mode: plus-lighter; }
+/* Vibrant labels/fills on materials (use these instead of plain grays).
+   No blend mode: `plus-lighter` adds the label to the backdrop, so a black
+   label in the light appearance adds nothing and the text disappears. */
+.as-vibrant            { color: var(--as-label); }
 .as-vibrant-secondary  { color: var(--as-label-secondary); }
 
 /* --------------------------------------------------------------------------
@@ -470,7 +472,7 @@
 .as-toolbar-title[data-reveal-on-scroll].is-visible { opacity: 1; transform: none; }
 
 /* Tab bar (iOS): floating capsule, search tab separate at trailing end */
-.as-tabbar { position: fixed; left: 0; right: 0; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 10px; padding: 0 var(--as-margin); z-index: 20; pointer-events: none; }
+.as-tabbar { position: fixed; inset-inline: 0; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 10px; padding: 0 var(--as-margin); z-index: 20; pointer-events: none; }
 .as-tabbar > * { pointer-events: auto; }
 .as-tabbar .as-glass-group { padding: 5px; gap: 0; transition: transform var(--as-dur-slow) var(--as-ease-spring), width var(--as-dur-slow) var(--as-ease-spring); }
 .as-tabbar .as-tab { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: 48px; padding: 4px 10px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-glass-fg-secondary); font: 500 10px/12px var(--as-font-text); cursor: pointer; transition: color var(--as-dur-fast), background var(--as-dur-base) var(--as-ease-spring), transform var(--as-dur-base) var(--as-ease-spring); }
@@ -544,9 +546,9 @@
 .as-sidebar .as-row.is-selected { background: light-dark(rgb(0 0 0 / .08), rgb(255 255 255 / .14)); font-weight: 600; }
 .as-sidebar .as-row svg { width: 20px; height: 20px; color: var(--as-accent); }
 .as-sidebar .as-section-title { padding: 14px 12px 6px; font: 600 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
-.as-with-sidebar { padding-left: 304px; }
+.as-with-sidebar { padding-inline-start: 304px; }
 /* Background extension effect: mirror + blur content beneath sidebar/inspector */
-.as-bg-extension { position: absolute; inset: 0 auto 0 0; width: 304px; overflow: hidden; z-index: 0; }
+.as-bg-extension { position: absolute; inset-block: 0; inset-inline: 0 auto; width: 304px; overflow: hidden; z-index: 0; }
 .as-bg-extension > img, .as-bg-extension > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); filter: blur(24px) saturate(1.2); }
 
 /* Sheet: inset half-sheet with large radius; becomes opaque at full height */
@@ -554,16 +556,17 @@
 .as-sheet-backdrop.is-open { opacity: 1; pointer-events: auto; }
 /* overscroll-behavior: reaching the end of a sheet/menu/sidebar must not hand
    the scroll to the page behind it. */
-.as-sheet { position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto; overscroll-behavior: contain;
-  --as-glass-radius: var(--as-radius-sheet); transform: translateY(110%); transition: transform var(--as-dur-slow) var(--as-ease-spring), border-radius var(--as-dur-base), background var(--as-dur-base), left var(--as-dur-base), right var(--as-dur-base), bottom var(--as-dur-base), max-height var(--as-dur-slow) var(--as-ease-spring); }
+.as-sheet { position: fixed; inset-inline: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto; overscroll-behavior: contain;
+  --as-glass-radius: var(--as-radius-sheet); transform: translateY(110%); transition: transform var(--as-dur-slow) var(--as-ease-spring), border-radius var(--as-dur-base), background var(--as-dur-base), inset-inline-start var(--as-dur-base), inset-inline-end var(--as-dur-base), bottom var(--as-dur-base), max-height var(--as-dur-slow) var(--as-ease-spring); }
 .as-sheet.is-open { transform: translateY(0); }
-.as-sheet.is-full { left: 0; right: 0; bottom: 0; max-height: 100vh; --as-glass-radius: var(--as-radius-sheet) var(--as-glass-radius, 0) 0 0; border-radius: var(--as-radius-sheet) var(--as-radius-sheet) 0 0; --_fill: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.as-sheet.is-full { inset-inline: 0; bottom: 0; max-height: 100vh; --as-glass-radius: var(--as-radius-sheet) var(--as-glass-radius, 0) 0 0; border-radius: var(--as-radius-sheet) var(--as-radius-sheet) 0 0; --_fill: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .as-sheet .as-grabber { width: 36px; height: 5px; margin: 6px auto 14px; border-radius: 3px; background: var(--as-label-tertiary); }
-.as-sheet .as-sheet-title { text-align: left; font: 700 20px/25px var(--as-font-display); margin: 0 0 12px; }  /* bolder, left-aligned */
+.as-sheet .as-sheet-title { text-align: start; font: 700 20px/25px var(--as-font-display); margin: 0 0 12px; }  /* bolder, leading-aligned */
 
 /* Menu / popover: pops open from its source; thicker glass; icons lead items */
 .as-menu { position: absolute; min-width: 250px; max-height: min(70dvh, 520px); overflow: auto; overscroll-behavior: contain; padding: 6px; z-index: 40; transform-origin: var(--as-origin, top left); --as-glass-radius: var(--as-radius-l);
   opacity: 0; transform: scale(.4); pointer-events: none; transition: transform var(--as-dur-base) var(--as-ease-spring), opacity var(--as-dur-fast); }
+.as-menu:dir(rtl) { transform-origin: var(--as-origin, top right); }
 .as-menu.is-open { opacity: 1; transform: none; pointer-events: auto; }
 /* The item must work as a real <button role="menuitem"> — the menu keyboard
    model (arrow keys, Escape, Tab) needs a focusable element, and a bare <div>
@@ -575,13 +578,13 @@
 .as-menu .as-menu-item:hover { background: rgb(128 128 128 / .14); }
 .as-menu .as-menu-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
 .as-menu .as-menu-item svg { width: 20px; height: 20px; opacity: .9; }
-.as-menu .as-menu-item .as-shortcut { margin-left: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
+.as-menu .as-menu-item .as-shortcut { margin-inline-start: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
 .as-menu .as-menu-item.as-destructive { color: var(--as-red); }
 .as-menu .as-menu-sep { height: .5px; margin: 6px 0; background: var(--as-separator); }
 [data-platform="macos"] .as-menu .as-menu-item { min-height: 28px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
 
-/* Alert: bolder, left-aligned text */
-.as-alert { width: 270px; padding: 20px 16px 8px; --as-glass-radius: var(--as-radius-xl); text-align: left; }
+/* Alert: bolder, leading-aligned text */
+.as-alert { width: 270px; padding: 20px 16px 8px; --as-glass-radius: var(--as-radius-xl); text-align: start; }
 .as-alert h2 { margin: 0 0 4px; font: 700 17px/22px var(--as-font-text); letter-spacing: -.43px; }
 .as-alert p  { margin: 0 0 16px; font: 400 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
 .as-alert .as-actions { display: flex; gap: 8px; margin: 0 -8px; }
@@ -607,6 +610,7 @@
 .as-segmented[data-indicator] .as-segment.is-selected { background: transparent; box-shadow: none; }
 .as-segmented[data-indicator] .as-segment:active { transform: none; }
 .as-seg-indicator {
+  /* physical `left` on purpose: liquid-glass.js measures physical offsets, in RTL too */
   position: absolute; top: 3px; left: 0; height: calc(100% - 6px); width: 0; z-index: 0;
   border-radius: var(--as-radius-capsule); pointer-events: none;
   background: light-dark(rgb(255 255 255), rgb(99 99 102));
@@ -633,10 +637,13 @@
    lifts into glass while held */
 .as-toggle { position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: var(--as-radius-capsule); background: var(--as-fill); cursor: pointer; transition: background var(--as-dur-base) var(--as-ease-soft); -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
 .as-toggle[aria-checked="true"] { background: var(--as-green); }
-.as-toggle .as-knob { position: absolute; top: 2px; left: 2px; width: var(--as-knob-w, 27px); height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transform: translateX(var(--as-knob-x, 0px)); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle .as-knob { position: absolute; top: 2px; inset-inline-start: 2px; width: var(--as-knob-w, 27px); height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transform: translateX(var(--as-knob-x, 0px)); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
 .as-toggle[aria-checked="true"] { --as-knob-x: 20px; }
 .as-toggle:active { --as-knob-w: 33px; }
 .as-toggle[aria-checked="true"]:active { --as-knob-x: 14px; }
+/* RTL: the switch is mirrored, so "on" travels toward the inline start. */
+.as-toggle[aria-checked="true"]:dir(rtl) { --as-knob-x: -20px; }
+.as-toggle[aria-checked="true"]:active:dir(rtl) { --as-knob-x: -14px; }
 .as-toggle.is-scrubbing .as-knob { transition: width var(--as-dur-base) var(--as-ease-spring); }
 .as-toggle.is-scrubbing { --as-knob-w: 33px; }
 
@@ -647,6 +654,9 @@
    The bare input below is the no-JS fallback. */
 .as-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; touch-action: pan-y; }
 .as-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
+/* A range input runs right to left in RTL (HIG: flip controls that show
+   progress), so the filled part of the track starts on the right. */
+.as-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
 .as-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring); }
 .as-slider:active::-webkit-slider-thumb { transform: scaleX(1.35); background: rgb(255 255 255 / .6); box-shadow: 0 6px 16px rgb(0 0 0 / .18), inset 0 0 0 1px rgb(255 255 255 / .8); }
 .as-slider::-moz-range-track { height: 6px; border-radius: 3px; background: var(--as-fill); }
@@ -657,6 +667,8 @@
 .as-slider.is-upgraded::-moz-range-thumb { opacity: 0; }
 .as-slider-knob {
   position: absolute; z-index: 1;
+  /* physical on purpose: liquid-glass.js positions the knob from offsetLeft
+     and mirrors the value itself when the input runs right to left */
   left: var(--as-knob-l, 0px); top: var(--as-knob-y, 50%);
   width: 28px; height: 28px; margin-left: -14px;
   border-radius: 50%; pointer-events: none; background: #fff;
@@ -682,7 +694,7 @@
    instead of the bare text box — but the ring has to come back somewhere, or
    keyboard users lose the field entirely. Never `outline: none` alone. */
 .as-search:focus-within { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
-.as-search input { flex: 1; border: 0; background: transparent; color: inherit; font: 400 17px/22px var(--as-font-text); outline: none; }
+.as-search input { flex: 1; min-inline-size: 0; border: 0; background: transparent; color: inherit; font: 400 17px/22px var(--as-font-text); outline: none; }
 .as-search input::placeholder { color: var(--as-glass-fg-secondary); }
 .as-search svg { width: 18px; height: 18px; color: var(--as-glass-fg-secondary); }
 
@@ -690,12 +702,12 @@
 .as-list { margin: 0 var(--as-margin); padding: 0; list-style: none; border-radius: var(--as-radius-xl); background: var(--as-bg-grouped-2); overflow: hidden; }
 .as-list li { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 16px; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; }
 .as-list li + li { box-shadow: inset 0 .5px 0 var(--as-separator); }
-.as-list li .as-value { margin-left: auto; color: var(--as-label-secondary); }
+.as-list li .as-value { margin-inline-start: auto; color: var(--as-label-secondary); }
 .as-list-header { margin: 24px calc(var(--as-margin) + 16px) 8px; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); text-transform: none; } /* title-style capitalization, not ALL CAPS */
 .as-grouped { background: var(--as-bg-grouped); }
 
 /* Badge / status */
-.as-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-action-destructive); color: var(--as-action-fg); font: 600 12px/18px var(--as-font-text); text-align: center; }
+.as-badge { position: absolute; inset-block-start: -4px; inset-inline-end: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-action-destructive); color: var(--as-action-fg); font: 600 12px/18px var(--as-font-text); text-align: center; }
 
 /* Navigation bar large title */
 .as-navbar { display: flex; flex-direction: column; padding: 0 var(--as-margin); }
@@ -1035,8 +1047,54 @@
   .as-seg-indicator { --as-ind-sx: 1 !important; }
   .as-slider-knob { --as-knob-sx: 1 !important; }
 }
-/* Forced colors (Windows High Contrast) */
-@media (forced-colors: active) { .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; } .as-glass::before, .as-glass::after { display: none; } }
+/* Forced colors (Windows High Contrast). The browser flattens backgrounds to
+   Canvas and drops box-shadows, which erases every state this stylesheet
+   paints with a fill: a switch's on/off colour and its knob, the segmented
+   indicator, selected tabs and rows. Those controls opt out of the automatic
+   adjustment and redraw their state with the system palette instead. */
+@media (forced-colors: active) {
+  .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .as-glass::before, .as-glass::after { display: none; }
+  /* Buttons that rely on a fill to look like buttons keep a visible boundary. */
+  .as-button-filled, .as-button-tinted, .as-button-gray, .as-button-bordered { border: 1px solid ButtonText; }
+
+  .as-toggle, .as-segmented, .as-slider { forced-color-adjust: none; }
+  .as-toggle { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-toggle .as-knob { background: CanvasText; box-shadow: none; }
+  .as-toggle[aria-checked="true"] { background: Highlight; box-shadow: inset 0 0 0 1px Highlight; }
+  .as-toggle[aria-checked="true"] .as-knob { background: HighlightText; }
+  :root .as-toggle:disabled, :root .as-toggle[aria-disabled="true"] { opacity: 1; box-shadow: inset 0 0 0 1px GrayText; }
+  .as-toggle:disabled .as-knob, .as-toggle[aria-disabled="true"] .as-knob { background: GrayText; }
+
+  .as-segmented { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-segmented .as-segment { color: CanvasText; }
+  .as-segmented .as-segment.is-selected { background: Highlight; color: HighlightText; box-shadow: none; }
+  .as-segmented .as-seg-indicator, .as-segmented.is-scrubbing .as-seg-indicator {
+    background: Highlight; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  :root .as-segmented .as-segment:disabled, :root .as-segmented .as-segment[aria-disabled="true"] { opacity: 1; color: GrayText; }
+
+  /* The native thumb comes back and the glass overlay knob goes away: the
+     overlay is a painted circle, and the native thumb is drawn by the system. */
+  .as-slider::-webkit-slider-runnable-track { background: linear-gradient(to right, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider::-webkit-slider-thumb, .as-slider.is-upgraded::-webkit-slider-thumb { opacity: 1; background: Canvas; box-shadow: inset 0 0 0 2px CanvasText; }
+  .as-slider::-moz-range-track { background: CanvasText; }
+  .as-slider::-moz-range-progress { background: Highlight; }
+  .as-slider::-moz-range-thumb, .as-slider.is-upgraded::-moz-range-thumb { opacity: 1; background: Canvas; border: 2px solid CanvasText; box-shadow: none; }
+  .as-slider-knob { display: none; }
+
+  /* Selection that was carried by a tinted background. */
+  .as-tabbar .as-tab.is-selected, .as-glass-group > .as-item.is-selected,
+  .as-glass-group > .as-item[aria-pressed="true"], .as-sidebar .as-row.is-selected,
+  .as-split > .as-sidebar .as-row.is-selected, .as-menubar .as-menubar-item[aria-expanded="true"],
+  .as-toolbar-window .as-toolbar-group > .as-item[aria-pressed="true"] {
+    forced-color-adjust: none; background: Highlight; color: HighlightText; box-shadow: none;
+  }
+  .as-sidebar .as-row.is-selected svg,
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: HighlightText; }
+}
 /* No backdrop-filter support → solid material fallback */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .as-glass { --_fill: light-dark(rgb(250 250 252 / .94), rgb(40 40 44 / .94)); }
@@ -1060,5 +1118,4 @@
   .as-toolbar { flex-wrap: wrap; gap: 8px; }
   .as-toolbar-title { min-inline-size: 0; overflow-wrap: anywhere; }
   .as-toolbar .as-search { min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; }
-  .as-toolbar .as-search input { min-inline-size: 0; }
 }

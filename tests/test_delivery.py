@@ -15,7 +15,7 @@ class Delivery(unittest.TestCase):
             site=pathlib.Path(tmp)/'site'
             result=subprocess.run(['bash',str(REPO/'scripts/prepare-demo.sh'),str(site)],capture_output=True,text=True)
             self.assertEqual(result.returncode,0,result.stderr)
-            for file in ['demo/index.html','skills/Apple-Style/web/demo-desktop.html','skills/Apple-Style/web/liquid-glass.js']:
+            for file in ['demo/index.html','skills/Apple-Style/web/demo-desktop.html','skills/Apple-Style/web/liquid-glass.js','skills/Apple-Style/web/liquid-glass.mjs']:
                 self.assertEqual((site/file).read_bytes(),(REPO/file).read_bytes())
             self.assertFalse((site/'skills/Apple-Style-HIG').exists())
             self.assertFalse((site/'.claude').exists())
