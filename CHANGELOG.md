@@ -20,6 +20,12 @@
 - 参考库全量刷新：208 个来源全部重新抓取（新增 Apple In-App Purchase，下线改名前的 In-App Purchase，设计入门页迁到 `/design/get-started/`，28 页内容更新）。
 - 关闭的 sheet 遮罩不再渲染（`visibility: hidden`），避免浏览器按视口边缘固定元素着色工具栏时取到隐藏遮罩。
 
+[PC 端网页评估](evals/runs/2026-10-17-pc-web/report.md) 发现的 D1–D3：
+
+- 分栏变量（栏宽、内容最小宽度、行高、窗口工具栏高度）定义到 `:root`，`.as-split` 可以在 `.as-window` 之外使用，也仍可在任意祖先上覆盖；`.as-window` 没有菜单栏时分栏也能撑满高度；窄屏时所有分栏都隐藏拖拽条。
+- `--as-label-secondary` 浅色值从 60% 提到 74%，默认满足 4.5:1（白底 5.02:1、浅灰底 4.72:1）；深色不变。
+- 新增 `--as-accent-on-tint`，`.as-button-tinted` 的文字在浅色下改用深一档的蓝色（白底 5.57:1、浅灰底 5.04:1）。
+
 ## v0.1.0 — 2026-10-04
 
 Reliability hardening.

@@ -2,14 +2,6 @@
   "light": {
     "violations": [
       {
-        "id": "color-contrast",
-        "impact": "serious",
-        "nodes": 1,
-        "targets": [
-          "#resolve"
-        ]
-      },
-      {
         "id": "region",
         "impact": "moderate",
         "nodes": 2,

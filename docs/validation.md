@@ -111,3 +111,11 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 - 性能探针（审计时的同一脚本、同一 headless Chromium，只说明量级）：20 个固定玻璃按钮滚动 60 次，`elementsFromPoint` **3600 → 1080 次**、累计 **383 → 44 ms**；30 个玻璃按钮来回滚动两次，位移贴图生成 **113 → 10 张**（10 为不同文字宽度的数量）。
 - 参考库全量刷新：首次运行因 2 个来源 404 整批中止、未写入任何文件（事务行为符合预期）。确认 Apple 将 In-App Purchase 改名为 Apple In-App Purchase（旧地址 301）、设计入门页迁到 `/design/get-started/` 后，更新该条目地址并 `--retire hig/in-app-purchase.md` 重跑：**新增 1、下线 1、更新 28、未变 179、失败 0**，208 个来源的 `fetched_at` 均为 2026-10-17。
 - 复核：更新报告指向 `accessibility-and-inclusion.md`（privacy、right-to-left）、`components-quickref.md`（icons、sf-symbols）、`web-implementation.md`（right-to-left）。对应页面的变化为 ATT 同意界面细则、文档链接更新、删除文档图标模板说明；速查表规则不受影响，未修改。
+
+## 评估缺陷 D1–D3 修复（未发布）
+
+执行日期：2026-10-17，环境同上。对应 [PC 端网页评估](../evals/runs/2026-10-17-pc-web/report.md) 第 4 节。
+
+- 新增 6 项浏览器回归测试（`.as-window` 外的栏宽与行高 ×2、在 `.as-window` 上覆盖变量并撑满高度、窄屏隐藏拖拽条、浅色/深色下 5 种背景上的次要文字与 tinted 按钮对比度），在修复前的样式表上运行：**5 项失败**，唯一通过的是深色对比度（深色原本达标，作为对照组）。对比度通过画布合成实际计算色测量，并在测量前关闭过渡动画（`.as-button` 的背景过渡中间帧会得到错误结果）。
+- 修复后：**Chromium 67 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`git diff --check` 通过。
+- 评估页删除全部 `[defect]` 覆盖后重跑 `evals/runs/2026-10-17-pc-web/check.spec.js`：4 项通过；axe 浅色、深色、对话框打开态的对比度违规均为 0（第一轮浅色 68 处），只剩最佳实践级 `region` 2 处（D4，未处理）。

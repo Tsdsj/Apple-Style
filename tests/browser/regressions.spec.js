@@ -345,3 +345,75 @@ test('a closed sheet backdrop is not rendered (§2.10)', async ({ page }) => {
   await page.locator('#dim').evaluate(el => el.classList.remove('is-open'));
   await expect.poll(() => page.locator('#dim').evaluate(el => getComputedStyle(el).visibility)).toBe('hidden');
 });
+
+// D1–D3 of evals/runs/2026-10-17-pc-web/report.md.
+test.describe('split view outside a Mac-style window (D1)', () => {
+  const panes = `<div class="as-split" id="split" style="block-size:600px">
+      <nav class="as-sidebar" aria-label="Sections"><a class="as-row is-selected" href="#a">Inbox</a><a class="as-row" href="#b">Archive</a></nav>
+      <div class="as-split-divider" aria-label="Sidebar width"></div>
+      <main class="as-content"><header class="as-toolbar as-toolbar-window"><h1 class="as-toolbar-title">Inbox</h1></header><p>Content</p></main>
+      <div class="as-split-divider" aria-label="Inspector width"></div>
+      <aside class="as-inspector" aria-label="Details"><div class="as-field"><span>Status</span><span>Open</span></div></aside></div>`;
+  const measure = page => page.evaluate(() => {
+    const box = s => document.querySelector(s).getBoundingClientRect();
+    return { sidebar: Math.round(box('.as-sidebar').width), inspector: Math.round(box('.as-inspector').width),
+      row: Math.round(box('.as-sidebar .as-row').height), field: Math.round(box('.as-inspector .as-field').height),
+      toolbar: getComputedStyle(document.querySelector('.as-toolbar-window')).minBlockSize };
+  });
+  for (const [width, sidebar, inspector] of [[1100, 220, 300], [1440, 264, 380]]) {
+    test(`panes keep their default widths and row heights at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 });
+      await load(page, `<div class="app">${panes}</div>`);
+      await page.evaluate(() => LiquidGlass.init());
+      const m = await measure(page);
+      expect(m).toMatchObject({ sidebar, inspector, toolbar: '52px' });
+      expect(m.row).toBeGreaterThanOrEqual(28); expect(m.field).toBeGreaterThanOrEqual(28);
+    });
+  }
+  test('tokens can still be overridden on .as-window, and a window without a menu bar fills its height', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 800 });
+    await load(page, `<div class="as-window" style="--as-sidebar-w: 300px">${panes.replace(' style="block-size:600px"', '')}</div>`);
+    await page.evaluate(() => LiquidGlass.init());
+    expect((await measure(page)).sidebar).toBe(300);
+    const fill = await page.evaluate(() => [document.querySelector('.as-window').getBoundingClientRect().bottom, split.getBoundingClientRect().bottom].map(Math.round));
+    expect(fill[1]).toBe(fill[0]);
+  });
+  test('below 1024px the stacked split hides its dividers', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
+    await load(page, `<div class="app">${panes}</div>`);
+    await page.evaluate(() => LiquidGlass.init());
+    // Not just zero-sized: the runtime gives dividers tabindex=0, so they must be display:none to leave the tab order.
+    await expect(page.locator('.as-split-divider').first()).toHaveCSS('display', 'none');
+  });
+});
+
+// Composites the computed colours (rgba, color-mix results) on a canvas, so the
+// ratio is what is drawn: container background, then the element's own
+// background, then the text colour.
+async function renderedContrast(page, selector) {
+  return page.evaluate(sel => {
+    const el = document.querySelector(sel), c = document.createElement('canvas'); c.width = c.height = 1;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    const pixel = colors => { x.clearRect(0, 0, 1, 1); for (const fill of colors) { x.fillStyle = fill; x.fillRect(0, 0, 1, 1); } return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+    const host = getComputedStyle(el.parentElement).backgroundColor, own = getComputedStyle(el).backgroundColor;
+    const bg = pixel([host, own]), fg = pixel([host, own, getComputedStyle(el).color]);
+    const lum = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
+    const [a, b] = [lum(fg), lum(bg)];
+    return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+  }, selector);
+}
+for (const colorScheme of ['light', 'dark']) {
+  test(`secondary labels and tinted buttons meet 4.5:1 by default in ${colorScheme} (D2, D3)`, async ({ page }) => {
+    // Reduced motion: .as-button transitions its background, and a mid-transition
+    // frame from the UA button colour is not the default being measured.
+    await page.emulateMedia({ colorScheme, contrast: 'no-preference', reducedMotion: 'reduce' });
+    const backgrounds = ['--as-bg', '--as-bg-secondary', '--as-bg-grouped', '--as-bg-grouped-2', '--as-bg-tertiary'];
+    await load(page, backgrounds.map((bg, i) => `<div style="background:var(${bg});padding:8px">
+      <span class="as-secondary" id="s${i}">Secondary</span> <button class="as-button as-button-tinted" id="t${i}">Tinted</button></div>`).join(''));
+    await page.waitForFunction(() => document.getAnimations().length === 0);
+    for (let i = 0; i < backgrounds.length; i++) {
+      expect(await renderedContrast(page, `#s${i}`), `secondary label on ${backgrounds[i]}`).toBeGreaterThanOrEqual(4.5);
+      expect(await renderedContrast(page, `#t${i}`), `tinted button on ${backgrounds[i]}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+}

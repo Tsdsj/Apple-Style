@@ -62,10 +62,18 @@
   --as-action-fg: #fff;
   --as-action-destructive: light-dark(#b42318, #b92b20);
   --as-accent: light-dark(#0066cc, #64b5ff);   /* app accent color; override per brand */
+  /* Accent text on an accent tint (.as-button-tinted): the tint lowers the
+     contrast, so light mode uses a darker shade — 5.57:1 on white, 5.04:1 on
+     secondarySystemBackground. Change it together with --as-accent. */
+  --as-accent-on-tint: light-dark(#0058b0, #64b5ff);
 
   /* Semantic (dynamic) colors — UIKit semantic values, adapt light/dark */
   --as-label:            light-dark(rgb(0 0 0),              rgb(255 255 255));
-  --as-label-secondary:  light-dark(rgb(60 60 67 / .60),     rgb(235 235 245 / .60));
+  /* Project default: Apple's light secondaryLabel (60 %) measures 3.44:1 on
+     white and 3.30:1 on secondarySystemBackground, below WCAG 1.4.3 for the
+     meaningful small text it carries. 74 % gives 5.02:1 / 4.72:1; the dark
+     value already passes (≥ 5.27:1 up to tertiarySystemBackground). */
+  --as-label-secondary:  light-dark(rgb(60 60 67 / .74),     rgb(235 235 245 / .60));
   --as-label-tertiary:   light-dark(rgb(60 60 67 / .30),     rgb(235 235 245 / .30));
   --as-label-quaternary: light-dark(rgb(60 60 67 / .18),     rgb(235 235 245 / .16));
   --as-placeholder:      var(--as-label-tertiary);
@@ -141,10 +149,9 @@
 /* Increased contrast variants of system colors (HIG Color spec) */
 @media (prefers-contrast: more) {
   :root {
-    /* Label and separator alphas tighten too, not just the hues. At their
-       default alphas secondaryLabel measures ~3.3:1 on secondarySystemBackground
-       — deliberate for de-emphasised text, but Increase Contrast is exactly
-       the switch that is supposed to take it past 4.5:1. */
+    /* Label and separator alphas tighten too, not just the hues: the default
+       secondaryLabel already passes 4.5:1; Increase Contrast takes it further,
+       and lifts tertiary and quaternary labels and separators as well. */
     --as-label-secondary:  light-dark(rgb(60 60 67 / .82), rgb(235 235 245 / .82));
     --as-label-tertiary:   light-dark(rgb(60 60 67 / .60), rgb(235 235 245 / .58));
     --as-label-quaternary: light-dark(rgb(60 60 67 / .40), rgb(235 235 245 / .38));
@@ -440,7 +447,7 @@
 .as-button:active { transform: scale(.96); opacity: .7; }           /* always a press state */
 .as-button:disabled { opacity: .35; pointer-events: none; }
 .as-button-filled { background: var(--as-action-bg); color: var(--as-action-fg); }
-.as-button-tinted { background: color-mix(in oklab, var(--as-accent) 15%, transparent); }
+.as-button-tinted { background: color-mix(in oklab, var(--as-accent) 15%, transparent); color: var(--as-accent-on-tint); }
 .as-button-gray   { background: var(--as-fill); color: var(--as-label); }
 .as-button-bordered { box-shadow: inset 0 0 0 1px var(--as-separator-opaque); color: var(--as-label); }
 .as-button-glass  { /* compose: class="as-glass as-glass-interactive as-button as-button-glass" */
@@ -744,8 +751,12 @@
    window frame. (The floating glass `.as-sidebar` above is the iPad
    expression; used inside `.as-split` it is restyled as a pane.)
    -------------------------------------------------------------------------- */
-.as-window {
-  /* Pane widths are STARTING POINTS, not Apple numbers — the HIG only says
+:root {
+  /* Split-view metrics live on :root, not .as-window: .as-split is used in
+     plain web-app frames too, and a token defined only on the window left
+     every pane at its content width and every row at zero height there.
+     Override them on .as-window, .as-split or any ancestor.
+     Pane widths are STARTING POINTS, not Apple numbers — the HIG only says
      "Set reasonable defaults for minimum and maximum pane sizes"
      (hig/split-views.md) without saying what reasonable is. These are the
      widths at which a two-level sidebar row and a key/value inspector row stop
@@ -760,18 +771,18 @@
   --as-window-chrome: 52px;
 }
 @media (min-width: 1280px) {
-  .as-window { --as-sidebar-w: 264px; --as-inspector-w: 380px; --as-content-min: 480px; }
+  :root { --as-sidebar-w: 264px; --as-inspector-w: 380px; --as-content-min: 480px; }
 }
 /* A pointer is more precise than a fingertip: WCAG 2.2 Target Size (Minimum)
    asks 24×24 CSS px, where touch wants 44×44. Gate on the INPUT, not the
    width — a touchscreen laptop at 1440px still needs finger-sized rows, and a
    Mac inspector at 44pt a row holds a third of what it should. */
-@media (any-pointer: coarse) { .as-window { --as-row-min: var(--as-hit-min); } }
+@media (any-pointer: coarse) { :root { --as-row-min: var(--as-hit-min); } }
 
 /* Narrow-container fallback preserves platform identity and all pane content.
    Panes stack; only resize handles disappear when there is no horizontal split. */
 @media (max-width: 1023.98px) {
-  .as-window > .as-split > .as-split-divider { display: none; }
+  .as-split > .as-split-divider { display: none; }
 }
 /* Used inside a split view, `.as-sidebar` is a pane, not the floating iPad
    slab it is on its own — at every width, so the compact fallback doesn't
@@ -794,6 +805,9 @@
     overflow: hidden;                    /* the panes scroll, the window doesn't */
     background: var(--as-bg-grouped);
   }
+  /* The split always takes the 1fr row, so a window without a menu bar (or
+     without a toolbar) still fills its height instead of leaving it empty. */
+  .as-window > .as-split { grid-row: 3; }
 
   /* Menu bar. On a Mac this lives outside the window and iPadOS 26 puts it at
      the top of the screen; on the web it has to be drawn in-window. Quiet

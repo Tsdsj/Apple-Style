@@ -23,7 +23,7 @@ Source: HIG *Color* (`Apple-Style-HIG/reference/hig/color.md`), *Dark Mode*, WWD
 visionOS uses the dark values. Grays (iOS/iPadOS): gray 142 142 147 / 142 142 147 · gray2 174 174 178 / 99 99 102 · gray3 199 199 204 / 72 72 74 · gray4 209 209 214 / 58 58 60 · gray5 229 229 234 / 44 44 46 · gray6 242 242 247 / 28 28 30.
 
 ## Semantic (dynamic) colors — use these, never hard-code appearance
-label / secondaryLabel (60%) / tertiaryLabel (30%) / quaternaryLabel (18%) · placeholderText · separator (translucent) / opaqueSeparator · link · systemBackground / secondary / tertiary · systemGroupedBackground / secondary / tertiary · systemFill / secondary / tertiary / quaternary. Web tokens: `--as-label`, `--as-bg`, `--as-bg-grouped-2`, `--as-fill`, … in `web/apple-style.css`.
+label / secondaryLabel (60%; the Web token uses 74 % in light for 4.5:1, see below) / tertiaryLabel (30%) / quaternaryLabel (18%) · placeholderText · separator (translucent) / opaqueSeparator · link · systemBackground / secondary / tertiary · systemGroupedBackground / secondary / tertiary · systemFill / secondary / tertiary / quaternary. Web tokens: `--as-label`, `--as-bg`, `--as-bg-grouped-2`, `--as-fill`, … in `web/apple-style.css`.
 
 Never redefine a semantic color's meaning (separator as text color, secondaryLabel as background).
 
@@ -41,4 +41,8 @@ Never redefine a semantic color's meaning (separator as text color, secondaryLab
 
 ## Accessible Web action colors (project defaults)
 
-`--as-blue` preserves the Apple system samples. White on those samples measures about 3.52:1 light / 3.23:1 dark and is insufficient for ordinary text. The runtime stylesheet uses `--as-action-bg: light-dark(#0066cc, #006bd6)` and `--as-action-fg: #fff` for filled buttons, prominent glass and selected rows. These opaque action surfaces meet 4.5:1 without Increase Contrast. `--as-action-destructive` provides a separate white-text destructive fill. `--as-accent` is for foreground accents, not white-text filled surfaces. Custom `--as-tint`, opacity, inherited foregrounds and backgrounds still require measurement. See `tests/browser/styles.spec.js` for the measured default pairs.
+`--as-blue` preserves the Apple system samples. White on those samples measures about 3.52:1 light / 3.23:1 dark and is insufficient for ordinary text. The runtime stylesheet uses `--as-action-bg: light-dark(#0066cc, #006bd6)` and `--as-action-fg: #fff` for filled buttons, prominent glass and selected rows. These opaque action surfaces meet 4.5:1 without Increase Contrast. `--as-action-destructive` provides a separate white-text destructive fill. `--as-accent` is for foreground accents, not white-text filled surfaces. Accent text on an accent tint (`.as-button-tinted`) uses `--as-accent-on-tint: light-dark(#0058b0, #64b5ff)`, 5.57:1 on white and 5.04:1 on secondarySystemBackground; change it together with `--as-accent`.
+
+`--as-label-secondary` departs from Apple's light secondaryLabel (60 %, 3.44:1 on white, 3.30:1 on secondarySystemBackground) and uses 74 % (5.02:1 / 4.72:1), because on the web it carries meaningful small text — section titles, field labels, metadata. The dark value is Apple's (≥ 5.27:1 up to tertiarySystemBackground). Tertiary and quaternary labels remain de-emphasis colours for placeholders and disabled content; do not use them for information people need to read.
+
+Custom `--as-tint`, opacity, inherited foregrounds and backgrounds still require measurement. See `tests/browser/styles.spec.js` and `tests/browser/regressions.spec.js` for the measured default pairs.

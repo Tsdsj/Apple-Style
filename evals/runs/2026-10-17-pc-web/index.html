@@ -10,7 +10,9 @@
      application, input = pointer + keyboard, container = 1024–1920 px.
      Library: ../../../skills/Apple-Style/web/{apple-style.css, liquid-glass.mjs}.
      Page CSS below is only what the library does not provide; every block is
-     tagged [gap] or [page] so the evaluation can count it. -->
+     tagged [gap] or [page] so the evaluation can count it. The first run also
+     needed 12 lines of [defect] workarounds (D1, D2 in report.md); they were
+     removed once the library fixed them. -->
 <link rel="stylesheet" href="../../../skills/Apple-Style/web/apple-style.css">
 <style>
   /* [gap] CJK: the font stacks have no CJK face and the type scale uses Latin
@@ -19,6 +21,7 @@
     --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
     --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
   }
+  * { letter-spacing: 0 !important; }
 
 
   /* [page] application frame: .as-window assumes an in-window menu bar, so a
@@ -26,13 +29,6 @@
   html, body { margin: 0; block-size: 100%; }
   .app { block-size: 100dvh; display: grid; grid-template-rows: minmax(0, 1fr); background: var(--as-bg-grouped); }
   .app > .as-split { min-block-size: 0; }
-  /* [defect] .as-split's panes read --as-sidebar-w, --as-inspector-w,
-     --as-content-min and --as-row-min, but those are defined only on
-     .as-window. Outside a Mac-style window every pane collapses to its
-     content width and every row to zero minimum height. Same values here. */
-  .app { --as-sidebar-w: 220px; --as-inspector-w: 300px; --as-content-min: 380px; --as-row-min: 28px; }
-  @media (min-width: 1280px) { .app { --as-sidebar-w: 240px; --as-inspector-w: 340px; --as-content-min: 480px; } }
-  @media (any-pointer: coarse) { .app { --as-row-min: var(--as-hit-min); } }
   .brand { display: flex; align-items: center; gap: 8px; padding: 10px 8px 14px; font: 600 15px/20px var(--as-font-text); color: var(--as-label); }
   .brand svg { inline-size: 22px; block-size: 22px; color: var(--as-accent); }
   .as-sidebar .as-row .count { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
@@ -48,12 +44,6 @@
   body .as-segmented .as-segment { min-block-size: 28px; padding-inline: 12px; font-size: 13px; line-height: 18px; }
   .app .as-toolbar-window .as-search { inline-size: 220px; }
 
-  /* [defect] --as-label-secondary keeps Apple's light value (≈3.5:1 on white),
-     below WCAG 1.4.3 for the meaningful small text it is used for (section
-     titles, field labels, metadata). The stylesheet only raises it under
-     Increase Contrast. AA values for the default appearance (5.63:1 on white): */
-  :root { --as-label-secondary: light-dark(rgb(60 60 67 / .78), rgb(235 235 245 / .64)); }
-  * { letter-spacing: 0 !important; }
 
   /* [gap] selectable list rows (a listbox): .as-list is the iOS inset grouped
      list and .as-list-column has no row styles. */

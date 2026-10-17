@@ -92,6 +92,13 @@ The example uses leading navigation and trailing detail. For a content website, 
 Working page: `web/demo-desktop.html`. Below 1024px the same markup degrades to
 stacked panes. The Mac platform attribute remains; test narrow-window content order and overflow before using that fallback in a product.
 
+`.as-split` does not need `.as-window`: a web app can put the split in its own
+full-height frame (`block-size: 100dvh`) without a menu bar or Mac density. The
+pane tokens (`--as-sidebar-w`, `--as-inspector-w`, `--as-content-min`,
+`--as-row-min`, `--as-window-chrome`) are defined on `:root` with the 1024 /
+1280 tiers below; override them on `.as-window`, `.as-split` or any ancestor.
+`.as-window` itself works with or without the menu bar and toolbar rows.
+
 - **Toolbar is part of the window frame**, not a bar the content scrolls under:
   "the toolbar resides in the frame at the top of a window … window titles can
   display inline with controls, and toolbar items don't include a bezel"
@@ -179,7 +186,7 @@ numbers, not a tweak:
 | `.as-menu-item` | 44px | **28px** |
 | Large title | 34/41 | 26/32 |
 
-Inside `.as-window`, sidebar rows and inspector fields use `--as-row-min`
+Inside `.as-split`, sidebar rows and inspector fields use `--as-row-min`
 (28px), and `@media (any-pointer: coarse)` raises it back to 44px — see the hit
 region note below. macOS keeps **capsules for Large/XL controls and standout
 actions only**; mini/small/medium stay rounded rectangles, which is what the

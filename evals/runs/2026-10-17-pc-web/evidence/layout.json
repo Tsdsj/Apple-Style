@@ -11,27 +11,27 @@
   {
     "width": 1280,
     "overflow": 0,
-    "sidebar": 240,
-    "content": 698,
-    "inspector": 340,
+    "sidebar": 264,
+    "content": 634,
+    "inspector": 380,
     "titleTruncated": 0,
     "errors": []
   },
   {
     "width": 1440,
     "overflow": 0,
-    "sidebar": 240,
-    "content": 858,
-    "inspector": 340,
+    "sidebar": 264,
+    "content": 794,
+    "inspector": 380,
     "titleTruncated": 0,
     "errors": []
   },
   {
     "width": 1920,
     "overflow": 0,
-    "sidebar": 240,
-    "content": 1338,
-    "inspector": 340,
+    "sidebar": 264,
+    "content": 1274,
+    "inspector": 380,
     "titleTruncated": 0,
     "errors": []
   },
