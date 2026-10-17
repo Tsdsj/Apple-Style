@@ -127,3 +127,12 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 - 原因：`.as-button-destructive` 与 `.as-menu-item.as-destructive` 用系统红色样本作文字色，白底 3.57:1、浅灰底 3.20:1；Apple 的增强对比度红色在浅灰底上也只有 4.08:1。
 - 新增 4 项浏览器测试（浅色/深色 × 默认/增强对比度；5 种标准背景上的危险按钮，以及叠在这些背景上的大玻璃菜单里的危险菜单项；从页面根到元素逐层合成背景后测量）。在修复前的样式表上：**3 项失败**，通过的是“深色 + 增强对比度”（Apple 该组红色在深色下本就达标）。
 - 修复后：**Chromium 71 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`git diff --check` 通过。
+
+## 桌面 Web 尺寸档（未发布）
+
+执行日期：2026-10-17，环境同上。
+
+- 新增 `data-density="desktop"`（`apple-style.css` 第 6c 节）与 `tests/browser/density.spec.js` 5 项：不设属性时 iOS 档尺寸不变；桌面档下正文、文字样式（含 `.as-em` 字重）、各尺寸按钮、图标按钮、分段控件、搜索框、开关、玻璃分组项、列表行、菜单项、侧栏与详情栏行的尺寸；40×24 开关的行程（开启后旋钮距两端 18px / 2px）与拖拽回关；20px 滑块覆盖旋钮与原生拇指中心对齐；RTL 下开关镜像；`hasTouch` 上下文（`any-pointer: coarse`）中保持 44px、16px 输入文字与 51×31 开关。
+- 全部测试：**Chromium 76 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`git diff --check` 通过。
+- 评估页改用该属性并删除自写的密度覆盖后，`evals/runs/2026-10-17-pc-web/check.spec.js` 4 项通过，axe 结果不变。
+- 范围：只在 Chromium 中验证；真实触屏笔记本、Safari、Firefox 未测。

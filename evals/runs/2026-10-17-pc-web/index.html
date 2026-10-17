@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="zh-Hans" data-density="desktop">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,15 +33,8 @@
   .brand svg { inline-size: 22px; block-size: 22px; color: var(--as-accent); }
   .as-sidebar .as-row .count { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
 
-  /* [gap] desktop-web density: the library has an iOS tier (17 px text, 44 px
-     controls) and a macOS tier (13 px, 22 px) but nothing for a cross-platform
-     desktop web app; panes inside .as-split are already 13 px while buttons,
-     segmented controls and search stay at the iOS size. */
-  /* Scoped to the body, not .app: a modal <dialog> renders in the top layer
-     outside the app frame and would otherwise fall back to the iOS tier. */
-  body.as-body { font: 400 14px/20px var(--as-font-text); color: var(--as-label); }
-  body .as-button { min-block-size: 32px; padding-inline: 14px; font-size: 14px; line-height: 20px; }
-  body .as-segmented .as-segment { min-block-size: 28px; padding-inline: 12px; font-size: 13px; line-height: 18px; }
+  /* Density: data-density="desktop" on <html> (the first run needed 4 lines of
+     [gap] overrides here, before the library had a desktop web tier). */
   .app .as-toolbar-window .as-search { inline-size: 220px; }
 
 

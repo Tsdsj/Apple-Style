@@ -106,6 +106,7 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 - Tailwind v4 / 级联层：样式表默认不分层，普通 `<link>` 行为不变；需要让工具类覆盖组件时，用 `@import "./apple-style.css" layer(components);` 导入到工具类之下的层。
 - `data-shortcuts`：⌘ 在 Apple 平台为 Command、其他平台为 Ctrl；焦点在文本框或富文本中时，全选、复制/剪切/粘贴、撤销/重做、光标移动与删除留给输入框，其他命令（如 ⌘S）照常执行。
 - 强制颜色（Windows 对比度主题）下，开关、分段选中、滑块与选中的标签/行改用系统色绘制；`dir="rtl"` 下滑块与开关按 HIG 镜像。
+- 尺寸档：默认是 iOS 档（17px 正文、44px 控件）；跨平台桌面 Web 应用在 `<html>` 上设 `data-density="desktop"`（14/20 正文、32px 控件，触屏时仍保持 44px 命中区）；Mac 风格界面用 `data-platform="macos"`。三者都按产品与输入方式选择，不按宽度推断。
 
 系统蓝色样本 `--as-blue` 保留；普通白字操作面使用 `--as-action-bg` / `--as-action-fg`，默认浅深色均满足 4.5:1。自定义 tint、透明度、图片背景和辅助文字仍应检查实际组合。增强对比度、降低透明度、减弱动态效果是额外支持，不是默认可读性的替代。
 

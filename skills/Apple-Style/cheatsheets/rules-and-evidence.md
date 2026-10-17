@@ -7,7 +7,7 @@ Choose four things independently before applying the design system:
 3. **Input:** touch, pointer, keyboard, assistive technology, or a combination. A wide iPad still needs touch targets; a narrow Mac window still needs keyboard access.
 4. **Available container:** actual width/height, zoom, safe areas, text scaling and surrounding panes. Reflow, collapse or disclose panes without changing platform identity.
 
-A 1366px iPad is not a Mac. A 700px Mac window is not an iPhone. A desktop browser page does not need a fake native window, sidebar or inspector. Use `.as-window` and `data-platform="macos"` only for an explicitly chosen Mac-like application surface. The stylesheet's 768/1024/1280px breakpoints and 264/380px pane widths are project defaults, not Apple platform detectors or official specifications.
+A 1366px iPad is not a Mac. A 700px Mac window is not an iPhone. A desktop browser page does not need a fake native window, sidebar or inspector. Use `.as-window` and `data-platform="macos"` only for an explicitly chosen Mac-like application surface; a cross-platform desktop web app uses `data-density="desktop"` (a project default density) with its own page structure. The stylesheet's 768/1024/1280px breakpoints and 264/380px pane widths are project defaults, not Apple platform detectors or official specifications.
 
 ## Strength of a rule
 

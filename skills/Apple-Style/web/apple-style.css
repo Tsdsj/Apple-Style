@@ -1019,6 +1019,110 @@
 }
 
 /* --------------------------------------------------------------------------
+   6c. Desktop web density — data-density="desktop"
+
+   A cross-platform desktop web app (consoles, dashboards, admin tools) sits
+   between the two densities above: the iOS default (17 px text, 44 px
+   controls) is loose for pointer-driven work, and data-platform="macos"
+   (13 px, 22 px) is an explicit choice for a Mac-like surface. This tier is a
+   PROJECT DEFAULT, not an Apple specification: 14/20 text and 32 px controls,
+   with every component scaled together so one page has one density.
+
+   Put the attribute on <html>: dialogs and popovers render in the top layer,
+   outside any app container. Touch input (any-pointer: coarse — including a
+   touchscreen laptop with a trackpad) keeps 44 px targets and 16 px field
+   text, and switches and sliders keep their touch size. Use either this or
+   data-platform="macos", not both.
+   -------------------------------------------------------------------------- */
+[data-density="desktop"] {
+  --as-control-h: 32px;     /* buttons, search fields; segmented controls in total */
+  --as-control-h-s: 28px;   /* small buttons, glass group items */
+  --as-row-min: 32px;       /* menu, sidebar, inspector and split-pane rows */
+  --as-field-font: 14px;
+}
+@media (any-pointer: coarse) {
+  [data-density="desktop"] { --as-control-h: var(--as-hit-min); --as-control-h-s: var(--as-hit-min); --as-row-min: var(--as-hit-min); --as-field-font: 16px; }
+}
+[data-density="desktop"] .as-root, [data-density="desktop"] .as-body,
+.as-root[data-density="desktop"], .as-body[data-density="desktop"] { font-size: 14px; line-height: 20px; }
+/* Text styles: size, leading and tracking only, so .as-em weights still apply.
+   The iOS tracking values are tuned for SF at iOS sizes; at 13–17 px on the
+   web they read cramped, and they are wrong for CJK. */
+[data-density="desktop"] .as-text-largetitle { font-size: 28px; line-height: 34px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-title1     { font-size: 24px; line-height: 30px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-title2     { font-size: 20px; line-height: 26px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-title3     { font-size: 17px; line-height: 22px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-headline,
+[data-density="desktop"] .as-text-body       { font-size: 14px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-callout,
+[data-density="desktop"] .as-text-subhead    { font-size: 13px; line-height: 18px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-footnote,
+[data-density="desktop"] .as-text-caption1   { font-size: 12px; line-height: 16px; letter-spacing: 0; }
+[data-density="desktop"] .as-text-caption2   { font-size: 11px; line-height: 14px; letter-spacing: 0; }
+
+[data-density="desktop"] .as-button { min-height: var(--as-control-h); padding: 0 14px; font-size: 14px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-button-mini   { min-height: 22px; padding: 0 10px; font-size: 12px; line-height: 16px; }
+[data-density="desktop"] .as-button-small  { min-height: var(--as-control-h-s); padding: 0 12px; font-size: 13px; line-height: 18px; }
+[data-density="desktop"] .as-button-large  { min-height: 40px; padding: 0 20px; font-size: 15px; line-height: 20px; }
+[data-density="desktop"] .as-button-xlarge { min-height: 48px; padding: 0 24px; font-size: 17px; line-height: 22px; }
+[data-density="desktop"] .as-button-icon   { width: var(--as-control-h); padding: 0; }
+
+[data-density="desktop"] .as-glass-group { padding: 3px; }
+[data-density="desktop"] .as-glass-group > .as-item { min-width: var(--as-control-h-s); min-height: var(--as-control-h-s); padding: 0 10px; font-size: 14px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-toolbar { min-height: 48px; padding-block: 6px; }
+[data-density="desktop"] .as-toolbar-title { font-size: 15px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-navbar .as-large-title { font-size: 28px; line-height: 34px; letter-spacing: 0; }
+
+[data-density="desktop"] .as-search { min-height: var(--as-control-h); padding: 0 10px; gap: 6px; }
+[data-density="desktop"] .as-search input,
+[data-density="desktop"] .as-toolbar-window .as-search input { font-size: var(--as-field-font); line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-search svg { width: 16px; height: 16px; }
+
+/* The segmented control's 3 px track inset is part of its height, so the
+   whole control lines up with a 32 px button. */
+[data-density="desktop"] .as-segmented .as-segment { min-height: calc(var(--as-control-h) - 6px); padding: 0 12px; font-size: 13px; line-height: 18px; letter-spacing: 0; }
+
+[data-density="desktop"] .as-sidebar .as-row { min-height: var(--as-row-min); font-size: 14px; line-height: 20px; }
+[data-density="desktop"] .as-sidebar .as-section-title { font-size: 12px; line-height: 16px; }
+[data-density="desktop"] .as-inspector .as-field { font-size: 14px; line-height: 20px; }
+[data-density="desktop"] .as-inspector .as-inspector-title { font-size: 12px; line-height: 16px; }
+[data-density="desktop"] .as-list li { min-height: max(var(--as-row-min), 36px); font-size: 14px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-list-header { font-size: 12px; line-height: 16px; }
+
+[data-density="desktop"] .as-menu { min-width: 200px; padding: 4px; }
+[data-density="desktop"] .as-menu .as-menu-item { min-height: var(--as-row-min); gap: 10px; padding: 0 10px; border-radius: var(--as-radius-s); font-size: 14px; line-height: 20px; letter-spacing: 0; }
+[data-density="desktop"] .as-menu .as-menu-item svg { width: 16px; height: 16px; }
+[data-density="desktop"] .as-menu .as-menu-item .as-shortcut { font-size: 13px; }
+[data-density="desktop"] .as-sheet .as-sheet-title { font-size: 17px; line-height: 22px; }
+[data-density="desktop"] .as-alert h2 { font-size: 15px; line-height: 20px; letter-spacing: 0; }
+
+@media (min-width: 1024px) {
+  [data-density="desktop"] .as-tabbar[data-sidebar] .as-tab,
+  [data-density="desktop"] .as-tabbar[data-sidebar] .as-tab-search { min-height: var(--as-row-min); }
+  [data-density="desktop"] .as-tabbar[data-sidebar] .as-tab,
+  [data-density="desktop"] .as-tabbar[data-sidebar] .as-tab span { font-size: 14px; line-height: 20px; }
+}
+
+/* Switch and slider shrink only when no touch input is available. */
+@media not all and (any-pointer: coarse) {
+  [data-density="desktop"] .as-toggle { width: 40px; height: 24px; }
+  [data-density="desktop"] .as-toggle .as-knob { width: var(--as-knob-w, 20px); height: 20px; }
+  [data-density="desktop"] .as-toggle[aria-checked="true"] { --as-knob-x: 16px; }
+  [data-density="desktop"] .as-toggle:active, [data-density="desktop"] .as-toggle.is-scrubbing { --as-knob-w: 24px; }
+  [data-density="desktop"] .as-toggle[aria-checked="true"]:active { --as-knob-x: 12px; }
+  [data-density="desktop"] .as-toggle[aria-checked="true"]:dir(rtl) { --as-knob-x: -16px; }
+  [data-density="desktop"] .as-toggle[aria-checked="true"]:active:dir(rtl) { --as-knob-x: -12px; }
+
+  [data-density="desktop"] .as-slider { height: 28px; }
+  [data-density="desktop"] .as-slider::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; }
+  [data-density="desktop"] .as-slider::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; }
+  [data-density="desktop"] .as-slider::-moz-range-track,
+  [data-density="desktop"] .as-slider::-moz-range-progress { height: 4px; border-radius: 2px; }
+  [data-density="desktop"] .as-slider::-moz-range-thumb { width: 20px; height: 20px; }
+  [data-density="desktop"] .as-slider-knob { width: 20px; height: 20px; margin-left: -10px; }
+}
+
+/* --------------------------------------------------------------------------
    7. Accessibility + user preferences (applied system-wide, automatically)
    -------------------------------------------------------------------------- */
 /* Reduce Transparency → frostier, obscures more of what's behind */

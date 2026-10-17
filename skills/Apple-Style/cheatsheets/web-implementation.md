@@ -173,22 +173,33 @@ That is why there are two tiers instead of one set of widths.
   two boards lying on a page. `.as-window` is `100dvh` with `overflow: hidden`;
   the panes scroll, the window never does.
 
-## Density (macOS)
+## Density
 
-`data-platform="macos"` on `<html>` is the desktop density switch, and it is
-easy to miss — set it first for any desktop target. It already carries real
-numbers, not a tweak:
+Pick the density from the product and its input, not from the viewport width,
+and set it on `<html>` (dialogs and popovers render in the top layer, outside
+any app container):
 
-| | iOS default | `data-platform="macos"` |
-|---|---|---|
-| Body text | 17/22 | **13/16** |
-| `.as-button` | 44px min-height, capsule | **22px**, `--as-radius-xs` |
-| `.as-menu-item` | 44px | **28px** |
-| Large title | 34/41 | 26/32 |
+| | iOS default | `data-density="desktop"` | `data-platform="macos"` |
+|---|---|---|---|
+| For | phone/tablet-first UI, touch | cross-platform desktop web apps: consoles, dashboards, admin tools | an explicitly Mac-like application surface |
+| Body text | 17/22 | **14/20** | **13/16** |
+| `.as-button` | 44px, capsule | **32px**, capsule | **22px**, `--as-radius-xs` |
+| Segmented control | 38px | **32px** | (iOS size) |
+| Search field | 44px | **32px** | (window toolbar: 24px) |
+| `.as-menu-item`, sidebar and pane rows | 44px | **32px** | **28px** |
+| Switch | 51×31 | **40×24** | (iOS size) |
+| Large title | 34/41 | 28/34 | 26/32 |
+
+`data-density="desktop"` is a project default, not an Apple specification. It
+scales every component together, so a page has one density instead of 13px
+panes next to 44px buttons. With touch input (`any-pointer: coarse`, which
+includes touchscreen laptops) it keeps 44px targets, 16px field text (iOS
+Safari zooms smaller inputs) and the touch-size switch and slider. Use either
+it or `data-platform="macos"`, not both.
 
 Inside `.as-split`, sidebar rows and inspector fields use `--as-row-min`
-(28px), and `@media (any-pointer: coarse)` raises it back to 44px — see the hit
-region note below. macOS keeps **capsules for Large/XL controls and standout
+(28px; 32px with the desktop density), and `@media (any-pointer: coarse)` raises
+it back to 44px — see the hit region note below. macOS keeps **capsules for Large/XL controls and standout
 actions only**; mini/small/medium stay rounded rectangles, which is what the
 `--as-radius-xs` override is for. A desktop window made entirely of 44pt
 capsules is the most common tell that a phone stylesheet was stretched.
