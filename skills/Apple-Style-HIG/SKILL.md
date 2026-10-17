@@ -5,7 +5,7 @@ description: Use when you need Apple's actual Human Interface Guidelines text or
 
 # Apple-Style-HIG — offline reference library
 
-Markdown renderings (not byte-for-byte copies) of developer.apple.com/design (legacy snapshot reported as 2026-09-14; exact original timestamps unknown; later fetches recorded in reference/sources.json; images replaced with their alt text, which often describes the do/don't examples). ~300k words. Companion to **Apple-Style** (rules/tokens) and **Apple-Style-Liquid-Glass** (implementation).
+Markdown renderings (not byte-for-byte copies) of developer.apple.com/design (every page last fetched 2026-10-17, recorded per page in reference/sources.json; images replaced with their alt text, which often describes the do/don't examples). ~300k words. Companion to **Apple-Style** (rules/tokens) and **Apple-Style-Liquid-Glass** (implementation).
 
 ## How to use
 1. Open `reference/INDEX.md` — every page with its one-line abstract, grouped as on Apple's site (Getting started · Foundations · Patterns · Components · Inputs · Technologies), plus Liquid Glass docs, WWDC25 transcripts, and design-site pages.
@@ -34,10 +34,10 @@ reference/
 - Each HIG page = Overview → Best practices (bold imperative sentences are the rules) → Platform considerations → Specifications (tables) → Resources → Change log. `--rules` extracts the bold sentences.
 - Pages with hard numbers: `typography` (all Dynamic Type tables), `color` (RGB for every system color/gray in 4 appearances), `layout` (tvOS safe areas/grids), `app-icons` (sizes), `buttons` (44pt), `sf-symbols`, `widgets`, `complications`, `live-activities`, `materials`.
 - Platform pages `designing-for-<platform>` set the mindset; `<component>` pages have a "Platform considerations" section for each OS.
-- Newest guidance (June 2026): `design-principles`, `siri`, `snippets`, `app-shortcuts`, `branding`, `layout`, `menus`, `shareplay`. `design-site/whats-new.md` lists dates.
+- Newest guidance: October 2026 `widgets`, `live-activities`; September 2026 `designing-for-iphone-duo` (new), `layout`, `branding`, `shareplay`, `apple-in-app-purchase` (renamed from In-App Purchase); June 2026 `design-principles`, `siri`, `snippets`, `app-shortcuts`, `menus`, `sidebars`, `scroll-views`, `search-fields`, `tab-bars`. `design-site/whats-new.md` lists dates.
 - HIG combines recommendations and platform constraints; do not turn “consider” or “prefer” into universal requirements. Transcripts provide rationale. Use `../Apple-Style/cheatsheets/rules-and-evidence.md` to label rule strength and applicability.
 - Width does not determine platform: read the relevant platform section for the actual target.
-- `reference/sources.json` records canonical URL, fetch URL, fetched_at and content SHA-256. Null timestamps identify legacy content; they are not fresh validation.
+- `reference/sources.json` records canonical URL, fetch URL, fetched_at and content SHA-256 (plus the source response hash). A timestamp says when the page was fetched, not that derived cheatsheet rules were re-validated.
 
 ## Refreshing
-`../Apple-Style/scripts/update-reference.sh` refreshes all manifest entries (HIG, Liquid Glass APIs, design-site, WWDC) with Python 3 standard library and generates INDEX automatically. HIG links discover new pages on a full run. `--only hig/layout.md` or `--limit 5` bounds online checks; `--index-only` is offline. A failed batch does not overwrite valid reference pages. Read the report and recheck the listed cheatsheets; a refreshed source does not automatically validate derived rules.
+`../Apple-Style/scripts/update-reference.sh` refreshes all manifest entries (HIG, Liquid Glass APIs, design-site, WWDC) with Python 3 standard library and generates INDEX automatically. HIG links discover new pages on a full run. `--only hig/layout.md` or `--limit 5` bounds online checks; `--index-only` is offline. A failed batch does not overwrite valid reference pages. When Apple moves a page the report gives `moved_to`: update that entry's `url`/`fetch_url`, or `--retire` the old path when a discovered page replaces it. WWDC transcripts go in a `wwdcNN/` directory per event. The report's `recheck_reasons` maps each cheatsheet to the changed pages it cites; recheck those passages — a refreshed source does not automatically validate derived rules.

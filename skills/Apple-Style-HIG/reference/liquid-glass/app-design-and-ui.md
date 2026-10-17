@@ -34,6 +34,7 @@ No matter which app-builder technology you choose, most of the components you us
 - Explore the design approaches for each platform, and learn how to make your app stand out.
 - Manage app-related assets, and learn how to load them locally or from a remote server.
 - Support common features like internationalization, accessibility, undo and redo, and the pasteboard.
+- Adapt iOS apps for dynamic resizing, vertical controls, and multiple displays on iPhone Duo. Read more at [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo).
 
 ![None]
 
@@ -55,4 +56,5 @@ Interfaces across Apple platforms feature a new dynamic material called Liquid G
 ## Interface
 
 - [Interface fundamentals](https://developer.apple.com/documentation/technologyoverviews/interface-fundamentals) — Explore the components that go into building your app’s interface, and discover platform-specific features that improve the experience you offer to people.
+- [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo) — Update your iOS app to dynamically resize for inner and outer displays, adjust your layout for the folding display, and adapt bars for vertical layout.
 - [Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass) — Learn how to design and develop beautiful interfaces that leverage Liquid Glass.

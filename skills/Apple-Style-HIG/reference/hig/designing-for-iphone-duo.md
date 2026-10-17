@@ -4,7 +4,7 @@ An app designed for iPhone Duo adapts seamlessly to both displays, providing a c
 
 ![A stylized representation of an iPhone Duo frame shown on top of a grid. The image is overlaid with rectangular and circular grid lines and is tinted green to subtly reflect the green in the original six-color Apple logo.]
 
-iPhone Duo has two displays, each with its own front-facing camera. A hinge in the center lets people open and close the device, and supports a variety of ways to hold and position it. This range of display sizes and poses makes an adaptable [Layout](https://developer.apple.com/design/human-interface-guidelines/layout) more important than ever. If your app uses standard system components and you’ve designed it to support resizing, it automatically adapts to the device’s poses with little adjustment required.
+iPhone Duo has two displays, each with its own front-facing camera. A hinge in the center lets people open and close the device, and supports a variety of ways to hold and position it. This range of display sizes and poses makes an adaptable [Layout](https://developer.apple.com/design/human-interface-guidelines/layout) more important than ever. If your app uses standard system components and you’ve designed it to support resizing, it automatically adapts to the device’s poses with little adjustment required. For developer guidance, see [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo).
 
 **Outer display**
 
@@ -39,6 +39,8 @@ People hold iPhone Duo and set it down in a number of ways: partially folded lik
 ![An illustration of six device poses.]
 
 Supporting the device’s various poses doesn’t mean designing a custom layout for each one: instead, use [Size classes](https://developer.apple.com/design/human-interface-guidelines/layout#Size-classes) so your app adapts naturally as it changes size. A compact width layout for the outer display and a regular width layout for the inner display give you the fundamentals for every pose. Don’t reinvent your app when it resizes; allow the existing layout to expand based on the available space instead. See [Dynamic layouts](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo#Dynamic-layouts) for guidance.
+
+You can use [Device Hub](https://developer.apple.com/documentation/xcode/device-hub) in Xcode to preview your app on iPhone Duo and test how your app appears in its various poses.
 
 ## Best practices
 
@@ -84,9 +86,9 @@ The reserved regions on iPhone Duo include:
 
 ![A diagram of the inner display of iPhone Duo, showing the locations of the folding region and the inner camera region.]
 
-Many system components automatically adapt to reserved regions. Components like alerts, context menus, and sheets automatically move to account for the fold, while larger components like [Split views](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo#Split-views) adapt their columns’ width and margins to match the symmetry of the inner display. For custom components, the reserved region APIs provide a way to reposition content away from reserved regions.
+Many system components automatically adapt to reserved regions. Components like alerts, context menus, and sheets automatically move to account for the fold, while larger components like [Split views](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo#Split-views) adapt their columns’ width and margins to match the symmetry of the inner display. For custom components, [ReservedRegion](https://developer.apple.com/documentation/swiftui/reservedregion) (SwiftUI) and [UIView.ReservedRegion](https://developer.apple.com/documentation/uikit/uiview/reservedregion) (UIKit) provide a way to reposition content away from reserved regions.
 
-**Adapt your layout when the device folds.** Prefer a layout container that adapts automatically, like the split view in Notes that adjusts the width of each pane to stay clearly visible as the device folds. In a grid-style layout, prefer an even number of columns so content divides cleanly. Use the reserved region APIs to keep important elements clear of the center if the system doesn’t move them automatically.
+**Adapt your layout when the device folds.** Prefer a layout container that adapts automatically, like the split view in Notes that adjusts the width of each pane to stay clearly visible as the device folds. In a grid-style layout, prefer an even number of columns so content divides cleanly. Use the `ReservedRegion` API to keep important elements clear of the center if the system doesn’t move them automatically.
 
 **Fully open**
 
@@ -115,13 +117,15 @@ There are two types of arrangement view: split and overlay.
 
 **Split arrangement**
 
-![A diagram of a split arrangement on the inner display of iPhone Duo. A secondary view fills the leading half of the display, and a primary view fills the trailing half.]
+![A diagram of a split arrangement on the inner display of iPhone Duo. A primary view fills the leading half of the display, and a secondary view fills the trailing half.]
 
 **Overlay arrangement**
 
 ![A diagram of an overlay arrangement on the inner display of iPhone Duo. A secondary view fills the display, and a smaller, bottom-aligned primary view is overlaid on top of the secondary view.]
 
 You can limit which axes a split arrangement uses, and collapse the secondary view in an overlay arrangement when you don’t want it to appear.
+
+For developer guidance, see [ArrangementView](https://developer.apple.com/documentation/swiftui/arrangementview) (SwiftUI) and [UIArrangementViewController](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller) (UIKit).
 
 **Consider an arrangement view when your layout already resembles one.** A layout that places two views side by side or one above the other, such as an [HStack](https://developer.apple.com/documentation/swiftui/hstack) or [VStack](https://developer.apple.com/documentation/swiftui/vstack), translates directly to a split arrangement. A layout that layers one view over another, such as a [ZStack](https://developer.apple.com/documentation/swiftui/zstack), translates to an overlay arrangement.
 
@@ -169,7 +173,7 @@ Preserve frequently used actions first, like Compose in Mail or New Note in Note
 
 **When space is limited, preserve either the toolbar or tab bar based on the experience that the view provides.** In navigation-focused experiences, move toolbar items into the overflow menu so the tab bar and primary destinations remain accessible. This is the default bar compression behavior.
 
-In task-oriented experiences, minimize the tab bar to preserve the toolbar actions that are central to completing the task. This mirrors the minimized tab bar behavior present on other iPhone devices.
+In task-oriented experiences, minimize the tab bar to preserve the toolbar actions that are central to completing the task. This mirrors the minimized tab bar behavior present on other iPhone devices. For developer guidance, see [ToolbarVerticalCompressionBehavior](https://developer.apple.com/documentation/swiftui/toolbarverticalcompressionbehavior) (SwiftUI) and [UIVerticalBarCompressionBehavior](https://developer.apple.com/documentation/uikit/uiverticalbarcompressionbehavior) (UIKit).
 
 **Toolbar compressed**
 
@@ -187,9 +191,23 @@ In task-oriented experiences, minimize the tab bar to preserve the toolbar actio
 
 [Apple Design Resources](https://developer.apple.com/design/resources/#ios-apps)
 
+[Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
+
 [Designing for iOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-ios)
 
 [Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
+
+#### Developer documentation
+
+[Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)
+
+[ReservedRegion](https://developer.apple.com/documentation/swiftui/reservedregion) — SwiftUI
+
+[UIView.ReservedRegion](https://developer.apple.com/documentation/uikit/uiview/reservedregion) — UIKit
+
+[ArrangementView](https://developer.apple.com/documentation/swiftui/arrangementview) — SwiftUI
+
+[UIArrangementViewController](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller) — UIKit
 
 #### Videos
 

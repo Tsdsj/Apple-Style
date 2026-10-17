@@ -64,3 +64,78 @@ class Update(unittest.TestCase):
         self.sources[0]['path']='../escape.md'
         (self.ref/'sources.json').write_text(json.dumps({'sources':self.sources}))
         with self.assertRaises(ValueError): updater.update(self.ref,fetcher=self.fetch)
+import transcript
+class Maintenance(unittest.TestCase):
+    def test_transcript_event_comes_from_the_page_or_url(self):
+        body = (FIXTURES/'transcript.html').read_text()
+        self.assertEqual(transcript.render(body).splitlines()[0], '# Meet the fixture')
+        canonical = '<link rel="canonical" href="https://developer.apple.com/videos/play/wwdc2026/204/" />' + body
+        self.assertEqual(transcript.render(canonical).splitlines()[0], '# Meet the fixture (WWDC26)')
+        self.assertEqual(transcript.render(body, 'https://developer.apple.com/videos/play/wwdc2025/219/').splitlines()[0], '# Meet the fixture (WWDC25)')
+    def test_new_event_directory_is_accepted_and_indexed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ref = pathlib.Path(tmp)/'reference'; (ref/'wwdc26').mkdir(parents=True)
+            (ref/'wwdc26/204-webkit.md').write_text('old')
+            source = dict(path='wwdc26/204-webkit.md', kind='transcript', url='https://developer.apple.com/videos/play/wwdc2026/204/',
+                          fetch_url='https://developer.apple.com/videos/play/wwdc2026/204/', sha256=None, fetched_at=None)
+            (ref/'sources.json').write_text(json.dumps({'schema': 1, 'sources': [source]}))
+            result = updater.update(ref, discover=False, fetcher=lambda url: (FIXTURES/'transcript.html').read_bytes(), cheatsheets=tmp)
+            self.assertTrue(result['applied'])
+            self.assertTrue((ref/'wwdc26/204-webkit.md').read_text().startswith('# Meet the fixture (WWDC26)'))
+            self.assertIn('## wwdc26', (ref/'INDEX.md').read_text())
+        with self.assertRaises(ValueError):
+            updater.validate_source(dict(source, path='videos/204.md'))
+    def test_recheck_lists_only_cheatsheets_citing_changed_pages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sheets = pathlib.Path(tmp)
+            (sheets/'cites-path.md').write_text('Rule (`hig/fixture.md`).')
+            (sheets/'cites-session.md').write_text('See WWDC25 219 for the anatomy.')
+            (sheets/'cites-name.md').write_text('Source: HIG *Fixture*, *Other page*.')
+            (sheets/'unrelated.md').write_text('Nothing cited here.')
+            sources = [{'path': 'hig/fixture.md'}, {'path': 'wwdc25/219-meet.md'}, {'path': 'hig/other.md'}]
+            reasons = updater.recheck(['hig/fixture.md', 'wwdc25/219-meet.md'], sources, sheets)
+            self.assertEqual(reasons, {'cites-name.md': ['hig/fixture.md'], 'cites-path.md': ['hig/fixture.md'], 'cites-session.md': ['wwdc25/219-meet.md']})
+    def test_retire_removes_entry_and_file_in_the_same_transaction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ref = pathlib.Path(tmp)/'reference'; (ref/'hig').mkdir(parents=True)
+            sources = []
+            for slug in ('kept', 'renamed'):
+                (ref/f'hig/{slug}.md').write_text('old')
+                sources.append(dict(path=f'hig/{slug}.md', kind='docc', url=f'https://developer.apple.com/design/human-interface-guidelines/{slug}',
+                                    fetch_url='https://developer.apple.com/docc.json', sha256=None, fetched_at=None))
+            (ref/'sources.json').write_text(json.dumps({'schema': 1, 'sources': sources}))
+            result = updater.update(ref, discover=False, fetcher=lambda url: (FIXTURES/'docc.json').read_bytes(), cheatsheets=tmp, retire=['hig/renamed.md'])
+            self.assertTrue(result['applied']); self.assertEqual(result['retired'], ['hig/renamed.md'])
+            self.assertFalse((ref/'hig/renamed.md').exists())
+            self.assertEqual([s['path'] for s in json.loads((ref/'sources.json').read_text())['sources']], ['hig/kept.md'])
+            self.assertNotIn('renamed', (ref/'INDEX.md').read_text())
+            with self.assertRaises(ValueError):
+                updater.update(ref, discover=False, fetcher=lambda url: b'', cheatsheets=tmp, retire=['hig/unknown.md'])
+    def test_missing_page_reports_where_it_moved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ref = pathlib.Path(tmp)/'reference'; (ref/'hig').mkdir(parents=True); (ref/'hig/old.md').write_text('old')
+            source = dict(path='hig/old.md', kind='docc', url='https://developer.apple.com/design/human-interface-guidelines/old',
+                          fetch_url='https://developer.apple.com/tutorials/data/design/human-interface-guidelines/old.json', sha256=None, fetched_at=None)
+            (ref/'sources.json').write_text(json.dumps({'schema': 1, 'sources': [source]}))
+            def gone(url): raise HTTPError(url, 404, 'Not Found', None, None)
+            result = updater.update(ref, discover=False, fetcher=gone, cheatsheets=tmp,
+                                    resolver=lambda url: 'https://developer.apple.com/design/human-interface-guidelines/new')
+            self.assertFalse(result['applied'])
+            self.assertEqual(result['failed'][0]['moved_to'], 'https://developer.apple.com/design/human-interface-guidelines/new')
+            self.assertEqual((ref/'hig/old.md').read_text(), 'old')
+    def test_html_tables_render_as_rows_and_hidden_chrome_is_skipped(self):
+        page = ('<main><h1>What’s new</h1><p>Updates to design guidance across every platform this year.</p>'
+                '<button class="filter-button">All</button><span class="visuallyhidden">Search Reset</span>'
+                '<table><thead><tr><th>October 13, 2026</th></tr></thead><tbody>'
+                '<tr><td><span><a href="/design/human-interface-guidelines/widgets">Widgets</a></span>'
+                '<p style="display:none">Guidancesearchterm</p><p style="display: none"><b>October 13, 2026</b></p></td>'
+                '<td><span>Added guidance for Apple HomeView.</span></td></tr>'
+                '<tr><td><a href="/x">Live Activities</a></td><td>Added guidance for limited width layouts.</td></tr>'
+                '</tbody></table></main>')
+        text = updater.render_html(page)
+        self.assertIn('### October 13, 2026', text)
+        self.assertIn('[Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets) — Added guidance for Apple HomeView.', text)
+        self.assertIn('\n[Live Activities](https://developer.apple.com/x) — Added guidance for limited width layouts.', text)
+        for chrome in ('Guidancesearchterm', 'Search Reset', 'All'):
+            self.assertNotIn(chrome, text.replace('Added', ''))
+        self.assertEqual(text.count('October 13, 2026'), 1)

@@ -2,6 +2,10 @@
 
 A view that embeds its content view in a dynamic glass effect.
 
+```swift
+class NSGlassEffectView
+```
+
 ## Instance Properties
 
 - [contentView](https://developer.apple.com/documentation/appkit/nsglasseffectview/contentview) — The view to embed in glass.

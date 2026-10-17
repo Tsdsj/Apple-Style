@@ -4,766 +4,839 @@
     {
       "path": "design-site/get-started.md",
       "kind": "html",
-      "url": "https://developer.apple.com/pathways/design/",
-      "fetch_url": "https://developer.apple.com/pathways/design/",
-      "fetched_at": null,
-      "sha256": "9638f316f033f49604daf1b5088f7b10bcf9932b4a386d5911e301b6a9cf82e1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "url": "https://developer.apple.com/design/get-started/",
+      "fetch_url": "https://developer.apple.com/design/get-started/",
+      "fetched_at": "2026-10-17T00:26:18.701796+00:00",
+      "sha256": "d489b09facd7b4cef6f4363e300eb07c0c3704c942ea5b19dd260f924ac2b532",
+      "provenance": "fetched",
+      "source_sha256": "81f18633c77722155857959243d6c50f7c01b07dcf2080fa5944b566447b502b"
     },
     {
       "path": "design-site/resources.md",
       "kind": "html",
       "url": "https://developer.apple.com/design/resources/",
       "fetch_url": "https://developer.apple.com/design/resources/",
-      "fetched_at": "2026-10-04T12:23:19.989553+00:00",
+      "fetched_at": "2026-10-17T00:26:18.906358+00:00",
       "sha256": "ccabfaea9a5c321f0db16387254610a9c1505d8ecae6f229ed4945b21c998c5e",
       "provenance": "fetched",
-      "source_sha256": "851ac36defce6874846d369b6870b355a7012ff857bfb52fd1d9024c3a7c371e"
+      "source_sha256": "c03e1d37b6d0ba976f9b2383f486c3d4003a92d52060cc57679a288b757a7652"
     },
     {
       "path": "design-site/whats-new.md",
       "kind": "html",
       "url": "https://developer.apple.com/design/whats-new/",
       "fetch_url": "https://developer.apple.com/design/whats-new/",
-      "fetched_at": null,
-      "sha256": "4e24110e62ff001c3aa2bc11b5fc1d576879e2c9a00ec0c05b79a7bc81ab15ff",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:26:19.474803+00:00",
+      "sha256": "99cb2d8b2af4583bed2a90646160c165e9b5ed44b205bebb43d3f302f9293bd9",
+      "provenance": "fetched",
+      "source_sha256": "f7f5430f8cef89d4dbaa12506ecdd46e7f935ab3f3acb52edea8f2997706471d"
     },
     {
       "path": "hig/accessibility.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/accessibility",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/accessibility.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:21.688292+00:00",
       "sha256": "f652c1247c6850892fb5462a5d3fcee504a1c2ed500032d166d09073ac70b12b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "be49ec0b34397f356a1e3fd8c7ad323713198515523947097913cb9c57da699b"
     },
     {
       "path": "hig/action-button.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/action-button",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/action-button.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:21.839908+00:00",
       "sha256": "cf592d9ceb02f165affa9968a19981813fd18fe99c8f5e9da6e19dc200aaab94",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "0b5b8f0e68140d183a8dd670fd13e9ad97c89894b4525015445173ec76288299"
     },
     {
       "path": "hig/action-sheets.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/action-sheets",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/action-sheets.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.003465+00:00",
       "sha256": "cdae722a206930c4c9b45ae19d262bcac89c72ce64f814ff865ce850b6d7b8e9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "d6dd08cc6fcd7b4a285f8c43b4bb47ecdac5274debce3b9abc54ea386c498494"
     },
     {
       "path": "hig/activity-rings.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/activity-rings",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/activity-rings.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.169987+00:00",
       "sha256": "258b1176db9eb4deb44dd57d8d0e00d3a32da9416604aa75a5a1a93df4341ff9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9a9f1c2141665892a1d57121c4e339c423f09a10382fb6f4579655c8517e7c62"
     },
     {
       "path": "hig/activity-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/activity-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/activity-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.345778+00:00",
       "sha256": "3a565e2767e6cb694365d2049284a0da03390cd561f0d090664cd4efe095e885",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ce1b7686d53deb6a1f3cf31eca2993053075503e6d10a6e0ae5e3f42cb6692a6"
     },
     {
       "path": "hig/airplay.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/airplay",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/airplay.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.538498+00:00",
       "sha256": "1fd961289628ba6ab77e667e93b7b8e7c06088e280c97f7f922b90fe385825b8",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "0db9976126d54787adcb48c35195122daff641bf9e63efc2a426352d05f28a7a"
     },
     {
       "path": "hig/alerts.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/alerts",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/alerts.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.706091+00:00",
       "sha256": "0408e2f3886e0961c2e613a28e349e7a1ec5c62694aac478b6c33355d0b0a959",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ca60f14c249290f1dcebe8bbaedde16183e3759f5a53238085915795e2e4dbdc"
     },
     {
       "path": "hig/always-on.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/always-on",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/always-on.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:22.869590+00:00",
       "sha256": "9dfb24a6e680de4ab1fb9098ad7c488f8d4bf909d4802bef43696b400364b04c",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c2dc9fe1fbfd54a7a1eca1b763adb053e7895d3a486166c48c6d97b017b8fe9e"
     },
     {
       "path": "hig/app-clips.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/app-clips",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/app-clips.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:23.066052+00:00",
       "sha256": "8f8b3dee0ee86d9f544cb502ad4bb5883cefcca17de605140899d068aedb8cca",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a8db2130bcb9e3ad5f8d25e59ae02ff4d5ebc0c1e50613470a01011f2f877613"
     },
     {
       "path": "hig/app-icons.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/app-icons",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/app-icons.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:23.245611+00:00",
       "sha256": "d8456438082dffba60d396b339989a98d4251a20f0ac74df74229d483dbce323",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5f67bb7b1e2405ee03526ab83c3f75b63b28473ce39ebf10848655908e2712f7"
     },
     {
       "path": "hig/app-shortcuts.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/app-shortcuts",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/app-shortcuts.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:23.425365+00:00",
       "sha256": "7043eef2133ef295930f0551befed205dd32417bf54ee8ea180c0220c3990e5f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "26ffd9677b5c4e62efcb480d40e5748180ebf18755fdf9ee26295b7981ecf3df"
     },
     {
       "path": "hig/apple-pay.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/apple-pay",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/apple-pay.json",
-      "fetched_at": null,
-      "sha256": "1a19e7377d0b61c430fab633b78247112516757fed4090297a29772dab0cf58e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:23.618741+00:00",
+      "sha256": "640c56b03c69671f4a2e79518bc9e3687280fa576167175ebd2d4a479925323f",
+      "provenance": "fetched",
+      "source_sha256": "6bf7e2366dbae5f954ca5fd70dda5d1ec6cbb43caf0d32f025726edcab49e494"
     },
     {
       "path": "hig/apple-pencil-and-scribble.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/apple-pencil-and-scribble",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/apple-pencil-and-scribble.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:23.787274+00:00",
       "sha256": "21cf9b7f8ffaaf0510dabd6f19057c85b34cec34630f51c9affb0d57e8515175",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "3839a275eb10efc4545a306d3b4fb180cb4265abf4f1fb847a79e5ea37da407d"
     },
     {
       "path": "hig/augmented-reality.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/augmented-reality",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/augmented-reality.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:23.973141+00:00",
       "sha256": "3484c2e770a05a02e285f3e51d2212d655c5dd76b8dd979407a3ac7e04d3bc17",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "173c1b6d97063d29ff5eae0bfa58e76678f2972415ac70e7558a3b7885b2a12f"
     },
     {
       "path": "hig/boxes.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/boxes",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/boxes.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:24.121486+00:00",
       "sha256": "46a93c4273f96359a02b3575ee3c31cbb3147b8819e9bfe4dd03a1950b0d1649",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "4fec245e6b9169673e1fef706d4261fb6cd3cf24a56de26718c88f141e514e1b"
     },
     {
       "path": "hig/branding.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/branding",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/branding.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:24.286712+00:00",
       "sha256": "598a66db7191a26ee9dde175e1f2e3011ae918b78050dd8be083d41badc2fa98",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2251b5c75eeaae25282ba10257cf26a3f5c92b01fb253f39010e610bcc8fce60"
     },
     {
       "path": "hig/buttons.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/buttons",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/buttons.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:24.464705+00:00",
       "sha256": "d18e4ab41c3c22c4dded7647ba12d84cc9367cdd98dd01a9523f13b3bbc34d11",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "fb450f96dd7a201a0203852782252942ee6d72978e0baaec1cb4c400568fed91"
     },
     {
       "path": "hig/camera-control.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/camera-control",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/camera-control.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:24.625187+00:00",
       "sha256": "4affdd51a311e3ad09fc0fe10cddabd9cafea1609491dba2d0d58904bb43bb99",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "7d0d4c3e1eebfb0304f46cc8c1e2ea7299eba168cd8fbe2b0d705d9118cd4f3b"
     },
     {
       "path": "hig/carekit.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/carekit",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/carekit.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:24.804679+00:00",
       "sha256": "800e9a7395157b0c402d55fca30cba98995cc3ffece8c50867fa687d39e002fe",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6d696909b32eb2260572081c496d751fa2157e19c65fe2b25094583ed4ccf2ed"
     },
     {
       "path": "hig/carplay.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/carplay",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/carplay.json",
-      "fetched_at": null,
-      "sha256": "dfcf2f1b4ca8ce94553e5152af3a567e0714fb88578eba1e59795d2e10909248",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:24.967893+00:00",
+      "sha256": "bdc6ed35bbf283b03b4edd9350807cce98ba3582d4650e5146fa60274d7d80c1",
+      "provenance": "fetched",
+      "source_sha256": "67b91743f7e1ac46d98cafe69330cd49c8e93429cabb318176dde82a52bd5489"
     },
     {
       "path": "hig/charting-data.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/charting-data",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/charting-data.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:25.133141+00:00",
       "sha256": "07da67d7fab4b24b53a8e4f699ac4b66b2e165906a17e96688169469a96bf6ec",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "0b4a17ab5624a01728de636fb84da734c0f058a5db43e53e6a67f550c1bc305d"
     },
     {
       "path": "hig/charts.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/charts",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/charts.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:25.316045+00:00",
       "sha256": "ba4a6d7f3deb27b86cbbf65b02e37a940093eb86d82561112e2975e24c715563",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "206a83349e8a0bfcdd9ba647b995988ca7d464f8554c7fe93b7044dd8ced2ec5"
     },
     {
       "path": "hig/collaboration-and-sharing.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/collaboration-and-sharing",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/collaboration-and-sharing.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:25.496212+00:00",
       "sha256": "fd253da291e8a4ed5068fca9cc94833c72a8e5108ce7f9cf5fd83f9277110908",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f306a01b01ea6692383c2bc9a8f800a7ea7b28820c72b088a048e3ebe9f65a29"
     },
     {
       "path": "hig/collections.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/collections",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/collections.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:25.646078+00:00",
       "sha256": "94f3e44aa94eca3bcfc0f3529d9cc703649cec67b65c51e6b3e89ef2872e4477",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "71304b9a6dfdf936b89fe4f5870ede9efe23b5ccb458871641e19b0651346830"
     },
     {
       "path": "hig/color-wells.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/color-wells",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/color-wells.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:25.796499+00:00",
       "sha256": "571248270123d2cd0c34f0afb966a4591c4e61d985c6578fb7843c5bc32188d9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5aadd45a4e38e27cf09ada9d6420969e9cc403920fb6b209f29873c1e4f6de3b"
     },
     {
       "path": "hig/color.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/color",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/color.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.021119+00:00",
       "sha256": "be42b67c72b335612c664db45773257eb0b57f1a5f5985824f4a6c2fb4ad2227",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "262ce33cb88d41ac0238bf1e3f59b7957e8ddb030379c41b35a6cbdb9ab11a39"
     },
     {
       "path": "hig/column-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/column-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/column-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.187170+00:00",
       "sha256": "16b341d47f6fc0f2f5d8d498e799fd43040cf7fe5ac1a3baf509930bd1e1b6de",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "8da488e1652ea4b1c37dd6aebc11f1698407666f7ab8fa4f7310e037a3c78506"
     },
     {
       "path": "hig/combo-boxes.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/combo-boxes",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/combo-boxes.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.329328+00:00",
       "sha256": "74e10e36bbac8d993be7232687f4ebde36355eda0457e859efd6e71fe5878dc2",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b869cd6b69cc6bcc602267f9d2f3a3bdc93572697539604d4f71d1f684d6e4a1"
     },
     {
       "path": "hig/complications.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/complications",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/complications.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.522877+00:00",
       "sha256": "863b3a72afeba536cdfab0dae1b7dac36d5820aac78d1b3955edd44be99b0383",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2d95765f9ffc5e568559ae20cc5a043facba35cef12c964f4fb5fa99456d528e"
     },
     {
       "path": "hig/components.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/components",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/components.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.673485+00:00",
       "sha256": "22f1529baadb55d6f7293418d5130498cc5a40cc4ab21acc354659caad4d6bd4",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "994ee018c35965cc680a71223a7c7da4a180882163a81c7b40487153f7d9f241"
     },
     {
       "path": "hig/content.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/content",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/content.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.817675+00:00",
       "sha256": "4d2ed09145947bd65636bb31d5d56ec9a496349f7680678e126535b68cf0d3fb",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6c6a46c4345dc8cc12b55be1e11cdb8355cc94d631bcd2678678407b43221416"
     },
     {
       "path": "hig/context-menus.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/context-menus",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/context-menus.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:26.995947+00:00",
       "sha256": "51511bf6ec7930f3958daae5cd1e27375fd7523b8924a57b8ef4b8b03b6c909e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5f69e8ed0837ea976f5bd1e6b30f96b6b77587229c5fbee50d3967aa80c9c1a3"
     },
     {
       "path": "hig/controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:27.159056+00:00",
       "sha256": "4a79dc50357ef74475177c98c61ad8715e5eee425c672be900a3b38b8bf2a5e8",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9a73e3f7abd7da7a8e6965933a3c32e009aa2c134d4376abd9fc2831bf5f80b7"
     },
     {
       "path": "hig/dark-mode.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/dark-mode",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/dark-mode.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:27.332487+00:00",
       "sha256": "c91af2a0f6241170dcde2501ca8781ac777caf9e64ba7ff2981c836a27f58f2a",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "cf352a73655e616568441efefb295802ade3e7f34980f33c35f0ee778cf4f3e7"
     },
     {
       "path": "hig/design-principles.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/design-principles",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/design-principles.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:27.498686+00:00",
       "sha256": "626c5dea95642c4a857e3ae82294340e53187af3f6d64af66546258256f5f87f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "69ea6425412bcb6410f8b6355e4d113c773731056e31b9ef730f07515045fa36"
     },
     {
       "path": "hig/designing-for-games.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-games",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-games.json",
-      "fetched_at": null,
-      "sha256": "c51357940291632fa4ae2c5ca183b11fd4b2c99cab8893153a2c1c0c5ad00026",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:27.682368+00:00",
+      "sha256": "24357ad399080da5f4b025ee201571d1ea021fde4312c0459fb555f5d93e6b3a",
+      "provenance": "fetched",
+      "source_sha256": "b4855daad08afd0951aad045ee24c6d4e65fb06158692a9e41513e5a74d2fa15"
     },
     {
       "path": "hig/designing-for-ios.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-ios",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-ios.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:27.858889+00:00",
       "sha256": "9dcb76d03065e2b947258bbe33804ab73b72b638aa67d2d6fc59a94ae83ea470",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "e347649ffc2cdcdb755c0222454046d389eb539ee8c8c6e395b6c79ccf327d4f"
     },
     {
       "path": "hig/designing-for-ipados.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-ipados",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-ipados.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:28.027004+00:00",
       "sha256": "c2b7ace9251071b3227d662aa3636829df26326c6a07e537d083fee719b38c48",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "da31fa0184109666e95208f23519452d3c7a6c8b3ddca8e444e1b2427e6151b1"
     },
     {
       "path": "hig/designing-for-iphone-duo.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-iphone-duo.json",
-      "fetched_at": null,
-      "sha256": "237af932270c9093f4c1fb6c3c252e62ad108ed7b255957bed5d95a2493893d1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:28.404758+00:00",
+      "sha256": "41b291d31e9ead244e50a0a8332e82a37a2069fb7776a6d727a1ddcc543d2849",
+      "provenance": "fetched",
+      "source_sha256": "9057aea6713e2609f9420a5a62a0619583ec7c36eb4d54a75a1bcad1e97e2823"
     },
     {
       "path": "hig/designing-for-macos.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-macos",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-macos.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:28.606390+00:00",
       "sha256": "89041de84ab8c2c4017d621a70e7aa67977f400b5c42b1ffad951b764c734cfe",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "0df69cf12d79dd46a6ecb28c01207dbd9137958decec405870cf0008730bb88e"
     },
     {
       "path": "hig/designing-for-tvos.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-tvos",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-tvos.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:28.759835+00:00",
       "sha256": "97985156d3e567d98eb188ba77b579cc16c2743fff84b8e2930f332477dfe434",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a5748cab2fbcd05e708c6958a7b18b8c5412c53a543ba165ae49ff374a18ba19"
     },
     {
       "path": "hig/designing-for-visionos.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-visionos",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-visionos.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:28.932719+00:00",
       "sha256": "8aa9e7b87996886f5ba65b608c10e5b70996ff780863eaa0e57b1f0555f76279",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1ac10b83d440922aa4033610dba9a9a0f18f14b80e49251ca1e8174491cde8cb"
     },
     {
       "path": "hig/designing-for-watchos.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-watchos",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-watchos.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.099819+00:00",
       "sha256": "6e52fb64040d8070dd278ea2a576bdce3a5fd0ee8fdf89d8de836f78085b841d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "7f7a256f1c9fe359b43191fbaacf3418acf0473e7dcc64d6e6fff619a97d0212"
     },
     {
       "path": "hig/digit-entry-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/digit-entry-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/digit-entry-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.239938+00:00",
       "sha256": "42ab4e0aea70a67469debb411a8d97123bd86d36a47c363c8e14bea9548b0f49",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a1bb6229cc9858b765d0607768e03dee10b48fdb3de8a7e102c09c80433e8b84"
     },
     {
       "path": "hig/digital-crown.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/digital-crown",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/digital-crown.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.400497+00:00",
       "sha256": "01d76dfeb2b4d8503d3e8819a204341e2728a4206ae539bdd2fcada6496f69fe",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5b3ff81825ad3719bab9ab734285d5c7e2dedb7ed22fca9e7b73584ff960c905"
     },
     {
       "path": "hig/disclosure-controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/disclosure-controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/disclosure-controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.563582+00:00",
       "sha256": "ff8fe3c1deac42bf9bc6f521cfc068663368f11ef69d1dd86bb934a0a87a3c1d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "824dbbf3779123a083d884dde1969853af381fa2b22f0d8bd9cbe626229a8bc3"
     },
     {
       "path": "hig/dock-menus.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/dock-menus",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/dock-menus.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.723080+00:00",
       "sha256": "a9d00b8b1f1e294246f0fe679d641bec12d9d029158fcedfd51a2623473ca7fd",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "8c4951c93c797782c2bbbfa2ded3501ff188fcc70b046967ed29cde9ec264cec"
     },
     {
       "path": "hig/drag-and-drop.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/drag-and-drop",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/drag-and-drop.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:29.901855+00:00",
       "sha256": "69515a00baf045a1f8392caca79861c1691593c2d987afecc9a8b5ad84de86f7",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "58e6bc8e7043ec76fa0264046712c5bb385cd1ff6b67222a7c3ad68b2671cf6c"
     },
     {
       "path": "hig/edit-menus.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/edit-menus",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/edit-menus.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.081126+00:00",
       "sha256": "150459f525a05decce63b95e1e4ac39416c4ff13018df3c54a7b30b6e04747d9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c90a3365aa4a2c6f955b414c2d81745db925d90a477e34a7323f264cc6d0d634"
     },
     {
       "path": "hig/entering-data.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/entering-data",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/entering-data.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.252525+00:00",
       "sha256": "7fa26ef7866379f13a4e14e7e3667350a85e58849ba4696fa36a20b8ccfee229",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "0c430bb7e33382add2b6c602261f719b7b39b1406dfcedb653755ebcb1116a09"
     },
     {
       "path": "hig/eyes.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/eyes",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/eyes.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.437695+00:00",
       "sha256": "6d4bb7468c7d91ef1362440d46a229bab2c57e6013c3715c764c673e0ca1693d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a964261953d92b187671f0b56f990e82c589e701ba83dddd90055253428803a6"
     },
     {
       "path": "hig/feedback.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/feedback",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/feedback.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.599744+00:00",
       "sha256": "9c1934098e718ca4fd4e1ac379f8cd54a93ac31395968622df5f642d5b8cd94d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "242973c86c0d632467b46aeee1ad59825b70e3e8893d190f16351d14097c872a"
     },
     {
       "path": "hig/file-management.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/file-management",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/file-management.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.767138+00:00",
       "sha256": "4535d6a14a82271c4dde4c43a43c2387f2a80c06a4431cb53768c2d76e314407",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "de6f7fed0392cbddba5161d1c062252be577bf228a72565ba2e8e9e2b1aae8fb"
     },
     {
       "path": "hig/focus-and-selection.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/focus-and-selection",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/focus-and-selection.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:30.949161+00:00",
       "sha256": "1d6955e2f3bc0b5577d5398fef239ec1f8b5c0e057bfbd38117de25d75f70a1d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "376c122b5361748c0e51899ef0f75e46d143ebfd3a84308decd6bc09bb3b8872"
     },
     {
       "path": "hig/foundations.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/foundations",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/foundations.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:31.143184+00:00",
       "sha256": "2bd8f3a4144e77537d415affcad32ce34798b71b12cf2c41e5dd85ea130555b7",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "e6d79a5fcd10ed55ab0a737cfd2131ce769bf5a582ce4143c491c756b2726568"
     },
     {
       "path": "hig/game-center.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/game-center",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/game-center.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:31.334627+00:00",
       "sha256": "83e464fe4e4f65754844cf6826e93ee229f03a0e97f236137e76626d05eacef9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f7e838952dd8621384d94cbe25c5d421a19cea0de73da183edb0858f41d9fb84"
     },
     {
       "path": "hig/game-controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/game-controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/game-controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:31.515288+00:00",
       "sha256": "ed4e2fd03a6dcd9590477c05832b98cfdc9d5355465df2532e4204ed2115a067",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6af93d91a10ff5c521aab4cfde1f0da7aa6b3944d27b6d14d081bd652a17e19f"
     },
     {
       "path": "hig/gauges.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/gauges",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/gauges.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:31.678808+00:00",
       "sha256": "b69d80b13ca310bbbb653da23602e4834af59c3aeadfb8845bbd425ae168d426",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b65e750890487f7e7ba727dd7cd9bdbfd3a4f9794f8fc8709d71d1fc47316766"
     },
     {
       "path": "hig/generative-ai.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/generative-ai",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/generative-ai.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:31.868840+00:00",
       "sha256": "473deeac3cfb34b2e619044b309da44d1595e7e5cbd0864cff6faaf281fa1254",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f003d1fa454cc20a848315cb9155fccc6b234bd32467f2bb3ed0a5a5911159a9"
     },
     {
       "path": "hig/gestures.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/gestures",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/gestures.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.055371+00:00",
       "sha256": "4420d6c30d92f6b6634ccde00f55ee180fdf590b19986d28da16bf1e8f14033a",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b00a8249b271de1259554903322347ffbb10c75402c5a47c7b1ab1bf8598b8dc"
     },
     {
       "path": "hig/getting-started.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/getting-started",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/getting-started.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.211586+00:00",
       "sha256": "328ff480d8d2d5d0e9c1c280c3d34b7b55146f72c5a035ae51e47978f185aa30",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "e6371c440aaee6457bc78cb85fe35fb38e42640f5b1bedd67e778faa14c29136"
     },
     {
       "path": "hig/going-full-screen.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/going-full-screen",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/going-full-screen.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.386224+00:00",
       "sha256": "4bb4b70ee06b32cc14529e1dcd9bae2bae357ba0723f9bbabb53e1706e536295",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "776354918036d18e3c407f83971fe27a7c99e4558754a72b1bfeb14249fe615c"
     },
     {
       "path": "hig/gyro-and-accelerometer.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/gyro-and-accelerometer",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/gyro-and-accelerometer.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.544015+00:00",
       "sha256": "9eab3b776d3b0ddca8205504ab1033ca74c5e790f96d7b1deec059ff9db95698",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b634a43cde1a4e7ba93f76f549a1e8bf29008a5ebcc8b4509bd2ef844035ee94"
     },
     {
       "path": "hig/healthkit.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/healthkit",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/healthkit.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.715174+00:00",
       "sha256": "a515a676264ed33978314fc674117763e6a3ec6ca961a5f4295bcd171b441a8e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "72032c015fb0f48a0462c3805407305d49c5d53d055d17630018aa7e0c8f305f"
     },
     {
       "path": "hig/home-screen-quick-actions.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/home-screen-quick-actions",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/home-screen-quick-actions.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:32.894615+00:00",
       "sha256": "cd27e8dc20df7b98b04b0afef84b29a43efe3713284d1104468cb07dc3de15b0",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "d423ac97ceebe7661853c69fa1fd20da9a84a53838f47bb1bddd8cdb6b7b0864"
     },
     {
       "path": "hig/homekit.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/homekit",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/homekit.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:33.074874+00:00",
       "sha256": "a9fe3eff6a601b7f3c0858e35828e28c5d0b9ce8d44a34db1aead45c1e644eb8",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1195c8a155c236e36072fb4daafde1d1c815f482ad434fa89eebd60665a9f05c"
     },
     {
       "path": "hig/icloud.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/icloud",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/icloud.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:33.215731+00:00",
       "sha256": "867f0d3276f7a5d696ba9b52d72b7225932bf89ba71a653d9a008bfe265f8d34",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "83608ee962bafe40a9fa6a92e2feffc2a9a11fae3bc4691c3e6de49778cfb94d"
     },
     {
       "path": "hig/icons.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/icons",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/icons.json",
-      "fetched_at": null,
-      "sha256": "94b48e7a0cfeefc7902d53ed217e6facaf41d7a515ac4dd1092ae79fa2895d2c",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:33.410307+00:00",
+      "sha256": "362d48c5b107a5c9e808a294403f873ec1771e700d54bf3ed672ebf02c82d156",
+      "provenance": "fetched",
+      "source_sha256": "680a5a407b3fb5f3595368cb6c328e2e8ff0f767a25381da6ad1f42a9a3d99a6"
     },
     {
       "path": "hig/id-verifier.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/id-verifier",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/id-verifier.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:33.582584+00:00",
       "sha256": "0bb754e6084aed945d4905f70e981bbd8bccf01a4a1c75d2dd506958e62924dd",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "414e1dc5fd1275dd28b8be88c8da0aaa014f4eaae6729b709faa119d4c87890c"
     },
     {
       "path": "hig/image-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/image-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/image-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:33.766578+00:00",
       "sha256": "a6fd054e6e8ab9849a7021f81062122d071075b0a012e8d5f9b4f0794f7d3b4f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "aeb9a17799e50b8ed0781daba4c042e398e8766e26c6e51c8c52e3a96b949b49"
     },
     {
       "path": "hig/image-wells.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/image-wells",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/image-wells.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:33.914283+00:00",
       "sha256": "cd84c0a4b6e90f18c8d96ed7e008e68c1e1afb77e8c73b0496abecdca4fb76f5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a3122d0dc9224c0893a638ec1c6d16e0dcc7e024808d737cbafe4efa5a662c71"
     },
     {
       "path": "hig/images.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/images",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/images.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.086124+00:00",
       "sha256": "bd74db5e2cdc70c16105aebf0dc307ad66ffc7c9cdf248c34a55c2529608a7b3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5c53562f2d8dec11133ae7a3fbe9aa78dc2899fc0069c3059d0c94bb3dcc45f6"
     },
     {
       "path": "hig/imessage-apps-and-stickers.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/imessage-apps-and-stickers",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/imessage-apps-and-stickers.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.244392+00:00",
       "sha256": "4e1fd16581a5322cd2114f5fe87d5700bb32fa16f2dda053714ed0ebac5d8aa2",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b5d06fc9f1a597556afc08a876b007030edcb162b7ee338fcb6d66a466700b1f"
     },
     {
       "path": "hig/immersive-experiences.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/immersive-experiences",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/immersive-experiences.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.426102+00:00",
       "sha256": "e538011387f681bf2ee39c5f3c36ff808fcc846f9ada0f16f363c3a15b530241",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
-    },
-    {
-      "path": "hig/in-app-purchase.md",
-      "kind": "docc",
-      "url": "https://developer.apple.com/design/human-interface-guidelines/in-app-purchase",
-      "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/in-app-purchase.json",
-      "fetched_at": null,
-      "sha256": "4c27249f2df007d153c6a23dfd043da6327d51ff44aa5e35b8e8790ae7c99c48",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "7d1f2b7baf9ebb65e82121c0e7d41160a3445d33cbcd7540ba1332e86531d2cb"
     },
     {
       "path": "hig/inclusion.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/inclusion",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/inclusion.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.596762+00:00",
       "sha256": "453357c27c6eebfe7bba9a23fc8c93efa82b9659a15220baaa6d45c1b00ff271",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ab94a3172d397f21973a34ef3bd80319dcf408e4aef13e509b2a99ad733aceb7"
     },
     {
       "path": "hig/inputs.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/inputs",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/inputs.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.760052+00:00",
       "sha256": "cbee7139d845ca7b84af4cbe6eb6c947374b8aac61579fb5ff6d11694b5a084e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2c848cdc008dc7084cfa60bfeef5992dcb9d48c543b8fb5efcd98a632ee25be6"
     },
     {
       "path": "hig/keyboards.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/keyboards",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/keyboards.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:34.949223+00:00",
       "sha256": "831b7ed0656c887328abdfca95e83f2aef9a51fdb77d720c04ed180622f07bd1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ef81add8bc05d6f5d641814e936076fd44400b45334160841e83c16e12eb8dee"
     },
     {
       "path": "hig/labels.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/labels",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/labels.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:35.120010+00:00",
       "sha256": "9d219d12444e440ee94fa89a3e6d5e850e3fd396aa18b1375c16f2b608492ed3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "808feaa4c07688eba4f91f8711695ef5869694ffc8b15e9dc2167a76be041738"
     },
     {
       "path": "hig/launching.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/launching",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/launching.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:35.293830+00:00",
       "sha256": "a8442c590f50547cd949ad523ace31066f4273f58804c97eb29be4f1e67d5b06",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "38291e5bc0ab9b623cdc831f1b495abdc8e39b4c3501a97a499099738901e2cf"
     },
     {
       "path": "hig/layout-and-organization.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/layout-and-organization",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/layout-and-organization.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:35.445646+00:00",
       "sha256": "6ba2cb6ca53416d783bac4b4e18769df2d104b6d73897d2a3facb26736fb8fe6",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ffc45638bba4c929e490c81942a218b86e14fb824a55ca88eb28d5c5f5164a5b"
     },
     {
       "path": "hig/layout.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/layout",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/layout.json",
-      "fetched_at": "2026-10-04T12:23:20.948627+00:00",
+      "fetched_at": "2026-10-17T00:24:35.637942+00:00",
       "sha256": "2b2ef3eae8adf8ac81958748773e837fece9368aebc56ac7d57b2587136df6cd",
       "provenance": "fetched",
       "source_sha256": "d41f32ddf76c597f0edd54eac361fa294a8736cfc4ccc627d1709fe092ed7267"
@@ -773,1110 +846,1240 @@
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/lists-and-tables",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/lists-and-tables.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:35.815095+00:00",
       "sha256": "f0b0f69fa9b2ecf2809fbc401fa2510c88d3d26ec70564256301d598213979d3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "7abfc703aad0db86267b53942594c48f9ffde84a8d76646220524193a47e19db"
     },
     {
       "path": "hig/live-activities.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/live-activities",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/live-activities.json",
-      "fetched_at": null,
-      "sha256": "7206a85b11207baeb65df9aa6b502175b91e199b7a0e1c5e4e19828fda6b98ec",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:35.993990+00:00",
+      "sha256": "8f02f0f10bed274fc687551b7ec4e95ddfbc85faa7231412542c27ad7726dee3",
+      "provenance": "fetched",
+      "source_sha256": "c32933a4135e6eff3edc2041166ae664c7a0b9ef9287cf8137a1eaebf2aaacf3"
     },
     {
       "path": "hig/live-photos.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/live-photos",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/live-photos.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.141182+00:00",
       "sha256": "cc5467c155076627bf4c32b50152564a2d722bef66bed6531d09fae3dd4b8c12",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "03e25b2971e1a6fbedd5e00841d087af0fc6da164b8b03a24090415f4e6f5a5d"
     },
     {
       "path": "hig/live-viewing-apps.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/live-viewing-apps",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/live-viewing-apps.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.296735+00:00",
       "sha256": "039851d528760fa5c2ffb909e7463e4f2e16d65183d1f933234fff7b765fe503",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5b68d9d2f35dce32c497a59653b380fdd55b3213bae00017824aeaecd1c93fa6"
     },
     {
       "path": "hig/loading.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/loading",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/loading.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.458182+00:00",
       "sha256": "b57b6f111fa47d0d8046ea82e644caf49ddb09c3a6da7528726fc7b514654f64",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "83c69df80cfafd72b1a317d82521f14dfdb415530cdf37c290462eb28673b901"
     },
     {
       "path": "hig/lockups.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/lockups",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/lockups.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.624911+00:00",
       "sha256": "fdb57b5ef1fe1a5f93827677c569f877d21cffd4577c573bfcbe094496b7bff9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b92d764c15ae6d7449bc18039f8411e2eb99a8955c1bdfe19418ded071b9d35c"
     },
     {
       "path": "hig/mac-catalyst.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/mac-catalyst",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/mac-catalyst.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.799176+00:00",
       "sha256": "ef2fcf5a5b92dd72099ac35c37793d413b98f411455480a80ba10fc57fb60397",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f047d3ba169717d807ea53f458e74d0e1ba878589eaa08f38cbe5a120dab753b"
     },
     {
       "path": "hig/machine-learning.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/machine-learning",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/machine-learning.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:36.987124+00:00",
       "sha256": "078e59bf483b4fd9e4401b4b11d66b19872ec16b85268b2dc86e68d1ebb15416",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a179227bcd89dda454c5d932b7e40c55b1c4a488595a1cacc883d1732a0ac1d7"
     },
     {
       "path": "hig/managing-accounts.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/managing-accounts",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/managing-accounts.json",
-      "fetched_at": null,
-      "sha256": "6a3db6bd51308b772d7fce3a5b81539ca8523ba06a5a508e4d55d6c3ce8647f8",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:37.175310+00:00",
+      "sha256": "136e835a63284bebb086a4dbc696f4fe9f032061719254b61be84892b349e8d4",
+      "provenance": "fetched",
+      "source_sha256": "f7bdc4b8223dae5c4bfe34c89c78836d9d1effb4ddcd0bfdf87ccf44e716f597"
     },
     {
       "path": "hig/managing-notifications.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/managing-notifications",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/managing-notifications.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:37.342260+00:00",
       "sha256": "613a6dba52155a188c49f22cc0b85df5e13dfca5222d18412fcae4920ec415fd",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "fa6df9790a888d432270ad26524507ed9336035b30187c3449298ade05fed9dd"
     },
     {
       "path": "hig/maps.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/maps",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/maps.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:37.520642+00:00",
       "sha256": "c3514c0fa57136ec8bf25f16a3632c992207718beded5529ae7b128185e4feb9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6dfe6a420882e08ca3e4ceba718fce1f2f7ef77c3c90c5cc81930e2fde7fa153"
     },
     {
       "path": "hig/materials.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/materials",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/materials.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:37.796252+00:00",
       "sha256": "3b922c412026de570af2b960e3d4dec9a25d25294e226b176d4077a3f7a4cb63",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "597da170985715de4bd8446df12e3604595e634a790b5da0ce6673d2b2327ed5"
     },
     {
       "path": "hig/menus-and-actions.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/menus-and-actions",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/menus-and-actions.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:37.953312+00:00",
       "sha256": "3937e76af9aafe7bee571fd4f7cd71548dd02c3f752a1117c5e68d186b886bdb",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b7134e861402d04357275a8f33160040d177ea90540d62522d38a3034c2ca2e2"
     },
     {
       "path": "hig/menus.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/menus",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/menus.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:38.128954+00:00",
       "sha256": "38e7f7f4b545c7a731ae56b2ec7e6776a420968eaa645a29817fbedb4111f78e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "dff423968b85e717c175a1999897224e6157cd7ce2f5907d64bf93088532dcf1"
     },
     {
       "path": "hig/modality.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/modality",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/modality.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:38.331371+00:00",
       "sha256": "7e4c1791d6e0b85870044fb9bc3920d72ca3c559c4a9b075911a86dedde288f7",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "79f76255705524952443c7ef0aaffaf6285142d0fdcd0a0ad9be4b1c3181e5be"
     },
     {
       "path": "hig/motion.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/motion",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/motion.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:38.504300+00:00",
       "sha256": "7f849dc5e459c7be2ff94e8f263ddaf23c41edb01ec2a0c8970e3d72f0276f58",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "957268c323af4617dabb6c0449d0920248c995159d54f76c691aa180ceb72a61"
     },
     {
       "path": "hig/multitasking.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/multitasking",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/multitasking.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:38.675104+00:00",
       "sha256": "ccf20644cfec73bfd46a38df254b60ee74a96d089d2cc115ae8a05eb53242df5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "915a42ff8b68aa48f7a489a6abd16b160408672c628ec731cbd14932405de7bc"
     },
     {
       "path": "hig/navigation-and-search.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/navigation-and-search",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/navigation-and-search.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:38.843412+00:00",
       "sha256": "22956c1e57d431fbe7c122ee7d5a5d8c8b040b3023351781365c5b6d9506b291",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "21bcaf85d9490a383fb97d02fb2f42b1665382c1f0b7de2e489ef753a184a6ed"
     },
     {
       "path": "hig/nearby-interactions.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/nearby-interactions",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/nearby-interactions.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.002339+00:00",
       "sha256": "c3e1fbe411dbb8e418603d50361875de1e955085a4bc969703c37d51ef6ef1ee",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "fde16c0fea2cecff22eb1d04be9b8deef2a9568f9164f91783ffd1b549e1ef88"
     },
     {
       "path": "hig/nfc.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/nfc",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/nfc.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.149818+00:00",
       "sha256": "6dd5f87b023b3372aecbb26cdc15dffe8826aadb3847ec0f51854417e7cdf32e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6d7528d790b0b66e8eaf568e53f6a1eba3786eab8a091566b47f7294f700ab4e"
     },
     {
       "path": "hig/notifications.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/notifications",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/notifications.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.445899+00:00",
       "sha256": "abe43ba6bd3f31189bce316eadcb258a3f3db6c0d5fa18f90d50fa1af13aa9be",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f08e0b107376688cec5d150cf66890bc519bf5b312facbbf4ff40fd450e389d1"
     },
     {
       "path": "hig/offering-help.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/offering-help",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/offering-help.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.617652+00:00",
       "sha256": "baed62ffe3028b83d7d8a2aec75fd105bf0fda1f2d179109eaba1dab05d3eb5b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b919e851612580cb77c29e8e43214d28b7d3bd3bf3f643115e2ce200a3032b38"
     },
     {
       "path": "hig/onboarding.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/onboarding",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/onboarding.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.819580+00:00",
       "sha256": "25972517a215cc8a223c286996e68dea90081c0663e647ef7c109ec6dcb7b7c5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9a85ebb1e3dd275d5f5dbfa1729a2e18429960fc26f5273921a68dc5b323dcda"
     },
     {
       "path": "hig/ornaments.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/ornaments",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/ornaments.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:39.981369+00:00",
       "sha256": "44b6156e32632cf15a273900ed36e04037dbcd195da055ecfccee3d19e285a3f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "572dba66383e71140c2a99cc5c2e3404c0e2e2baf21f3e298e97edb4bcceb871"
     },
     {
       "path": "hig/outline-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/outline-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/outline-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.147711+00:00",
       "sha256": "d1fbdee8f1563bb9c9db8b4484467ddfe4739547201207bc316fa3278ae173b8",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "bc250fe2b268d1e4835539e19b484f39c4643ccb1646c847fc367032da1abce0"
     },
     {
       "path": "hig/page-controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/page-controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/page-controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.320772+00:00",
       "sha256": "40577cf2381cd9e9b98079aada38a2da3a400d872402e6575201acdc8624be5a",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "55f462ba56c3684c03d3a50cbeb97c97455ab77c27080c15f3aa89905933478f"
     },
     {
       "path": "hig/panels.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/panels",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/panels.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.491528+00:00",
       "sha256": "50322c64efed22b176c5adc5043020f2b409bbde359071e0e97c4457cb260c99",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "550616a3035d4072d138434de7b44e5cbff04d11ff3de82fad51fe37b1edc072"
     },
     {
       "path": "hig/path-controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/path-controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/path-controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.634844+00:00",
       "sha256": "f0a69f9c873880d881fe505131ac7d0b69a8440161a43e2e7555364717809cfa",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2048f8d82d124f2c78d4d8442fc82574a1410e39a585d60e5af663ead74aeb23"
     },
     {
       "path": "hig/patterns.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/patterns",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/patterns.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.828059+00:00",
       "sha256": "1200631309ccef69e0f9de18ad8fcd1a61c3033645348f7901640e21499d3fb3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "e0cca40c8b02d292b2e084d73a270fa85a28d36267c6862b468dc8edba3b9cf5"
     },
     {
       "path": "hig/photo-editing.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/photo-editing",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/photo-editing.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:40.973292+00:00",
       "sha256": "a5256544166cb25516af3ad623ca8cce98ad10d919f9d4d62405fdc519047c63",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "182e352ce445d1e0ada02d3f00449fc73155d290893b0347c8c6dbdc6cc3d149"
     },
     {
       "path": "hig/pickers.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/pickers",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/pickers.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:41.137587+00:00",
       "sha256": "684ea31a75753bc62c9ba3d182c9b70b8a35018ea64e3b733c12c7c9bc50354f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "73d7d22d7a21124a52832ff09c887f54d191e3bf2152e20f314ca3558288c5f2"
     },
     {
       "path": "hig/playing-audio.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/playing-audio",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/playing-audio.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:41.310010+00:00",
       "sha256": "bbce3ffd15fde27bf70d0d830deaf34c13619fcf6d4c6a61e6b8212dcc546315",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9c63454e50a9ddc656891e9dccef1e889bfa8b8124dd3f27d00f4b2e6610dd76"
     },
     {
       "path": "hig/playing-haptics.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/playing-haptics",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/playing-haptics.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:41.498419+00:00",
       "sha256": "3b72e435e0a4e1e52e117765590a29683a0da61028b3e9e7a132388c543bde92",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "68bab380a07eff7aa471d589565891bd904d4615bea3629766d4b7a11ab5c5ba"
     },
     {
       "path": "hig/playing-video.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/playing-video",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/playing-video.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:41.671629+00:00",
       "sha256": "20dab3f4ca91d254b7463fc3a15b788f43965692d10c816b887943ac083cddb0",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "8a9dbaefd3094451dc390d12b71edf7183a196ea96085360aeb0bf1190cd97a2"
     },
     {
       "path": "hig/pointing-devices.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/pointing-devices",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/pointing-devices.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:41.861679+00:00",
       "sha256": "3cf5f50e01676abf66da2e7d0d3cfec4e7fbcad8cd62ad780f8b88caaa3ca39c",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "06001b6feb8b9ab4544eca1cd4e98adaf125ba9d79475b6039887efa7e934f40"
     },
     {
       "path": "hig/pop-up-buttons.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/pop-up-buttons",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/pop-up-buttons.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:42.026945+00:00",
       "sha256": "5cafb52ab2938c8e14a135c13519747764f3b6ea7d68e4cae3e547dba98495b1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "64ef3e8079e3a1dd2742d377fbf98f7d141cca8798d2dd1985f71b5c24043a4d"
     },
     {
       "path": "hig/popovers.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/popovers",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/popovers.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:42.186305+00:00",
       "sha256": "9970821c1156d3ee1ca1b76c037e509ca2c3e2838019f3ee9dd3fe5f0ae4c72f",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "83999a347d3632cdb33ce4414ab97357ae2ad83af041e0f42fa2a7d861482eaa"
     },
     {
       "path": "hig/presentation.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/presentation",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/presentation.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:42.339070+00:00",
       "sha256": "99e5368330c03fede101f7c2e8732155be7e6297589d6de6c242249531980fa9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b0766887b028fec9e8776628e2c33dc45e71763814da4c9ac29c3c871cfd174b"
     },
     {
       "path": "hig/printing.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/printing",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/printing.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:42.484892+00:00",
       "sha256": "2579eba7994c9540336749ebd8e8549c0d7e85ffdf0358de75f751e1cacd95ca",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "8cb877a88d268a02b93117e9fdcf19d4f36f2cab00dbf35b3945ff2760184b1f"
     },
     {
       "path": "hig/privacy.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/privacy",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/privacy.json",
-      "fetched_at": null,
-      "sha256": "6c7176dfa2a209d9f829f3a7de4fd35f4f416f293dabdfc8a592fb73c41b4d18",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:42.664908+00:00",
+      "sha256": "a75f1a04f2e2c1dc646df63a4a242b0a7aed2dd3788a43cbf6c296ddd85b11ba",
+      "provenance": "fetched",
+      "source_sha256": "9c637c45ac3a1c5414a4b7b6f606dbcd69a642fc01bf252bbdee0644fc299dd3"
     },
     {
       "path": "hig/progress-indicators.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/progress-indicators",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/progress-indicators.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:42.841203+00:00",
       "sha256": "6193f2bddf562e3f474f7e106153e567882c351415f78ef52dfba4b890674a18",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "76a299d47f154a13b38568a52054f96d5f784739a6aecfe1a82d6ff3a042aa7c"
     },
     {
       "path": "hig/pull-down-buttons.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/pull-down-buttons",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/pull-down-buttons.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:43.008044+00:00",
       "sha256": "7a9c2769f2fed2b7d4182f05cb13554b3b5c8aaf343200844417e1c776f98ca3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9fc61775c9f36daaff05f16caa8a6063237d0379ca079a2d0a45a7a4534a37e1"
     },
     {
       "path": "hig/rating-indicators.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/rating-indicators",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/rating-indicators.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:43.152947+00:00",
       "sha256": "d30ec1c9162226d1dfd2f26d31d77727e2fe33d6c3da98a1e28efe8d8bbcd4ca",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "57b373bd44c03e1e294c4c5d0d701a32a9a6c22eca2022baf65ac7f33d789bae"
     },
     {
       "path": "hig/ratings-and-reviews.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/ratings-and-reviews",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/ratings-and-reviews.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:43.305061+00:00",
       "sha256": "70ae6b69fd2f7570ecefeadf25a99be0eea0cbe2449c17f5f598c3a1f97f566d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "4a8893daf794573380288976e6f6349228d571cce7b1b197be179dade1c527b8"
     },
     {
       "path": "hig/remotes.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/remotes",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/remotes.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:43.471146+00:00",
       "sha256": "609ee46b78435ce271d5b423e1c63a32cda34ff19e595be1ff220807982b2f4b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1e906ba4702ca94af3a6a08dcbf453dbdcbc93059b72a0aabd16ff3f725c84bc"
     },
     {
       "path": "hig/researchkit.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/researchkit",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/researchkit.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:43.635020+00:00",
       "sha256": "6d2fdcd9790eb06bb257d3942237a94046541eb4eef97bcb8295f0d359ed863d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2a71e66fc5c79e62fdf55141eecc855de44f2408c363fe9f2f5c97060c3508bd"
     },
     {
       "path": "hig/right-to-left.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/right-to-left",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/right-to-left.json",
-      "fetched_at": null,
-      "sha256": "25b41d3bf1b849c4a9eb8835bef433e5c7d6409975941bf0df543d173d39f848",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:43.823971+00:00",
+      "sha256": "c5b609fc403baa25e8bb0d41b42171cbc10d146e21b0ea18fb8abb9f4b8bac6b",
+      "provenance": "fetched",
+      "source_sha256": "0c47d2b7b7c45cf65e4de155e84433f19980ab1ae8d12f09d7df213483e0f539"
     },
     {
       "path": "hig/scroll-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/scroll-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/scroll-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.003408+00:00",
       "sha256": "355dab8b98aac80b006e507bee4a66033cb7fa21ab8c4b7fa0c3e4e19d0c7da4",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "fa99110bf671741536de552c96154c6b6fb447bdce754b9b55c3536b4deae8e8"
     },
     {
       "path": "hig/search-fields.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/search-fields",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/search-fields.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.176976+00:00",
       "sha256": "772fe02638cdb4894e39c0c1ec9b1afb2fa4d2845fc332463b0f9e52b3fb3804",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "57ad53c788667b8676c585a5c6ef7f6bdaa297dd0a206f9e6606351265045bbb"
     },
     {
       "path": "hig/searching.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/searching",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/searching.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.338284+00:00",
       "sha256": "6d253afd118b866f4758a14a1b3ffdee239d7bdcb57ad0e36f2325ba10e5d9c3",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "e88879b435c2746f33924395f9992adc052177adac4bf037dd923034b1b996bd"
     },
     {
       "path": "hig/segmented-controls.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/segmented-controls",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/segmented-controls.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.511606+00:00",
       "sha256": "904aab59a537383fa29c4c164c13a2cff05cbd838f27afa0587e00f8a4ab6c3c",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "58316edb97f3e1b141e4c86d4671ebc994f5feb68576379f94f5f4be29537d88"
     },
     {
       "path": "hig/selection-and-input.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/selection-and-input",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/selection-and-input.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.656017+00:00",
       "sha256": "74ad5b77a3754460129a995989f9c113fe091ba30567bbbe1039f63dadfcc2df",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1efb49280cd8cf4a8f784c6bc7e12ff241343b3125a7bd7831d842a0a64e01c4"
     },
     {
       "path": "hig/settings.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/settings",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/settings.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:44.825217+00:00",
       "sha256": "724ba9a8f6c76f7e527b2d3218427a072a739cf1e8fc5ab0bbcaba1a80cdc606",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c17e9a542a806d828ef5bef1df044cee2c2c135f96e8d0c591d873c2507449cc"
     },
     {
       "path": "hig/sf-symbols.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sf-symbols.json",
-      "fetched_at": null,
-      "sha256": "3c7e3b2b668f8a75ea91f8fb3d1b2a10474dbac29c5d9480d93467b56148857c",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:45.012101+00:00",
+      "sha256": "91cc076ecaac39fff60480f3ea4141f661ebb1e1f60b8077e95b830d91e564f1",
+      "provenance": "fetched",
+      "source_sha256": "8150624ce5c4088b3f48ac610b5fb78c6526a8a1ff5b87f50a3ab37fa12bce7d"
     },
     {
       "path": "hig/shareplay.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/shareplay",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/shareplay.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:45.219018+00:00",
       "sha256": "d7e61a63735d6377bfb8b0aedd973e12ebfa5d519a7f04c219c11891c9c2004d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b8801258811a282267cc8b8a68bc683fc6b3ed62e5b44da037afda29eda073c0"
     },
     {
       "path": "hig/shazamkit.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/shazamkit",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/shazamkit.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:45.366774+00:00",
       "sha256": "1c0e2c5ca08249069cc4b13a710d7fb1ae6a209894e8891a4dc1c8207b219b9b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5338d913a6adc4faf1be9f023ee3941b1d6c8faba2b900f78e280ec4b56f2b78"
     },
     {
       "path": "hig/sheets.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/sheets",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sheets.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:45.557317+00:00",
       "sha256": "791353d2d73b55ce1d436db21737148528e881a696862ea7c17ec3eba6d3d2b0",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "3e1a1accb148d23db5a74907b56438de35cdafdb1aafcc12722c7097d7829459"
     },
     {
       "path": "hig/sidebars.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/sidebars",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sidebars.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:45.731333+00:00",
       "sha256": "4619c11b2658f09965120b69337b50bd4629abcc846e117fe2dfbe6af5a99d0e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5aff188db0d343d4286e15a8ed6a7baadef4cfa60565ce374be0c51aae64859d"
     },
     {
       "path": "hig/sign-in-with-apple.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/sign-in-with-apple",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sign-in-with-apple.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:45.916012+00:00",
       "sha256": "93bb40d627e82a13024e87aeff951f4331a623e7d80ae6978f4e3ed0dfeae479",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c07d0c3f32211522d3e084567c086fe29e65f8fd964dd2440bdcbcb0d2d5bbe7"
     },
     {
       "path": "hig/siri.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/siri",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/siri.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.096004+00:00",
       "sha256": "0404695704101b56dd0c66c20babff317cdc5be56c2d2e6f270a7b06158b43d4",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "fe14c4b871727adb2d3014ddf9222b88057db7eb9bb8b688c23de3dee634f3b2"
     },
     {
       "path": "hig/sliders.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/sliders",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sliders.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.273111+00:00",
       "sha256": "4aff6a26e2cb9c7ad2485061d60131a2bb73cef7ed4313e1a1cec769ff57cd3b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "d557c0acf0362a586460bed995d1fdc6a605117d5051d6d4dcbe42eeb27e273f"
     },
     {
       "path": "hig/snippets.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/snippets",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/snippets.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.449300+00:00",
       "sha256": "3d5789ff2ed947424beb69edfce1bd49169038def66fbea614de906e08c90ef0",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "32af5833181b26681cfa8c4edd5559f94e995c1e6e870b264c97bbfe7a3eae5d"
     },
     {
       "path": "hig/spatial-layout.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/spatial-layout",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/spatial-layout.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.627825+00:00",
       "sha256": "d745bc54bdc8a3aef737814ed66d43dec5513e37278bfa627dee6d271af69107",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "146f0f556fbba1218a77339dd28894af38639d384503c42720e800d90846ec30"
     },
     {
       "path": "hig/split-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/split-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/split-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.792407+00:00",
       "sha256": "ccec6cf8eadc49bf4f77db3af1cba1a8391e22d968e789995e2af05ab0814582",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2be47ad6548b556f28d735dda7b38afa34efec57ea2037b32ce80523ffa7eea7"
     },
     {
       "path": "hig/status-bars.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/status-bars",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/status-bars.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:46.958726+00:00",
       "sha256": "3d757442cef0bdc173a26cd3359b6c9e6918e6b90a39d4568aa80c494d6fbaaa",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "bd387b95bf3ebe254e9f113ed5f75ddad579b180b3b40e5f1767782f50d48792"
     },
     {
       "path": "hig/status.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/status",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/status.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.111146+00:00",
       "sha256": "6a03f8a6d3b6eb40773cc0e639331344856b52cee0940af88ed3fb4db7987c1b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b75881bf9f8a39bc42aa93d21be213a1c058c693ca0363ad7e7cf77e53135ad2"
     },
     {
       "path": "hig/steppers.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/steppers",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/steppers.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.255671+00:00",
       "sha256": "b6e87feecbe589b6d478ad9e45ef22cb8b4993fd08f4ae55a3409884eb2ab3e1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "4eb9f69ba9f3b269a0024f4037f2835c50eac59d34acd3ba6e9a41921fe69d68"
     },
     {
       "path": "hig/system-experiences.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/system-experiences",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/system-experiences.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.404719+00:00",
       "sha256": "3e5fa5e6ffbd7c3810b1cc3823ee617e6f79bb8a13b59a5cfb56cf6976a3e328",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "73559c32f2baf8a758e37b14699692dad3277a75435687215b6926da2dad4f8b"
     },
     {
       "path": "hig/tab-bars.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/tab-bars",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/tab-bars.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.575957+00:00",
       "sha256": "0931220f642699f055582d7a9f3fca9473dcf164ecba4034475541b74d710940",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b2f48f79d3f8a5bd00f2e3b462a19debd0a557ea0113ed8e573907bb06513f07"
     },
     {
       "path": "hig/tab-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/tab-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/tab-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.729265+00:00",
       "sha256": "9743757f30f2e491bc5b24224ab1f6addda3631327102411beefb6dc7b10d655",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "9f63190111716fc0b57437c11d820921551cd6843d982d6c2fb8b485879b26ee"
     },
     {
       "path": "hig/tap-to-pay-on-iphone.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/tap-to-pay-on-iphone",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/tap-to-pay-on-iphone.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:47.901885+00:00",
       "sha256": "fa5369bf91fe6f030442c3d4a3577cecc6a308af7ada7630bf2cf3170fe867e2",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1e5ab813ebedbe97fd909f3e468eaac469f6a0d3a1543b840d279aca9b2b7877"
     },
     {
       "path": "hig/technologies.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/technologies",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/technologies.json",
-      "fetched_at": null,
-      "sha256": "fb6c25ac4b31a559388eaafd348f5ad7103ed386fca5f61da80fe57924026bdc",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:48.077249+00:00",
+      "sha256": "4b224180342eb6fa417b0a2ed00af7fa725cfdbe376266ad7ca6b08497fc322a",
+      "provenance": "fetched",
+      "source_sha256": "5dabec78c0d4b2a34d669fd5f5c42871e47f4ec634369a591ca412dc3fc98c38"
     },
     {
       "path": "hig/text-fields.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/text-fields",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/text-fields.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:48.244026+00:00",
       "sha256": "4a9741f080b3d072d14dfe0014ceab3469bb97a78d63513f698a652eef9dd58b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "18324cc7181a498b9324a1980231260785ee427eb9ae48f775bfa06a96153d40"
     },
     {
       "path": "hig/text-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/text-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/text-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:48.409518+00:00",
       "sha256": "40aba57e6f122f912032ee4f61169aec4fb1f4b1a9ac33e3512df6dbc5497ed5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a0e011df816d22db83719825572cf324b4ea9c737862e804c62484330dcc701f"
     },
     {
       "path": "hig/the-menu-bar.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/the-menu-bar",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/the-menu-bar.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:48.591320+00:00",
       "sha256": "d17d26cbcc47e68842e1a01e3f60f90543222a9993b9f68056b036c45d687469",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "49021cdabc50e3cd7a0d0daedfc7fe3175a1b3331ce5b836cdf759183d5c7f46"
     },
     {
       "path": "hig/toggles.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/toggles",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/toggles.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:48.765055+00:00",
       "sha256": "1ccad128a235297a6f4c3ab903df6e6d0766871c4462b4c0e0ac73c992467b01",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "bed6ecd8ea69e785eed940803ae0cfe12f6b2120ee1072f5b6b34d1b618df753"
     },
     {
       "path": "hig/token-fields.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/token-fields",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/token-fields.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:48.919995+00:00",
       "sha256": "164fe5b7e4e118da0e091ec57b46160e9c662f3fdf16da4e4a5edbd7b948956b",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "afe7eae105dbab556f8fa136c1988720a702134b47c16469a2186f3742d34dc2"
     },
     {
       "path": "hig/toolbars.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/toolbars",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/toolbars.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:49.110023+00:00",
       "sha256": "df2274c6c4664f0e320b4b282ba8b755991fdc664f5261ad1bdcd46ee3f6e6d2",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "4f1147642ab0561dcb2d4b074be970a537e2072be41e061314d1e234b4cdc6f7"
     },
     {
       "path": "hig/top-shelf.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/top-shelf",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/top-shelf.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:49.282995+00:00",
       "sha256": "249c728628732cb6a10bd9fe4056eb6f874d30b572c30240acd47531ad98a4c7",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6fed7d0b7496558c128180753234d214026c0faa5d8d1994d6ef16d397474bea"
     },
     {
       "path": "hig/typography.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/typography",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/typography.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:49.611420+00:00",
       "sha256": "649669ffcfb0210e46a1c3b953b6cd707faea2e7c2a15cbb0972d901751984de",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "85bf7dc78d41a6e5e16d4055f3bdadf7bac4f7d5cb2206514c8b82d5d24631ed"
     },
     {
       "path": "hig/undo-and-redo.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/undo-and-redo",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/undo-and-redo.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:49.762991+00:00",
       "sha256": "169cfa628253abe59884d56a67b40d96d898431dcc507922847af039db99ca69",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f876432967988ac2cf71bd79af61d1240c7b9ea6fe856747382954921f70b4d2"
     },
     {
       "path": "hig/virtual-keyboards.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/virtual-keyboards",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/virtual-keyboards.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:49.938994+00:00",
       "sha256": "ba7d48773579c04737c1bad6d2f3b3ecc9651e5f1c6b3a91185a83d870bf3902",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6f5e2d364bdd50f7ee473b0c6b23402e8ba6ba6bda6666b32f8f9d8018cb6c34"
     },
     {
       "path": "hig/voiceover.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/voiceover",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/voiceover.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:50.097229+00:00",
       "sha256": "48e4a97272bda3fade408b67ec8ead5bc61c417b9399bf396e3805a38d18d959",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "859dc02ab9ba87dc545952d8f8077cf94936cd9f49f491d2e765c2425a6c76e5"
     },
     {
       "path": "hig/wallet.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/wallet",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/wallet.json",
-      "fetched_at": null,
-      "sha256": "bac14fd071c912f58cdb3d51b056cfe3f70bf590805c37d98641c9d137d9039e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:50.409917+00:00",
+      "sha256": "3f925df4652d20b8638b31b22f0c5babda402349d5e98379b9a60989f5acda03",
+      "provenance": "fetched",
+      "source_sha256": "e1f8debb3cdaeeec6f3d33e0cd303199905c8063b4bc15b3ee0a68693eaaa4a8"
     },
     {
       "path": "hig/watch-faces.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/watch-faces",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/watch-faces.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:50.555820+00:00",
       "sha256": "52c90be680cf663ff10199995507d246db614d796a234c260193e92253ade670",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "f52fe24a93bf7943b190a1a7fe75f9479c081242b3b75848989da6b6690314a6"
     },
     {
       "path": "hig/web-views.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/web-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/web-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:50.809539+00:00",
       "sha256": "f7a787b029bdf8f559e67c7aa54570d748b203a849f25de447ea13fe8ac8bdff",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "7219049db6cc53cafe303ae5dc430b0717cb79660b2e9d3763a649f55de82148"
     },
     {
       "path": "hig/widgets.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/widgets",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/widgets.json",
-      "fetched_at": null,
-      "sha256": "791e3a83d7aba0e924576364617a03a195e2668a933ef34d5514a431c693bc91",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:51.016752+00:00",
+      "sha256": "553799fabb906cc50fc719a217e8bd1d5543ae30332becb0fc0b9818a77fd077",
+      "provenance": "fetched",
+      "source_sha256": "25dc580b5eedfb5b040f2a7ff149c1f0e9a16a6ffdda6817f73e1df8ea0a88cf"
     },
     {
       "path": "hig/windows.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/windows",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/windows.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:51.502784+00:00",
       "sha256": "de3e38ec14655b117e18bdcbf51614085ad930977688d47b63d284facde162e5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "1da7914a4b33b20b55cc7558d004f5017300f4121c2d7fdf05ba79517073a220"
     },
     {
       "path": "hig/workouts.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/workouts",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/workouts.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:51.661270+00:00",
       "sha256": "8646da469c8174adca41e3a3bee885bd1891bc184ac4b073d3b4405aca94a32d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "a44637de85333370e6f43da835ee69a7163fde8695c9287b0f7ca14696ff5af6"
     },
     {
       "path": "hig/writing.md",
       "kind": "docc",
       "url": "https://developer.apple.com/design/human-interface-guidelines/writing",
       "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/writing.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:51.830210+00:00",
       "sha256": "2111a63956282b2638c5f610f1445d8de626e3727f65b13b96813e0e2e6bf601",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "3c32e5d0b6dac0a2ccef96d96ea8a3eb62e425ef319fd065aa6e3010f93ea149"
     },
     {
       "path": "liquid-glass/adopting-liquid-glass.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/technologyoverviews/adopting-liquid-glass.json",
-      "fetched_at": "2026-10-04T12:23:21.433034+00:00",
+      "fetched_at": "2026-10-17T00:24:52.028675+00:00",
       "sha256": "a243e27204a9ea11681c6b3a8cc8d78900f3c0ea08d67b42d955b06b70aa1f93",
       "provenance": "fetched",
-      "source_sha256": "30dcd1ca1011f1626aea5f5f1c4d2ed6581258aba8afed8226a3eed9b2fba846"
+      "source_sha256": "bd122cfa76a26fb434543cc0bddc6a012768a91f1a4f01a3e6c27de980c1c083"
     },
     {
       "path": "liquid-glass/api/appkit-nsglasseffectview.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/appkit/nsglasseffectview",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/appkit/nsglasseffectview.json",
-      "fetched_at": null,
-      "sha256": "5dd577fe2b3f69d37dbf7a16d52eb69ab1399d6fa2709443173c9ef4c3e60f37",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:52.222118+00:00",
+      "sha256": "1da44561bd2e2001a171380d34002b7767bbec657a3e6846039c71c579ad076d",
+      "provenance": "fetched",
+      "source_sha256": "a603324d9fbd853bc9bf12342d298af2ba24bc6d6f55e96af132605c4bd528e3"
     },
     {
       "path": "liquid-glass/api/bundleresources-information-property-list-uidesignrequirescompatibility.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/bundleresources/information-property-list/uidesignrequirescompatibility",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/bundleresources/information-property-list/uidesignrequirescompatibility.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:52.403362+00:00",
       "sha256": "c98c38ee2403faae0d2aadcfd9ef469b964bdceef27227b682314aaf828c79a9",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "aac472ac005daa0ea5521e34d167aafb804ec68534d1490fa2ed66f30b9e3a12"
     },
     {
       "path": "liquid-glass/api/swiftui-concentricrectangle.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/concentricrectangle",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/concentricrectangle.json",
-      "fetched_at": null,
-      "sha256": "00d96f2ab1950494b18d5a5c580941f0c8052426d6b6f80490b6848008ea3ad0",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:52.598048+00:00",
+      "sha256": "c9555e4c8d1ea5c73df730e52c1ad6d4905437fcb2cfbfce346f5b53b7ac2b5c",
+      "provenance": "fetched",
+      "source_sha256": "2eb1431e9dd5608847ab7c0886d6f41a260c94a36a80f7ca320bc649d230b766"
     },
     {
       "path": "liquid-glass/api/swiftui-glass-interactive----.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/glass/interactive(_:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/glass/interactive(_:).json",
-      "fetched_at": "2026-10-04T12:23:22.376306+00:00",
+      "fetched_at": "2026-10-17T00:24:52.747332+00:00",
       "sha256": "effc247f51b02545664aaf5cad435f7a9ef76290be6a12dbe08834274c5fb203",
       "provenance": "fetched",
-      "source_sha256": "ee62d9c38a628fc0f51af350aa44d4cc64d4f27ef6f663a0f18979e4454921a3"
+      "source_sha256": "00f1c042a21e05bb5b9a94ded67f3051b553c7bd2e064f6836ee747119828e77"
     },
     {
       "path": "liquid-glass/api/swiftui-glasseffecttransition.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/glasseffecttransition",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/glasseffecttransition.json",
-      "fetched_at": null,
-      "sha256": "a9031549f8d9e9821d2acba30dcbdbdc51c019d693e2afb47c8849c8d1f9aa36",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:52.905627+00:00",
+      "sha256": "a45954418351b117a1e13c03bc91fe7b948d8ece5e60eec7c12345334d18be20",
+      "provenance": "fetched",
+      "source_sha256": "2a1c8fbab7c651f17515416c73f85431106466368f7ffbf758b279e8f4b38c4e"
     },
     {
       "path": "liquid-glass/api/swiftui-glassprominentbuttonstyle.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/glassprominentbuttonstyle",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/glassprominentbuttonstyle.json",
-      "fetched_at": null,
-      "sha256": "279d3ab3a332409b3029f5c19caf425d94e3ba66ccb0a28c0d913606228a1c5e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:53.085875+00:00",
+      "sha256": "801f378cd21d3d07a060124c0e792164ce6816344a6df59d31130da93def75ba",
+      "provenance": "fetched",
+      "source_sha256": "87fad8c7ab2fbfeb2a8546b6a35b4182b1a008ffe3f75bfef243baebc55f1caa"
     },
     {
       "path": "liquid-glass/api/swiftui-landmarks-applying-a-background-extension-effect.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/landmarks-applying-a-background-extension-effect",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/landmarks-applying-a-background-extension-effect.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:53.249233+00:00",
       "sha256": "5dd45867b6c457b58cd2f67bf9aaedc11f673354d8539e20cf0d39060f7c92e5",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "cda80951b7e4c136b90b702181190e2ed931162dc551588b5aef2cdd1bf10de2"
     },
     {
       "path": "liquid-glass/api/swiftui-landmarks-displaying-custom-activity-badges.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/landmarks-displaying-custom-activity-badges",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/landmarks-displaying-custom-activity-badges.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:53.438142+00:00",
       "sha256": "b848ea540b212255e267cf07b537655eabc0f283c1e164f11d049b6b54d4bb85",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "683357462601d7eb98873ade07ccf1764ed203670e789bc248f7c4b15a2ea6ed"
     },
     {
       "path": "liquid-glass/api/swiftui-landmarks-extending-horizontal-scrolling-under-a-sidebar-or-inspector.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/landmarks-extending-horizontal-scrolling-under-a-sidebar-or-inspector",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/landmarks-extending-horizontal-scrolling-under-a-sidebar-or-inspector.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:53.585699+00:00",
       "sha256": "27c6215b93c3bec5af0186a7ef25714427fb027606cab547d3de3cf6e3de8801",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "47d7d6dadf9ab1af934e6bbfe2c37b36bfd43f1ead3fa3dcc965f7f02fcdfa25"
     },
     {
       "path": "liquid-glass/api/swiftui-landmarks-refining-the-system-provided-glass-effect-in-toolbars.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/landmarks-refining-the-system-provided-glass-effect-in-toolbars",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/landmarks-refining-the-system-provided-glass-effect-in-toolbars.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:53.737024+00:00",
       "sha256": "c177540988072d9d08dbfd7a217465fca802607642ba85f0db50ac815881a69e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "406ca77a37e41f032167b3f010fc6e64ad9a847a172bc3984c53151084d9d8fd"
     },
     {
       "path": "liquid-glass/api/swiftui-shape-rect-corners-isuniform--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/shape/rect(corners:isuniform:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/shape/rect(corners:isuniform:).json",
-      "fetched_at": null,
-      "sha256": "f24c2d26d65fa86e0fb6d531761e56b5b05d50d7c908a35758203d1e069a5702",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:53.878619+00:00",
+      "sha256": "1fa985260b40c237df471fa146505c613b92541e1b8aca85ca703af69fddc08f",
+      "provenance": "fetched",
+      "source_sha256": "c3e223ff2ffa9dc8132797f8e699bc8d8e3317eea072fb77809c0ce68c40b513"
     },
     {
       "path": "liquid-glass/api/swiftui-view-backgroundextensioneffect--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/view/backgroundextensioneffect()",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/view/backgroundextensioneffect().json",
-      "fetched_at": null,
-      "sha256": "a5154d2d01a800314d422c0f1d230a560361391f94d77d5a066789bd4331ba24",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.047413+00:00",
+      "sha256": "943a12f18e249d9ad3528f519eba4031cc992ea7a4c95e6fa27e674d76e56036",
+      "provenance": "fetched",
+      "source_sha256": "c4ead99c1dd4a6f7f234f231e26de90abf5d25bd6859d74956bebcc72cb465f4"
     },
     {
       "path": "liquid-glass/api/swiftui-view-glasseffect---in--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/view/glasseffect(_:in:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/view/glasseffect(_:in:).json",
-      "fetched_at": null,
-      "sha256": "14cfb6d0fd33bfcbf5d5bf9775db22b1e867098d28124e9e7369f9a64c993ab1",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.223349+00:00",
+      "sha256": "852eba63c05bbbfd7c0e0c90a4806ff7aff7144ae06346497a59cd1caa909d53",
+      "provenance": "fetched",
+      "source_sha256": "c5af879e0691c0fedef3c1f360ddb54d021b92dd79fa62263b0b79989e2b24ce"
     },
     {
       "path": "liquid-glass/api/swiftui-view-glasseffectunion-id-namespace--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/view/glasseffectunion(id:namespace:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/view/glasseffectunion(id:namespace:).json",
-      "fetched_at": null,
-      "sha256": "f227e4bbba445a97bbc57f2d8004dec0a9717f05859b3eb08e27d832bc032547",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.383795+00:00",
+      "sha256": "3607db78555bf73246639970555473acdd0e8aeb456129bbe8e1d2cb202c8067",
+      "provenance": "fetched",
+      "source_sha256": "4b7dabdcb8160a3bb09a6f91fbfe2b1b221626288921117d77f49a2dcc2ea051"
     },
     {
       "path": "liquid-glass/api/swiftui-view-safeareabar-edge-alignment-spacing-content--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/view/safeareabar(edge:alignment:spacing:content:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/view/safeareabar(edge:alignment:spacing:content:).json",
-      "fetched_at": null,
-      "sha256": "db6fc6033c9cb3fe3ea0daf0b6cb168bf5a460302de521d5b8c294ffec85ae45",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.551082+00:00",
+      "sha256": "55128cec91df1a2c2702289ec209aa52821cde041c1bab35792f63d4477076bc",
+      "provenance": "fetched",
+      "source_sha256": "3d8ea882f39e4d5706b6c8239c0ccbf3c331d513b3ac8fb6dcde2b627d3bb4d6"
     },
     {
       "path": "liquid-glass/api/swiftui-view-scrolledgeeffectstyle---for--.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/view/scrolledgeeffectstyle(_:for:)",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/view/scrolledgeeffectstyle(_:for:).json",
-      "fetched_at": null,
-      "sha256": "b895382a0a294cf47b243b58c99bf186c4671fa302cc3e0f8ccf4f482170cb99",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.733252+00:00",
+      "sha256": "2b41791c9fcdc58a8c3f5d653146f36618e8be17e2a13e6318a0d6519b2b108f",
+      "provenance": "fetched",
+      "source_sha256": "834a69cc7e970d196986d4a9a046e0f3f624b1cd9052b968032fb7ead7f12193"
     },
     {
       "path": "liquid-glass/api/uikit-uicornerconfiguration-swift.struct.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/uikit/uicornerconfiguration-swift.struct",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/uikit/uicornerconfiguration-swift.struct.json",
-      "fetched_at": null,
-      "sha256": "1293b0ad4dcd2f00562dcf0b459350b8eb95d54e4f199340ecb976d19e0e4383",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:54.906090+00:00",
+      "sha256": "0059a4f6ca0799dab341cec43631a8404c6aa3e02f83724dd971469b8bd8b9f8",
+      "provenance": "fetched",
+      "source_sha256": "ce4c63c6ceee9cb9836a3916b0eae7a68d2526775303f37a0e0d50a671e67bb1"
     },
     {
       "path": "liquid-glass/api/uikit-uiglasseffect.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/uikit/uiglasseffect",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiglasseffect.json",
-      "fetched_at": null,
-      "sha256": "e6fbab6879b8965ebc12202cb2a327cd6257c058fccc0c3ef22c518fe6a40c23",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:55.072033+00:00",
+      "sha256": "acc23670a8b6268a148d0118ecc3d700235a34de9c692e962b72826c3361c253",
+      "provenance": "fetched",
+      "source_sha256": "018c940374695c079a6e5b95f6d2f4d4281e41c7394c19086d8d41edcbb24ae3"
     },
     {
       "path": "liquid-glass/api/xcode-creating-your-app-icon-using-icon-composer.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/xcode/creating-your-app-icon-using-icon-composer",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/xcode/creating-your-app-icon-using-icon-composer.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:55.261509+00:00",
       "sha256": "a14ba8d8a19d8478b57713160848b78c976547181540c29c2ae629eb22c831b2",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "3458352b0e40d4488d5e31d413d47ece2b150bcddf4ab9b406f34865d73f728e"
     },
     {
       "path": "liquid-glass/app-design-and-ui.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/technologyoverviews/app-design-and-ui",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/technologyoverviews/app-design-and-ui.json",
-      "fetched_at": null,
-      "sha256": "bf0dac97de0476219fc21b5cd3e109a59ff843c7ebde9d58d55f8f79e8371a75",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "fetched_at": "2026-10-17T00:24:55.424432+00:00",
+      "sha256": "7ec5b4128793df7570ce38d78ab9070878c5cb57247d63c084355eb91c64b7de",
+      "provenance": "fetched",
+      "source_sha256": "01f2919d8047641ae62462dd8cb853938b3aa7550d0fd5139f20bed252e34581"
     },
     {
       "path": "liquid-glass/landmarks.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/landmarks-building-an-app-with-liquid-glass",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/landmarks-building-an-app-with-liquid-glass.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:55.594062+00:00",
       "sha256": "7508e1816b97940a1fe685f2c20daa2ec44f5489c2727e489aa1155adee73f97",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "8c4d0b572debbf3143b20f37b60579c6bcbab6404e328d499985d048eca997b4"
     },
     {
       "path": "liquid-glass/liquid-glass-overview.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/technologyoverviews/liquid-glass",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/technologyoverviews/liquid-glass.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:55.887770+00:00",
       "sha256": "cdaa827f02d4c50243160cecd02cabaaac4794cd11009a43a35665eb6bfce541",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "6bb5642ad84c2450b12b82417c5b00e17eb7163adf688b64fed7c5240f26c87f"
     },
     {
       "path": "liquid-glass/swiftui-liquid-glass.md",
       "kind": "docc",
       "url": "https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views",
       "fetch_url": "https://developer.apple.com/tutorials/data/documentation/swiftui/applying-liquid-glass-to-custom-views.json",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:56.065304+00:00",
       "sha256": "85d6b8e31816cbd828a5ea9aab3515246069b10f1e2e3c5e8ade45327622c4da",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "5ceb483599a015780e9a0718cb555529bf9bc190e20215ff50e019ee34ade69c"
     },
     {
       "path": "wwdc25/208-elevate-the-design-of-your-ipad-app.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/208/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/208/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:56.275055+00:00",
       "sha256": "264d35a9e552d240aff3b62d438c793f4d9c84a794aa6992c6392993b242dd18",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "2f110c33b9bfc12acf09bb0c1f9738d8cfca73d6b917c35c04fc06495c372e61"
     },
     {
       "path": "wwdc25/219-meet-liquid-glass.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/219/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/219/",
-      "fetched_at": "2026-10-04T12:23:23.498955+00:00",
+      "fetched_at": "2026-10-17T00:24:56.482700+00:00",
       "sha256": "b04a74607f177985ea7d4ccf2d77bee1a15fdd3d7e49ddb0970c30c50bc533d2",
       "provenance": "fetched",
-      "source_sha256": "746f50bfefcc6103bd1fbde19b327284e319390078a297e3d62d624f0b6139df"
+      "source_sha256": "77ff4f0e728c606f6da822881ef67b86fd0d87b52ec4f0241f7173682b36f7d7"
     },
     {
       "path": "wwdc25/220-say-hello-to-the-new-look-of-app-icons.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/220/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/220/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:56.718744+00:00",
       "sha256": "04c94a8c2b6799f4d0c567278b43b35c5925e8fa09b94cc4f3c0002842668251",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "22213e3ecb62d4921bc8f4176ccf6cef7bb64e2422ffa5a840b87457f209aaf0"
     },
     {
       "path": "wwdc25/284-build-a-uikit-app-with-the-new-design.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/284/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/284/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:56.935334+00:00",
       "sha256": "7f36bbee2257713b4200bc1e6d17126087e481ff2a39138254048e7a9d1ea132",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "b558dac46c699eef000b2e7e658a678ea8ab06fc17c0f25aa936e36790f73f4f"
     },
     {
       "path": "wwdc25/310-build-an-appkit-app-with-the-new-design.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/310/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/310/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:57.203767+00:00",
       "sha256": "7da4779ead2659f136ab32b2201a0d5dd7c6f2f32e2cab9eac5e957e79d07b74",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c2a13e2a9f19afddaf0bae537e05abb96d1e41fd0fb01b791a6e7bc8c6eb20c0"
     },
     {
       "path": "wwdc25/323-build-a-swiftui-app-with-the-new-design.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/323/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/323/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:57.421524+00:00",
       "sha256": "5ffc45f745d0d1fe0cdb8d8ccd20d697fc88ba100ddb7d85a142a1d661a8503e",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "c5a0a06529cd2b03d9aea974206141e718c8d00dcd2e89a647f67c7a7318c178"
     },
     {
       "path": "wwdc25/356-get-to-know-the-new-design-system.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/356/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/356/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:57.629365+00:00",
       "sha256": "b0c92e3702f820da9961fb735d1d9d234ffaf0699cc1155cb28868f9a1b4110a",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "3b8d5a2a3bd800b31db6d0a0eb2a04368815b5c08af458ef5f32425c0f018036"
     },
     {
       "path": "wwdc25/359-design-foundations-from-idea-to-interface.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/359/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/359/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:57.840863+00:00",
       "sha256": "ee0774880d19e4aa07d8862ce8e723dea7174f7ea2f60e78a53c52474884c73d",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "abb5eac60d3d047c400d61294b8a0e3395bff9d0982a966299060e0125bb60cf"
     },
     {
       "path": "wwdc25/361-create-icons-with-icon-composer.md",
       "kind": "transcript",
       "url": "https://developer.apple.com/videos/play/wwdc2025/361/",
       "fetch_url": "https://developer.apple.com/videos/play/wwdc2025/361/",
-      "fetched_at": null,
+      "fetched_at": "2026-10-17T00:24:58.041316+00:00",
       "sha256": "0a28f7c98d9c04f4dea1259beb64f263249d0641b486eb6000feeb7b74524afb",
-      "provenance": "legacy snapshot; original fetch time not recorded; README reported 2026-09-14"
+      "provenance": "fetched",
+      "source_sha256": "ce64df7947836dd92e0079c88149759029e7ef9b1732e00a6193bb7b187bfc46"
+    },
+    {
+      "path": "hig/apple-in-app-purchase.md",
+      "kind": "docc",
+      "url": "https://developer.apple.com/design/human-interface-guidelines/apple-in-app-purchase",
+      "fetch_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/apple-in-app-purchase.json",
+      "fetched_at": "2026-10-17T00:24:58.235527+00:00",
+      "sha256": "0608aed98ed763f493041d47d80a80d0e093932ae3568878cdd6f4f1b2d18dd6",
+      "source_sha256": "cd8111e2096e2fd911c6d168b16a1142fd647a8a815e74ab749f5c5c3d8370c5",
+      "provenance": "fetched"
     }
   ]
 }

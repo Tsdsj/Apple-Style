@@ -2,6 +2,10 @@
 
 A button style that applies prominent glass border artwork based on the button’s context.
 
+```swift
+nonisolated struct GlassProminentButtonStyle
+```
+
 ## Overview
 
 You can also use [glassProminent](https://developer.apple.com/documentation/swiftui/primitivebuttonstyle/glassprominent) to construct this style.

@@ -138,7 +138,7 @@ PowerShell 用例自动发现 `pwsh`/`powershell`；也可通过 `APPLE_STYLE_PW
 
 ## 参考库维护
 
-[INDEX](skills/Apple-Style-HIG/reference/INDEX.md) 由脚本生成；[sources.json](skills/Apple-Style-HIG/reference/sources.json) 记录 208 个现有来源的规范 URL、抓取入口、抓取时间与 SHA-256。旧内容的准确时间未知，明确为 null；不能补造时间。
+[INDEX](skills/Apple-Style-HIG/reference/INDEX.md) 由脚本生成；[sources.json](skills/Apple-Style-HIG/reference/sources.json) 记录 208 个来源的规范 URL、抓取入口、抓取时间与 SHA-256；全部来源于 2026-10-17 实际重新抓取。
 
 ```bash
 skills/Apple-Style/scripts/update-reference.sh --index-only
@@ -147,7 +147,7 @@ skills/Apple-Style/scripts/update-reference.sh --only hig/layout.md --report /tm
 skills/Apple-Style/scripts/update-reference.sh --report /tmp/reference-update.json
 ```
 
-仅需 Python 3 标准库。下载/解析先在暂存中完成，任一失败则整批不写入有效参考；提交失败恢复旧目录。报告区分新增、修改、未变和失败，并列出待复核速查表。更新参考不等于自动证明速查表仍正确。网络故障、HTTP 错误、无效 JSON、解析失败及回滚先由本地夹具覆盖，在线验证限制为少量来源。
+仅需 Python 3 标准库。下载/解析先在暂存中完成，任一失败则整批不写入有效参考；提交失败恢复旧目录。报告区分新增、修改、未变、下线和失败；Apple 移动页面时失败项给出 `moved_to`，可更新该条目地址，或在新页面已被发现时用 `--retire PATH` 在同一事务中移除旧页。`recheck_reasons` 按“速查表 → 其引用的变化页面”列出待复核内容。更新参考不等于自动证明速查表仍正确。网络故障、HTTP 错误、无效 JSON、解析失败及回滚先由本地夹具覆盖，在线验证限制为少量来源。
 
 ## 发布准备与许可
 
@@ -167,4 +167,4 @@ Call `LiquidGlass.init(root)` after mount and `destroy(root)` before unmount. Bu
 
 Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Windows-native junctions are covered by the Windows CI jobs, separately from macOS copy fallback tests. Safari, Firefox, VoiceOver and model on/off comparisons remain unverified. See the linked release verification record for actual CI and deployment runs.
 
-Reference refreshes use a source manifest, hashes, timestamps, local fixtures and a transactional commit. Missing legacy fetch times remain unknown. Apple reference content is not relicensed. The existing free-use statement for original project code is retained; choosing a standard LICENSE remains the author's decision.
+Reference refreshes use a source manifest, hashes, timestamps, local fixtures and a transactional commit; every source was re-fetched on 2026-10-17. Moved pages are reported with `moved_to`, `--retire` removes a replaced page in the same transaction, and the report maps each cheatsheet to the changed pages it cites. Apple reference content is not relicensed. The existing free-use statement for original project code is retained; choosing a standard LICENSE remains the author's decision.

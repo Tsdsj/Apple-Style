@@ -2,6 +2,11 @@
 
 Configures the scroll edge effect style for scroll views within this hierarchy.
 
+```swift
+nonisolated func scrollEdgeEffectStyle(_ style: ScrollEdgeEffectStyle?, for edges: Edge.Set) -> some View
+
+```
+
 ## Discussion
 
 By default, a scroll view renders an automatic edge effect. Use this modifier to change the scroll edge effect style.

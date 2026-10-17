@@ -244,3 +244,104 @@ test('imported into a cascade layer, the stylesheet yields to utilities and stil
   await page.locator('.as-toggle').click();
   await expect(page.locator('.as-toggle')).toHaveAttribute('aria-checked', 'true');
 });
+
+// §2.8–2.10 of the audit: nested glass, runtime cost budgets, closed sheet backdrop.
+async function baselineMedia(page) {
+  // macOS runners default to reduced transparency, which turns lensing off.
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setEmulatedMedia', { features: [
+    { name: 'prefers-reduced-transparency', value: 'no-preference' },
+    { name: 'prefers-contrast', value: 'no-preference' },
+    { name: 'prefers-reduced-motion', value: 'no-preference' }] });
+}
+
+test('glass nested in a glass group stays visible, renders flat and warns once (§2.8)', async ({ page }) => {
+  const warnings = []; page.on('console', m => { if (m.type() === 'warning') warnings.push(m.text()); });
+  await load(page, `<div id="group" class="as-glass as-glass-group"><button id="nested" class="as-glass as-button">Archive</button><button class="as-item">Share</button></div>`);
+  const status = await page.evaluate(() => { const s = LiquidGlass.init(); LiquidGlass.init(); return s; });
+  const style = await page.locator('#nested').evaluate(el => { const c = getComputedStyle(el); return { hidden: c.display === 'none', backdrop: c.backdropFilter, rim: getComputedStyle(el, '::before').display }; });
+  expect(style).toEqual({ hidden: false, backdrop: 'none', rim: 'none' });
+  await expect(page.locator('#nested')).toBeVisible();
+  expect(status.attached, 'only the group itself is attached').toBe(1);
+  expect(warnings.filter(w => w.includes('glass on glass'))).toHaveLength(1);
+});
+
+test('backdrop sampling is throttled while scrolling and still settles on the final backdrop (§2.9)', async ({ page }) => {
+  const buttons = Array.from({ length: 20 }, (_, i) => `<button class="as-glass as-button" style="position:fixed;top:${10 + (i % 10) * 48}px;left:${i < 10 ? 10 : 200}px">B${i}</button>`).join('');
+  await load(page, `<section style="height:3000px;background:rgb(255,255,255)"></section><section style="height:3000px;background:rgb(0,0,0)"></section>${buttons}`);
+  await page.evaluate(() => {
+    window.samples = 0; const original = document.elementsFromPoint.bind(document);
+    document.elementsFromPoint = (x, y) => { samples++; return original(x, y); };
+    LiquidGlass.init();
+  });
+  await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('.as-glass')].every(b => b.dataset.glassScheme === 'light'))).toBe(true);
+  const frames = await page.evaluate(() => new Promise(done => {
+    samples = 0; let n = 0;
+    const step = () => { scrollBy(0, 70); if (++n < 60) requestAnimationFrame(step); else done(n); };
+    requestAnimationFrame(step);
+  }));
+  const during = await page.evaluate(() => samples);
+  expect(frames).toBe(60);
+  expect(during, 'unthrottled sampling would be 60 frames × 20 elements × 3 points').toBeLessThan(1200);
+  await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('.as-glass')].every(b => b.dataset.glassScheme === 'dark'))).toBe(true);
+});
+
+test('displacement maps are reused when glass scrolls out of view and back (§2.9)', async ({ page }) => {
+  await baselineMedia(page);
+  const items = Array.from({ length: 30 }, (_, i) => `<div style="height:400px;background:hsl(${i * 30} 80% 50%)"><button class="as-glass as-button" style="margin:40px;width:140px">Item</button></div>`).join('');
+  await load(page, items);
+  test.skip(!(await page.evaluate(() => LiquidGlass.supportsLens)), 'lensing is Chromium-only');
+  await page.evaluate(() => { window.maps = 0; const o = HTMLCanvasElement.prototype.toDataURL; HTMLCanvasElement.prototype.toDataURL = function (...a) { maps++; return o.apply(this, a); }; LiquidGlass.init(); });
+  await expect.poll(() => page.evaluate(() => maps)).toBeGreaterThan(0);
+  const initial = await page.evaluate(() => maps);
+  for (const target of [() => scrollTo(0, document.body.scrollHeight), () => scrollTo(0, 0), () => scrollTo(0, document.body.scrollHeight), () => scrollTo(0, 0)]) {
+    await page.evaluate(target); await page.waitForTimeout(150);
+  }
+  await expect(page.locator('filter').first()).toBeAttached();
+  expect(await page.evaluate(() => maps), 'same-sized glass shares one map').toBe(initial);
+});
+
+test('DOM additions do not sweep every registered component (§2.9)', async ({ page }) => {
+  const glass = Array.from({ length: 200 }, (_, i) => `<button class="as-glass as-button">G${i}</button>`).join('');
+  await load(page, `<main id="root">${glass}</main><div class="as-menubar" role="menubar" data-shortcuts><button class="as-menubar-item">Edit</button></div>
+    <div class="as-menu" role="menu"><button class="as-menu-item" role="menuitem" id="cmd">Archive<span class="as-shortcut">⌘E</span></button></div>`);
+  await page.evaluate(() => {
+    LiquidGlass.init();
+    window.reads = 0; window.collects = 0;
+    const d = Object.getOwnPropertyDescriptor(Node.prototype, 'isConnected');
+    Object.defineProperty(Node.prototype, 'isConnected', { configurable: true, get() { reads++; return d.get.call(this); } });
+    const q = Document.prototype.querySelectorAll;
+    Document.prototype.querySelectorAll = function (sel) { if (sel === '.as-menu-item .as-shortcut') collects++; return q.call(this, sel); };
+  });
+  for (let i = 0; i < 30; i++) await page.evaluate(i => new Promise(r => { const p = document.createElement('p'); p.textContent = 'row ' + i; root.append(p); setTimeout(r, 0); }), i);
+  expect(await page.evaluate(() => ({ reads, collects }))).toEqual({ reads: 0, collects: 0 });
+  // Changing a shortcut label still re-binds it.
+  await page.evaluate(() => new Promise(r => { document.querySelector('.as-shortcut').textContent = '⌘K'; setTimeout(r, 0); }));
+  expect(await page.evaluate(() => collects)).toBe(1);
+  await page.evaluate(() => { window.fired = 0; cmd.addEventListener('click', () => fired++); });
+  await page.keyboard.press(await page.evaluate(() => /mac/i.test(navigator.platform)) ? 'Meta+k' : 'Control+k');
+  expect(await page.evaluate(() => fired)).toBe(1);
+  // Removing components is still noticed and cleaned up.
+  await page.evaluate(() => new Promise(r => { root.querySelectorAll('.as-glass').forEach((b, i) => { if (i % 2) b.remove(); }); setTimeout(r, 0); }));
+  await expect.poll(() => page.evaluate(() => LiquidGlass.init().attached)).toBe(100);
+});
+
+test('materialize keeps large glass free of animated blur (§2.9)', async ({ page }) => {
+  await baselineMedia(page);
+  await load(page, `<div id="small" class="as-glass as-button" hidden>Small</div><div id="large" class="as-glass as-glass-large" hidden style="width:300px;height:200px">Large</div>`);
+  const filters = await page.evaluate(() => ['small', 'large'].map(id => {
+    const el = document.getElementById(id); LiquidGlass.materialize(el, true);
+    return el.getAnimations()[0].effect.getKeyframes()[0].filter;
+  }));
+  expect(filters).toEqual(['blur(6px) saturate(0.6)', 'none']);
+});
+
+test('a closed sheet backdrop is not rendered (§2.10)', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await load(page, `<div id="dim" class="as-sheet-backdrop"></div>`);
+  await expect.poll(() => page.locator('#dim').evaluate(el => getComputedStyle(el).visibility)).toBe('hidden');
+  await page.locator('#dim').evaluate(el => el.classList.add('is-open'));
+  await expect.poll(() => page.locator('#dim').evaluate(el => getComputedStyle(el).visibility)).toBe('visible');
+  await page.locator('#dim').evaluate(el => el.classList.remove('is-open'));
+  await expect.poll(() => page.locator('#dim').evaluate(el => getComputedStyle(el).visibility)).toBe('hidden');
+});

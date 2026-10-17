@@ -12,6 +12,14 @@
 - 运行时可在 Node / 服务端渲染 / 无 DOM 测试环境中导入（返回同形状的空操作 API），支持 CommonJS；新增 ES 模块入口 `liquid-glass.mjs`；同页的脚本与模块共享一个运行时。演示打包包含 `.mjs`。
 - 级联层：样式表保持默认不分层（不影响现有 `<link>` 用法），文档给出导入到层的写法，使 Tailwind v4 工具类可以覆盖组件。
 
+审计 §2.8–2.10：
+
+- 玻璃组中的 `.as-glass` 不再被 `display: none` 隐藏，而是平面渲染（内容可见可用），运行时不挂载它并在控制台警告一次。
+- 性能：滚动/缩放时背景采样最多每 120 ms 一次并在停止后补采一次；采样不再写 `pointer-events`；位移贴图按尺寸/圆角/边缘缓存（48 项）；DOM 变化只在有节点移除时扫描已注册组件；快捷键只在菜单项变化时重新收集；`materialize()` 对大玻璃与 lite 模式不再动画 `filter: blur()`。浏览器测试以调用次数作为预算。
+- 维护：转录标题从页面识别 WWDC 年份（不再写死 WWDC25）；参考库接受 `wwdcNN/` 目录；页面 404 时报告 `moved_to`，新增 `--retire`；待复核速查表按引用关系列出（`recheck_reasons`）；HTML 渲染识别表格行并跳过隐藏元素与按钮。
+- 参考库全量刷新：208 个来源全部重新抓取（新增 Apple In-App Purchase，下线改名前的 In-App Purchase，设计入门页迁到 `/design/get-started/`，28 页内容更新）。
+- 关闭的 sheet 遮罩不再渲染（`visibility: hidden`），避免浏览器按视口边缘固定元素着色工具栏时取到隐藏遮罩。
+
 ## v0.1.0 — 2026-10-04
 
 Reliability hardening.

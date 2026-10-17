@@ -36,7 +36,7 @@ Layers of the material (all adapt to what is behind): lensing/refraction → blu
 - Symbols and text on bars: **monochrome** by default. Tint an icon only to convey meaning (call to action), not decoration.
 - Colorful backgrounds → prefer monochrome bars, or pick an accent with strong differentiation. Check resting state (top of a scroll view) for legibility; avoid content overlapping glass in steady states — reposition or scale content.
 
-## Scroll edge effect (replaces bar backgrounds and hard dividers)
+## Scroll edge effect (replaces bar backgrounds and hard dividers) — `hig/scroll-views.md`
 - Auto-applied under system bars when pinned controls overlap a scroll view. Dissolves content into the background as it approaches the bar; when content darkens the glass, it switches to a subtle dim.
 - **Soft** (default, iOS/iPadOS): gradual blur/fade. **Hard** (mostly macOS; pinned column headers, controls without backgrounds, interactive text): uniform, more opaque boundary.
 - **One effect per scroll view** — not one per window. A multi-column window has several scrollers, and each one with pinned chrome above it gets its own edge; a sidebar or inspector that doesn't scroll gets none. Don't stack or mix the two styles; in split views keep the edge heights consistent across panes; never decorative — no floating UI above it, no effect.

@@ -2,6 +2,11 @@
 
 Shows the specified content as a custom bar beside the modified view.
 
+```swift
+nonisolated func safeAreaBar(edge: HorizontalEdge, alignment: VerticalAlignment = .center, spacing: CGFloat? = nil, @ContentBuilder content: () -> some View) -> some View
+
+```
+
 ## Return Value
 
 A new view that displays `content` beside the modified view, making space for the `content` view by horizontally insetting the modified view, adjusting the safe area and scroll edge effects to match.

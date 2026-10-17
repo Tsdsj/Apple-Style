@@ -258,9 +258,22 @@ page does not jump.
 - Never read layout (`getBoundingClientRect`, `offsetWidth`) inside `pointermove`.
   Measure once at gesture start, batch writes in one `requestAnimationFrame`.
 - Animate `transform`/`opacity` only. Never animate `backdrop-filter`, `blur()`,
-  `box-shadow` or `width`.
+  `box-shadow` or `width` on elements in the page flow. The runtime makes two
+  bounded exceptions: `morph()` resizes one fixed-position ghost that has no
+  children (its layout cannot move anything else), and `materialize()` blurs
+  small glass for under 400 ms — large glass and lite mode use scale and
+  opacity only.
+- The runtime's own budget: backdrop sampling (`adapt`) runs at most every
+  120 ms while scrolling or resizing, plus once after movement stops;
+  displacement maps are cached by size, radius and rim (48 entries), so
+  scrolling glass in and out of view reuses them; DOM mutations only sweep
+  registered components when nodes were removed. Browser tests count these
+  (`elementsFromPoint`, `toDataURL`, `isConnected`) so regressions fail CI.
 - `data-perf="lite"` on `<html>` disables lensing wholesale — ship it as an escape
   hatch for low-end devices and for `Save-Data`.
+- A glass element placed directly in `.as-glass-group` is glass on glass: it is
+  rendered flat (content stays visible) and the runtime logs a console warning.
+  Group children are `.as-item`.
 
 ## Runtime lifecycle and frameworks
 

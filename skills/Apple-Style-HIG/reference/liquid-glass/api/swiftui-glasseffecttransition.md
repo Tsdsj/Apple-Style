@@ -2,6 +2,10 @@
 
 A structure that describes changes to apply when a glass effect is added or removed from the view hierarchy.
 
+```swift
+struct GlassEffectTransition
+```
+
 ## Type Properties
 
 - [identity](https://developer.apple.com/documentation/swiftui/glasseffecttransition/identity) — The identity transition specifying no changes.

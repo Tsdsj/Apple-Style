@@ -16,6 +16,7 @@ Legacy timestamps marked null are unknown, not freshly fetched.
 - [App Clips](hig/app-clips.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/app-clips)
 - [App icons](hig/app-icons.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/app-icons)
 - [App Shortcuts](hig/app-shortcuts.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/app-shortcuts)
+- [Apple In-App Purchase](hig/apple-in-app-purchase.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/apple-in-app-purchase)
 - [Apple Pay](hig/apple-pay.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/apple-pay)
 - [Apple Pencil and Scribble](hig/apple-pencil-and-scribble.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/apple-pencil-and-scribble)
 - [Augmented reality](hig/augmented-reality.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/augmented-reality)
@@ -79,7 +80,6 @@ Legacy timestamps marked null are unknown, not freshly fetched.
 - [Images](hig/images.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/images)
 - [iMessage apps and stickers](hig/imessage-apps-and-stickers.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/imessage-apps-and-stickers)
 - [Immersive experiences](hig/immersive-experiences.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/immersive-experiences)
-- [In-app purchase](hig/in-app-purchase.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/in-app-purchase)
 - [Inclusion](hig/inclusion.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/inclusion)
 - [Inputs](hig/inputs.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/inputs)
 - [Keyboards](hig/keyboards.md) · [Source](https://developer.apple.com/design/human-interface-guidelines/keyboards)
@@ -207,7 +207,7 @@ Legacy timestamps marked null are unknown, not freshly fetched.
 
 ## design-site
 
-- [Design Pathway](design-site/get-started.md) · [Source](https://developer.apple.com/pathways/design/)
+- [Design Pathway](design-site/get-started.md) · [Source](https://developer.apple.com/design/get-started/)
 - [Apple Design Resources](design-site/resources.md) · [Source](https://developer.apple.com/design/resources/)
 - [What’s new](design-site/whats-new.md) · [Source](https://developer.apple.com/design/whats-new/)
 

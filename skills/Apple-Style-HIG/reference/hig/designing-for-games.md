@@ -108,7 +108,7 @@ As you create or adapt a game for Apple platforms, learn how to integrate the fu
 
 - [Game Center](https://developer.apple.com/design/human-interface-guidelines/game-center) — Game Center is Apple’s social gaming network, which lets players track their progress and connect with friends across Apple platforms, and boosts the discovery of your game across players’ devices.
 - [iCloud](https://developer.apple.com/design/human-interface-guidelines/icloud) — iCloud is a service that lets people seamlessly access the content they care about — photos, videos, documents, and more — from any device, without performing explicit synchronization.
-- [In-app purchase](https://developer.apple.com/design/human-interface-guidelines/in-app-purchase) — People can use in-app purchase to pay for virtual goods — like premium content, digital goods, and subscriptions — securely within your app.
+- [Apple In-App Purchase](https://developer.apple.com/design/human-interface-guidelines/apple-in-app-purchase) — People can use Apple In-App Purchase to pay for digital goods and services, like premium content and subscriptions, securely within your app.
 
 ## Resources
 

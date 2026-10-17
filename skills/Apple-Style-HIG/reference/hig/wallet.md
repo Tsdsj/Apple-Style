@@ -139,7 +139,7 @@ The poster generic pass style features a full background image and a pass field 
 
 ### Generic passes
 
-The generic style is for passes that don’t fit the other categories, such as a gym membership card or coat-check claim ticket. For developer guidance, see [Creating a poster generic pass](https://developer.apple.com/documentation/walletpasses/creating-a-poster-generic-pass).
+The generic style is for passes that don’t fit the other categories, such as a gym membership card or coat-check claim ticket. For developer guidance, see [Creating a Poster Generic Pass](https://developer.apple.com/documentation/walletpasses/creating-a-poster-generic-pass).
 
 ![A gym membership generic pass on a solid purple background with a dumbbell thumbnail, member details, and a barcode at the bottom.]
 

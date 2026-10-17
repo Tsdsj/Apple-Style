@@ -2,6 +2,10 @@
 
 A visual effect that renders a glass material.
 
+```swift
+@MainActor class UIGlassEffect
+```
+
 ## Initializers
 
 - [init(style:)](https://developer.apple.com/documentation/uikit/uiglasseffect/init(style:)) — Creates a glass effect with the specified style.

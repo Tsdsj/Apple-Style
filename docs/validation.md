@@ -101,3 +101,13 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 - 强制颜色下的开关、分段、滑块、分组选中与填充按钮另做了截图人工检查。
 
 范围限制不变：只验证了 Chromium 的强制颜色模拟与 RTL；真实 Windows 对比度主题、Safari、Firefox、VoiceOver/NVDA 仍未验证。快捷键的平台判断在测试中通过覆盖 `navigator.platform` / `userAgentData` 模拟，未在真实 macOS Safari 上按键验证。
+
+## 审计 §2.8–2.10 修复（未发布）
+
+执行日期：2026-10-17，环境同上节。
+
+- 新增 6 项浏览器回归测试（嵌套玻璃、采样节流、贴图复用、DOM 变化扫描、materialize 滤镜、sheet 遮罩），先在未修复代码上运行：**6 项全部失败**；修复后全部通过。新增 5 项参考脚本单元测试（转录年份、`wwdcNN` 目录、定向复核、`--retire`、`moved_to`、表格与隐藏元素渲染），单元测试不联网。
+- 修复后：**Chromium 61 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`node --check` 与 `git diff --check` 通过。
+- 性能探针（审计时的同一脚本、同一 headless Chromium，只说明量级）：20 个固定玻璃按钮滚动 60 次，`elementsFromPoint` **3600 → 1080 次**、累计 **383 → 44 ms**；30 个玻璃按钮来回滚动两次，位移贴图生成 **113 → 10 张**（10 为不同文字宽度的数量）。
+- 参考库全量刷新：首次运行因 2 个来源 404 整批中止、未写入任何文件（事务行为符合预期）。确认 Apple 将 In-App Purchase 改名为 Apple In-App Purchase（旧地址 301）、设计入门页迁到 `/design/get-started/` 后，更新该条目地址并 `--retire hig/in-app-purchase.md` 重跑：**新增 1、下线 1、更新 28、未变 179、失败 0**，208 个来源的 `fetched_at` 均为 2026-10-17。
+- 复核：更新报告指向 `accessibility-and-inclusion.md`（privacy、right-to-left）、`components-quickref.md`（icons、sf-symbols）、`web-implementation.md`（right-to-left）。对应页面的变化为 ATT 同意界面细则、文档链接更新、删除文档图标模板说明；速查表规则不受影响，未修改。

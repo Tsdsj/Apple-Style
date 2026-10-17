@@ -8,9 +8,11 @@ People download CarPlay apps from the App Store and install them on iPhone like 
 
 CarPlay is designed for drivers to use while they’re driving. Keep this context in mind as you design your CarPlay app, providing features that help people perform tasks quickly and with minimal interaction.
 
-To create the interface of your CarPlay app, you use the system-defined templates that are appropriate for the type of app you’re developing, such as audio, communication, navigation, or fueling. For each template, your app provides the content and iOS renders it in CarPlay. Because the system displays UI components and handles the interface with the vehicle, you don’t need to adjust your layout for different screen resolutions, or manage input from different types of hardware like touchscreens, knobs, or touch pads.
+To create the interface of your CarPlay app, you use the system-defined templates that are appropriate for the type of app you’re developing, such as audio, communication, or navigation. For each template, your app provides the content and iOS renders it in CarPlay. Because the system displays UI components and handles the interface with the vehicle, you don’t need to adjust your layout for different screen resolutions, or manage input from different types of hardware like touchscreens, knobs, or touch pads.
 
-To learn how to create various types of CarPlay apps and use the system-provided templates, see [CarPlay App Programming Guide](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf). The general design guidelines below apply to all types of CarPlay apps.
+To learn how to create various types of CarPlay apps and use the system-provided templates, see [CarPlay Developer Guide](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf). The general design guidelines below apply to all types of CarPlay apps.
+
+> **Note:** CarPlay audio and video apps also work on Apple HomeView without requiring you to make any modifications to your app.
 
 ## iPhone interactions
 
@@ -101,7 +103,7 @@ A CarPlay app needs to handle errors gracefully and report them to people only w
 
 #### Developer documentation
 
-[CarPlay App Programming Guide](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf)
+[CarPlay Developer Guide](https://developer.apple.com/carplay/documentation/CarPlay-App-Programming-Guide.pdf)
 
 #### Videos
 

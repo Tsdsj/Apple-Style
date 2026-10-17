@@ -159,6 +159,20 @@
     return c.toDataURL('image/png');
   }
 
+  // A map depends only on size, radius and rim, so re-entering the viewport, a
+  // theme change or a remount reuses it instead of recomputing every pixel and
+  // re-encoding a PNG. Least recently used entries are dropped past the cap.
+  const mapCache = new Map(), MAP_CACHE_MAX = 48;
+  function cachedMap(w, h, radius, rim) {
+    const key = [Math.round(w), Math.round(h), radius.toFixed(1), rim.toFixed(1)].join(':');
+    let href = mapCache.get(key);
+    if (href) mapCache.delete(key);
+    else href = buildMap(w, h, radius, rim);
+    mapCache.set(key, href);
+    if (mapCache.size > MAP_CACHE_MAX) mapCache.delete(mapCache.keys().next().value);
+    return href;
+  }
+
   // Three displacement passes at slightly different strengths, recombined one
   // channel each: real glass disperses wavelengths, and that faint colour
   // fringe at the rim is most of what reads as "thick glass" rather than blur.
@@ -228,7 +242,7 @@
       ensureSvg().appendChild(f);
       el.__lgChroma = chroma;
     }
-    const href = buildMap(rect.width, rect.height, radius, rim);
+    const href = cachedMap(rect.width, rect.height, radius, rim);
     f.querySelectorAll('feImage').forEach(n => {
       n.setAttribute('href', href);
       n.setAttribute('width', rect.width); n.setAttribute('height', rect.height);
@@ -325,7 +339,9 @@
   function sampleBehind(el) {
     const r = el.getBoundingClientRect(); const pts = [[r.left + r.width / 2, r.top + r.height / 2], [r.left + r.width * .2, r.top + r.height / 2], [r.left + r.width * .8, r.top + r.height / 2]];
     let lums = [], overText = false;
-    const prev = el.style.pointerEvents; el.style.pointerEvents = 'none';
+    // The element and its descendants are filtered out of the stack below, so
+    // there is no need to toggle pointer-events (two style writes per sample,
+    // each invalidating style before the next layout read).
     for (const [x, y] of pts) {
       const stack = document.elementsFromPoint(x, y).filter(n => n !== el && !el.contains(n));
       for (const n of stack) {
@@ -337,7 +353,6 @@
         if (cs.backgroundImage !== 'none') { const g = cs.backgroundImage.match(/rgba?\([^)]+\)/g); if (g) { lums.push(g.map(relLum).filter(v => v !== null).reduce((a, b) => a + b, 0) / g.length); break; } }
       }
     }
-    el.style.pointerEvents = prev;
     if (!lums.length) return { scheme: null, overText };
     const avg = lums.reduce((a, b) => a + b, 0) / lums.length;
     return { scheme: avg < .3 ? 'dark' : avg > .5 ? 'light' : null, overText };
@@ -382,8 +397,12 @@
     const st = state(el);
     if (el.__lgAnimation) el.__lgAnimation.cancel();
     const dur = reduceMotion() ? 1 : (o.duration ?? 380);
-    const kf = show ? [{ opacity: 0, transform: 'scale(.86)', filter: 'blur(6px) saturate(.6)' }, { opacity: 1, transform: 'none', filter: 'none' }]
-                    : [{ opacity: 1, transform: 'none', filter: 'none' }, { opacity: 0, transform: 'scale(.92)', filter: 'blur(6px) saturate(.6)' }];
+    // The brief blur reads as lensing settling in. Its cost grows with area, so
+    // large glass (menus, sheets, sidebars) and lite mode use scale + opacity.
+    const blur = !liteMode() && !el.classList.contains('as-glass-large');
+    const hidden = blur ? 'blur(6px) saturate(.6)' : 'none';
+    const kf = show ? [{ opacity: 0, transform: 'scale(.86)', filter: hidden }, { opacity: 1, transform: 'none', filter: 'none' }]
+                    : [{ opacity: 1, transform: 'none', filter: 'none' }, { opacity: 0, transform: 'scale(.92)', filter: hidden }];
     if (show) el.hidden = false;
     const anim = el.__lgAnimation = animate(el, el, kf, { duration: dur, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
     return anim.finished.then(() => {
@@ -985,7 +1004,13 @@
       });
     };
     collect();
-    observe(root, MutationObserver, collect).observe(root, { childList: true, subtree: true });
+    // Re-collect only when menu items or shortcut labels change, not on every
+    // DOM update an app makes (each collect is a query over the whole root).
+    const SHORTCUT_NODES = '.as-menu-item, .as-shortcut';
+    const touches = n => n.nodeType === 1 && (n.matches(SHORTCUT_NODES) || !!n.querySelector(SHORTCUT_NODES));
+    observe(root, MutationObserver, records => {
+      if (records.some(r => r.target.closest?.('.as-shortcut') || [...r.addedNodes].some(touches) || [...r.removedNodes].some(touches))) collect();
+    }).observe(root, { childList: true, subtree: true });
     listen(root, root === document ? window : root, 'keydown', e => {
       if (e.defaultPrevented) return;
       const hit = binds.find(({ combo }) => modifiersMatch(combo, e)
@@ -1037,7 +1062,7 @@
 
   /* ---------- Attach / init ------------------------------------------------ */
   const attached = new Set(), onScreen = new Set();
-  let vo = null, ro = null, shared = null, ticking = 0;
+  let vo = null, ro = null, shared = null, ticking = 0, adaptTimer = 0, adaptAgain = false;
   function clearLens(el) {
     if (el.__lgId) document.getElementById(el.__lgId)?.remove();
     if (el.__lgChroma) chromaBudget++;
@@ -1057,13 +1082,17 @@
       else { onScreen.delete(e.target); clearLens(e.target); }
     }), { rootMargin: '240px' });
     ro = observe(shared, ResizeObserver, entries => entries.forEach(e => { if (attached.has(e.target)) relens(e.target); }));
-    listen(shared, window, 'scroll', scheduleAdapt, { passive: true, capture: true });
-    listen(shared, window, 'resize', scheduleAdapt);
+    listen(shared, window, 'scroll', throttleAdapt, { passive: true, capture: true });
+    listen(shared, window, 'resize', throttleAdapt);
     for (const q of ['(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(prefers-color-scheme: dark)']) {
       listen(shared, matchMedia(q), 'change', () => { attached.forEach(relens); scheduleAdapt(); });
     }
     observe(shared, MutationObserver, records => {
       if (records.some(r => r.type === 'attributes' && r.target === document.documentElement)) { attached.forEach(relens); scheduleAdapt(); }
+      // Only a removal can disconnect an owner or move it out of its scope (a
+      // move is a removal plus an insertion), so additions and attribute
+      // changes skip the sweep over every owner.
+      if (!records.some(r => r.removedNodes.length)) return;
       for (const root of roots.keys()) if (root !== document && !root.isConnected) destroy(root);
       for (const [owner, st] of [...resources]) if (owner.nodeType === 1) {
         const movedOut = st.scope && !st.scope.contains(owner) && ![...roots.keys()].some(r => r.contains(owner));
@@ -1092,6 +1121,21 @@
       attached.forEach(el => el.__lgInvalidate?.());
     });
   }
+  // Sampling reads layout (elementsFromPoint plus computed styles) for every
+  // visible glass element. While scrolling or resizing it runs at most every
+  // ADAPT_INTERVAL ms, plus once more after the movement stops, instead of on
+  // every frame. Cached pointer rects are dropped immediately — that is free.
+  const ADAPT_INTERVAL = 120;
+  function throttleAdapt() {
+    if (!shared) return;
+    attached.forEach(el => el.__lgInvalidate?.());
+    if (adaptTimer) { adaptAgain = true; return; }
+    scheduleAdapt();
+    adaptTimer = timer(shared, () => {
+      adaptTimer = 0;
+      if (adaptAgain) { adaptAgain = false; throttleAdapt(); }
+    }, ADAPT_INTERVAL);
+  }
   function refresh() { attached.forEach(relens); scheduleAdapt(); }
   function release(owner) {
     const st = resources.get(owner);
@@ -1111,8 +1155,8 @@
   }
   function stopIfIdle() {
     if (!roots.size && ![...resources.keys()].some(o => o !== shared)) {
-      const old = shared; shared = null; release(old); vo = ro = null; ticking = 0;
-      svgRoot?.remove(); svgRoot = null; chromaBudget = 8;
+      const old = shared; shared = null; release(old); vo = ro = null; ticking = adaptTimer = 0; adaptAgain = false;
+      svgRoot?.remove(); svgRoot = null; chromaBudget = 8; mapCache.clear();
     }
     if (svgRoot && !svgRoot.children.length) { svgRoot.remove(); svgRoot = null; }
   }
@@ -1129,9 +1173,21 @@
     for (const owner of [...resources.keys()]) if (owner !== shared && (root === document || owner === root || (owner.nodeType && root.contains?.(owner)))) release(owner);
     stopIfIdle();
   }
+  // A glass element directly inside a glass group is glass on glass. The CSS
+  // renders it flat so its content stays visible and usable; the runtime
+  // leaves it unattached (no lens or sampling) and says so once.
+  const warnedNested = new WeakSet();
+  function nestedGlass(el) {
+    if (!el.parentElement?.classList.contains('as-glass-group')) return false;
+    if (!warnedNested.has(el)) {
+      warnedNested.add(el);
+      console.warn('[Apple-Style] .as-glass inside .as-glass-group is glass on glass; it is rendered flat. Use .as-item for group children.', el);
+    }
+    return true;
+  }
   function scan(root, scope) {
     if (isSuspended(root)) return 0;
-    members(root, '.as-glass').forEach(el => attach(el));
+    members(root, '.as-glass').forEach(el => { if (!nestedGlass(el)) attach(el); });
     const wired = controls(root);
     members(root, '.as-tabbar[data-minimize]').forEach(b => tabBarMinimize(b));
     members(root, '.as-toolbar-title[data-reveal-on-scroll]').forEach(t => titleOnScroll(t, { root: scope }));
@@ -1152,8 +1208,13 @@
           if (root.contains(record.target) && !isSuspended(record.target) && record.target.matches?.('.as-segmented')) segmented(record.target);
           if (root.contains(record.target) && !isSuspended(record.target) && record.target.matches?.('.as-toggle')) toggle(record.target);
         }
-        for (const owner of [...resources.keys()]) if (owner.nodeType === 1 && !owner.isConnected) detach(owner, true);
-        menuShortcuts(root);
+        if (records.some(r => r.removedNodes.length)) {
+          for (const owner of [...resources.keys()]) if (owner.nodeType === 1 && !owner.isConnected) detach(owner, true);
+        }
+        // Opting in later (a menu bar that mounts after init) is picked up from
+        // the added subtree instead of re-querying the whole root every batch.
+        if (!root.__lgShortcuts && records.some(r => [...r.addedNodes].some(n => n.nodeType === 1
+          && (n.matches('.as-menubar[data-shortcuts]') || n.querySelector('.as-menubar[data-shortcuts]'))))) menuShortcuts(root);
       });
       observer.observe(root, { childList: true, subtree: true }); roots.set(root, observer);
     }

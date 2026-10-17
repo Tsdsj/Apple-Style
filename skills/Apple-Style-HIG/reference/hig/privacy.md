@@ -69,7 +69,7 @@ Ideally, the current context helps people understand why you’re requesting the
 
 ![A checkmark in a circle to indicate a correct example.]
 
-**Don’t include additional actions in your custom screen or window.** For example, don’t provide a way for people to leave the screen or window without viewing the system alert — like offering an option to close or cancel.
+**Don’t include additional actions in your custom screen or window, unless needed to obtain a legal consent.** For example, don’t provide a way for people to leave the screen or window without viewing the system alert — like offering an option to close or cancel.
 
 ![A screenshot of an app’s pre-alert screen that includes a button titled Cancel that appears below the Next button.]
 
@@ -85,7 +85,7 @@ App tracking is a sensitive issue. In some cases, it might make sense to display
 
 **Never precede the system-provided alert with a custom screen or window that could confuse or mislead people.** People sometimes tap quickly to dismiss alerts without reading them. A custom messaging screen, window, or view that takes advantage of such behaviors to influence choices will lead to rejection by App Store review.
 
-There are several prohibited custom-screen designs that will cause rejection. Some examples are offering incentives, displaying a screen or window that looks like a request, displaying an image of the alert, and annotating the screen behind the alert (as shown below). To learn more, see [App Review Guidelines: 5.1.1 (iv)](https://developer.apple.com/app-store/review/guidelines/#data-collection-and-storage).
+There are several prohibited custom-screen designs that will cause rejection. Some examples are offering incentives, displaying a screen or window that looks like a request, displaying an image of the alert, and annotating the screen behind the alert (as shown below). For the avoidance of confusion, a consent screen or window shown before or after an [App Tracking Transparency](https://developer.apple.com/documentation/apptrackingtransparency) system alert to comply with local privacy laws is allowed. To learn more, see [App Review Guidelines: 5.1.1 (iv)](https://developer.apple.com/app-store/review/guidelines/#data-collection-and-storage).
 
 **Incentive**
 

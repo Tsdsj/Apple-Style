@@ -2,6 +2,10 @@
 
 A configuration that defines how corner radii are mapped to the corners of a rectangle.
 
+```swift
+struct UICornerConfiguration
+```
+
 ## Overview
 
 Create a `UICornerConfiguration` that expresses how you want the corners of your view to appear. Your configuration can apply to corners independently or uniformly, and can form the following types of corners:

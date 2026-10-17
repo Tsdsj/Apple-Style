@@ -2,6 +2,11 @@
 
 Applies the Liquid Glass effect to a view.
 
+```swift
+nonisolated func glassEffect(_ glass: Glass = .regular, in shape: some Shape = DefaultGlassEffectShape()) -> some View
+
+```
+
 ## Discussion
 
 When you use this effect, the system:
