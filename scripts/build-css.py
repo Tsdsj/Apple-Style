@@ -2,8 +2,9 @@
 """Build the Web stylesheets from skills/Apple-Style/web/css/*.css; stdlib only.
 
 apple-style.css      the css/ files concatenated in ORDER. The cascade depends on
-                     this order (window before app before density), so it is
-                     fixed here rather than taken from directory listing order.
+                     this order (app before window before density, and the
+                     preferences after the core components), so it is fixed
+                     here rather than taken from directory listing order.
 apple-style.min.css  a conservative minification of that output.
 
 Also checks that every var(--as-*) used in css/ and patterns/ is defined (in a
@@ -25,10 +26,14 @@ OUT = WEB / 'apple-style.css'
 MIN = WEB / 'apple-style.min.css'
 RUNTIME = [WEB / 'liquid-glass.js', WEB / 'liquid-glass.mjs']
 
-# Concatenation order = original section order of the single-file stylesheet.
-# tokens, base, glass, controls, window (6b), app (6c), density (6d), preferences.
-ORDER = ['tokens.css', 'base.css', 'glass.css', 'controls.css',
-         'window.css', 'app.css', 'density.css', 'preferences.css']
+# Concatenation order. Layers a content website needs come first, then the
+# application layers, then the preferences that must win over the components:
+#   core:  tokens, base, glass, controls, preferences
+#   app:   app (6c), window (6b), density (6d), app-preferences (7b)
+# The cascade depends on this order (window before density, app-preferences last),
+# so it is fixed here rather than taken from directory listing order.
+ORDER = ['tokens.css', 'base.css', 'glass.css', 'controls.css', 'preferences.css',
+         'app.css', 'window.css', 'density.css', 'app-preferences.css']
 
 COMMENT = re.compile(r'/\*.*?\*/', re.S)
 DECLARED = re.compile(r'(?<![\w-])(--as-[\w-]+)\s*:')

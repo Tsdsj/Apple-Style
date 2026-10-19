@@ -1,0 +1,109 @@
+/* --------------------------------------------------------------------------
+   7b. Accessibility + user preferences for application components: the
+   desktop window, toolbar, sidebar, sheet, menu, segmented control, slider,
+   toggle, skeleton, dialog and toast.
+
+   Loaded after density.css, so these overrides keep winning ties the way they
+   did when all of the preferences came last. A content website does not load
+   this file.
+   -------------------------------------------------------------------------- */
+/* Reduce Transparency → frostier, obscures more of what's behind */
+@media (prefers-reduced-transparency: reduce) {
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(rgb(255 255 255 / .96), rgb(120 120 124 / .96)); }
+  /* Window chrome is not .as-glass, so it needs its own opt-out: a menu bar
+     and a window toolbar still blur their backdrop otherwise. */
+  .as-menubar, .as-toolbar-window { background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .as-toast { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* Increase Contrast → predominantly black/white with a contrasting border */
+@media (prefers-contrast: more) {
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(#fff, #000); box-shadow: inset 0 0 0 1.5px var(--as-label); }
+  /* Window chrome is not .as-glass, so it needs its own high-contrast pass:
+     opaque frame, a real separator, and no translucency. */
+  .as-menubar, .as-toolbar-window {
+    background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: 0 0 0 0 transparent, inset 0 -1px 0 var(--as-label);
+  }
+  .as-split > .as-split-divider { background: var(--as-label); }
+  /* Increase Contrast additionally uses monochrome selected rows. */
+  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-label); color: var(--as-bg); }
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: var(--as-bg); }
+  /* Toasts and modals get a real edge. */
+  .as-toast { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: var(--as-label); }
+  .as-dialog { border-color: var(--as-label); }
+}
+/* Reduce Motion → no elastic / morphing, keep opacity changes */
+@media (prefers-reduced-motion: reduce) {
+  .as-sheet, .as-menu, .as-toggle .as-knob, .as-tabbar .as-glass-group, .as-seg-indicator, .as-slider-knob,
+  .as-toolbar-title[data-reveal-on-scroll], .as-dialog, .as-dialog::backdrop, .as-toast { transition-duration: 1ms !important; }
+  .as-toolbar-title[data-reveal-on-scroll] { transform: none; }
+  .as-skeleton { animation: none; }
+  .as-seg-indicator { --as-ind-sx: 1 !important; }
+  .as-slider-knob { --as-knob-sx: 1 !important; }
+}
+/* Forced colors (Windows High Contrast). The browser flattens backgrounds to
+   Canvas and drops box-shadows, which erases every state this stylesheet
+   paints with a fill: a switch's on/off colour and its knob, the segmented
+   indicator, selected tabs and rows. Those controls opt out of the automatic
+   adjustment and redraw their state with the system palette instead. */
+@media (forced-colors: active) {
+  .as-toggle, .as-segmented, .as-slider { forced-color-adjust: none; }
+  .as-toggle { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-toggle .as-knob { background: CanvasText; box-shadow: none; }
+  .as-toggle[aria-checked="true"] { background: Highlight; box-shadow: inset 0 0 0 1px Highlight; }
+  .as-toggle[aria-checked="true"] .as-knob { background: HighlightText; }
+  :root .as-toggle:disabled, :root .as-toggle[aria-disabled="true"] { opacity: 1; box-shadow: inset 0 0 0 1px GrayText; }
+  .as-toggle:disabled .as-knob, .as-toggle[aria-disabled="true"] .as-knob { background: GrayText; }
+
+  .as-segmented { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-segmented .as-segment { color: CanvasText; }
+  .as-segmented .as-segment.is-selected { background: Highlight; color: HighlightText; box-shadow: none; }
+  .as-segmented .as-seg-indicator, .as-segmented.is-scrubbing .as-seg-indicator {
+    background: Highlight; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  :root .as-segmented .as-segment:disabled, :root .as-segmented .as-segment[aria-disabled="true"] { opacity: 1; color: GrayText; }
+
+  /* The native thumb comes back and the glass overlay knob goes away: the
+     overlay is a painted circle, and the native thumb is drawn by the system. */
+  .as-slider::-webkit-slider-runnable-track { background: linear-gradient(to right, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider::-webkit-slider-thumb, .as-slider.is-upgraded::-webkit-slider-thumb { opacity: 1; background: Canvas; box-shadow: inset 0 0 0 2px CanvasText; }
+  .as-slider::-moz-range-track { background: CanvasText; }
+  .as-slider::-moz-range-progress { background: Highlight; }
+  .as-slider::-moz-range-thumb, .as-slider.is-upgraded::-moz-range-thumb { opacity: 1; background: Canvas; border: 2px solid CanvasText; box-shadow: none; }
+  .as-slider-knob { display: none; }
+
+  /* Selection that was carried by a tinted background. */
+  .as-tabbar .as-tab.is-selected, .as-glass-group > .as-item.is-selected,
+  .as-glass-group > .as-item[aria-pressed="true"], .as-sidebar .as-row.is-selected,
+  .as-split > .as-sidebar .as-row.is-selected, .as-menubar .as-menubar-item[aria-expanded="true"],
+  .as-toolbar-window .as-toolbar-group > .as-item[aria-pressed="true"] {
+    forced-color-adjust: none; background: Highlight; color: HighlightText; box-shadow: none;
+  }
+  .as-sidebar .as-row.is-selected svg,
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: HighlightText; }
+
+  /* forced-color-adjust is inherited: everything inside a selected option is
+     drawn with the author's colours, so it needs system colours too. A page's
+     own coloured text inside an option needs the same rule. */
+  .as-option[aria-selected="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .as-option[aria-selected="true"] :is(.as-secondary, .as-tertiary, .as-pill) { color: HighlightText; }
+  .as-option[aria-selected="true"] .as-pill { background: transparent; border-color: HighlightText; }
+  .as-option:focus-visible { outline-color: CanvasText; }
+  .as-skeleton { forced-color-adjust: none; background: GrayText; }
+  .as-toast { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+.as-segment:disabled, .as-segment[aria-disabled="true"],
+.as-toggle:disabled, .as-toggle[aria-disabled="true"] { opacity: .45; cursor: default; }
+
+/* Utilities, repeated from preferences.css. They were the last rules of the
+   cascade, so they won over component padding, position and size. Keep them
+   last here as well, or a list or sheet that also carries .as-safe-bottom loses
+   its bottom padding. */
+.as-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.as-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.as-safe-bottom { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }

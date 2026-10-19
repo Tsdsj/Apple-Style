@@ -96,6 +96,13 @@
   --as-fill-secondary:   light-dark(rgb(120 120 128 / .16),  rgb(120 120 128 / .32));
   --as-fill-tertiary:    light-dark(rgb(118 118 128 / .12),  rgb(118 118 128 / .24));
   --as-fill-quaternary:  light-dark(rgb(116 116 128 / .08),  rgb(118 118 128 / .18));
+  /* Edge of a text field (WCAG 1.4.11): at least 3:1 against the field fill and
+     against every grouped background, in both appearances. Worst cases measured:
+     3.5:1 light (fill over --as-bg-secondary), 3.3:1 dark (fill over --as-bg-tertiary). */
+  --as-field-border: light-dark(rgb(118 118 128), rgb(142 142 147));
+  /* A modal holds a form: it is an opaque content surface, not glass. Large
+     glass lets the list behind it show through the fields. */
+  --as-modal-bg: light-dark(rgb(255 255 255), rgb(44 44 46));
 
   /* Standard materials (content layer). Thickness = opacity of fill. */
   --as-material-ultrathin: light-dark(rgb(255 255 255 / .55), rgb(30 30 30 / .55));

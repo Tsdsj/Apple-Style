@@ -449,3 +449,68 @@ for (const colorScheme of ['light', 'dark']) for (const contrast of ['no-prefere
     }
   });
 }
+
+// Text field edge (1.8, WCAG 1.4.11). The border must reach 3:1 against the page and
+// against the field's own fill, on every grouped background, in both appearances.
+// The border is painted over the field background, so the fill is composited first.
+async function fieldEdgeContrast(page, selector) {
+  return page.evaluate(sel => {
+    const el = document.querySelector(sel), c = document.createElement('canvas'); c.width = c.height = 1;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    const pixel = colors => { x.clearRect(0, 0, 1, 1); for (const fill of colors) { x.fillStyle = fill; x.fillRect(0, 0, 1, 1); } return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+    const lum = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
+    const ratio = (p, q) => { const [a, b] = [lum(p), lum(q)].sort((m, n) => n - m); return (a + .05) / (b + .05); };
+    const chain = []; for (let n = el.parentElement; n; n = n.parentElement) chain.unshift(getComputedStyle(n).backgroundColor);
+    const page = pixel(['#fff', ...chain]);
+    const fill = pixel(['#fff', ...chain, getComputedStyle(el).backgroundColor]);
+    const edge = pixel(['#fff', ...chain, getComputedStyle(el).backgroundColor, getComputedStyle(el).borderTopColor]);
+    return { vsPage: ratio(edge, page), vsFill: ratio(edge, fill) };
+  }, selector);
+}
+for (const colorScheme of ['light', 'dark']) {
+  test(`text field edge is at least 3:1 against the page and the field in ${colorScheme} (1.8)`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme, contrast: 'no-preference', reducedMotion: 'reduce' });
+    const backgrounds = ['--as-bg', '--as-bg-secondary', '--as-bg-grouped', '--as-bg-grouped-2', '--as-bg-tertiary', '--as-bg-grouped-3'];
+    await load(page, backgrounds.map((bg, i) => `<div style="background:var(${bg});padding:8px">
+      <input class="as-input" id="f${i}" aria-label="Field ${i}">
+      <input class="as-input" id="v${i}" aria-label="Invalid ${i}" aria-invalid="true"></div>`).join(''));
+    await page.waitForFunction(() => document.getAnimations().length === 0);
+    for (let i = 0; i < backgrounds.length; i++) {
+      for (const id of [`f${i}`, `v${i}`]) {
+        const { vsPage, vsFill } = await fieldEdgeContrast(page, `#${id}`);
+        expect(vsPage, `${id} edge against the page (${backgrounds[i]})`).toBeGreaterThanOrEqual(3);
+        expect(vsFill, `${id} edge against the field (${backgrounds[i]})`).toBeGreaterThanOrEqual(3);
+      }
+    }
+  });
+}
+
+// Links in running text (1.9, WCAG 1.4.1). Chrome underlines every link by default, so
+// the plain ones are checked against the computed decoration, not against the stylesheet.
+test.describe('links in running text are underlined by default (1.9)', () => {
+  const decoration = (page, id) => page.locator(`#${id}`).evaluate(el => getComputedStyle(el).textDecorationLine);
+  test('a link in a paragraph and a link in a list item are underlined', async ({ page }) => {
+    await load(page, `<p><a id="p" href="#p">Prose link</a></p><ul><li><a id="li" href="#li">List link</a></li></ul>`);
+    expect(await decoration(page, 'p')).toContain('underline');
+    expect(await decoration(page, 'li')).toContain('underline');
+    expect(await page.locator('#p').evaluate(el => getComputedStyle(el).textUnderlineOffset)).not.toBe('auto');
+  });
+  test('a link in navigation is not underlined, and neither is a link in a navigation landmark', async ({ page }) => {
+    await load(page, `<nav><ul><li><a id="nav" href="#n">Home</a></li></ul></nav><div role="navigation"><a id="rn" href="#r">Other</a></div>`);
+    expect(await decoration(page, 'nav')).toBe('none');
+    expect(await decoration(page, 'rn')).toBe('none');
+  });
+  test('a class-styled link in a paragraph is not underlined', async ({ page }) => {
+    await load(page, `<p><a id="btn" class="as-button as-button-filled" href="#b">Continue</a></p>`);
+    expect(await decoration(page, 'btn')).toBe('none');
+  });
+  test('the underline survives forced colors', async ({ page }) => {
+    await page.emulateMedia({ forcedColors: 'active' });
+    await load(page, `<p><a id="p" href="#p">Prose link</a></p>`);
+    expect(await decoration(page, 'p')).toContain('underline');
+  });
+  test('an author rule for a link overrides the default underline', async ({ page }) => {
+    await load(page, `<style>p a { text-decoration: none; }</style><p><a id="p" href="#p">Prose link</a></p>`);
+    expect(await decoration(page, 'p')).toBe('none');
+  });
+});

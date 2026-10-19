@@ -7,6 +7,12 @@
 - 样式表源文件拆分到 `skills/Apple-Style/web/css/*.css`，内容未改动。`apple-style.css` 由 `scripts/build-css.py` 按原节顺序合并生成，与拆分前逐字节一致；新增压缩版 `apple-style.min.css`。
 - `scripts/build-css.py --check` 检查生成文件是否过期，以及是否使用了未声明的 `var(--as-*)`；`tests/test_build_css.py` 把它接入 CI。
 - 演示页的说明、技能文件的文件列表和打包测试改为指向新结构。
+- 网站公共层（1.12）：`controls.css` 只保留按钮、表单字段、状态标签和徽标；工具栏、标签栏、侧栏、sheet、菜单、分段控件、开关、滑块等移入 `app.css`，它们的偏好设置覆盖移入最后合并的 `app-preferences.css`。合并顺序为 tokens、base、glass、controls、preferences、app、window、density、app-preferences。在演示页上逐元素比较 240 种组合（宽度、深浅色、强制颜色、减弱动态效果、增强对比度、减弱透明度、密度、平台）的计算样式，与分层前一致。公共层压缩后 25.2 KB。
+- `.as-input` 默认有边框（新令牌 `--as-field-border`），对页面背景和输入框填充的对比度在浅色和深色下均 ≥ 3:1（WCAG 1.4.11，1.8）。
+- 正文（段落、列表、定义、表格、引用、图片说明）中没有类名的链接默认带下划线；`nav` 中的链接和带类名的链接（如 `a.as-button`）不再显示浏览器默认下划线（WCAG 1.4.1，1.9）。
+- `SKILL.md` 改为以网站为主：先判断页面类型（内容网站、Web 应用、Mac 窗口、原生），按类型列出要读的文件；新增网站快速开始和“网站上不要做”的清单。`rules-and-evidence.md` 增加页面类型表（1.1、1.2）。
+- 新增 `cheatsheets/website.md`：公共层的加载方式、可选的延后加载折射、性能预算（项目默认值）和无头浏览器渲染模糊的限制（1.5、1.6）。Review 增加网站预算检查项。
+- 技能目录内指向目录之外的链接改为仓库 URL，`tests/test_skill_links.py` 防止再出现（1.10）。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 
