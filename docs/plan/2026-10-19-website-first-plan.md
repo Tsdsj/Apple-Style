@@ -133,7 +133,7 @@ skills/Apple-Style/
 
 ### 阶段 3：Review（W3、W6）
 
-- [ ] **3.1 Review 增加“网站”检查清单**
+- [x] **3.1 Review 增加“网站”检查清单**
   - 全站坏链和锚点
   - 每页元数据
   - 320px 横向溢出
@@ -144,9 +144,9 @@ skills/Apple-Style/
   - 深层路径 404
   - 无 JS 可浏览
   - 性能和 LCP 是否在 1.5 的预算内
-- [ ] **3.2 `scripts/check-site/`**：把 `evals/runs/2026-10-19-website/tools/check-site.spec.js` 通用化（站点目录、端口、页面列表可配置），附运行说明。Playwright 作为可选依赖，没装时 Review 把相关项标为未检查。
-- [ ] **3.3 无头浏览器陷阱**（W6）：写入 Review 和 `web-implementation.md` 的发布前验证：无头或软件渲染的截图会低估 20px 以上的背景模糊，不能据此关掉折射或改材质，大玻璃观感要在有 GPU 的浏览器里确认。
-- [ ] **3.4 用参考站和一个故意埋了问题的小站验证检查脚本**：参考站全部通过，埋的每个问题都被查出。
+- [x] **3.2 `scripts/check-site/`**：把 `evals/runs/2026-10-19-website/tools/check-site.spec.js` 通用化（站点目录、端口、页面列表可配置），附运行说明。Playwright 作为可选依赖，没装时 Review 把相关项标为未检查。
+- [x] **3.3 无头浏览器陷阱**（W6）：写入 Review 和 `web-implementation.md` 的发布前验证：无头或软件渲染的截图会低估 20px 以上的背景模糊，不能据此关掉折射或改材质，大玻璃观感要在有 GPU 的浏览器里确认。
+- [~] **3.4 用参考站和一个故意埋了问题的小站验证检查脚本**：参考站全部通过，埋的每个问题都被查出。
 
 **完成标准**：Review 的网站清单与 `check-site` 的输出一一对应；脚本在 CI 中对参考站运行。
 

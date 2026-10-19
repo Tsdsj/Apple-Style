@@ -1,0 +1,18 @@
+/* Deliberately small. Planted problems live in the pages, not here. */
+body { margin: 0; font: 17px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fff; }
+main, header, footer { max-width: 760px; margin: 0 auto; padding: 16px; }
+[hidden] { display: none !important; }
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 8px; top: 8px; background: #fff; }
+:focus-visible { outline: 2px solid #0066cc; outline-offset: 2px; }
+header nav { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+header nav a { color: #1d1d1f; }
+#menu { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; }
+.menu-btn { display: none; border: 1px solid #1d1d1f; background: none; font: inherit; padding: 4px 10px; }
+@media (max-width: 599px) { .menu-btn { display: inline-block; } #menu { flex-direction: column; } }
+main a { color: #0066cc; text-decoration: underline; }
+.nolink a { text-decoration: none; color: #0066cc; }   /* planted: link in running text, colour only */
+.faint { color: #bbbbbb; }                              /* planted: low contrast on white */
+.wide { width: 360px; background: #eef; }              /* planted: overflows at 320 px */
+.badge { display: inline-block; padding: 2px 8px; background: #0066cc; color: #fff; animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .2; } }               /* planted: ignores prefers-reduced-motion */

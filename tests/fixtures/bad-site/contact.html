@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>青柠记账 · 联系</title>
+<meta name="description" content="联系青柠记账。">
+<link rel="canonical" href="https://example.invalid/contact.html">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/menu.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header>
+  <nav data-site-nav aria-label="主导航">
+    <a href="index.html">青柠记账</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">菜单</button>
+    <ul id="menu">
+      <li><a href="features.html">功能</a></li>
+      <li><a href="about.html">关于</a></li>
+      <li><a href="contact.html">联系</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
+  <h1>联系我们</h1>
+  <form id="contact">
+    <p><label>姓名 <input name="name" required autocomplete="name"></label></p>
+    <p><label>邮箱 <input name="email" type="email" required autocomplete="email"></label></p>
+    <p><label>内容 <textarea name="message" required></textarea></label></p>
+    <button type="submit">发送</button>
+  </form>
+  <p id="ok" hidden>已收到，我们会尽快回复。</p>
+</main>
+<script>
+// Planted defect: the form never shows the success message (#ok stays hidden).
+document.getElementById('contact').addEventListener('submit', function (e) { e.preventDefault(); });
+</script>
+<footer><p>© 2026 青柠记账</p></footer>
+</body>
+</html>

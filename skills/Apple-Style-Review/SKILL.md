@@ -30,11 +30,34 @@ Audit the authorized scope, using `../Apple-Style/cheatsheets/rules-and-evidence
 | Motion/preferences | Reduced motion/transparency and increased contrast observed, not just media queries located; motion interruptible; no unnecessary bounce |
 | Lifecycle | repeated init, root scope, dynamic insertion/removal/remount, destroy; Observer/listener/timer/frame/filter cleanup; attach options survive resize/theme updates |
 | Resources/performance | Avoid unnecessary filters/promotions; characterize actual devices and workload before claiming performance gains; budgets are project defaults |
-| Website budget (content websites) | Minified CSS and JS, and LCP against the same page without the reference code, against `../Apple-Style/cheatsheets/website.md` → Performance budget. Headless screenshots underestimate backdrop blur of 20 px or more, so judge large glass on a GPU browser and never disable refraction on headless evidence (`website.md` → Verification note) |
 | Delivery | Loading/empty/error/populated as applicable, mobile/coarse input and key widths, browser errors, source/manifest consistency and reference limitations |
 | Browser/assistive technology | Chromium, Safari, Firefox, VoiceOver/NVDA each have separate evidence; unrun checks remain not checked |
 
 Sources: `../Apple-Style-HIG/reference/INDEX.md` and `sources.json`; shared rule scope links the canonical HIG, WCAG and APG pages. Consult the matching platform section before suggesting native window conventions.
+
+## Website checklist (content websites)
+
+Use for a content site (`../Apple-Style/cheatsheets/website.md`). Each row below is one check of `scripts/check-site/` (`check-site.spec.js`; inputs, outputs and limits in its `README.md`). Record each as checked, not checked (reason) or not applicable (scope).
+
+Run it from the project that has Playwright (`npm i -D @playwright/test`): `SITE=<dir> OUT=<dir> npx playwright test -c <skill>/scripts/check-site/check-site.config.js`. Set `AXE` to `axe.min.js` (axe-core 4.10.2) for row 5 and `LIGHTHOUSE` for LCP. Without Playwright, record every row as not checked; the tool never reports a pass it did not measure.
+
+| Review item | check | Record |
+|---|---|---|
+| Crawl and anchors | 1 | broken internal links and `#anchors` across the crawled pages |
+| Per-page metadata | 2 | lang, unique title, description, canonical, zoom, color-scheme, one h1, landmarks, skip link |
+| 320 px overflow | 3 | pages and widths with horizontal overflow |
+| Running-text links | 4 | links in text with no underline, border or background; contrast to the text |
+| axe light and dark, mockups | 5 | serious and critical rules with node counts, both schemes; decorative mockups included |
+| Keyboard narrow menu | 6 | Tab reaches the toggle, Enter opens, Esc closes, focus returns (390 px) |
+| Focus visible | 7 | first 20 Tab stops with an outline or box-shadow |
+| Form empty and valid submit | 8 | error, first invalid field focused and announced; success message |
+| Deep-path 404 | 9 | status, `noindex`, stylesheets and styles at a missing three-level path |
+| No-JS browsing | 10 | primary nav reachable at 390 and 1280 px; main has text |
+| Preferences | 11 | animations under reduced motion; controls under forced colors |
+| Budget and LCP | 12 | render-blocking CSS and JS against `website.md` → Performance budget; LCP against the same page without the reference code |
+| Console and requests | 13 | console errors, failed requests, external origins |
+
+Headless or software-rendered Chromium understates backdrop blur of 20 px or more, so headless screenshots cannot justify disabling refraction or changing a material. Judge large glass on a GPU browser and record which (`website.md` → Verification note).
 
 ## Report format
 

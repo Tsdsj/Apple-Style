@@ -25,6 +25,7 @@
 - 页眉在 320px 下保持一行；相邻同背景版块不再叠加上下留白。
 - `.as-body` 去掉浏览器默认的 8px 外边距；网站快速开始给 `<body>` 加上 `class="as-body"`（否则字体、颜色和背景不生效）。
 - 表单字段示例把错误提示移到 `<label>` 之外：放在标签内的错误一旦显示，会成为字段可访问名称的一部分。
+- Review 新增网站检查清单，与新脚本 `skills/Apple-Style-Review/scripts/check-site/` 的 13 项检查一一对应：全站坏链与锚点、逐页元数据、各宽度横向溢出、正文链接非颜色标识、axe（浅色与深色）、窄屏菜单键盘操作、焦点可见、表单两种提交、深层路径 404、无 JS 浏览、偏好设置、体积预算与 LCP、控制台与请求。没测的项一律记为未检查。用 `tests/fixtures/bad-site/` 验证每个埋入的问题都被查出（`tests/test_check_site.py`），并对照上次评测的站点 A、B 复核结果（3.1–3.3）。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 
