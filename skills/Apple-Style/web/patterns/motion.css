@@ -1,0 +1,24 @@
+/* ==========================================================================
+   Scroll entrance (pattern 2.14). Requires the core layers only.
+   Content is visible without this file and without the animation. The reveal is
+   added only when the browser supports scroll-driven animations (@supports) and
+   the user has not asked for less motion (prefers-reduced-motion: no-preference).
+   It is an opacity and a short translation of 16 px, once, as the element enters.
+   No scroll-jacking, no parallax on text, and no animation that repeats.
+   Motion rationale: motion-and-interaction.md. Layout and timing values here are
+   project defaults (not an Apple guideline).
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .as-site-reveal {
+      animation: as-site-reveal linear both;
+      animation-timeline: view();
+      /* Finishes when the element is 40% into the viewport: a short, one-time reveal. */
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+@keyframes as-site-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}

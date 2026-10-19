@@ -204,6 +204,7 @@
   text-rendering: optimizeLegibility;
   font-feature-settings: "kern";
 }
+.as-body { margin: 0; }   /* full-width bars and sections reach the viewport edge */
 .as-text-largetitle { font: 400 34px/41px var(--as-font-display); letter-spacing: .4px; }
 .as-text-title1     { font: 400 28px/34px var(--as-font-display); letter-spacing: .36px; }
 .as-text-title2     { font: 400 22px/28px var(--as-font-display); letter-spacing: .35px; }
@@ -500,10 +501,11 @@
 [data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
 
 /* Form fields. Markup:
-     <label class="as-form-field"><span class="as-form-label">Title</span>
-       <input class="as-input" aria-describedby="title-error" required>
-       <span class="as-form-error" id="title-error" hidden>Enter a title.</span></label>
-   The label is visible text, never only a placeholder. Errors are text next to
+     <div class="as-form-field"><label class="as-form-label" for="title">Title</label>
+       <input class="as-input" id="title" aria-describedby="title-error" required>
+       <span class="as-form-error" id="title-error" hidden>Enter a title.</span></div>
+   The label is visible text, never only a placeholder. Keep the error outside the
+   <label>, or it joins the field's accessible name once shown. Errors are text next to
    the field plus aria-invalid="true" — the red edge alone carries nothing. */
 .as-form { display: grid; gap: 16px; }
 .as-form-field { display: grid; gap: 6px; min-inline-size: 0; }

@@ -172,13 +172,13 @@
       <div class="card">
         <h3>Form fields · label, hint, error</h3>
         <form class="as-form" id="demoForm" novalidate>
-          <label class="as-form-field"><span class="as-form-label">Name</span>
+          <div class="as-form-field"><label class="as-form-label" for="demoName">Name</label>
             <input class="as-input" id="demoName" required autocomplete="off" aria-describedby="demoNameError">
-            <span class="as-form-error" id="demoNameError" hidden>Enter a name for the landmark.</span></label>
+            <span class="as-form-error" id="demoNameError" hidden>Enter a name for the landmark.</span></div>
           <label class="as-form-field"><span class="as-form-label">Region</span>
             <select class="as-input" id="demoRegion"><option>California</option><option>Utah</option><option>Wyoming</option></select></label>
-          <label class="as-form-field"><span class="as-form-label">Notes</span>
-            <textarea class="as-input" aria-describedby="demoNotesHint"></textarea><span class="as-form-hint" id="demoNotesHint">Optional.</span></label>
+          <div class="as-form-field"><label class="as-form-label" for="demoNotes">Notes</label>
+            <textarea class="as-input" id="demoNotes" aria-describedby="demoNotesHint"></textarea><span class="as-form-hint" id="demoNotesHint">Optional.</span></div>
           <div class="row"><button class="as-button as-button-filled">Save</button></div>
         </form>
       </div>

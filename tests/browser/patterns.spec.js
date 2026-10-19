@@ -132,6 +132,25 @@ test('the header stays at the top while scrolling, and an anchor target is not h
     - document.querySelector('.as-site-header').getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(0);
 });
 
+test('with JavaScript the brand, Menu and the CTA stay on one row from 320 to 390 px, and the bar keeps its height', async ({ page }) => {
+  for (const width of [320, 360, 390]) {
+    await open(page, { width, height: 700 });
+    const row = await page.evaluate(() => {
+      const inner = document.querySelector('.as-site-header-inner');
+      const tops = ['.as-site-brand', '.as-site-nav-toggle', '.as-site-header-inner > .as-button'].map(sel => {
+        const el = document.querySelector(sel), r = el.getBoundingClientRect();
+        return { sel, centre: Math.round(r.top + r.height / 2), right: Math.round(r.right) };
+      });
+      return { tops, innerHeight: inner.getBoundingClientRect().height, innerRight: Math.round(inner.getBoundingClientRect().right), scrollWidth: document.documentElement.scrollWidth };
+    });
+    // Elements are centred in the bar, so one row means one vertical centre (a wrapped CTA would sit a row lower).
+    expect(new Set(row.tops.map(t => t.centre)).size, `${width}px: ${JSON.stringify(row.tops)}`).toBe(1);
+    expect(row.innerHeight, `${width}px`).toBeLessThanOrEqual(56);
+    for (const t of row.tops) expect(t.right, `${width}px ${t.sel} stays inside the header`).toBeLessThanOrEqual(width);
+    expect(row.scrollWidth).toBeLessThanOrEqual(width);
+  }
+});
+
 test('the footer does not overflow at 320px', async ({ page }) => {
   await open(page, { width: 320, height: 700 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);

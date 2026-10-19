@@ -56,7 +56,7 @@ Concatenate the five core layers (`cheatsheets/website.md`, *Loading*) and copy 
   <link rel="stylesheet" href="/css/site-footer.css">
   <script src="/js/site-nav.js" defer></script>
 </head>
-<body>
+<body class="as-body">
   <a href="#main">Skip to content</a>
   <header class="as-site-header">
     <div class="as-site-header-inner">

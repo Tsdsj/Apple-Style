@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Images and video (pattern 2.13). Requires the core layers. Most of the rules
+   are HTML attributes (width, height, loading, fetchpriority, srcset, sizes,
+   <picture>); see website-patterns.md. This file gives the boxes and the caption
+   and the visible control under a decorative video.
+   Layout: observed convention and project default (not an Apple guideline).
+   ========================================================================== */
+
+/* Width and height attributes reserve the box (CLS). `height: auto` keeps the ratio when the width shrinks. */
+.as-site-media { box-sizing: border-box; min-inline-size: 0; margin: 0; }
+.as-site-media img, .as-site-media video, .as-site-media picture { display: block; max-inline-size: 100%; }
+.as-site-media img, .as-site-media video { inline-size: auto; block-size: auto; }
+.as-site-media img { inline-size: 100%; }
+
+/* A fixed-ratio box for images and video that are cropped to fill it. The ratio is set per use. */
+.as-site-ratio {
+  position: relative; overflow: hidden; aspect-ratio: var(--as-ratio, 16 / 9);
+  border-radius: var(--as-radius-l); background: var(--as-bg-secondary);
+}
+.as-site-ratio > img, .as-site-ratio > video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+.as-site-media figcaption { margin-block-start: 8px; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+
+/* Controls for a decorative looping video. The control sits beside the video on a solid bar, not over the
+   picture: its contrast does not depend on what the video shows (WCAG 1.4.3, 1.4.11). */
+.as-site-video-bar {
+  box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-block-start: 8px; padding: 4px 0;
+}
+.as-site-video-bar .as-button { min-inline-size: var(--as-hit-min); }
+
+@media (forced-colors: active) {
+  .as-site-ratio { border: 1px solid CanvasText; }
+  .as-site-media figcaption { color: CanvasText; }
+}

@@ -35,10 +35,11 @@ html { scroll-padding-top: calc(var(--as-site-header-h) + 16px); }
   padding-inline: var(--as-margin);
 }
 @media (min-width: 48em) { .as-site-header-inner { padding-inline: var(--as-margin-regular); } }
+/* The brand may wrap (min-inline-size 0) so a long name cannot push the page wider than the viewport. */
 .as-site-brand {
-  display: inline-flex; align-items: center; min-block-size: var(--as-hit-min);
+  display: inline-flex; align-items: center; min-block-size: var(--as-hit-min); min-inline-size: 0;
   color: var(--as-label); font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px;
-  text-decoration: none; white-space: nowrap;
+  text-decoration: none; overflow-wrap: anywhere;
 }
 .as-site-brand:hover { text-decoration: underline; text-underline-offset: .25em; }
 .as-site-nav { display: flex; margin-inline-start: auto; min-inline-size: 0; }
@@ -50,6 +51,17 @@ html { scroll-padding-top: calc(var(--as-site-header-h) + 16px); }
   color: var(--as-label); font: 400 14px/20px var(--as-font-text); letter-spacing: -.24px; text-decoration: none;
 }
 .as-site-nav-links a:hover { text-decoration: underline; text-underline-offset: .25em; }
+/* 320 to 479 px: the brand, Menu and the CTA stay on one row. At 320 px the content is 288 px wide (320 minus two
+   16 px gutters). The normal sizes need about 286 px, which leaves no room for another system's font, so below 30em
+   the gaps and the type are tighter (about 250 px needed). Above 30em the normal sizes apply. A long brand name or a
+   large text setting can still wrap the CTA onto a second row; the reflow rule (WCAG 1.4.10) allows that, and then
+   --as-site-header-h must be the taller height. */
+@media (max-width: 29.99em) {
+  .as-site-header-inner { gap: 4px 8px; }
+  .as-site-header .as-site-brand { font-size: 16px; line-height: 20px; }
+  .as-site-header .as-site-nav-toggle { padding-inline: 10px; font-size: 14px; }
+  .as-site-header .as-button-small { padding-inline: 12px; font-size: 14px; }
+}
 /* Current page: weight and underline as well as the position of the link. Colour is not the only cue. */
 .as-site-nav-links a[aria-current="page"] {
   font-weight: 600; text-decoration-line: underline; text-decoration-thickness: 2px; text-underline-offset: .35em;

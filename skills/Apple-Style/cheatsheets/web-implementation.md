@@ -94,15 +94,17 @@ hint/error), `.as-form-label`, `.as-form-hint`, `.as-form-error`, `.as-form-row`
 
 ```html
 <form class="as-form" novalidate>
-  <label class="as-form-field"><span class="as-form-label">Title</span>
-    <input class="as-input" name="title" required autocomplete="off" aria-describedby="title-error">
-    <span class="as-form-error" id="title-error" hidden>Enter a title.</span></label>
+  <div class="as-form-field"><label class="as-form-label" for="title">Title</label>
+    <input class="as-input" id="title" name="title" required autocomplete="off" aria-describedby="title-error">
+    <span class="as-form-error" id="title-error" hidden>Enter a title.</span></div>
   <label class="as-form-field"><span class="as-form-label">Owner</span>
     <select class="as-input" name="owner"><option>Unassigned</option><option>Lin</option></select></label>
 </form>
 ```
 
 - A real `<label for>` (or a wrapping `<label>`) for every field; placeholder is a hint, never the label.
+  Keep the error and hint outside the `<label>`: text inside a label becomes part of the field's
+  accessible name, so a shown error would be read as the name. Reference them with `aria-describedby`.
 - `autocomplete` tokens (`email`, `new-password`, `one-time-code`…) and `inputmode`
   (`numeric`, `decimal`, `email`) — this is most of what makes a form feel native on
   iOS. `type="number"` only for true numbers, never phone or card fields.
@@ -114,9 +116,9 @@ hint/error), `.as-form-label`, `.as-form-hint`, `.as-form-error`, `.as-form-row`
 - `.as-input[aria-invalid="true"]` draws the red edge; the `.as-form-error`
   text is what carries the message. On a failed submit, focus the first invalid
   field.
-- The field fill is the boundary (an iOS-style filled field); Increase Contrast
-  adds a ≥ 3:1 edge. If your product requires an always-visible outlined field,
-  override `border-color` on `.as-input`.
+- `.as-input` draws a default edge (`--as-field-border`) with ≥ 3:1 against the page
+  and the field fill in both appearances (WCAG 1.4.11); Increase Contrast strengthens it.
+  If you override `border-color` or the fill, re-measure.
 
 ## Theming
 
@@ -189,4 +191,4 @@ Dynamic Type · keyboard only · VoiceOver/NVDA · RTL · slow 3G · over dark *
 light content · Safari and Firefox (no lensing there — confirm the fallback
 still reads as a material). **Widths: 320 · 390 · 768 · 1024 · 1440 · 2000** —
 a design checked only at one width is how a page ends up with dead gutters at
-2000 or a squeezed detail column at 1024. Record checked / not checked / not applicable with commands, browser and revision in `../../Apple-Style-Review/SKILL.md`. Reading the checklist is not runtime validation.
+2000 or a squeezed detail column at 1024. Record checked / not checked / not applicable with commands, browser and revision in `../../Apple-Style-Review/SKILL.md`. Reading the checklist is not runtime validation. Content pages: run the Website checklist in `../../Apple-Style-Review/SKILL.md`, and read `website.md` → Verification note before judging large glass.

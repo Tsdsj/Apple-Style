@@ -14,7 +14,7 @@ Scope: [rule strength and evidence](rules-and-evidence.md). Use this file for co
 
 - **What each layer gives:**
   - `tokens.css`: custom properties only (color, type scale, spacing, radius, motion). This is the stable interface. Override tokens instead of editing rules.
-  - `base.css`: type classes, shapes, readable width, and underlines for links inside running text.
+  - `base.css`: `class="as-body"` on `<body>` (system font, colours, background in both appearances, zero margin), type classes, shapes, readable width, and link colour and underlines for links inside running text. Without `as-body` the page keeps the browser's default font, colour and 8 px margin.
     The underline rule has zero specificity so a site can restyle it. Do not reset every link with `a { text-decoration: none }`: that also removes the underline from links in running text (WCAG 1.4.1). Links in `nav` and links with a class (such as `.as-button`) are already plain.
   - `glass.css`: materials (`.as-glass`) and the scroll edge. Glass renders with CSS alone.
   - `controls.css`: buttons (`.as-button`), form fields (`.as-form-field`, `.as-input`), pills and badges.

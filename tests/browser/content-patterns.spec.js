@@ -101,6 +101,33 @@ test.describe('sections, cards and the header edge (2.5)', () => {
     expect(Math.abs(title - brand)).toBeLessThanOrEqual(1);
   });
 
+  test('two sections with the same background share one gap; sections with different backgrounds keep both paddings', async ({ page }) => {
+    await open(page, { width: 1280 });
+    const padTop = sel => page.locator(sel).first().evaluate(el => parseFloat(getComputedStyle(el).paddingTop));
+    // #pricing is alternating and follows a plain section, so both of its edges are visible background changes.
+    expect(await padTop('#pricing')).toBeGreaterThan(0);
+    expect(await padTop('#faq')).toBeGreaterThan(0);
+    // A plain section added after the plain #faq shares its background, so its top padding collapses.
+    const measured = await page.evaluate(() => {
+      const faq = document.getElementById('faq');
+      const extra = document.createElement('section');
+      extra.className = 'as-site-section';
+      extra.innerHTML = '<h2 class="as-site-section-title">Extra</h2>';
+      faq.after(extra);
+      const faqContentBottom = faq.getBoundingClientRect().bottom - parseFloat(getComputedStyle(faq).paddingBottom);
+      const result = {
+        extraTop: getComputedStyle(extra).paddingTop,
+        faqBottomPadding: parseFloat(getComputedStyle(faq).paddingBottom),
+        gap: extra.querySelector('h2').getBoundingClientRect().top - faqContentBottom,
+      };
+      extra.remove();
+      return result;
+    });
+    expect(parseFloat(measured.extraTop)).toBe(0);
+    // The visible gap is the first section's bottom padding alone, not the two paddings added together.
+    expect(Math.abs(measured.gap - measured.faqBottomPadding)).toBeLessThanOrEqual(1);
+  });
+
   test('the feature grid has equal card heights and wraps to one column at 320 px', async ({ page }) => {
     await open(page, { width: 320, height: 700 });
     const widths = await page.locator('.as-site-card').evaluateAll(els => els.map(e => Math.round(e.getBoundingClientRect().width)));

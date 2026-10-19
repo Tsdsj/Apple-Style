@@ -13,6 +13,11 @@
   padding-inline: max(var(--_gutter), calc((100% - var(--as-site-width, 1120px)) / 2 + var(--_gutter)));
 }
 @media (min-width: 48em) { .as-site-section { --_gutter: var(--as-margin-regular); } }
+/* Adjacent sections with the same background share one gap: the second drops its top padding, so the gap is
+   the first section's bottom padding alone. Two sections with different backgrounds keep both paddings, because
+   the edge between them is visible and the content needs room from it. */
+.as-site-section:not(.as-site-section-alt) + .as-site-section:not(.as-site-section-alt),
+.as-site-section-alt + .as-site-section-alt { padding-block-start: 0; }
 /* Alternating background. The surface for cards and tables steps up one level so they still read as raised. */
 .as-site-section-alt { --as-site-surface: var(--as-bg-tertiary); background: var(--as-bg-secondary); }
 .as-site-section-title {

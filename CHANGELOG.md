@@ -21,6 +21,10 @@
 - 参考库新增 `marketing/` 分类：用事务式刷新收录 developer.apple.com 的 App Store 营销指南与预购页（徽章用法、Apple 产品图、产品名称与商标写法），来源增至 210 个；`hig-lookup.sh --page` 可查到这两页（2.20）。
 - 新增网站模式：主视觉与大字号 `hero.css`、版块与功能网格 `section.css`、价格与对比表 `pricing.css`、FAQ `faq.css`、文章排版 `prose.css`、博客列表/面包屑/分页/标签 `blog.css`，均写入 `website-patterns.md`，测试在 `tests/browser/content-patterns.spec.js`（2.4–2.9）。文章页（公共层 + 页眉页脚 + 版块、文章、博客）压缩后 38.3 KB，落地页（+ 主视觉、价格、FAQ）39.8 KB。
 - 没有类名的链接改用 `--as-link` 颜色：浏览器默认的 #0000EE 在深色背景上对比度约 2.2:1。
+- 新增网站模式：网站表单 `site-form.css` + `web/js/site-form.js`（压缩后 1.9 KB；错误摘要获得焦点、行内错误、成功状态、键盘与读屏都碰不到的防垃圾字段）、404 与法律页 `legal.css`、产品示意图 `mockup.css`（含 App Store 徽章与 Apple 商标写法，出处为参考库中的营销指南）、图片与媒体 `media.css`、滚动进入动效 `motion.css`，测试在 `tests/browser/site-forms-media.spec.js`（2.10–2.14）。
+- 页眉在 320px 下保持一行；相邻同背景版块不再叠加上下留白。
+- `.as-body` 去掉浏览器默认的 8px 外边距；网站快速开始给 `<body>` 加上 `class="as-body"`（否则字体、颜色和背景不生效）。
+- 表单字段示例把错误提示移到 `<label>` 之外：放在标签内的错误一旦显示，会成为字段可访问名称的一部分。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

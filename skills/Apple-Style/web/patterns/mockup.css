@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Product mockup (pattern 2.12): an HTML drawing of a screen, without a device
+   frame. Requires the core layers. Every colour is a token. The content is solid
+   (no glass). The text is real text, so it meets the body-text contrast rules in
+   both appearances (WCAG 1.4.3), whether or not the block is aria-hidden.
+   Layout and treatment: observed convention and project default (not an Apple
+   guideline). See website-patterns.md, Product imagery, for when to use it.
+   ========================================================================== */
+.as-site-mockup {
+  box-sizing: border-box; display: grid; gap: 12px; margin: 0; padding: 16px;
+  border: 1px solid var(--as-separator); border-radius: var(--as-radius-l);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+  font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; min-inline-size: 0;
+}
+.as-site-mockup-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.as-site-mockup-title { margin: 0; font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-label); overflow-wrap: anywhere; }
+.as-site-mockup-muted { color: var(--as-label-secondary); }
+.as-site-mockup-rows { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.as-site-mockup-row {
+  box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px;
+  min-block-size: var(--as-hit-min); padding: 8px 12px; border-radius: var(--as-radius-s); background: var(--as-bg-tertiary);
+}
+.as-site-mockup-row > span:first-child { min-inline-size: 0; overflow-wrap: anywhere; }
+.as-site-mockup-value { font-variant-numeric: tabular-nums; color: var(--as-label); }
+/* A status word is text. The pill is the same .as-pill used elsewhere, so its colour rules apply. */
+.as-site-mockup-row .as-pill { flex: 0 0 auto; }
+
+@media (forced-colors: active) {
+  .as-site-mockup, .as-site-mockup-row { border: 1px solid CanvasText; background: Canvas; color: CanvasText; }
+  .as-site-mockup-muted { color: CanvasText; }
+}
+
+/* App Store badge link (website-patterns.md, Product imagery). The artwork is Apple's, is supplied by Apple,
+   and is not shipped in this repository. Height is 40 px, the onscreen minimum in the App Store marketing
+   guidelines; the width follows the artwork's own ratio, so it is never stretched. Clear space is one quarter
+   of the badge height (10 px at 40 px), kept as padding of the link, so nothing else sits inside it. The artwork
+   gets no filter, transform, animation or opacity change. */
+.as-site-store-badge { display: inline-block; padding: 10px; border-radius: var(--as-radius-s); line-height: 0; }
+.as-site-store-badge img { display: block; block-size: 40px; inline-size: auto; max-inline-size: none; }
+.as-site-store-badge:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }

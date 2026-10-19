@@ -11,6 +11,7 @@
   text-rendering: optimizeLegibility;
   font-feature-settings: "kern";
 }
+.as-body { margin: 0; }   /* full-width bars and sections reach the viewport edge */
 .as-text-largetitle { font: 400 34px/41px var(--as-font-display); letter-spacing: .4px; }
 .as-text-title1     { font: 400 28px/34px var(--as-font-display); letter-spacing: .36px; }
 .as-text-title2     { font: 400 22px/28px var(--as-font-display); letter-spacing: .35px; }
