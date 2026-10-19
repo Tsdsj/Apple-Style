@@ -1,32 +1,79 @@
 ---
 name: Apple-Style
-description: Use when building or restyling a UI that should look and behave like Apple's platforms — Liquid Glass, iOS 26 / macOS 26 design system, Human Interface Guidelines compliance, SF typography, system colors, floating tab bars/toolbars/sidebars, sheets, menus — for web (HTML/CSS/JS, React, Vue, Tailwind), SwiftUI, UIKit or AppKit. Also use when the user says "Apple style", "Liquid Glass", "HIG", "like iOS", "like macOS", "Cupertino", or asks whether a design follows Apple guidelines.
+description: Use when building or restyling a UI that should look and behave like Apple's platforms. Main use is websites in an Apple style: product and marketing pages, landing pages, documentation, blogs and content sites. Also web apps (HTML/CSS/JS, React, Vue, Tailwind) and, as a secondary branch, native SwiftUI, UIKit or AppKit. Covers Liquid Glass, Human Interface Guidelines compliance, system colors and type, floating navigation, sheets and menus. Also use when the user says "Apple style", "Liquid Glass", "HIG", "like iOS", "like macOS", "Cupertino", or asks whether a design follows Apple guidelines.
 ---
 
 # Apple-Style
 
-Entry point for four companion skills: this skill covers composition and Web implementation; **Apple-Style-HIG** provides source text; **Apple-Style-Liquid-Glass** covers material tuning; **Apple-Style-Review** records evidence and findings.
+Entry point for four companion skills. This one covers composition and web implementation, starting with websites. **Apple-Style-HIG** holds the source text, **Apple-Style-Liquid-Glass** covers materials and native recipes, **Apple-Style-Review** records evidence.
 
 ## Workflow
 
-1. Read `cheatsheets/rules-and-evidence.md`. Identify target platform, application type, input methods and available container space separately. Preserve existing product conventions and the user's current design/implementation stage.
-2. Classify content and navigation/control layers. Prefer standard components and semantic colors; use glass where the relevant platform guidance supports it. A web page does not automatically become a native window.
-3. Load the relevant cheatsheets. For Web always read `web-implementation.md`; for material work read `materials-and-liquid-glass.md`. Load color, typography, layout, components, motion or accessibility only as needed.
-4. When a number or recommendation matters, inspect the applicable platform section in `../Apple-Style-HIG/reference/` and its provenance in `sources.json`. Distinguish official requirements, official recommendations, project defaults and visual heuristics.
-5. Implement within the authorized scope. The existing CSS/JS needs no runtime dependencies or build step. Use `web/demo.html` for component markup and `web/demo-desktop.html` only for a deliberately chosen Mac-like window.
-6. Verify relevant states and record checked / not checked / not applicable with evidence using **Apple-Style-Review**. Do not infer test passes from a textual review.
+1. **Classify the page type first** (table in `cheatsheets/rules-and-evidence.md`, section *Page type*). Read the files for that type:
+   - **Content website** (product, marketing or landing page; docs; blog): `cheatsheets/website.md`, `cheatsheets/website-patterns.md`, `cheatsheets/web-implementation.md`, core layers `web/css/tokens.css`, `base.css`, `glass.css`, `controls.css`, `preferences.css`.
+   - **Web app** (tool, dashboard, console, editor, admin): `cheatsheets/web-implementation.md`, `cheatsheets/components-quickref.md`, `web/demo.html`, the core layers plus `web/css/app.css`, `density.css`, `app-preferences.css`; `window.css` only for split panes.
+   - **Deliberate Mac-like window** (the user asked for a Mac look): `web/demo-desktop.html`, `cheatsheets/layout-and-shapes.md`, `cheatsheets/web-implementation.md` (window section), the web app files, and `web/css/window.css`.
+   - **Native** (SwiftUI, UIKit, AppKit): the HIG reference in `../Apple-Style-HIG/reference/INDEX.md` and the native recipe in `../Apple-Style-Liquid-Glass/SKILL.md`. Do not read web files for this type.
+
+   Identify target platform, application type, input and available container separately. Preserve existing product conventions and the user's current stage.
+2. Classify content and navigation/control layers. Use standard components and semantic colors; use glass where the platform guidance supports it. A web page does not automatically become a native window.
+3. Load other cheatsheets only as needed (color, typography, layout, motion, accessibility). For material work read `cheatsheets/materials-and-liquid-glass.md`.
+4. When a number or recommendation matters, check the applicable section in `../Apple-Style-HIG/reference/` and its provenance in `sources.json`. Label each claim as an official requirement, official recommendation, project default or visual heuristic.
+5. Implement within the authorized scope. Web assets need no runtime dependencies or build step: copy only the layers you use.
+6. Verify the relevant states and record checked / not checked / not applicable, with evidence, using **Apple-Style-Review**. Do not infer test passes from a textual review.
+
+## On a website, don't
+
+- Put an iOS-style floating bottom tab bar in place of site navigation. Use a header; on narrow screens use a disclosure menu.
+- Draw a fake OS window, title bar or menu bar around the page.
+- Put glass on content: cards, articles, tables, forms. Glass belongs to the navigation layer (header, floating controls).
+- Ship the whole `apple-style.css` or `liquid-glass.js` to a content site. Copy the core layers and the patterns the page uses.
 
 ## Composition defaults
 
-- Keep a clear content/control hierarchy. Prefer regular glass on floating navigation and controls; content usually uses solid backgrounds or standard materials. Avoid unnecessary glass nesting. Platform-specific exceptions come from the source, not a universal prohibition.
-- Use semantic label, background, separator and action colors. System color samples are not contrast guarantees: ordinary meaningful text needs 4.5:1 in default light and dark states. White-text buttons and selected rows use `--as-action-bg` / `--as-action-fg`; retest custom tints over the actual backdrop.
-- Use concentric radii for nested shapes. Capsules suit many touch controls; dense Mac controls can use rounded rectangles. Exact spacing, pane widths and corner sizes in the Web CSS are project defaults.
-- Select density from product/platform intent; adapt layout to the container. Cross-platform desktop web apps use `data-density="desktop"` on `<html>` (14/20 text, 32px controls, 44px kept for touch); `data-platform="macos"` is an explicit choice for a Mac-like surface. Neither is inferred from `>=1024px`. Sidebars, inspectors and menus are optional and follow the task's information structure.
-- Keep meaningful click and keyboard activation even when adding drag. Respect disabled state, cancellation, focus and ARIA. Reduce Motion removes unnecessary elastic movement; avoid decorative bounce.
-- Prefer monochrome navigation icons and restrained primary tint as a visual default. Keep useful borders, custom backgrounds or brand colors when needed for contrast, grouping or the existing design system.
-- Native targets should use system components and semantic APIs first. Web assets do not ship SF fonts or SF Symbols.
+- Keep a clear content/control hierarchy. Regular glass on floating navigation and controls; content on solid backgrounds or standard materials. Avoid glass nested in glass. Platform exceptions come from the source, not a universal prohibition.
+- Use semantic label, background, separator and action colors. System color samples are not contrast guarantees: ordinary text needs 4.5:1 in default light and dark states. White-text buttons and selected rows use `--as-action-bg` / `--as-action-fg`. If a custom or brand tint fails, override `--as-accent`, `--as-action-bg` and `--as-accent-on-tint`, then re-measure over the actual backdrop.
+- Use concentric radii for nested shapes. Capsules suit touch controls; dense Mac controls can use rounded rectangles. Spacing, pane widths and corner sizes in the CSS are project defaults.
+- Choose density from product intent, not viewport width. Websites keep the default density. Desktop web apps set `data-density="desktop"` on `<html>` (project default). `data-platform="macos"` is an explicit choice for a Mac-like surface. Sidebars, inspectors and menus are optional.
+- Keep click and keyboard activation when adding drag. Respect disabled state, cancellation, focus and ARIA. Reduce Motion removes elastic movement; avoid decorative bounce.
+- Prefer monochrome navigation icons and restrained tint. Keep borders or brand colors where they are needed for contrast, grouping or an existing design system.
+- Native targets use system components and semantic APIs first. Web assets do not ship SF fonts or SF Symbols, and websites must not self-host SF fonts.
 
-## Web quick start
+## Website quick start
+
+Concatenate the five core layers in order (`cheatsheets/website.md`, *Loading*). No script is loaded.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product name: short description</title>
+  <link rel="stylesheet" href="/css/apple-core.css">
+</head>
+<body>
+  <a href="#main">Skip to content</a>
+  <header class="as-glass">
+    <a href="/">Product name</a>
+    <nav aria-label="Primary">
+      <a href="/features">Features</a>
+      <a href="/pricing" aria-current="page">Pricing</a>
+    </nav>
+  </header>
+  <main id="main">
+    <h1>Headline</h1>
+    <p>Body text.</p>
+    <a class="as-button as-button-filled" href="/signup">Get started</a>
+  </main>
+  <footer>…</footer>
+</body>
+</html>
+```
+
+The skip link must be visible on focus. The core layers have no skip-link class, so style it in the site CSS.
+
+## Web app quick start
 
 ```html
 <link rel="stylesheet" href="apple-style.css">
@@ -48,22 +95,19 @@ Entry point for four companion skills: this skill covers composition and Web imp
 </script>
 ```
 
-Use `tablist` only when switching panels; every tab needs `aria-controls` pointing to its panel. `data-activation="manual"` separates arrow-key focus from Enter/Space activation. Value selectors use `radiogroup`. Both support click, roving tabindex and disabled-item skipping. Listen for `change`; do not add a second state-toggle click handler.
-
-Bundlers and frameworks import `web/liquid-glass.mjs` (keep it next to `liquid-glass.js`); importing is safe during server rendering, and init still belongs after mount. With Tailwind v4 or other cascade layers, import the stylesheet into a layer below utilities: `@import "./apple-style.css" layer(components);`.
-
-`init(root)` includes root itself, is idempotent and watches additions/removals within its scope. `destroy(root)` releases that scope; `detach(el)` releases a component. `attach(el, {scale, rim, chroma, lens, adapt})` stores options for resize/theme regeneration. See `web-implementation.md` for lifecycle details and React/Vue cleanup examples.
-
-Web app components: `.as-form-field` + `.as-input` (text field, text area, `<select>` pop-up button), `.as-listbox` / `.as-option` (selectable list — the runtime adds the keyboard model; selection is `aria-selected`), `<dialog class="as-dialog">` with `showModal()`, `LiquidGlass.toast(message)`, `.as-empty`, `.as-skeleton` and `.as-pill`. Markup and contracts: `web-implementation.md` → *Forms*, *States*, *Selectable lists and toasts*.
-
-Optional structures: `.as-tabbar[data-sidebar]` opts into the project's width-based sidebar layout; `.as-window` / `.as-split` / `.as-inspector` compose a window where appropriate. A wide iPad retains iPad intent; a narrow Mac retains Mac intent; ordinary websites retain their page structure.
+- `tablist` only for switching panels, with `aria-controls` on each tab; `<nav>` links for navigation. Listen for `change`; do not add a second state-toggle click handler.
+- Forms, lists, dialogs, toasts and states: `web-implementation.md` (*Forms*, *States*, *Selectable lists and toasts*). Components: `components-quickref.md`.
+- Bundlers import `web/liquid-glass.mjs` and call `init` after mount. `init(root)`, `destroy(root)` and `detach(el)` manage lifecycle; framework cleanup is in `web-implementation.md`.
+- `.as-window`, `.as-split` and `.as-inspector` only where the task needs them.
 
 ## Files
 
-- `cheatsheets/`: topic references plus shared rule scope and evidence definitions.
-- `web/apple-style.css`, `web/liquid-glass.js`, `web/liquid-glass.mjs`: dependency-free Web assets (classic script / CommonJS, and its ES module entry).
-- `web/css/*.css`: the stylesheet source, split by layer. `web/apple-style.css` and `web/apple-style.min.css` are generated from it by `scripts/build-css.py` in the repository; edit the sources, not the generated files.
-- `web/demo.html`, `web/demo-desktop.html`: minimal examples, linked from `../../demo/index.html`.
-- `scripts/hig-lookup.sh`: search local references.
-- `scripts/update-reference.sh`: transactional manifest-backed refresh; failures leave the previous library intact.
-- `../../docs/validation.md`: commands, actual evidence and unverified coverage.
+- `cheatsheets/`: topic references; `rules-and-evidence.md` (page types, evidence); `website*.md` (websites); `web-implementation.md` and `components-quickref.md` (web).
+- `web/css/*.css`: stylesheet sources. Core layers, in cascade order: `tokens`, `base`, `glass`, `controls`, `preferences`. App-only layers: `app`, `window`, `density`, `app-preferences`.
+- `web/apple-style.css`, `web/apple-style.min.css`: all layers, generated from `web/css/` by `scripts/build-css.py` in the repository. Edit the sources, not these files. Websites should not use them.
+- `web/liquid-glass.js`, `web/liquid-glass.mjs`: runtime (classic script, and ES module entry). Web apps use it; websites only for optional lens.
+- `web/js/site-nav.js`: planned. Narrow-screen navigation with no runtime dependency (≤ 2 KB). Not yet present.
+- `web/patterns/*.css`: planned. One reference file per website pattern, using tokens only. Not yet present.
+- `web/demo.html`, `web/demo-desktop.html`: examples for web apps and the Mac-like window.
+- `scripts/hig-lookup.sh`: search local references. `scripts/update-reference.sh`: transactional, manifest-backed refresh.
+- Repository only, not installed with the skill: [validation commands and evidence](https://github.com/Tsdsj/Apple-Style/blob/main/docs/validation.md) and the [demo index](https://github.com/Tsdsj/Apple-Style/blob/main/demo/index.html).

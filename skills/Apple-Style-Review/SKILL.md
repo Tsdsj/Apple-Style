@@ -30,6 +30,7 @@ Audit the authorized scope, using `../Apple-Style/cheatsheets/rules-and-evidence
 | Motion/preferences | Reduced motion/transparency and increased contrast observed, not just media queries located; motion interruptible; no unnecessary bounce |
 | Lifecycle | repeated init, root scope, dynamic insertion/removal/remount, destroy; Observer/listener/timer/frame/filter cleanup; attach options survive resize/theme updates |
 | Resources/performance | Avoid unnecessary filters/promotions; characterize actual devices and workload before claiming performance gains; budgets are project defaults |
+| Website budget (content websites) | Minified CSS and JS, and LCP against the same page without the reference code, against `../Apple-Style/cheatsheets/website.md` → Performance budget. Headless screenshots underestimate backdrop blur of 20 px or more, so judge large glass on a GPU browser and never disable refraction on headless evidence (`website.md` → Verification note) |
 | Delivery | Loading/empty/error/populated as applicable, mobile/coarse input and key widths, browser errors, source/manifest consistency and reference limitations |
 | Browser/assistive technology | Chromium, Safari, Firefox, VoiceOver/NVDA each have separate evidence; unrun checks remain not checked |
 

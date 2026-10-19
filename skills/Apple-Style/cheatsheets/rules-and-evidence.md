@@ -9,6 +9,17 @@ Choose four things independently before applying the design system:
 
 A 1366px iPad is not a Mac. A 700px Mac window is not an iPhone. A desktop browser page does not need a fake native window, sidebar or inspector. Use `.as-window` and `data-platform="macos"` only for an explicitly chosen Mac-like application surface; a cross-platform desktop web app uses `data-density="desktop"` (a project default density) with its own page structure. The stylesheet's 768/1024/1280px breakpoints and 264/380px pane widths are project defaults, not Apple platform detectors or official specifications.
 
+## Page type
+
+Classify the page type before anything else. The type decides which files to read; `../SKILL.md` step 1 lists the same files. Classify each page or surface separately: a site with a marketing section and a dashboard has two types.
+
+| Page type | Signals in the request | Default structure | Do not | Files to load |
+|---|---|---|---|---|
+| Content website | Product or marketing page, landing page, documentation, blog, portfolio-like site; mostly reading; static pages; search visibility matters | Semantic page: skip link, header with site navigation, `main` with sections, footer. No runtime script. | Bottom tab bar; fake window or menu bar; glass on cards, articles or tables; the whole `apple-style.css` or `liquid-glass.js` | `website.md`, `website-patterns.md`, `web-implementation.md`, core layers in `web/css/` (tokens, base, glass, controls, preferences) |
+| Web app | Tool, dashboard, console, editor, admin screen; state changes, forms, lists or dialogs are the main job | App shell the product needs (toolbar, tab bar, sidebar, or none); stateful components; runtime for segmented controls, toggles, listboxes and lens | Sidebar or inspector by default; desktop density on a public page | `web-implementation.md`, `components-quickref.md`, `web/demo.html`, core layers plus `app.css`, `density.css` and `app-preferences.css`; `window.css` only for split panes |
+| Deliberate Mac-like window | The user asks for a Mac app or Mac window look, or a desktop-app surface on the web | `.as-window` with toolbar, split panes and optional inspector; `data-platform="macos"` set on `<html>` | Using it for a website or a page without app state; width alone as the reason | `web/demo-desktop.html`, `layout-and-shapes.md`, `web-implementation.md` (window section), web app files plus `window.css` |
+| Native | SwiftUI, UIKit, AppKit, an iOS or macOS app project, Xcode | System components and semantic APIs; HIG source for values | Web CSS/JS in place of system components; custom glass where a system material exists | HIG reference (`../../Apple-Style-HIG/reference/INDEX.md`), native recipe in `../../Apple-Style-Liquid-Glass/SKILL.md`; no web files |
+
 ## Strength of a rule
 
 | Label | Meaning | Example and source | Scope |

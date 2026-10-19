@@ -47,4 +47,4 @@ Destructive text (`.as-button-destructive`, destructive menu items) uses `--as-d
 
 `--as-label-secondary` departs from Apple's light secondaryLabel (60 %, 3.44:1 on white, 3.30:1 on secondarySystemBackground) and uses 74 % (5.02:1 / 4.72:1), because on the web it carries meaningful small text — section titles, field labels, metadata. The dark value is Apple's (≥ 5.27:1 up to tertiarySystemBackground). Tertiary and quaternary labels remain de-emphasis colours for placeholders and disabled content; do not use them for information people need to read.
 
-Custom `--as-tint`, opacity, inherited foregrounds and backgrounds still require measurement. See `tests/browser/styles.spec.js` and `tests/browser/regressions.spec.js` for the measured default pairs.
+Custom `--as-tint`, opacity, inherited foregrounds and backgrounds still require measurement. See the repository's [`styles.spec.js`](https://github.com/Tsdsj/Apple-Style/blob/main/tests/browser/styles.spec.js) and [`regressions.spec.js`](https://github.com/Tsdsj/Apple-Style/blob/main/tests/browser/regressions.spec.js) for the measured default pairs.
