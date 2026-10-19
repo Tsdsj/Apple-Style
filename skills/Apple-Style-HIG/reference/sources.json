@@ -2080,6 +2080,26 @@
       "sha256": "0608aed98ed763f493041d47d80a80d0e093932ae3568878cdd6f4f1b2d18dd6",
       "source_sha256": "cd8111e2096e2fd911c6d168b16a1142fd647a8a815e74ab749f5c5c3d8370c5",
       "provenance": "fetched"
+    },
+    {
+      "path": "marketing/guidelines.md",
+      "kind": "html",
+      "url": "https://developer.apple.com/app-store/marketing/guidelines/",
+      "fetch_url": "https://developer.apple.com/app-store/marketing/guidelines/",
+      "fetched_at": "2026-10-19T22:38:16.834545+00:00",
+      "sha256": "1da877cd213a95f3cfb472523df8dffe4639eea6cfb43b1278375134aa8f12e3",
+      "source_sha256": "a0e08702f201bae0d109778a27bdd6a8771f162e63b9ae8774ecd4b11259bcb6",
+      "provenance": "fetched"
+    },
+    {
+      "path": "marketing/pre-orders.md",
+      "kind": "html",
+      "url": "https://developer.apple.com/app-store/pre-orders/",
+      "fetch_url": "https://developer.apple.com/app-store/pre-orders/",
+      "fetched_at": "2026-10-19T22:38:17.055964+00:00",
+      "sha256": "f45178ebad6c86e97bd79fe39b94ec4ee9688dc03164bd15c48722709f23b703",
+      "source_sha256": "ec584e6c3a0cd634cfd362a9e3035d8fba515ff863104dd14ea85e6983c2c641",
+      "provenance": "fetched"
     }
   ]
 }

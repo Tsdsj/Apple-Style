@@ -127,7 +127,7 @@ skills/Apple-Style/
 - [ ] **2.17 浏览器测试**：每个模式至少一个测试，覆盖键盘、320px、深色和强制颜色；参考站跑 axe（浅色和深色）为 0 违规。
 - [x] **2.18 拆分 `web-implementation.md`**：应用部分移到 `web-app.md`；`components-quickref.md` 分成网站和 Web 应用两节，iOS 标签栏、检查器等移到应用一节。
 - [x] **2.19 补速查表**：`typography.md` 加网页大字号和中日韩排版；`layout-and-shapes.md` 加网页栅格和内容宽度；Liquid Glass 技能加“网站上的玻璃”一节（只用于页眉、菜单、浮动按钮，写明折射的性能代价）。
-- [ ] **2.20 官方出处**：模式中如需官方依据（例如 App Store 徽章用法），收录对应的 Apple 营销资源页面到参考库，并在 `sources.json` 记录出处；找不到出处的按 D3 标为惯例。
+- [x] **2.20 官方出处**：模式中如需官方依据（例如 App Store 徽章用法），收录对应的 Apple 营销资源页面到参考库，并在 `sources.json` 记录出处；找不到出处的按 D3 标为惯例。
 
 **完成标准**：参考站在 Lighthouse 移动端模拟下性能 ≥ 98、无障碍 100；所有模式测试通过；`website-patterns.md` 中每个模式都标了来源等级。
 

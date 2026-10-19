@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-10-19T22:38:16.305961+00:00",
+  "applied": true,
+  "added": [
+    "marketing/guidelines.md",
+    "marketing/pre-orders.md"
+  ],
+  "modified": [],
+  "unchanged": [],
+  "retired": [],
+  "failed": [],
+  "recheck_cheatsheets": [],
+  "recheck_reasons": {}
+}

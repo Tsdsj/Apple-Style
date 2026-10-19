@@ -211,6 +211,11 @@ Legacy timestamps marked null are unknown, not freshly fetched.
 - [Apple Design Resources](design-site/resources.md) · [Source](https://developer.apple.com/design/resources/)
 - [What’s new](design-site/whats-new.md) · [Source](https://developer.apple.com/design/whats-new/)
 
+## marketing
+
+- [Marketing Resources and Identity Guidelines](marketing/guidelines.md) · [Source](https://developer.apple.com/app-store/marketing/guidelines/)
+- [Offering apps and games for pre-order](marketing/pre-orders.md) · [Source](https://developer.apple.com/app-store/pre-orders/)
+
 ## wwdc25
 
 - [Elevate the design of your iPad app (WWDC25)](wwdc25/208-elevate-the-design-of-your-ipad-app.md) · [Source](https://developer.apple.com/videos/play/wwdc2025/208/)

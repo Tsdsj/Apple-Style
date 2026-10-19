@@ -140,7 +140,7 @@ PowerShell 用例自动发现 `pwsh`/`powershell`；也可通过 `APPLE_STYLE_PW
 
 ## 参考库维护
 
-[INDEX](skills/Apple-Style-HIG/reference/INDEX.md) 由脚本生成；[sources.json](skills/Apple-Style-HIG/reference/sources.json) 记录 208 个来源的规范 URL、抓取入口、抓取时间与 SHA-256；全部来源于 2026-10-17 实际重新抓取。
+[INDEX](skills/Apple-Style-HIG/reference/INDEX.md) 由脚本生成；[sources.json](skills/Apple-Style-HIG/reference/sources.json) 记录 210 个来源的规范 URL、抓取入口、抓取时间与 SHA-256；其中 208 个于 2026-10-17 实际重新抓取，2 个 App Store 营销页（`marketing/`）于 2026-10-19 新增抓取。
 
 ```bash
 skills/Apple-Style/scripts/update-reference.sh --index-only

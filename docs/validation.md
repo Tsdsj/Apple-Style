@@ -148,3 +148,17 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 - 全部测试：**Chromium 97 通过**，**Python 35 通过（PowerShell 8 项跳过）**，`node --check` 与 `git diff --check` 通过。`demo.html` 新增组件示例，在 320 / 1024px、浅色 / 深色下另跑了交互探针（表单校验、列表键盘、对话框回车创建、Toast），无溢出、无脚本错误。
 - 评估页改用库组件后重跑 `check.spec.js`：4 项通过；对话框打开态 axe 违规 0、incomplete 1（空文本区，工具无法计算），此前为 incomplete 15；浅色 / 深色结果不变（D4 `region` 2 处）。测量方法同时修正：对话框淡入完成后再运行 axe，否则会把淡入中途的半透明文字当作对比度失败。
 - 范围：只在 Chromium 141 中验证。可定制 select 在 Safari 27 与 Firefox 上的表现、真实读屏软件对 Toast 与 listbox 的播报均未实测。
+
+## App Store 营销页出处（未发布）
+
+执行日期：2026-10-19（UTC 22:38 前后）。环境：Linux 容器，Python 3.13.16。对应计划 2.20 与决策 D3。
+
+- 收录方式：在 `reference/sources.json` 增加两条 `kind: "html"` 的 manifest 条目，路径位于新分类 `marketing/`。`update_reference.py` 的 `CATEGORIES` 与 `cited()` 同步加入 `marketing`，否则路径校验会拒绝该条目。随后用库自带的事务式刷新拉取：
+  - `marketing/guidelines.md` ← https://developer.apple.com/app-store/marketing/guidelines/（H1：Marketing Resources and Identity Guidelines，31,658 字节）
+  - `marketing/pre-orders.md` ← https://developer.apple.com/app-store/pre-orders/（H1：Offering apps and games for pre-order，5,422 字节，指向 guidelines 的徽章与预购徽章用法）
+- 抓取前用 `curl` 核验：两页均为 200。未收录：`/app-store/marketing/` 返回 403；`/app-store/marketing/badges/`、`/app-store/badges/`、`/app-store/marketing/artwork/` 返回 404；guidelines 中的 Marketing Tools 位于 `toolbox.marketingtools.apple.com`，不在 developer.apple.com 域内；“Download Artwork”为协议门控的 JS 下载，没有可收录的页面。`www.apple.com` 按网络策略被拒（代理记录 403），未尝试绕过。
+- 执行：先在仓库副本上干跑，逐文件 diff 确认只新增两页与 INDEX 的 `## marketing` 段，其余 208 个文件字节未变；再对仓库执行。两者都以 `python3 -I -B` 直接调用 `update_reference.main()`，参数等同 `update-reference.sh --only marketing/guidelines.md --only marketing/pre-orders.md --report docs/reference-marketing-report.json`。结果：**新增 2、修改 0、未变 0、失败 0**，[逐项报告](reference-marketing-report.json)。
+- 来源总数由 208 增至 210。两条的 `fetched_at` 分别为 2026-10-19T22:38:16Z 与 22:38:17Z，`sha256` 与文件一致，`source_sha256` 已记录。
+- 渲染限制（渲染器未改，内容未手工改写）：页内锚点（如 `#section-badges`）与无 href 的“Download Artwork”按钮被解析为 `https://developer.apple.com` 首页，引用时以正文为准；Headline 等示例图小节只剩小标题；页面包含 App Store 营销素材许可协议全文，原样保存。
+- 未做：未保存任何徽章、图片或 zip；未刷新既有 208 页；未改动 CHANGELOG、计划文档与 `skills/Apple-Style/SKILL.md`。
+- 测试：`python3 -m unittest discover -s tests -p 'test_*.py'`：43 项运行，**35 通过，8 项 PowerShell 跳过**（本容器无 pwsh），0 失败。HEAD 为 42 项运行、34 通过；新增的 `test_reference` 用例覆盖 `marketing` 分类的接受、INDEX 段、`cited()` 映射与其他目录的拒绝。`test_reference.py` 与 `test_skill_links.py` 通过；`git diff --check` 通过。

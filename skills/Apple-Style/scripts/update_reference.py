@@ -21,7 +21,7 @@ APPLE = 'https://developer.apple.com'
 DEFAULT = Path(__file__).resolve().parents[2] / 'Apple-Style-HIG/reference'
 CHEATSHEETS = Path(__file__).resolve().parents[1] / 'cheatsheets'
 REPO = Path(__file__).resolve().parents[3]
-CATEGORIES = ('hig', 'liquid-glass', 'design-site')   # plus one wwdcNN directory per event
+CATEGORIES = ('hig', 'liquid-glass', 'design-site', 'marketing')   # plus one wwdcNN directory per event
 
 
 def digest(data):
@@ -168,7 +168,7 @@ def index(reference, sources):
 def cited(text, stems):
     """Reference paths a cheatsheet cites: explicit paths (globs allowed),
     'WWDC25 219'-style session numbers and italic page names in Source lines."""
-    paths = set(re.findall(r'\b((?:hig|liquid-glass(?:/api)?|design-site|wwdc\d\d)/[\w.*()-]+\.md)', text))
+    paths = set(re.findall(r'\b((?:hig|liquid-glass(?:/api)?|design-site|marketing|wwdc\d\d)/[\w.*()-]+\.md)', text))
     paths |= {f'wwdc{year}/{number}-*.md' for year, number in re.findall(r'WWDC(\d\d) (\d{3})', text)}
     for line in re.findall(r'^Source:.*$', text, re.M):
         for name in re.findall(r'\*([^*]+)\*', line):

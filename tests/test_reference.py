@@ -139,3 +139,15 @@ class Maintenance(unittest.TestCase):
         for chrome in ('Guidancesearchterm', 'Search Reset', 'All'):
             self.assertNotIn(chrome, text.replace('Added', ''))
         self.assertEqual(text.count('October 13, 2026'), 1)
+    def test_marketing_category_is_accepted_indexed_and_cited(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ref = pathlib.Path(tmp)/'reference'; (ref/'marketing').mkdir(parents=True)
+            (ref/'marketing/guidelines.md').write_text('# Marketing Resources and Identity Guidelines\n\nBody.\n')
+            source = dict(path='marketing/guidelines.md', kind='html', url='https://developer.apple.com/app-store/marketing/guidelines/',
+                          fetch_url='https://developer.apple.com/app-store/marketing/guidelines/', sha256=None, fetched_at=None)
+            updater.validate_source(source)
+            self.assertIn('## marketing', updater.index(ref, [source]))
+            self.assertIn('(marketing/guidelines.md)', updater.index(ref, [source]))
+            self.assertIn('marketing/guidelines.md', updater.cited('Rule (`marketing/guidelines.md`).', {}))
+        with self.assertRaises(ValueError):
+            updater.validate_source(dict(source, path='press/guidelines.md'))

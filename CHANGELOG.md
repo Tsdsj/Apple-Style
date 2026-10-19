@@ -18,6 +18,7 @@
 - `website.md` 增加元数据与 SEO、多页共享页眉页脚、字体、深色模式、静态托管、框架接入和上线清单（2.15）。
 - `web-implementation.md` 只保留所有网页通用的内容（含表单），应用组件的约定移到新的 `web-app.md`；`components-quickref.md` 分为网站和 Web 应用两部分（2.18）。
 - `typography.md` 增加网页大字号与中日韩排版，`layout-and-shapes.md` 增加网页布局，Liquid Glass 技能增加“网站上的玻璃”（2.19）。
+- 参考库新增 `marketing/` 分类：用事务式刷新收录 developer.apple.com 的 App Store 营销指南与预购页（徽章用法、Apple 产品图、产品名称与商标写法），来源增至 210 个；`hig-lookup.sh --page` 可查到这两页（2.20）。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 
