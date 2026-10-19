@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site patterns fixture</title>
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/tokens.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/base.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/glass.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/controls.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/preferences.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-header.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-nav.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-footer.css">
+  <style>
+    .fx-hero { min-block-size: 520px; padding: 32px 16px; }
+    .fx-section { block-size: 1100px; padding: 16px; }
+    .fx-spacer { block-size: 1400px; }
+    .fx-skip { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform: translateY(-200%); }
+    .fx-skip:focus { transform: none; }
+  </style>
+  <script src="../../skills/Apple-Style/web/js/site-nav.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="fx-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="#top">Product</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing" aria-current="page">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="#signup">Get started</a>
+    </div>
+  </header>
+  <main id="main">
+    <section id="top" class="fx-hero"><h1>Headline</h1><p>Body text with a <a href="#features">running link</a>.</p></section>
+    <section id="features" class="fx-section"><h2>Features</h2><p>Feature copy.</p></section>
+    <div class="fx-spacer"></div>
+    <section id="pricing" class="fx-section"><h2>Pricing</h2><p>Pricing copy.</p></section>
+    <section id="faq" class="fx-section"><h2>FAQ</h2><p>Questions.</p></section>
+  </main>
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Product</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Company</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#top">About the team and the long address for wrapping</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>© 2026 Example Co. Questions? <a href="#faq">Read the FAQ</a>.</p>
+        <nav aria-label="Legal">
+          <ul class="as-site-footer-legal-links">
+            <li><a href="#top">Privacy</a></li>
+            <li><a href="#top">Terms</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,4 +1,5 @@
-import importlib.util, pathlib, subprocess, sys, unittest
+import importlib.util, pathlib, subprocess, sys, tempfile, unittest
+from unittest import mock
 REPO = pathlib.Path(__file__).resolve().parents[1]
 SCRIPT = REPO/'scripts/build-css.py'
 spec = importlib.util.spec_from_file_location('build_css', SCRIPT)
@@ -12,5 +13,14 @@ class BuildCss(unittest.TestCase):
         self.assertEqual(build_css.minify(css), '.a{font:12px "SF  Pro , Text";width:calc(100% - 32px)}.b:is( .c ) > .d{content:"a;b"}\n')
     def test_undefined_variable_needs_declaration_or_fallback(self):
         sources = [('t.css', ':root { --as-a: 1; }\n.b { color: var(--as-a); }\n.c { color: var(--as-zz); }\n.d { color: var(--as-yy, red); }\n')]
-        problems, _ = build_css.undefined_variables(sources)
+        with tempfile.TemporaryDirectory() as empty:  # isolate from the real web/patterns/ tokens
+            with mock.patch.object(build_css, 'PATTERNS_DIR', pathlib.Path(empty)):
+                problems, _ = build_css.undefined_variables(sources)
         self.assertEqual(problems, ['--as-zz'])
+    def test_pattern_files_are_checked_for_undefined_variables(self):
+        sources = [('t.css', ':root { --as-a: 1; }\n')]
+        with tempfile.TemporaryDirectory() as tmp:
+            pathlib.Path(tmp, 'p.css').write_text('.as-site-x { color: var(--as-a); background: var(--as-nope); }\n')
+            with mock.patch.object(build_css, 'PATTERNS_DIR', pathlib.Path(tmp)):
+                problems, count = build_css.undefined_variables(sources)
+        self.assertEqual((problems, count), (['--as-nope'], 1))

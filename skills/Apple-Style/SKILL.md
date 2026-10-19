@@ -11,8 +11,8 @@ Entry point for four companion skills. This one covers composition and web imple
 
 1. **Classify the page type first** (table in `cheatsheets/rules-and-evidence.md`, section *Page type*). Read the files for that type:
    - **Content website** (product, marketing or landing page; docs; blog): `cheatsheets/website.md`, `cheatsheets/website-patterns.md`, `cheatsheets/web-implementation.md`, core layers `web/css/tokens.css`, `base.css`, `glass.css`, `controls.css`, `preferences.css`.
-   - **Web app** (tool, dashboard, console, editor, admin): `cheatsheets/web-implementation.md`, `cheatsheets/components-quickref.md`, `web/demo.html`, the core layers plus `web/css/app.css`, `density.css`, `app-preferences.css`; `window.css` only for split panes.
-   - **Deliberate Mac-like window** (the user asked for a Mac look): `web/demo-desktop.html`, `cheatsheets/layout-and-shapes.md`, `cheatsheets/web-implementation.md` (window section), the web app files, and `web/css/window.css`.
+   - **Web app** (tool, dashboard, console, editor, admin): `cheatsheets/web-implementation.md`, `cheatsheets/web-app.md`, `cheatsheets/components-quickref.md`, `web/demo.html`, the core layers plus `web/css/app.css`, `density.css`, `app-preferences.css`; `window.css` only for split panes.
+   - **Deliberate Mac-like window** (the user asked for a Mac look): `web/demo-desktop.html`, `cheatsheets/layout-and-shapes.md`, `cheatsheets/web-app.md` (window section), the web app files, and `web/css/window.css`.
    - **Native** (SwiftUI, UIKit, AppKit): the HIG reference in `../Apple-Style-HIG/reference/INDEX.md` and the native recipe in `../Apple-Style-Liquid-Glass/SKILL.md`. Do not read web files for this type.
 
    Identify target platform, application type, input and available container separately. Preserve existing product conventions and the user's current stage.
@@ -41,7 +41,7 @@ Entry point for four companion skills. This one covers composition and web imple
 
 ## Website quick start
 
-Concatenate the five core layers in order (`cheatsheets/website.md`, *Loading*). No script is loaded.
+Concatenate the five core layers (`cheatsheets/website.md`, *Loading*) and copy the pattern files you use. Add `site-nav.js` with `defer` only for a disclosure menu. No other script is loaded.
 
 ```html
 <!doctype html>
@@ -51,27 +51,35 @@ Concatenate the five core layers in order (`cheatsheets/website.md`, *Loading*).
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Product name: short description</title>
   <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/site-header.css">
+  <link rel="stylesheet" href="/css/site-nav.css">
+  <link rel="stylesheet" href="/css/site-footer.css">
+  <script src="/js/site-nav.js" defer></script>
 </head>
 <body>
   <a href="#main">Skip to content</a>
-  <header class="as-glass">
-    <a href="/">Product name</a>
-    <nav aria-label="Primary">
-      <a href="/features">Features</a>
-      <a href="/pricing" aria-current="page">Pricing</a>
-    </nav>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Product name</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/features">Features</a></li>
+          <li><a href="/pricing" aria-current="page">Pricing</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/signup">Get started</a>
+    </div>
   </header>
   <main id="main">
     <h1>Headline</h1>
-    <p>Body text.</p>
-    <a class="as-button as-button-filled" href="/signup">Get started</a>
   </main>
-  <footer>…</footer>
+  <footer class="as-site-footer">…</footer>
 </body>
 </html>
 ```
 
-The skip link must be visible on focus. The core layers have no skip-link class, so style it in the site CSS.
+The skip link must be visible on focus; style it in the site CSS.
 
 ## Web app quick start
 
@@ -96,18 +104,18 @@ The skip link must be visible on focus. The core layers have no skip-link class,
 ```
 
 - `tablist` only for switching panels, with `aria-controls` on each tab; `<nav>` links for navigation. Listen for `change`; do not add a second state-toggle click handler.
-- Forms, lists, dialogs, toasts and states: `web-implementation.md` (*Forms*, *States*, *Selectable lists and toasts*). Components: `components-quickref.md`.
-- Bundlers import `web/liquid-glass.mjs` and call `init` after mount. `init(root)`, `destroy(root)` and `detach(el)` manage lifecycle; framework cleanup is in `web-implementation.md`.
+- Forms: `web-implementation.md` (*Forms*). Lists, dialogs, toasts and states: `web-app.md` (*States*, *Selectable lists and toasts*). Components: `components-quickref.md`.
+- Bundlers import `web/liquid-glass.mjs` and call `init` after mount. `init(root)`, `destroy(root)` and `detach(el)` manage lifecycle; framework cleanup is in `web-app.md` (*Runtime lifecycle and frameworks*).
 - `.as-window`, `.as-split` and `.as-inspector` only where the task needs them.
 
 ## Files
 
-- `cheatsheets/`: topic references; `rules-and-evidence.md` (page types, evidence); `website*.md` (websites); `web-implementation.md` and `components-quickref.md` (web).
+- `cheatsheets/`: topic references; `rules-and-evidence.md` (page types, evidence); `website*.md` (websites); `web-implementation.md`, `web-app.md` and `components-quickref.md` (web).
 - `web/css/*.css`: stylesheet sources. Core layers, in cascade order: `tokens`, `base`, `glass`, `controls`, `preferences`. App-only layers: `app`, `window`, `density`, `app-preferences`.
 - `web/apple-style.css`, `web/apple-style.min.css`: all layers, generated from `web/css/` by `scripts/build-css.py` in the repository. Edit the sources, not these files. Websites should not use them.
 - `web/liquid-glass.js`, `web/liquid-glass.mjs`: runtime (classic script, and ES module entry). Web apps use it; websites only for optional lens.
-- `web/js/site-nav.js`: planned. Narrow-screen navigation with no runtime dependency (≤ 2 KB). Not yet present.
-- `web/patterns/*.css`: planned. One reference file per website pattern, using tokens only. Not yet present.
+- `web/js/site-nav.js`: narrow-screen disclosure menu (≤ 2 KB), loaded with `defer`.
+- `web/patterns/*.css`: one reference file per website pattern, tokens only.
 - `web/demo.html`, `web/demo-desktop.html`: examples for web apps and the Mac-like window.
 - `scripts/hig-lookup.sh`: search local references. `scripts/update-reference.sh`: transactional, manifest-backed refresh.
 - Repository only, not installed with the skill: [validation commands and evidence](https://github.com/Tsdsj/Apple-Style/blob/main/docs/validation.md) and the [demo index](https://github.com/Tsdsj/Apple-Style/blob/main/demo/index.html).

@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Site header (pattern 2.1). Requires the core layers (tokens, base, glass,
+   controls, preferences). Observed convention (apple.com-style marketing sites,
+   2026-10-19), not an Apple guideline. Two variants:
+     (a) full-width bar (default): .as-site-header
+     (b) floating capsule: .as-site-header.as-site-header-floating, with the
+         inner element also carrying .as-glass
+   Project defaults below: --as-site-header-h and --as-site-width.
+   ========================================================================== */
+:root {
+  /* Height the sticky header covers. Used for scroll-padding, so anchors are not
+     hidden under it. Bar: 56px. Floating variant: set 80px on :root. If the bar
+     wraps to two rows (no JavaScript, narrow), set it to the taller height. */
+  --as-site-header-h: 56px;
+  /* Content width of the header and footer. Project default. */
+  --as-site-width: 1120px;
+}
+/* Anchor targets stop below the sticky header. Remove this rule if the page has no sticky header. */
+html { scroll-padding-top: calc(var(--as-site-header-h) + 16px); }
+
+/* (a) Bar. A standard material, not Liquid Glass: a website has no system bar to
+   supply the scroll edge, so the bar draws its own translucent band and hairline. */
+.as-site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--as-material-regular);
+  -webkit-backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+  backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+  border-block-end: 1px solid var(--as-separator);
+  color: var(--as-label);
+}
+.as-site-header-inner {
+  position: relative; box-sizing: border-box;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px;
+  min-block-size: var(--as-site-header-h); max-inline-size: var(--as-site-width); margin-inline: auto;
+  padding-inline: var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-header-inner { padding-inline: var(--as-margin-regular); } }
+.as-site-brand {
+  display: inline-flex; align-items: center; min-block-size: var(--as-hit-min);
+  color: var(--as-label); font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  text-decoration: none; white-space: nowrap;
+}
+.as-site-brand:hover { text-decoration: underline; text-underline-offset: .25em; }
+.as-site-nav { display: flex; margin-inline-start: auto; min-inline-size: 0; }
+/* Static, so the narrow panel is positioned against the header row, not the nav. .as-glass > * would make the nav relative in the floating variant. */
+.as-site-header .as-site-nav { position: static; }
+.as-site-nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.as-site-nav-links a {
+  display: inline-flex; align-items: center; min-block-size: 32px; padding: 0 10px; border-radius: var(--as-radius-s);
+  color: var(--as-label); font: 400 14px/20px var(--as-font-text); letter-spacing: -.24px; text-decoration: none;
+}
+.as-site-nav-links a:hover { text-decoration: underline; text-underline-offset: .25em; }
+/* Current page: weight and underline as well as the position of the link. Colour is not the only cue. */
+.as-site-nav-links a[aria-current="page"] {
+  font-weight: 600; text-decoration-line: underline; text-decoration-thickness: 2px; text-underline-offset: .35em;
+}
+@media (pointer: coarse) { .as-site-nav-links a { min-block-size: var(--as-hit-min); } }
+.as-site-brand:focus-visible, .as-site-nav-links a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* (b) Floating capsule. The glass is the navigation layer, so it is allowed here
+   (materials rule 1). The outer element is transparent and only sets the gutter. */
+.as-site-header-floating { background: none; border-block-end: 0; -webkit-backdrop-filter: none; backdrop-filter: none; padding-block: 12px; padding-inline: var(--as-margin); }
+.as-site-header-floating > .as-site-header-inner { min-block-size: 56px; padding-inline: 16px; border-radius: var(--as-radius-capsule); }
+.as-site-header-floating .as-site-brand,
+.as-site-header-floating .as-site-nav-links a { color: var(--as-glass-fg); }
+
+/* Reduced transparency: an opaque bar. */
+@media (prefers-reduced-transparency: reduce) {
+  .as-site-header { background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* Forced colors: the bar and the current-page marker keep a visible edge. */
+@media (forced-colors: active) {
+  .as-site-header { background: Canvas; color: CanvasText; border-block-end: 1px solid CanvasText; }
+  .as-site-nav-links a[aria-current="page"] { outline: 2px solid CanvasText; outline-offset: 3px; }
+}

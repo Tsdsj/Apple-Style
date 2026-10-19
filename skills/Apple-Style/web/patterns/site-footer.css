@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Site footer (pattern 2.3): sitemap columns and a legal row. No JavaScript.
+   Observed convention (apple.com-style marketing sites, 2026-10-19), not an Apple
+   guideline. Columns stack below 48em; each column is a heading and a list.
+   ========================================================================== */
+.as-site-footer {
+  background: var(--as-bg-secondary); color: var(--as-label-secondary);
+  border-block-start: 1px solid var(--as-separator);
+  font: 400 14px/20px var(--as-font-text); letter-spacing: -.24px;
+}
+.as-site-footer-inner {
+  box-sizing: border-box; display: grid; gap: 32px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: 40px var(--as-margin) 24px;
+}
+@media (min-width: 48em) { .as-site-footer-inner { padding-inline: var(--as-margin-regular); } }
+.as-site-footer-sitemap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 24px; }
+@media (min-width: 48em) { .as-site-footer-sitemap { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); } }
+.as-site-footer-col { min-inline-size: 0; }
+.as-site-footer-heading { margin: 0 0 8px; color: var(--as-label); font: 600 14px/20px var(--as-font-text); }
+/* Lists of links are not underlined: they are not running text (WCAG 1.4.1). */
+.as-site-footer-list, .as-site-footer-legal-links { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.as-site-footer-legal-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.as-site-footer-list a, .as-site-footer-legal-links a {
+  color: var(--as-label); text-decoration: none; overflow-wrap: anywhere;
+}
+.as-site-footer-list a:hover, .as-site-footer-legal-links a:hover { text-decoration: underline; text-underline-offset: .25em; }
+/* Links inside a paragraph keep the underline from base.css (WCAG 1.4.1), so no class here. */
+.as-site-footer p a { color: var(--as-link); }
+.as-site-footer-legal {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding-block-start: 20px; border-block-start: 1px solid var(--as-separator);
+}
+.as-site-footer-legal p { margin: 0; }
+.as-site-footer a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }

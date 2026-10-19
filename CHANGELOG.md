@@ -13,6 +13,11 @@
 - `SKILL.md` 改为以网站为主：先判断页面类型（内容网站、Web 应用、Mac 窗口、原生），按类型列出要读的文件；新增网站快速开始和“网站上不要做”的清单。`rules-and-evidence.md` 增加页面类型表（1.1、1.2）。
 - 新增 `cheatsheets/website.md`：公共层的加载方式、可选的延后加载折射、性能预算（项目默认值）和无头浏览器渲染模糊的限制（1.5、1.6）。Review 增加网站预算检查项。
 - 技能目录内指向目录之外的链接改为仓库 URL，`tests/test_skill_links.py` 防止再出现（1.10）。
+- 新增 `web/js/site-nav.js`（压缩后 1.8 KB，不依赖运行时）：窄屏展开导航，Esc 关闭并归还焦点、点外部或链接关闭、变宽时自动收起，无 JS 时链接照常可用（1.7）。
+- 新增网站模式：页眉 `web/patterns/site-header.css`（通栏材质条与浮动玻璃胶囊两种写法，吸顶不遮挡锚点）、窄屏导航 `site-nav.css`、页脚 `site-footer.css`，写法和无障碍要求在 `cheatsheets/website-patterns.md`，浏览器测试在 `tests/browser/patterns.spec.js`（2.1–2.3）。
+- `website.md` 增加元数据与 SEO、多页共享页眉页脚、字体、深色模式、静态托管、框架接入和上线清单（2.15）。
+- `web-implementation.md` 只保留所有网页通用的内容（含表单），应用组件的约定移到新的 `web-app.md`；`components-quickref.md` 分为网站和 Web 应用两部分（2.18）。
+- `typography.md` 增加网页大字号与中日韩排版，`layout-and-shapes.md` 增加网页布局，Liquid Glass 技能增加“网站上的玻璃”（2.19）。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

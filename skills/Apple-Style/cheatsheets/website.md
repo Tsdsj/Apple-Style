@@ -22,7 +22,7 @@ Scope: [rule strength and evidence](rules-and-evidence.md). Use this file for co
 
 - **Add `app.css` only when a page uses an app component**: toolbar, tab bar, sidebar, sheet, menu, alert, segmented control, toggle, slider, search, list, listbox, dialog, toast, empty state or skeleton. A content website normally needs none of them. Do not use the app-only layers (`window.css`, `density.css`) on a website.
 
-- **No runtime by default.** Layout and navigation are plain HTML. A narrow-screen menu will use `web/js/site-nav.js` (planned, ≤ 2 KB, no runtime dependency; not yet present). Do not call `LiquidGlass.init(document)` on a site: it attaches every `.as-glass` element and wires every control on the page.
+- **No runtime by default.** Layout and navigation are plain HTML. A narrow-screen menu uses `web/js/site-nav.js` (≤ 2 KB minified, no runtime dependency, loaded with `defer`; markup in `website-patterns.md`, *Narrow navigation*). Do not call `LiquidGlass.init(document)` on a site: it attaches every `.as-glass` element and wires every control on the page.
 
 - **Optional lens (refraction).** Refraction needs `liquid-glass.js`. Load it with `defer` and attach it only to the header or one menu panel:
 

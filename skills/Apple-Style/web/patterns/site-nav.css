@@ -1,0 +1,57 @@
+/* ==========================================================================
+   Narrow-screen navigation (pattern 2.2). Pairs with web/js/site-nav.js.
+   Below the breakpoint the links collapse behind a toggle button, but only when
+   the script has set data-enhanced. Without JavaScript the links wrap in place.
+   Breakpoint (project default): 48em (768px). The max-width query below and the
+   NARROW constant in site-nav.js must match. Written as 47.99em so 768px is wide.
+
+   Why a disclosure and not role="menu": these are ordinary navigation links.
+   role="menu" promises arrow-key menu behaviour that the links do not implement.
+   So the toggle is a button with aria-expanded, and the list stays a list of links.
+   ========================================================================== */
+
+/* Hidden unless the script enhances the nav below the breakpoint. */
+.as-site-nav-toggle {
+  display: none; align-items: center; gap: 8px;
+  min-block-size: var(--as-hit-min); min-inline-size: var(--as-hit-min); padding: 0 14px;
+  border: 0; border-radius: var(--as-radius-capsule);
+  background: var(--as-fill-tertiary); color: var(--as-label);
+  font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* The chevron is a shape, so open and closed do not depend on colour. */
+.as-site-nav-toggle::after {
+  content: ""; inline-size: 7px; block-size: 7px; margin-block-start: -3px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  transition: transform var(--as-dur-fast) var(--as-ease-soft);
+}
+.as-site-nav-toggle[aria-expanded="true"]::after { margin-block-start: 3px; transform: rotate(-135deg); }
+.as-site-nav-toggle:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+@media (max-width: 47.99em) {
+  /* No JavaScript: the links drop to their own full-width row under the brand. */
+  .as-site-nav:not([data-enhanced]) { order: 3; flex: 1 0 100%; }
+  .as-site-nav[data-enhanced] .as-site-nav-toggle { display: inline-flex; }
+  /* The panel is a layer over the page: solid, not glass, so text in it is never over a busy backdrop. */
+  .as-site-nav[data-enhanced] .as-site-nav-links {
+    display: none; position: absolute; inset-inline: 0; top: 100%;
+    flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 0;
+    box-sizing: border-box; max-block-size: calc(100dvh - var(--as-site-header-h)); overflow-y: auto;
+    padding: 8px var(--as-margin) 16px; background: var(--as-bg); box-shadow: 0 1px 0 var(--as-separator);
+  }
+  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links { display: flex; }
+  .as-site-nav[data-enhanced] .as-site-nav-links a { min-block-size: var(--as-hit-min); padding: 0 4px; font-size: 17px; line-height: 22px; }
+  .as-site-header-floating .as-site-nav[data-enhanced] .as-site-nav-links { margin-block-start: 8px; border-radius: var(--as-radius-l); }
+}
+/* The open animation is opt-in: it runs only when motion is not reduced. */
+@media (max-width: 47.99em) and (prefers-reduced-motion: no-preference) {
+  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links {
+    animation: as-site-nav-in var(--as-dur-fast) var(--as-ease-soft);
+  }
+}
+@keyframes as-site-nav-in { from { opacity: 0; transform: translateY(-4px); } }
+
+@media (forced-colors: active) {
+  .as-site-nav-toggle { border: 1px solid ButtonText; background: ButtonFace; color: ButtonText; }
+  .as-site-nav[data-enhanced] .as-site-nav-links { border-block-end: 1px solid CanvasText; }
+}
