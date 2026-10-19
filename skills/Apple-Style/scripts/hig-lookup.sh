@@ -10,7 +10,7 @@ REF="${APPLE_STYLE_REF:-$HERE/../../Apple-Style-HIG/reference}"
 [ -d "$REF" ] || { echo "reference library not found at $REF (set APPLE_STYLE_REF)" >&2; exit 1; }
 case "${1:-}" in
   --list) ls "$REF/hig" | sed 's/\.md$//' | column -c 120 ;;
-  --page) shift; f="$REF/hig/$1.md"; [ -f "$f" ] || f=$(ls "$REF"/liquid-glass/*"$1"*.md "$REF"/liquid-glass/api/*"$1"*.md "$REF"/wwdc25/*"$1"*.md "$REF"/marketing/*"$1"*.md 2>/dev/null | head -1); [ -n "$f" ] && cat "$f" || { echo "no page '$1'"; exit 1; } ;;
+  --page) shift; f="$REF/hig/$1.md"; [ -f "$f" ] || f=$( { ls "$REF"/liquid-glass/*"$1"*.md "$REF"/liquid-glass/api/*"$1"*.md "$REF"/wwdc*/*"$1"*.md "$REF"/marketing/*"$1"*.md 2>/dev/null || true; } | head -1); [ -n "$f" ] && cat "$f" || { echo "no page '$1'"; exit 1; } ;;
   --rules) shift; f="$REF/hig/$1.md"; grep -E '^\*\*[^*]+\*\*' "$f" | sed 's/\*\*//g' | cut -c1-220 ;;
   ""|-h|--help) sed -n '2,6p' "$0" ;;
   *) grep -ril --include='*.md' -- "$*" "$REF" | sort | while read -r f; do

@@ -1,4 +1,4 @@
-import importlib.util, json, pathlib, tempfile, unittest, sys
+import importlib.util, json, pathlib, subprocess, tempfile, unittest, sys
 SCRIPT = pathlib.Path(__file__).resolve().parents[1]/'skills/Apple-Style/scripts'
 sys.path.insert(0, str(SCRIPT))
 import docc2md
@@ -151,3 +151,9 @@ class Maintenance(unittest.TestCase):
             self.assertIn('marketing/guidelines.md', updater.cited('Rule (`marketing/guidelines.md`).', {}))
         with self.assertRaises(ValueError):
             updater.validate_source(dict(source, path='press/guidelines.md'))
+    def test_lookup_page_finds_pages_outside_hig(self):
+        script = SCRIPT/'hig-lookup.sh'
+        for slug, title in [('219', '# Meet Liquid Glass'), ('pre-orders', '# Offering apps'), ('materials', '# Materials')]:
+            result = subprocess.run(['bash', str(script), '--page', slug], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(result.stdout.startswith(title), result.stdout[:80])
