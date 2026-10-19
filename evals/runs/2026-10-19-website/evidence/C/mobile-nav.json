@@ -1,0 +1,11 @@
+{
+  "links": 8,
+  "visibleLinks": 8,
+  "toggle": "打开菜单",
+  "bottomBar": false,
+  "expandedAfterEnter": "true",
+  "visibleAfterOpen": 8,
+  "tabLandsIn": "menu/header",
+  "expandedAfterEscape": "false",
+  "focusAfterEscape": "toggle"
+}

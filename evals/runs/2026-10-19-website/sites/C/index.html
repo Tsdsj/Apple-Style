@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>青柠记账 Lime Ledger · 为 iPhone 和 Mac 打造的轻记账</title>
+  <meta name="description" content="青柠记账是一款为 iPhone 和 Mac 设计的记账 App：三秒记一笔，自动分类，预算与报表一目了然。无需注册、没有广告，你的账目只属于你。">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://limeledger.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="青柠记账 Lime Ledger">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="青柠记账 · 记账，本该这么轻">
+  <meta property="og:description" content="为 iPhone 和 Mac 打造的轻记账。三秒记一笔，自动分类，数据只属于你。">
+  <meta property="og:url" content="https://limeledger.app/">
+  <meta property="og:image" content="https://limeledger.app/assets/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="青柠记账博客" href="blog/feed.xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>!function(d){d.classList.add("js");try{var t=localStorage.getItem("ll-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}}(document.documentElement);</script>
+  <script src="assets/js/main.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "青柠记账 Lime Ledger",
+    "operatingSystem": "iOS 17, macOS 14",
+    "applicationCategory": "FinanceApplication",
+    "offers": [
+      { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "name": "免费版" },
+      { "@type": "Offer", "price": "98", "priceCurrency": "CNY", "name": "青柠 Pro 年度订阅" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="index.html" aria-label="青柠记账 首页"><img src="assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+      <div class="nav-menu" id="site-menu">
+        <ul class="nav-links">
+          <li><a href="features.html">功能</a></li>
+          <li><a href="pricing.html">价格</a></li>
+          <li><a href="faq.html">常见问题</a></li>
+          <li><a href="blog/index.html">博客</a></li>
+          <li><a href="about.html">关于我们</a></li>
+          <li><a href="contact.html">联系我们</a></li>
+        </ul>
+      </div>
+      <a class="btn btn-primary btn-sm nav-cta" href="#download">免费下载</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu"><span class="visually-hidden">菜单</span><span class="nav-toggle__bars" aria-hidden="true"></span></button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <a class="hero-badge" href="blog/lime-ledger-3-for-mac.html"><b>3.0</b>青柠记账现已登陆 Mac<span aria-hidden="true">›</span></a>
+        <h1 class="display" id="hero-title"><span class="phrase">记账，</span><span class="phrase">本该这么轻。</span></h1>
+        <p class="lead">青柠记账为 iPhone 和 Mac 而生。三秒记一笔，自动归类，预算一目了然。而你的每一笔账，都只属于你。</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-lg" href="#download">免费下载</a>
+          <a class="link-more" href="features.html">了解全部功能</a>
+        </div>
+        <p class="hero-note">免费下载 · 无需注册 · 没有广告</p>
+
+        <div class="hero-visual">
+          <div class="float-card float-card--left" aria-hidden="true">
+            <svg class="rings" viewBox="0 0 120 120">
+              <g transform="rotate(-90 60 60)">
+                <circle class="track" cx="60" cy="60" r="50"/><circle class="r1" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="65 100"/>
+                <circle class="track" cx="60" cy="60" r="36"/><circle class="r2" cx="60" cy="60" r="36" pathLength="100" stroke-dasharray="48 100"/>
+                <circle class="track" cx="60" cy="60" r="22"/><circle class="r3" cx="60" cy="60" r="22" pathLength="100" stroke-dasharray="82 100"/>
+              </g>
+            </svg>
+            <div>
+              <p class="float-card__title">十月预算</p>
+              <p class="float-card__value">已用 65%</p>
+              <p class="float-card__title">还剩 ¥1,731.60</p>
+            </div>
+          </div>
+
+          <div class="phone" role="img" aria-label="青柠记账 iPhone 版首页示意：十月已支出 3,268.40 元，预算剩余 1,731.60 元，下方是今天和昨天的记账明细。">
+            <div class="phone__screen">
+              <div class="ui-status"><span>9:41</span><span class="ui-status__icons"><i></i><i></i><i></i></span></div>
+              <div class="ui-body">
+                <div class="ui-top"><span class="ui-title">明细</span><span class="ui-chip-btn">日常账本</span></div>
+                <div class="ui-card">
+                  <p class="ui-label">10 月支出</p>
+                  <p class="ui-amount">¥3,268<small>.40</small></p>
+                  <div class="ui-progress"><span style="width:65%"></span></div>
+                  <p class="ui-sub">预算剩余 ¥1,731.60 · 还有 12 天</p>
+                </div>
+                <div>
+                  <p class="ui-section-title"><span>今天</span><span>−¥58.00</span></p>
+                  <div class="ui-group">
+                    <div class="ui-row"><span class="ui-ico" style="--c:#f08a00">餐</span><span class="ui-row__main"><b>午餐</b><small>轻食沙拉 · 12:41</small></span><span class="ui-row__amt">−36.00</span></div>
+                    <div class="ui-row"><span class="ui-ico" style="--c:#2aa3bb">行</span><span class="ui-row__main"><b>地铁</b><small>通勤 · 08:52</small></span><span class="ui-row__amt">−4.00</span></div>
+                    <div class="ui-row"><span class="ui-ico" style="--c:#f08a00">餐</span><span class="ui-row__main"><b>拿铁</b><small>早餐 · 08:30</small></span><span class="ui-row__amt">−18.00</span></div>
+                  </div>
+                </div>
+                <div>
+                  <p class="ui-section-title"><span>昨天</span><span>−¥212.50</span></p>
+                  <div class="ui-group">
+                    <div class="ui-row"><span class="ui-ico" style="--c:#ff375f">购</span><span class="ui-row__main"><b>超市</b><small>日用品</small></span><span class="ui-row__amt">−86.50</span></div>
+                    <div class="ui-row"><span class="ui-ico" style="--c:#8e5cf0">娱</span><span class="ui-row__main"><b>电影</b><small>两张票</small></span><span class="ui-row__amt">−126.00</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="ui-tabbar"><span class="is-active">明细</span><span>预算</span><span class="ui-fab">+</span><span>报表</span><span>我的</span></div>
+            </div>
+          </div>
+
+          <div class="float-card float-card--right" aria-hidden="true">
+            <span class="ui-ico" style="--c:#f08a00;font-size:15px">餐</span>
+            <div>
+              <p class="float-card__title">已记一笔 · 来自锁屏小组件</p>
+              <p class="float-card__value">午餐 ¥36.00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快速记账 -->
+    <section class="section section--alt" aria-labelledby="quick-title">
+      <div class="container split">
+        <div class="split__text">
+          <span class="eyebrow">快速记账</span>
+          <h2 class="h2" id="quick-title"><span class="phrase">三秒钟，</span><span class="phrase">记好一笔。</span></h2>
+          <p class="lead">打开 App 就是数字键盘。输入金额，点一下分类，完成。你甚至不必打开 App——锁屏、控制中心和 Siri 都能直接记账。</p>
+          <ul class="detail-list">
+            <li>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+              <b>锁屏与桌面小组件</b><span>轻点小组件即可记账，今天花了多少一眼可见。</span>
+            </li>
+            <li>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              <b>快捷指令与 Siri</b><span>“用青柠记一笔，午餐三十六元”，说完就记好。</span>
+            </li>
+            <li>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12"/><path d="M7 22l-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/></svg>
+              <b>常用模板与周期账单</b><span>房租、通勤、会员订阅，设置一次，按时自动入账。</span>
+            </li>
+          </ul>
+        </div>
+        <div class="split__media">
+          <div class="stage">
+            <div class="phone" style="--phone-w:290px" role="img" aria-label="记账键盘示意：输入金额 36 元，已选择“餐饮”分类，下方是数字键盘和“完成”按钮。">
+              <div class="phone__screen">
+                <div class="ui-status"><span>9:41</span><span class="ui-status__icons"><i></i><i></i><i></i></span></div>
+                <div class="ui-body">
+                  <div class="ui-seg"><span class="is-on">支出</span><span>收入</span><span>转账</span></div>
+                  <div class="ui-entry">
+                    <p class="ui-amount"><span>¥</span>36.00</p>
+                    <p class="ui-meta"><span>今天 12:41</span><span>·</span><span>轻食沙拉</span></p>
+                  </div>
+                  <div class="ui-cats">
+                    <span class="is-on"><i class="ui-ico" style="--c:#f08a00">餐</i>餐饮</span>
+                    <span><i class="ui-ico" style="--c:#2aa3bb">行</i>交通</span>
+                    <span><i class="ui-ico" style="--c:#ff375f">购</i>购物</span>
+                    <span><i class="ui-ico" style="--c:#8e5cf0">娱</i>娱乐</span>
+                    <span><i class="ui-ico" style="--c:#3a8ee6">缴</i>生活缴费</span>
+                    <span><i class="ui-ico" style="--c:#e0569b">医</i>医疗</span>
+                    <span><i class="ui-ico" style="--c:#5fb52a">学</i>学习</span>
+                    <span><i class="ui-ico" style="--c:#8e8e93">···</i>更多</span>
+                  </div>
+                </div>
+                <div class="ui-keypad">
+                  <span>1</span><span>2</span><span>3</span><span class="is-fn">⌫</span>
+                  <span>4</span><span>5</span><span>6</span><span class="is-fn">今天</span>
+                  <span>7</span><span>8</span><span>9</span><span class="is-done">完成</span>
+                  <span>.</span><span>0</span><span>00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 功能概览 -->
+    <section class="section" aria-labelledby="overview-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">功能一览</span>
+          <h2 class="h2" id="overview-title"><span class="phrase">一个 App，</span><span class="phrase">管好每一分钱。</span></h2>
+          <p class="lead">从日常开销到家庭账本，青柠记账把复杂的事情做简单，把简单的事情做得更好。</p>
+        </div>
+
+        <div class="bento">
+          <article class="tile tile--wide">
+            <h3 class="h3">报表，一眼看懂</h3>
+            <p>按月、按年、按分类查看趋势。钱花在哪里、哪个月超支，图表会直接告诉你。</p>
+            <a class="link-more" href="features.html#reports">了解报表</a>
+            <div class="tile__visual">
+              <div class="ui-panel" style="max-width:540px" role="img" aria-label="2026 年月度支出柱状图，1 至 10 月，月均 4,219 元，10 月为当前月份。">
+                <div class="ui-panel__head"><span>2026 年支出趋势</span><small>月均 ¥4,219</small></div>
+                <svg class="bars" viewBox="0 0 300 130" aria-hidden="true">
+                  <line class="grid-line" x1="0" y1="110" x2="300" y2="110"/>
+                  <line class="grid-line" x1="0" y1="60" x2="300" y2="60" stroke-dasharray="3 4"/>
+                  <rect class="bar" x="7" y="41.3" width="16" height="68.7" rx="4"/>
+                  <rect class="bar" x="37" y="20.3" width="16" height="89.7" rx="4"/>
+                  <rect class="bar" x="67" y="49.2" width="16" height="60.8" rx="4"/>
+                  <rect class="bar" x="97" y="43.7" width="16" height="66.3" rx="4"/>
+                  <rect class="bar" x="127" y="36.5" width="16" height="73.5" rx="4"/>
+                  <rect class="bar" x="157" y="48" width="16" height="62" rx="4"/>
+                  <rect class="bar" x="187" y="28.5" width="16" height="81.5" rx="4"/>
+                  <rect class="bar" x="217" y="23.2" width="16" height="86.8" rx="4"/>
+                  <rect class="bar" x="247" y="50.7" width="16" height="59.3" rx="4"/>
+                  <rect class="bar is-on" x="277" y="55.5" width="16" height="54.5" rx="4"/>
+                  <text x="15" y="125" text-anchor="middle">1月</text><text x="45" y="125" text-anchor="middle">2月</text><text x="75" y="125" text-anchor="middle">3月</text><text x="105" y="125" text-anchor="middle">4月</text><text x="135" y="125" text-anchor="middle">5月</text><text x="165" y="125" text-anchor="middle">6月</text><text x="195" y="125" text-anchor="middle">7月</text><text x="225" y="125" text-anchor="middle">8月</text><text x="255" y="125" text-anchor="middle">9月</text><text x="285" y="125" text-anchor="middle">10月</text>
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile">
+            <h3 class="h3">预算圆环</h3>
+            <p>为每个分类设一个上限。圆环快合拢时，你自然会多想一下。</p>
+            <a class="link-more" href="features.html#budgets">了解预算</a>
+            <div class="tile__visual">
+              <div style="display:flex;align-items:center;gap:20px" role="img" aria-label="预算圆环：餐饮已用 78%，购物已用 56%，交通已用 90%。">
+                <svg class="rings" viewBox="0 0 120 120" aria-hidden="true">
+                  <g transform="rotate(-90 60 60)">
+                    <circle class="track" cx="60" cy="60" r="50"/><circle class="r1" cx="60" cy="60" r="50" pathLength="100" stroke-dasharray="78 100"/>
+                    <circle class="track" cx="60" cy="60" r="36"/><circle class="r2" cx="60" cy="60" r="36" pathLength="100" stroke-dasharray="56 100"/>
+                    <circle class="track" cx="60" cy="60" r="22"/><circle class="r3" cx="60" cy="60" r="22" pathLength="100" stroke-dasharray="90 100"/>
+                  </g>
+                </svg>
+                <ul class="chips" style="flex-direction:column;align-items:flex-start;list-style:none" aria-hidden="true">
+                  <li class="chip"><i style="--c:#5fb52a"></i>餐饮 78%</li>
+                  <li class="chip"><i style="--c:#ff9f0a"></i>购物 56%</li>
+                  <li class="chip"><i style="--c:#30b0c7"></i>交通 90%</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile">
+            <h3 class="h3">自动分类</h3>
+            <p>写下“地铁”就归到交通，写下“咖啡”就归到餐饮。全部在设备上完成。</p>
+            <a class="link-more" href="features.html#categories">了解自动分类</a>
+            <div class="tile__visual">
+              <div class="ui-panel" role="img" aria-label="三笔记录被自动归类：便利店早餐归为餐饮，打车回家归为交通，话费充值归为生活缴费。">
+                <div class="ui-row"><span class="ui-ico" style="--c:#f08a00">餐</span><span class="ui-row__main"><b>便利店早餐</b><small>自动归类 · 餐饮</small></span><span class="tag">自动</span></div>
+                <div class="ui-row"><span class="ui-ico" style="--c:#2aa3bb">行</span><span class="ui-row__main"><b>打车回家</b><small>自动归类 · 交通</small></span><span class="tag">自动</span></div>
+                <div class="ui-row"><span class="ui-ico" style="--c:#3a8ee6">缴</span><span class="ui-row__main"><b>话费充值</b><small>自动归类 · 生活缴费</small></span><span class="tag">自动</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile--wide">
+            <h3 class="h3">快捷指令与 Siri</h3>
+            <p>把记账交给一句话。也可以在快捷指令里串起自动化：每月 1 号自动记下房租，下班打卡时提醒你补记。</p>
+            <a class="link-more" href="features.html#quick-entry">了解快速记账</a>
+            <div class="tile__visual">
+              <div class="bubble-stack" role="img" aria-label="Siri 对话示意：用户说“用青柠记一笔，午餐三十六元”，青柠记账回复已记录，餐饮分类，36 元。">
+                <p class="bubble">用青柠记一笔，午餐三十六元</p>
+                <div class="ui-panel" style="max-width:340px">
+                  <div class="ui-row"><span class="ui-ico" style="--c:#f08a00">餐</span><span class="ui-row__main"><b>已记录 · 餐饮</b><small>午餐 · 今天 12:41</small></span><span class="ui-row__amt">¥36.00</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile--half">
+            <h3 class="h3">多账户，多币种</h3>
+            <p>现金、储蓄卡、信用卡、外币账户统一管理，自动换算净资产。</p>
+            <a class="link-more" href="features.html#accounts">了解账户</a>
+            <div class="tile__visual">
+              <div class="ui-panel" role="img" aria-label="账户列表：工资卡余额 24,532.18 元，信用卡待还 3,268.40 元，美元账户 1,200 美元，约合 8,532 元。">
+                <div class="ui-row"><span class="ui-ico" style="--c:#5fb52a">储</span><span class="ui-row__main"><b>工资卡</b><small>储蓄卡</small></span><span class="ui-row__amt">¥24,532.18</span></div>
+                <div class="ui-row"><span class="ui-ico" style="--c:#636366">信</span><span class="ui-row__main"><b>信用卡</b><small>11 月 8 日还款</small></span><span class="ui-row__amt">−¥3,268.40</span></div>
+                <div class="ui-row"><span class="ui-ico" style="--c:#3a8ee6">$</span><span class="ui-row__main"><b>美元账户</b><small>≈ ¥8,532.00</small></span><span class="ui-row__amt">$1,200.00</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile--half">
+            <h3 class="h3">iPhone 与 Mac 实时同步</h3>
+            <p>通过你自己的 iCloud 同步，端到端加密。在手机上记的账，Mac 上马上就能看到。</p>
+            <a class="link-more" href="features.html#sync">了解同步</a>
+            <div class="tile__visual">
+              <svg class="sync-art" viewBox="0 0 460 220" role="img" aria-label="示意图：iPhone 与 Mac 之间通过 iCloud 端到端加密同步。">
+                <rect class="soft" x="44" y="34" width="84" height="156" rx="18"/>
+                <rect class="stroke" x="44" y="34" width="84" height="156" rx="18"/>
+                <path class="stroke" d="M76 47h20"/>
+                <rect class="lime" x="58" y="66" width="40" height="8" rx="4"/>
+                <rect x="58" y="86" width="56" height="6" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="58" y="100" width="46" height="6" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="58" y="114" width="52" height="6" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="58" y="128" width="38" height="6" rx="3" fill="currentColor" opacity=".18"/>
+                <rect class="soft" x="282" y="52" width="150" height="100" rx="10"/>
+                <rect class="stroke" x="282" y="52" width="150" height="100" rx="10"/>
+                <path class="stroke" d="M282 152h150l18 14H264z"/>
+                <rect x="300" y="66" width="50" height="7" rx="3.5" fill="currentColor" opacity=".18"/>
+                <rect x="300" y="104" width="12" height="32" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="320" y="92" width="12" height="44" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="340" y="110" width="12" height="26" rx="3" fill="currentColor" opacity=".18"/>
+                <rect class="lime" x="360" y="86" width="12" height="50" rx="3"/>
+                <rect x="380" y="100" width="12" height="36" rx="3" fill="currentColor" opacity=".18"/>
+                <rect x="400" y="96" width="12" height="40" rx="3" fill="currentColor" opacity=".18"/>
+                <path class="dash" d="M138 118C170 50 240 40 272 96"/>
+                <circle class="lime" cx="205" cy="60" r="22"/>
+                <rect x="196" y="59" width="18" height="13" rx="3" fill="#fff"/>
+                <path d="M199.5 59v-3.5a5.5 5.5 0 0 1 11 0V59" fill="none" stroke="#fff" stroke-width="2.4"/>
+                <text x="86" y="214" text-anchor="middle">iPhone</text>
+                <text x="357" y="196" text-anchor="middle">Mac</text>
+                <text x="205" y="106" text-anchor="middle">端到端加密</text>
+              </svg>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 隐私 -->
+    <section class="section section--ink" aria-labelledby="privacy-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">隐私</span>
+          <h2 class="h2" id="privacy-title"><span class="phrase">你的账，</span><span class="phrase">只有你看得见。</span></h2>
+          <p class="lead">从写下第一行代码起，我们就决定：不做账号系统，不接广告，也不收集你的财务数据。</p>
+        </div>
+        <div class="privacy-points">
+          <div>
+            <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M3 3l18 18"/></svg></span>
+            <h3>无需注册</h3>
+            <p>打开就能用。不要手机号，不要邮箱，也没有密码需要记。</p>
+          </div>
+          <div>
+            <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+            <h3>数据在你手里</h3>
+            <p>账目只存在你的设备和你自己的 iCloud 中，并经过端到端加密。我们的服务器上没有你的账本。</p>
+          </div>
+          <div>
+            <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></span>
+            <h3>智能，但在本机</h3>
+            <p>自动分类和票据识别都在设备上运行，不会把你的消费记录发送到任何服务器。</p>
+          </div>
+          <div>
+            <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c5 0 9 4.5 10 7-.4 1-1.2 2.3-2.4 3.5M6.2 6.6C4.2 7.9 2.8 9.9 2 12c1 2.5 5 7 10 7 1.8 0 3.4-.5 4.8-1.3"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></span>
+            <h3>零广告，零追踪</h3>
+            <p>App 里没有任何广告或第三方统计 SDK。我们靠订阅维持运营，而不是靠你的数据。</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="link-more" href="privacy.html">阅读隐私政策</a>
+          <a class="link-more" href="blog/why-no-account.html">我们为什么不做账号系统</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mac -->
+    <section class="section" aria-labelledby="mac-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">全新 Mac 版</span>
+          <h2 class="h2" id="mac-title"><span class="phrase">在 Mac 上，</span><span class="phrase">看得更全。</span></h2>
+          <p class="lead">更大的报表、拖放导入账单、完整的键盘快捷键。与 iPhone 实时同步，一次订阅，两端通用。</p>
+        </div>
+        <div class="mac-wrap">
+          <div class="mac" role="img" aria-label="青柠记账 Mac 版报表界面示意：左侧为账本与导航，右侧显示十月支出 3,268.40 元、收入 15,200 元、结余 11,931.60 元，以及月度柱状图和分类占比。">
+            <div class="mac__side">
+              <div class="mac__lights"><i></i><i></i><i></i></div>
+              <p class="mac__group">账本</p>
+              <p class="mac__item is-active"><i style="--c:#5fb52a"></i>日常</p>
+              <p class="mac__item"><i style="--c:#ff9f0a"></i>家庭（共享）</p>
+              <p class="mac__item"><i style="--c:#30b0c7"></i>旅行</p>
+              <p class="mac__group">浏览</p>
+              <p class="mac__item">明细</p>
+              <p class="mac__item">预算</p>
+              <p class="mac__item is-active">报表</p>
+              <p class="mac__item">账户</p>
+            </div>
+            <div class="mac__main">
+              <div class="mac__toolbar"><p>2026 年 10 月</p><span class="ui-seg"><span>周</span><span class="is-on">月</span><span>年</span></span></div>
+              <div class="mac__stats">
+                <div class="mac__stat"><p>支出</p><p>¥3,268.40</p><small>较上月 −8.2%</small></div>
+                <div class="mac__stat"><p>收入</p><p>¥15,200.00</p><small>工资 · 稿费</small></div>
+                <div class="mac__stat"><p>结余</p><p>¥11,931.60</p><small>储蓄率 78%</small></div>
+              </div>
+              <div class="mac__grid">
+                <div class="mac__card">
+                  <p class="mac__card-title">月度支出<span>2026</span></p>
+                  <svg class="bars" viewBox="0 0 300 112" preserveAspectRatio="none" aria-hidden="true">
+                    <line class="grid-line" x1="0" y1="111" x2="300" y2="111"/>
+                    <rect class="bar" x="7" y="41.3" width="16" height="68.7" rx="3"/>
+                    <rect class="bar" x="37" y="20.3" width="16" height="89.7" rx="3"/>
+                    <rect class="bar" x="67" y="49.2" width="16" height="60.8" rx="3"/>
+                    <rect class="bar" x="97" y="43.7" width="16" height="66.3" rx="3"/>
+                    <rect class="bar" x="127" y="36.5" width="16" height="73.5" rx="3"/>
+                    <rect class="bar" x="157" y="48" width="16" height="62" rx="3"/>
+                    <rect class="bar" x="187" y="28.5" width="16" height="81.5" rx="3"/>
+                    <rect class="bar" x="217" y="23.2" width="16" height="86.8" rx="3"/>
+                    <rect class="bar" x="247" y="50.7" width="16" height="59.3" rx="3"/>
+                    <rect class="bar is-on" x="277" y="55.5" width="16" height="54.5" rx="3"/>
+                  </svg>
+                  <p class="mac__axis" aria-hidden="true"><span>1月</span><span>2月</span><span>3月</span><span>4月</span><span>5月</span><span>6月</span><span>7月</span><span>8月</span><span>9月</span><span>10月</span></p>
+                </div>
+                <div class="mac__card">
+                  <p class="mac__card-title">分类占比<span>10 月</span></p>
+                  <div class="cat-row"><b>餐饮</b><span>¥1,045.89</span><i style="--c:#f08a00;--w:32%"></i></div>
+                  <div class="cat-row"><b>购物</b><span>¥686.36</span><i style="--c:#ff375f;--w:21%"></i></div>
+                  <div class="cat-row"><b>生活缴费</b><span>¥555.63</span><i style="--c:#3a8ee6;--w:17%"></i></div>
+                  <div class="cat-row"><b>交通</b><span>¥392.21</span><i style="--c:#2aa3bb;--w:12%"></i></div>
+                  <div class="cat-row"><b>娱乐</b><span>¥294.16</span><i style="--c:#8e5cf0;--w:9%"></i></div>
+                  <div class="cat-row"><b>其他</b><span>¥294.15</span><i style="--c:#8e8e93;--w:9%"></i></div>
+                  <p class="mac__total"><span>合计</span><span>¥3,268.40</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 用户评价 -->
+    <section class="section section--alt" aria-labelledby="voices-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">用户怎么说</span>
+          <h2 class="h2" id="voices-title"><span class="phrase">记账这件事，</span><span class="phrase">终于坚持下来了。</span></h2>
+        </div>
+        <div class="grid grid--3">
+          <figure class="quote-card">
+            <blockquote><p>“以前记账总是三天打鱼。青柠一打开就是键盘，现在已经连续记了四百多天。”</p></blockquote>
+            <figcaption><span class="avatar" style="--c:#5fb52a" aria-hidden="true">周</span><span><b>小周</b>自由设计师</span></figcaption>
+          </figure>
+          <figure class="quote-card">
+            <blockquote><p>“最打动我的是不用注册。家里的账，我只想让自己和爱人看到。共享账本刚好解决了这个问题。”</p></blockquote>
+            <figcaption><span class="avatar" style="--c:#f08a00" aria-hidden="true">林</span><span><b>林女士</b>两个孩子的妈妈</span></figcaption>
+          </figure>
+          <figure class="quote-card">
+            <blockquote><p>“Mac 版的报表太顺手了。月底复盘五分钟搞定，还能直接导出 CSV 给会计。”</p></blockquote>
+            <figcaption><span class="avatar" style="--c:#2aa3bb" aria-hidden="true">杰</span><span><b>阿杰</b>独立开发者</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 价格预览 -->
+    <section class="section" aria-labelledby="plans-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">价格</span>
+          <h2 class="h2" id="plans-title"><span class="phrase">免费开始，</span><span class="phrase">需要时再升级。</span></h2>
+          <p class="lead">记账、同步、导出数据，免费版全都能用。想要更多，再考虑青柠 Pro。</p>
+        </div>
+        <div class="plan-teaser">
+          <div class="card">
+            <h3 class="h3">免费版</h3>
+            <p class="price-line">¥0</p>
+            <p>不限条数的记账、iCloud 同步、Face ID 锁、随时导出数据。</p>
+          </div>
+          <div class="card">
+            <h3 class="h3">青柠 Pro</h3>
+            <p class="price-line">¥98 <small>/ 年</small></p>
+            <p>共享账本、票据扫描、多币种、无限预算与高级报表。iPhone 与 Mac 通用。</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="link-more" href="pricing.html">查看完整对比</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 下载 -->
+    <section class="section section--alt download" id="download" aria-labelledby="download-title">
+      <div class="container">
+        <img class="download__icon" src="assets/img/app-icon.svg" alt="青柠记账 App 图标" width="104" height="104">
+        <h2 class="h2" id="download-title"><span class="phrase">今天就开始，</span><span class="phrase">轻松记账。</span></h2>
+        <p class="lead" style="margin-top:16px">在 iPhone 和 Mac 上免费下载。</p>
+        <div class="store-buttons">
+          <a class="store-btn" href="https://apps.apple.com/cn/app/id0000000000" data-store="ios" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
+            <span><small>在 App Store 下载</small><strong>iPhone 版</strong></span>
+          </a>
+          <a class="store-btn" href="https://apps.apple.com/cn/app/id0000000000?platform=mac" data-store="mac" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>
+            <span><small>在 Mac App Store 下载</small><strong>Mac 版</strong></span>
+          </a>
+        </div>
+        <p class="small muted">iPhone 版需要 iOS 17 或更高版本；Mac 版需要 macOS 14 或更高版本，支持 Apple 芯片和 Intel 处理器。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <a class="brand" href="index.html"><img src="assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+        <p class="footer-tagline">为 iPhone 和 Mac 打造的轻记账。</p>
+      </div>
+      <nav class="footer-grid" aria-label="页脚导航">
+        <div>
+          <h2 class="footer-title">产品</h2>
+          <ul>
+            <li><a href="features.html">功能介绍</a></li>
+            <li><a href="pricing.html">价格</a></li>
+            <li><a href="index.html#download">下载</a></li>
+            <li><a href="blog/lime-ledger-3-for-mac.html">3.0 新功能</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">支持</h2>
+          <ul>
+            <li><a href="faq.html">常见问题</a></li>
+            <li><a href="contact.html">联系我们</a></li>
+            <li><a href="faq.html#cancel-subscription">管理订阅</a></li>
+            <li><a href="faq.html#export-data">导出数据</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">公司</h2>
+          <ul>
+            <li><a href="about.html">关于我们</a></li>
+            <li><a href="blog/index.html">博客</a></li>
+            <li><a href="about.html#join">加入我们</a></li>
+            <li><a href="contact.html#press">媒体合作</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">法律</h2>
+          <ul>
+            <li><a href="privacy.html">隐私政策</a></li>
+            <li><a href="privacy.html#subscription">订阅说明</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer-bottom">
+        <div>
+          <p>© 2026 Lime Ledger 工作室。保留所有权利。</p>
+          <p>iPhone、Mac、iCloud、Siri 和 App Store 是 Apple Inc. 在美国及其他国家和地区注册的商标。青柠记账与 Apple Inc. 无关联。</p>
+        </div>
+        <div class="theme-switch">
+          <span class="theme-switch__label" id="theme-label">外观</span>
+          <fieldset class="segmented" aria-labelledby="theme-label">
+            <legend>外观</legend>
+            <label><input type="radio" name="theme" value="auto" checked><span>自动</span></label>
+            <label><input type="radio" name="theme" value="light"><span>浅色</span></label>
+            <label><input type="radio" name="theme" value="dark"><span>深色</span></label>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

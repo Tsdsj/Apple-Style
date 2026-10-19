@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>隐私政策 · 青柠记账 Lime Ledger</title>
+  <meta name="description" content="青柠记账隐私政策：我们收集什么、不收集什么，iCloud 端到端加密同步如何工作，以及你如何导出和删除自己的数据。">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://limeledger.app/privacy.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="青柠记账 Lime Ledger">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="隐私政策 · 青柠记账">
+  <meta property="og:description" content="我们不做账号系统，不收集你的财务数据。这是完整的说明。">
+  <meta property="og:url" content="https://limeledger.app/privacy.html">
+  <meta property="og:image" content="https://limeledger.app/assets/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>!function(d){d.classList.add("js");try{var t=localStorage.getItem("ll-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}}(document.documentElement);</script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="index.html" aria-label="青柠记账 首页"><img src="assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+      <div class="nav-menu" id="site-menu">
+        <ul class="nav-links">
+          <li><a href="features.html">功能</a></li>
+          <li><a href="pricing.html">价格</a></li>
+          <li><a href="faq.html">常见问题</a></li>
+          <li><a href="blog/index.html">博客</a></li>
+          <li><a href="about.html">关于我们</a></li>
+          <li><a href="contact.html">联系我们</a></li>
+        </ul>
+      </div>
+      <a class="btn btn-primary btn-sm nav-cta" href="index.html#download">免费下载</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu"><span class="visually-hidden">菜单</span><span class="nav-toggle__bars" aria-hidden="true"></span></button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="page-title" style="padding-bottom:clamp(40px,5vw,72px)">
+      <div class="container">
+        <span class="eyebrow">法律</span>
+        <h1 class="h1" id="page-title">隐私政策</h1>
+        <p class="lead"><span class="phrase">最近更新：<time datetime="2026-09-24">2026 年 9 月 24 日</time></span>　<span class="phrase">生效日期：<time datetime="2026-09-24">2026 年 9 月 24 日</time></span></p>
+      </div>
+    </section>
+
+    <section class="section section--flush-top">
+      <div class="container legal">
+        <nav class="toc" aria-labelledby="toc-title">
+          <h2 id="toc-title">目录</h2>
+          <ol>
+            <li><a href="#overview">概述</a></li>
+            <li><a href="#collect">我们收集的信息</a></li>
+            <li><a href="#not-collect">我们不收集的信息</a></li>
+            <li><a href="#icloud">iCloud 同步与加密</a></li>
+            <li><a href="#on-device">设备端处理</a></li>
+            <li><a href="#subscription">订阅与付款</a></li>
+            <li><a href="#network">App 发出的网络请求</a></li>
+            <li><a href="#website">网站与联系表单</a></li>
+            <li><a href="#sharing">信息共享与第三方</a></li>
+            <li><a href="#rights">你的权利</a></li>
+            <li><a href="#children">未成年人保护</a></li>
+            <li><a href="#changes">政策变更</a></li>
+            <li><a href="#contact-us">联系我们</a></li>
+          </ol>
+        </nav>
+
+        <article class="prose">
+          <div class="summary-box">
+            <h2>简要版本</h2>
+            <ul>
+              <li>青柠记账没有账号系统，我们不知道你是谁。</li>
+              <li>你的账目只保存在你的设备和你自己的 iCloud 中，同步时端到端加密，我们无法读取。</li>
+              <li>App 内没有广告，没有第三方统计或追踪 SDK。</li>
+              <li>你可以随时导出或删除全部数据，无需向我们申请。</li>
+            </ul>
+          </div>
+
+          <h2 id="overview">1. 概述</h2>
+          <p>本隐私政策适用于 Lime Ledger 工作室（以下简称“我们”）提供的青柠记账 iPhone App、Mac App 以及本网站（以下统称“服务”）。我们依据《中华人民共和国个人信息保护法》等相关法律法规处理个人信息，并始终遵循“最少必要”的原则：能不收集的就不收集，能在你设备上完成的就不上传。</p>
+          <p>请你在使用服务前仔细阅读本政策。如果对本政策有任何疑问，可以随时通过<a href="#contact-us">第 13 节</a>的方式联系我们。</p>
+
+          <h2 id="collect">2. 我们收集的信息</h2>
+          <p>在 App 中，我们<strong>不收集</strong>任何可以识别你身份的信息。仅在以下有限的情况下，我们会接触到少量信息：</p>
+          <ul>
+            <li><strong>崩溃与性能报告：</strong>只有当你在系统“设置 → 隐私与安全性 → 分析与改进”中选择与 App 开发者共享时，Apple 才会向我们提供匿名、汇总的崩溃日志。这些日志不包含你的账目内容。</li>
+            <li><strong>你主动联系我们时提供的信息：</strong>例如通过邮件或网站表单发送的称呼、邮箱和留言内容，详见<a href="#website">第 8 节</a>。</li>
+          </ul>
+
+          <h2 id="not-collect">3. 我们不收集的信息</h2>
+          <p>为了让你放心，我们把<strong>不收集</strong>的内容也列出来：</p>
+          <ul>
+            <li>你的账目、金额、分类、备注、账户余额和票据照片；</li>
+            <li>你的姓名、手机号、邮箱（除非你主动联系我们）、身份证号或银行卡号；</li>
+            <li>你的位置、通讯录、照片图库（票据扫描只在你主动拍摄时读取单张图片，且仅在本机处理）；</li>
+            <li>广告标识符（IDFA）或任何用于跨 App 追踪你的信息。</li>
+          </ul>
+
+          <h2 id="icloud">4. iCloud 同步与加密</h2>
+          <p>当你开启 iCloud 同步时，账目数据会存储在<strong>你自己的 iCloud 私有数据库</strong>中，而不是我们的服务器。数据在离开你的设备之前即使用加密字段进行端到端加密，密钥由你的 Apple 账户在你的设备之间管理。这意味着我们和 Apple 都无法读取你的账目内容。</p>
+          <p>使用共享账本时，账本会通过 iCloud 共享给你邀请的成员，只有被邀请且接受邀请的人能够访问。你可以随时移除成员或停止共享。</p>
+          <p>你可以随时关闭 iCloud 同步，此时数据只保存在本机。</p>
+
+          <h2 id="on-device">5. 设备端处理</h2>
+          <p>自动分类、自定义规则和票据识别全部在你的设备上运行，使用的模型随 App 一起安装。你的消费记录和票据图片不会被上传到任何服务器用于分析或训练。</p>
+
+          <h2 id="subscription">6. 订阅与付款</h2>
+          <p>青柠 Pro 的购买、续订、取消和退款均由 Apple 通过 App Store 处理。我们不会获得你的支付信息（如银行卡号或支付账户）。为了确认你的订阅状态，App 会在本机校验 App Store 提供的交易凭证，我们只能看到 Apple 提供的匿名、汇总的销售数据。</p>
+          <p>订阅会在当前周期结束前 24 小时内自动续订，除非你在此之前取消。你可以在 iPhone 的“设置 → [你的名字] → 订阅”中管理或取消订阅。年度订阅的免费试用期内取消不会产生费用。</p>
+
+          <h2 id="network">7. App 发出的网络请求</h2>
+          <p>除了 iCloud 同步和 App Store 交易外，App 只会发出一种网络请求：开启多币种功能后，每天下载一次公开的汇率表。该请求不包含你的账目、设备标识或任何个人信息。</p>
+
+          <h2 id="website">8. 网站与联系表单</h2>
+          <p>本网站不使用 Cookie，不接入任何统计、广告或社交媒体追踪代码，也不从第三方加载字体或脚本。网站会在你浏览器的本地存储中保存一项设置——你选择的外观（浅色或深色），该信息不会发送给我们。</p>
+          <p>当你通过联系表单或邮件联系我们时，我们会收到你提供的称呼、邮箱、所选主题、设备类型和留言内容。这些信息<strong>仅用于回复你</strong>，不会用于营销，也不会提供给任何第三方。问题处理完毕后，我们会在 90 天内删除相关往来记录。</p>
+          <p>与其他网站一样，网站托管服务商可能会在服务器日志中短期记录访问者的 IP 地址和浏览器信息，用于安全防护和故障排查，日志不会用于识别个人身份，并会在 30 天内自动删除。</p>
+
+          <h2 id="sharing">9. 信息共享与第三方</h2>
+          <p>我们不会出售、出租或交易任何个人信息。App 中没有集成任何第三方 SDK。我们依赖的第三方服务仅有：</p>
+          <ul>
+            <li><strong>Apple：</strong>提供 iCloud 同步、App Store 购买与崩溃报告，其处理受 Apple 隐私政策约束；</li>
+            <li><strong>邮件服务商：</strong>用于收发你主动发送给我们的邮件；</li>
+            <li><strong>网站托管服务商：</strong>用于托管本网站的静态文件。</li>
+          </ul>
+          <p>除法律法规要求或有权机关依法提出要求外，我们不会向任何人披露你的信息。由于我们并不持有你的账目，即使收到此类要求，我们也无法提供你的财务数据。</p>
+
+          <h2 id="rights">10. 你的权利</h2>
+          <p>你对自己的数据拥有完全的控制权，并且大部分操作无需经过我们：</p>
+          <ul>
+            <li><strong>查阅与复制：</strong>在 App 中“设置 → 数据 → 导出”，随时以 CSV 或 JSON 格式导出全部数据；</li>
+            <li><strong>更正：</strong>在 App 中直接编辑任何记录；</li>
+            <li><strong>删除：</strong>在 App 中“设置 → 数据 → 删除所有数据”，会同时删除本机与 iCloud 中的数据；</li>
+            <li><strong>撤回同意：</strong>关闭 iCloud 同步，或在系统设置中停止共享分析数据。</li>
+          </ul>
+          <p>如果你希望查阅、更正或删除你通过邮件或表单提供给我们的信息，请写信至 <a href="mailto:privacy@limeledger.app">privacy@limeledger.app</a>，我们会在 15 个工作日内处理。</p>
+
+          <h2 id="children">11. 未成年人保护</h2>
+          <p>青柠记账面向一般用户，未专门针对未成年人设计。由于 App 不收集个人信息，未成年人使用时也不会产生额外的个人信息处理。如果你是未满 14 周岁的未成年人的监护人，并认为孩子通过邮件或表单向我们提供了个人信息，请联系我们删除。</p>
+
+          <h2 id="changes">12. 政策变更</h2>
+          <p>如果本政策发生实质性变化，我们会在 App 内和本页面显著位置提前告知，并更新页面顶部的日期。我们不会在未经你明确同意的情况下，扩大对个人信息的收集和使用范围。</p>
+
+          <h2 id="contact-us">13. 联系我们</h2>
+          <p>如对本政策或你的个人信息有任何疑问、意见或投诉，请联系：</p>
+          <p>Lime Ledger 工作室 · 个人信息保护负责人<br>邮箱：<a href="mailto:privacy@limeledger.app">privacy@limeledger.app</a><br>你也可以通过<a href="contact.html">联系我们</a>页面留言。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <a class="brand" href="index.html"><img src="assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+        <p class="footer-tagline">为 iPhone 和 Mac 打造的轻记账。</p>
+      </div>
+      <nav class="footer-grid" aria-label="页脚导航">
+        <div>
+          <h2 class="footer-title">产品</h2>
+          <ul>
+            <li><a href="features.html">功能介绍</a></li>
+            <li><a href="pricing.html">价格</a></li>
+            <li><a href="index.html#download">下载</a></li>
+            <li><a href="blog/lime-ledger-3-for-mac.html">3.0 新功能</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">支持</h2>
+          <ul>
+            <li><a href="faq.html">常见问题</a></li>
+            <li><a href="contact.html">联系我们</a></li>
+            <li><a href="faq.html#cancel-subscription">管理订阅</a></li>
+            <li><a href="faq.html#export-data">导出数据</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">公司</h2>
+          <ul>
+            <li><a href="about.html">关于我们</a></li>
+            <li><a href="blog/index.html">博客</a></li>
+            <li><a href="about.html#join">加入我们</a></li>
+            <li><a href="contact.html#press">媒体合作</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">法律</h2>
+          <ul>
+            <li><a href="privacy.html">隐私政策</a></li>
+            <li><a href="privacy.html#subscription">订阅说明</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer-bottom">
+        <div>
+          <p>© 2026 Lime Ledger 工作室。保留所有权利。</p>
+          <p>iPhone、Mac、iCloud、Siri 和 App Store 是 Apple Inc. 在美国及其他国家和地区注册的商标。青柠记账与 Apple Inc. 无关联。</p>
+        </div>
+        <div class="theme-switch">
+          <span class="theme-switch__label" id="theme-label">外观</span>
+          <fieldset class="segmented" aria-labelledby="theme-label">
+            <legend>外观</legend>
+            <label><input type="radio" name="theme" value="auto" checked><span>自动</span></label>
+            <label><input type="radio" name="theme" value="light"><span>浅色</span></label>
+            <label><input type="radio" name="theme" value="dark"><span>深色</span></label>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

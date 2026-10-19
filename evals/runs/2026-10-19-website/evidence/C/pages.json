@@ -1,0 +1,610 @@
+[
+  {
+    "page": "/index.html",
+    "title": "青柠记账 Lime Ledger · 为 iPhone 和 Mac 打造的轻记账",
+    "lang": "zh-CN",
+    "description": "青柠记账是一款为 iPhone 和 Mac 设计的记账 App：三秒记一笔，自动分类，预算与报表一目了然。无需注册、没有广告，你的账目只属于你。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 0,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 3,
+    "svgs": 14,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 1,
+    "textLength": 2453,
+    "bytes": 120810,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/features.html",
+    "title": "功能介绍 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "了解青柠记账的全部功能：三秒快速记账、设备端智能分类、预算圆环、清晰报表、多账户多币种、iPhone 与 Mac 端到端加密同步，以及 Face ID 隐私锁。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/features.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "功能目录",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 15,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 4,
+    "jsonld": 0,
+    "textLength": 2310,
+    "bytes": 114233,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/pricing.html",
+    "title": "价格 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "青柠记账核心功能永久免费。青柠 Pro 每年 98 元或每月 12 元，解锁共享账本、票据扫描、多币种和高级报表，iPhone 与 Mac 通用，支持家人共享。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/pricing.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 1,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 1144,
+    "bytes": 98614,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/faq.html",
+    "title": "常见问题 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "关于青柠记账的常见问题：支持的设备、iCloud 同步、导出与删除数据、订阅与退款、家人共享，以及隐私与安全。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/faq.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "问题分类",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 1,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 381,
+    "bytes": 99321,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/blog/index.html",
+    "title": "博客 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "青柠手记：青柠记账的产品更新、设计思考，以及关于钱和生活的小方法。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/blog/",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 3,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "../assets/css/style.css"
+    ],
+    "scripts": [
+      "../assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 361,
+    "bytes": 91413,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/about.html",
+    "title": "关于我们 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "青柠记账由一支六人的小团队在杭州打造。我们相信好的工具应该安静地帮你：打开就能记，不要账号，不放广告。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/about.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 3,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 1254,
+    "bytes": 96315,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/contact.html",
+    "title": "联系我们 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "联系青柠记账团队：使用帮助、订阅问题、功能建议、商务合作与媒体采访。工作日 24 小时内回复。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/contact.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 4,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 635,
+    "bytes": 96051,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "title": "青柠记账 3.0：你好，Mac · 青柠记账博客",
+    "lang": "zh-CN",
+    "description": "青柠记账 3.0 正式发布：从零写起的原生 Mac 版、为大屏幕重新设计的报表、完整键盘快捷键，以及 iPhone 上的待机显示小组件和订阅追踪。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/blog/lime-ledger-3-for-mac.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 2,
+    "footer": 2,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 4,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "../assets/css/style.css"
+    ],
+    "scripts": [
+      "../assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 1,
+    "textLength": 1728,
+    "bytes": 100627,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/privacy.html",
+    "title": "隐私政策 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "青柠记账隐私政策：我们收集什么、不收集什么，iCloud 端到端加密同步如何工作，以及你如何导出和删除自己的数据。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/privacy.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "toc-title",
+      "页脚导航"
+    ],
+    "ariaCurrent": 0,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 0,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "assets/css/style.css"
+    ],
+    "scripts": [
+      "assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 2675,
+    "bytes": 97405,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "title": "我们为什么不做账号系统 · 青柠记账博客",
+    "lang": "zh-CN",
+    "description": "青柠记账没有注册和登录。没有账号，同步怎么做？数据怎么找回？我们又靠什么赚钱？这篇文章认真回答一次。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/blog/why-no-account.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 2,
+    "footer": 2,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 3,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "../assets/css/style.css"
+    ],
+    "scripts": [
+      "../assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 1,
+    "textLength": 1606,
+    "bytes": 96339,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "title": "第一次做预算？从 50/30/20 开始 · 青柠记账博客",
+    "lang": "zh-CN",
+    "description": "用 50/30/20 法则做第一份预算：50% 必要支出、30% 想要的开销、20% 储蓄。附月收入一万元的分配示例，以及在青柠记账中的设置方法。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [
+      "og:type",
+      "og:site_name",
+      "og:locale",
+      "og:title",
+      "og:description",
+      "og:url",
+      "og:image"
+    ],
+    "canonical": "https://limeledger.app/blog/first-budget-50-30-20.html",
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 2,
+    "footer": 2,
+    "navs": [
+      "主导航",
+      "页脚导航"
+    ],
+    "ariaCurrent": 1,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 2,
+    "svgs": 3,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "../assets/css/style.css"
+    ],
+    "scripts": [
+      "../assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 1,
+    "textLength": 1375,
+    "bytes": 96686,
+    "errors": [],
+    "external": [],
+    "failed": []
+  },
+  {
+    "page": "/404.html",
+    "title": "页面未找到 · 青柠记账 Lime Ledger",
+    "lang": "zh-CN",
+    "description": "你要找的页面不存在或已经搬走了。可以回到青柠记账首页，或者看看常见问题。",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "icon": true,
+    "appleTouch": true,
+    "og": [],
+    "canonical": null,
+    "themeColor": 2,
+    "colorScheme": null,
+    "h1": 1,
+    "headingSkips": 0,
+    "main": 1,
+    "header": 1,
+    "footer": 1,
+    "navs": [
+      "主导航",
+      "常用页面",
+      "页脚导航"
+    ],
+    "ariaCurrent": 0,
+    "skipLink": true,
+    "imgNoAlt": 0,
+    "imgs": 3,
+    "svgs": 0,
+    "lazy": 0,
+    "asClasses": 0,
+    "stylesheets": [
+      "/assets/css/style.css"
+    ],
+    "scripts": [
+      "/assets/js/main.js"
+    ],
+    "inlineStyleBytes": 0,
+    "backdrop": 1,
+    "jsonld": 0,
+    "textLength": 78,
+    "bytes": 88685,
+    "errors": [],
+    "external": [],
+    "failed": []
+  }
+]

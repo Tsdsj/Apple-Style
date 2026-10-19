@@ -1,0 +1,39 @@
+[
+  {
+    "page": "lh-contact_html.json",
+    "performance": 100,
+    "accessibility": 97,
+    "best-practices": 100,
+    "seo": 100,
+    "LCP": "1.5 s",
+    "CLS": "0",
+    "TBT": "0 ms",
+    "below90": [
+      "link-in-text-block"
+    ]
+  },
+  {
+    "page": "lh-index_html.json",
+    "performance": 99,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100,
+    "LCP": "1.7 s",
+    "CLS": "0",
+    "TBT": "0 ms",
+    "below90": [
+      "color-contrast"
+    ]
+  },
+  {
+    "page": "lh-pricing_html.json",
+    "performance": 100,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "LCP": "1.6 s",
+    "CLS": "0",
+    "TBT": "0 ms",
+    "below90": []
+  }
+]

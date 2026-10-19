@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "/index.html",
+    "/features.html",
+    "/pricing.html",
+    "/blog/index.html",
+    "/faq.html",
+    "/about.html",
+    "/contact.html",
+    "/privacy.html",
+    "/blog/lime-ledger-3.html",
+    "/blog/local-first.html",
+    "/blog/30-day-habits.html"
+  ],
+  "broken": [],
+  "missingAnchors": [],
+  "files": [
+    "404.html",
+    "README.md",
+    "about.html",
+    "apple-touch-icon.png",
+    "assets/css/style.css",
+    "assets/img/icon-192.png",
+    "assets/img/icon-512.png",
+    "assets/img/icon.svg",
+    "assets/img/og-image.png",
+    "assets/js/main.js",
+    "assets/js/theme.js",
+    "blog/30-day-habits.html",
+    "blog/feed.xml",
+    "blog/index.html",
+    "blog/lime-ledger-3.html",
+    "blog/local-first.html",
+    "contact.html",
+    "faq.html",
+    "favicon.svg",
+    "features.html",
+    "index.html",
+    "pricing.html",
+    "privacy.html",
+    "robots.txt",
+    "site.webmanifest",
+    "sitemap.xml",
+    "tools/check-site.js",
+    "tools/inject.py",
+    "tools/serve.js"
+  ],
+  "orphans": [
+    "404.html"
+  ]
+}

@@ -1,0 +1,297 @@
+{
+  "light /index.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5,
+        "targets": [
+          ".snip-entry__amt > span",
+          ".snip-time",
+          ".snip-time > b"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 106
+      }
+    ]
+  },
+  "light /features.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 45,
+        "targets": [
+          ".ui-entry__top > span:nth-child(1)",
+          ".ui-entry__top > span:nth-child(3)",
+          ".ui-entry__note"
+        ]
+      },
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a[href$=\"privacy.html\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 20
+      }
+    ]
+  },
+  "light /pricing.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href=\"contact.html?topic=billing\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "th-has-data-cells",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /blog/index.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 4
+      }
+    ]
+  },
+  "light /faq.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".subhead > a[href$=\"contact.html\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "light /about.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href$=\"lime-ledger-3.html\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "light /contact.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "span > a[href$=\"privacy.html\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 3
+      }
+    ]
+  },
+  "light /privacy.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "light /blog/lime-ledger-3.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "light /blog/local-first.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 2
+      }
+    ]
+  },
+  "light /blog/30-day-habits.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /404.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /index.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 106
+      }
+    ]
+  },
+  "dark /features.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".ui-key--ok"
+        ]
+      },
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a[href$=\"privacy.html\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 18
+      }
+    ]
+  },
+  "dark /pricing.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href=\"contact.html?topic=billing\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "th-has-data-cells",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /blog/index.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 4
+      }
+    ]
+  },
+  "dark /faq.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".subhead > a[href$=\"contact.html\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "dark /about.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href$=\"lime-ledger-3.html\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "dark /contact.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "span > a[href$=\"privacy.html\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 3
+      }
+    ]
+  },
+  "dark /privacy.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "dark /blog/lime-ledger-3.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "dark /blog/local-first.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 2
+      }
+    ]
+  },
+  "dark /blog/30-day-habits.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /404.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  }
+}

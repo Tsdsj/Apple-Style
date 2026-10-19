@@ -1,0 +1,422 @@
+[
+  {
+    "page": "/index.html",
+    "width": 320,
+    "overflow": 38,
+    "offenders": [
+      "div.split__text",
+      "span.eyebrow",
+      "h2.h2"
+    ]
+  },
+  {
+    "page": "/index.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/index.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/index.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/index.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/index.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/features.html",
+    "width": 320,
+    "overflow": 58,
+    "offenders": [
+      "div.split__text",
+      "span.eyebrow",
+      "h2.h2"
+    ]
+  },
+  {
+    "page": "/features.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/features.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/features.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/features.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/features.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/pricing.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/faq.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover",
+      "div.post-card__body",
+      "p.post-meta"
+    ]
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/index.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/about.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/contact.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/lime-ledger-3-for-mac.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/privacy.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/why-no-account.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 320,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 390,
+    "overflow": 0,
+    "offenders": [
+      "div.post-cover"
+    ]
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 768,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 1024,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 1440,
+    "overflow": 0,
+    "offenders": []
+  },
+  {
+    "page": "/blog/first-budget-50-30-20.html",
+    "width": 1920,
+    "overflow": 0,
+    "offenders": []
+  }
+]

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
+  <title>青柠记账博客</title>
+  <subtitle>产品更新、设计背后的思考，以及让记账更轻松的小方法。</subtitle>
+  <link rel="self" type="application/atom+xml" href="https://www.limeledger.example/blog/feed.xml"/>
+  <link rel="alternate" type="text/html" href="https://www.limeledger.example/blog/"/>
+  <id>https://www.limeledger.example/blog/</id>
+  <updated>2026-09-16T09:00:00+08:00</updated>
+  <author><name>青柠工作室</name></author>
+  <icon>https://www.limeledger.example/assets/img/icon-192.png</icon>
+  <entry>
+    <title>青柠记账 3.0：来到 Mac，预算学会了“滚动”</title>
+    <link rel="alternate" type="text/html" href="https://www.limeledger.example/blog/lime-ledger-3.html"/>
+    <id>https://www.limeledger.example/blog/lime-ledger-3.html</id>
+    <published>2026-09-16T09:00:00+08:00</published>
+    <updated>2026-09-16T09:00:00+08:00</updated>
+    <author><name>林知夏</name></author>
+    <category term="产品更新"/>
+    <summary>三年来最大的一次更新：Mac 版正式登场，预算支持滚动结余，iPhone 首页也焕然一新。</summary>
+  </entry>
+  <entry>
+    <title>为什么我们坚持“本地优先”</title>
+    <link rel="alternate" type="text/html" href="https://www.limeledger.example/blog/local-first.html"/>
+    <id>https://www.limeledger.example/blog/local-first.html</id>
+    <published>2026-08-20T09:00:00+08:00</published>
+    <updated>2026-08-20T09:00:00+08:00</updated>
+    <author><name>何川</name></author>
+    <category term="设计理念"/>
+    <summary>记账 App 知道你太多事。我们从第一天起就决定：这些数据不应该经过我们的服务器。</summary>
+  </entry>
+  <entry>
+    <title>新手记账的五个习惯：从坚持 30 天开始</title>
+    <link rel="alternate" type="text/html" href="https://www.limeledger.example/blog/30-day-habits.html"/>
+    <id>https://www.limeledger.example/blog/30-day-habits.html</id>
+    <published>2026-07-08T09:00:00+08:00</published>
+    <updated>2026-07-08T09:00:00+08:00</updated>
+    <author><name>许念</name></author>
+    <category term="记账方法"/>
+    <summary>记账最难的不是方法，而是坚持。这五个小习惯，能帮你轻松跨过最初的 30 天。</summary>
+  </entry>
+</feed>

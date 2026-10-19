@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh-CN" class="as-root">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>青柠记账 Lime Ledger — 三秒记一笔，一眼看清一个月</title>
+<meta name="description" content="青柠记账是为 iPhone 与 Mac 设计的记账应用：三秒记一笔，预算自动算，报表一看就懂。无广告、无需注册，数据只存在你的设备和 iCloud 中。">
+<link rel="canonical" href="https://limeledger.example/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="青柠记账 Lime Ledger">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="青柠记账 — 三秒记一笔，一眼看清一个月">
+<meta property="og:description" content="为 iPhone 与 Mac 设计的记账应用。无广告、无需注册，数据只属于你。">
+<meta property="og:url" content="https://limeledger.example/">
+<meta property="og:image" content="https://limeledger.example/assets/img/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- head:start -->
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ll-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="assets/css/apple-style.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/liquid-glass.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+<!-- head:end -->
+</head>
+<body>
+<!-- header:start -->
+<a class="skip-link" href="#main">跳到主要内容</a>
+<header class="site-header as-scroll-edge as-edge-top">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html" aria-current="page"><img src="assets/img/logo.svg" alt="" width="30" height="30"><span>青柠记账</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <div class="as-glass as-glass-group">
+        <a class="as-item" href="features.html">功能</a>
+        <a class="as-item" href="pricing.html">价格</a>
+        <a class="as-item" href="blog/index.html">博客</a>
+        <a class="as-item" href="faq.html">常见问题</a>
+        <a class="as-item" href="about.html">关于我们</a>
+      </div>
+    </nav>
+    <a class="as-glass as-glass-interactive as-glass-prominent as-button as-button-glass as-button-small site-cta" href="https://apps.apple.com/cn/app/lime-ledger/id0000000000">免费下载</a>
+    <button class="as-glass as-glass-interactive as-button as-button-glass as-button-icon menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="菜单"><span class="bars" aria-hidden="true"></span></button>
+    <nav id="site-menu" class="as-glass as-glass-large as-menu site-menu" aria-label="主导航" data-lens="off" hidden>
+      <a class="as-menu-item" href="index.html" aria-current="page">首页</a>
+      <a class="as-menu-item" href="features.html">功能</a>
+      <a class="as-menu-item" href="pricing.html">价格</a>
+      <a class="as-menu-item" href="blog/index.html">博客</a>
+      <a class="as-menu-item" href="faq.html">常见问题</a>
+      <a class="as-menu-item" href="about.html">关于我们</a>
+      <a class="as-menu-item" href="contact.html">联系我们</a>
+    </nav>
+  </div>
+</header>
+<!-- header:end -->
+
+<main id="main" tabindex="-1">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">适用于 iPhone 与 Mac</p>
+        <h1 class="display" id="hero-title">三秒记一笔，<br>一眼看清<wbr>一个月。</h1>
+        <p class="lead">青柠记账给记账做减法：打开就能记，预算自动算，报表一看就懂。没有广告，不用注册，你的账单只存在你的设备和 iCloud 中。</p>
+        <div class="actions">
+          <a class="as-button as-button-filled as-button-large" href="https://apps.apple.com/cn/app/lime-ledger/id0000000000">免费下载</a>
+          <a class="link-more" href="features.html">查看全部功能</a>
+        </div>
+        <p class="fineprint">免费下载，可选订阅青柠 Pro。需要 iOS 26、iPadOS 26 或 macOS 26 及更高版本。</p>
+      </div>
+
+      <div class="art art-glow hero__art">
+        <div class="device app" role="img" aria-label="青柠记账 iPhone 版首页示意图：10 月已支出 3,284.50 元，预算 5,000 元，还剩 1,715.50 元。今天记录了午餐 32 元、地铁 4 元和拿铁 28 元。">
+          <div class="screen" aria-hidden="true">
+            <div class="app-top"><b>10 月</b><span class="app-chip">日常账本 <svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M6 9l6 6 6-6"/></svg></span></div>
+            <div class="app-card app-summary">
+              <span class="label">本月支出</span>
+              <span class="amount">¥3,284.50</span>
+              <div class="app-meter" style="--v:66%"><i></i></div>
+              <div class="app-row-split"><span>预算 ¥5,000</span><span>剩余 ¥1,715.50</span></div>
+            </div>
+            <p class="app-h">今天</p>
+            <ul class="app-list">
+              <li><span class="cat" style="--c:var(--c-food)"><svg viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4.5c-.8.9-.8 2 0 3M13 4.5c-.8.9-.8 2 0 3"/></svg></span><span class="t">午餐<small>餐饮 · 12:30</small></span><span class="v">-32.00</span></li>
+              <li><span class="cat" style="--c:var(--c-transit)"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="14" rx="3"/><path d="M5 11h14M8.5 21l1.5-3.5M15.5 21l-1.5-3.5"/></svg></span><span class="t">地铁<small>交通 · 08:52</small></span><span class="v">-4.00</span></li>
+              <li><span class="cat" style="--c:var(--c-coffee)"><svg viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16"/></svg></span><span class="t">拿铁<small>咖啡 · 08:40</small></span><span class="v">-28.00</span></li>
+            </ul>
+            <p class="app-h">昨天</p>
+            <ul class="app-list">
+              <li><span class="cat" style="--c:var(--c-shop)"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span><span class="t">超市<small>购物 · 19:16</small></span><span class="v">-186.40</span></li>
+              <li><span class="cat" style="--c:var(--c-income)"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 10l4 4 4-4M5 19h14"/></svg></span><span class="t">工资<small>收入 · 09:00</small></span><span class="v is-income">+12,000.00</span></li>
+            </ul>
+            <span class="app-add"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.4"><path d="M12 5v14M5 12h14"/></svg>记一笔</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="why-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">为什么是青柠</p>
+        <h2 class="section-title" id="why-title">少一点操作，<br>多一点清楚。</h2>
+      </header>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M13.5 3L5.5 13.5h6L10.5 21l8-10.5h-6z"/></svg></span>
+          <h3>三秒记一笔</h3>
+          <p>金额、分类、完成。常用分类自动排在最前面，连备注都可以省。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M11 4.05A8 8 0 1 0 19.95 13H11z"/><path d="M14 3.5a7 7 0 0 1 6.5 6.5H14z"/></svg></span>
+          <h3>预算心里有数</h3>
+          <p>设定每月总预算和分类预算。花到八成时温和提醒，不会突然超支。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M5 20v-6M10 20V5M15 20v-9M20 20v-4"/></svg></span>
+          <h3>报表一看就懂</h3>
+          <p>按月份、分类和账户查看支出走势，钱花在了哪里一目了然。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h10A1.5 1.5 0 0 1 16 6.5V14H3z"/><path d="M1.5 17.5h15"/><rect x="18" y="8" width="4.5" height="11" rx="1.2"/></svg></span>
+          <h3>iPhone 与 Mac 同步</h3>
+          <p>通过你自己的 iCloud 自动同步。在手机上随手记，在 Mac 上慢慢整理。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" aria-labelledby="quick-title">
+    <div class="container split">
+      <div class="split__copy">
+        <p class="eyebrow">快速记账</p>
+        <h2 class="section-title" id="quick-title">打开就记，<br>记完就走。</h2>
+        <p class="body-l">青柠记账为最常见的那一步而设计：输入金额，选一个分类，轻点“完成”。平均 3 秒记下一笔，比找零钱还快。</p>
+        <ul class="checklist">
+          <li>主屏幕小组件和锁定屏幕控件，一步打开记账</li>
+          <li>支持 Siri 与快捷指令：“用青柠记一笔，午餐 32 元。”</li>
+          <li>常用分类、商家和备注会根据习惯自动联想</li>
+        </ul>
+        <a class="link-more" href="features.html#quick">了解快速记账</a>
+      </div>
+      <div class="art art-glow">
+        <div class="keypad app" role="img" aria-label="记一笔界面示意：金额 32.00 元，已选分类“餐饮”，备注“午餐”，下方是数字键盘和“完成”按钮。">
+          <div class="amount" aria-hidden="true"><small>¥</small>32.00</div>
+          <div class="chips" aria-hidden="true"><span class="is-on" style="--c:var(--c-food)"><i></i>餐饮</span><span style="--c:var(--c-transit)"><i></i>交通</span><span style="--c:var(--c-shop)"><i></i>购物</span><span style="--c:var(--c-coffee)"><i></i>咖啡</span></div>
+          <div class="note" aria-hidden="true"><span>备注：午餐</span><span>今天 12:30</span></div>
+          <div class="keys" aria-hidden="true">
+            <span>1</span><span>2</span><span>3</span><span>⌫</span>
+            <span>4</span><span>5</span><span>6</span><span>+</span>
+            <span>7</span><span>8</span><span>9</span><span class="done">完成</span>
+            <span>.</span><span>0</span><span>00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="budget-title">
+    <div class="container split is-reversed">
+      <div class="split__copy">
+        <p class="eyebrow">预算</p>
+        <h2 class="section-title" id="budget-title">不是限制花钱，<br>而是花得安心。</h2>
+        <p class="body-l">给每个月设一个总预算，再按需要细分到餐饮、交通、购物。青柠会告诉你接下来每天还能花多少，月底不再有“意外”。</p>
+        <a class="link-more" href="features.html#budget">了解预算</a>
+      </div>
+      <div class="art art-glow">
+        <div class="budget app" role="img" aria-label="预算示意：10 月还剩 12 天，每天可花 142 元。餐饮已用 72%，交通 35%，购物 92% 接近上限，娱乐 20%。">
+          <header aria-hidden="true"><b>10 月预算</b><span>还剩 12 天 · 每天可花 ¥142</span></header>
+          <div class="budget-row" aria-hidden="true"><span class="cat" style="--c:var(--c-food)"><svg viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4.5c-.8.9-.8 2 0 3M13 4.5c-.8.9-.8 2 0 3"/></svg></span><div><div class="top"><span>餐饮 <small>¥1,440 / ¥2,000</small></span><span>72%</span></div><div class="app-meter" style="--v:72%"><i></i></div></div></div>
+          <div class="budget-row" aria-hidden="true"><span class="cat" style="--c:var(--c-transit)"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="14" rx="3"/><path d="M5 11h14M8.5 21l1.5-3.5M15.5 21l-1.5-3.5"/></svg></span><div><div class="top"><span>交通 <small>¥210 / ¥600</small></span><span>35%</span></div><div class="app-meter" style="--v:35%"><i></i></div></div></div>
+          <div class="budget-row" aria-hidden="true"><span class="cat" style="--c:var(--c-shop)"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span><div><div class="top"><span>购物 <small>¥920 / ¥1,000</small></span><span class="as-pill as-pill-warning">接近上限</span></div><div class="app-meter" style="--v:92%;--bar:#f08a24"><i></i></div></div></div>
+          <div class="budget-row" aria-hidden="true"><span class="cat" style="--c:var(--c-fun)"><svg viewBox="0 0 24 24"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7v10"/></svg></span><div><div class="top"><span>娱乐 <small>¥80 / ¥400</small></span><span>20%</span></div><div class="app-meter" style="--v:20%"><i></i></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-dark" aria-labelledby="privacy-title">
+    <div class="container split">
+      <div class="split__copy">
+        <p class="eyebrow">隐私</p>
+        <h2 class="section-title" id="privacy-title">你的账，<br>只有你看得到。</h2>
+        <p class="body-l">青柠记账不需要注册账号，也不接入任何广告或第三方追踪。数据保存在你的设备上，通过你自己的 iCloud 同步，金额和备注在上传前就已在设备上加密。我们看不到，也不想看。</p>
+        <ul class="checklist">
+          <li>无需注册，打开即用</li>
+          <li>不含广告，不含第三方追踪 SDK</li>
+          <li>可用面容 ID、触控 ID 或密码锁定 App</li>
+          <li>随时把全部数据导出为 CSV，免费</li>
+        </ul>
+        <a class="link-more" href="privacy.html">阅读隐私政策</a>
+      </div>
+      <div class="art">
+        <div class="lock-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M32 6l20 8v15c0 13-8.6 24.3-20 29-11.4-4.7-20-16-20-29V14z"/><rect x="23" y="29" width="18" height="14" rx="3"/><path d="M27 29v-4a5 5 0 0 1 10 0v4"/><path d="M32 34.5v3"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sync-title">
+    <div class="container split">
+      <div class="split__copy">
+        <p class="eyebrow">iPhone 与 Mac</p>
+        <h2 class="section-title" id="sync-title">在手机上记，<br>在 Mac 上理。</h2>
+        <p class="body-l">Mac 版有更大的表格和更强的筛选：批量修改分类、把账单截图拖进来、导出给会计。所有改动几秒内就会回到你的 iPhone。</p>
+        <a class="link-more" href="features.html#sync">了解同步与 Mac 版</a>
+      </div>
+      <div class="art art-glow">
+        <div class="sync-art app" role="img" aria-label="同步示意：Mac 窗口显示 2026 年每月支出柱状图和最近记录，旁边的 iPhone 显示同一份数据。">
+          <div class="mac" aria-hidden="true">
+            <aside>
+              <div class="dots"><i></i><i></i><i></i></div>
+              <small>账本</small>
+              <span class="is-on" style="--c:#5fb52a"><i></i>日常</span>
+              <span style="--c:#1e7ef0"><i></i>旅行</span>
+              <span style="--c:#e83e8c"><i></i>家庭</span>
+              <small>视图</small>
+              <span>报表</span><span>预算</span><span>周期账单</span>
+            </aside>
+            <div class="mac-main">
+              <header><b>2026 年支出</b><span>¥38,420.18</span></header>
+              <div class="mini-bars"><i style="--h:62%"></i><i style="--h:48%"></i><i style="--h:70%"></i><i style="--h:58%"></i><i style="--h:86%"></i><i style="--h:74%"></i><i style="--h:100%"></i><i style="--h:82%"></i><i style="--h:78%"></i><i class="is-now" style="--h:69%"></i><i style="--h:4%"></i><i style="--h:4%"></i></div>
+              <table>
+                <tr><td><span class="dot" style="--c:var(--c-food)"></span>午餐</td><td>餐饮</td><td>-32.00</td></tr>
+                <tr><td><span class="dot" style="--c:var(--c-transit)"></span>地铁</td><td>交通</td><td>-4.00</td></tr>
+                <tr><td><span class="dot" style="--c:var(--c-coffee)"></span>拿铁</td><td>咖啡</td><td>-28.00</td></tr>
+                <tr><td><span class="dot" style="--c:var(--c-shop)"></span>超市</td><td>购物</td><td>-186.40</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="device" aria-hidden="true">
+            <div class="screen">
+              <div class="app-top"><b>10 月</b><span class="app-chip">日常</span></div>
+              <div class="app-card app-summary"><span class="label">本月支出</span><span class="amount">¥3,284.50</span><div class="app-meter" style="--v:66%"><i></i></div></div>
+              <ul class="app-list">
+                <li><span class="cat" style="--c:var(--c-food)"><svg viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0z"/></svg></span><span class="t">午餐<small>餐饮</small></span><span class="v">-32.00</span></li>
+                <li><span class="cat" style="--c:var(--c-transit)"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="14" rx="3"/></svg></span><span class="t">地铁<small>交通</small></span><span class="v">-4.00</span></li>
+                <li><span class="cat" style="--c:var(--c-coffee)"><svg viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/></svg></span><span class="t">拿铁<small>咖啡</small></span><span class="v">-28.00</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" aria-labelledby="price-title">
+    <div class="container">
+      <header class="section-head is-center">
+        <p class="eyebrow">价格</p>
+        <h2 class="section-title" id="price-title">免费开始，<br>需要时再升级。</h2>
+        <p class="lead">记账、月度预算、iCloud 同步和数据导出永久免费。想要多账本、分类预算和完整报表，可以订阅青柠 Pro。</p>
+      </header>
+      <div class="plans">
+        <article class="plan">
+          <div class="plan__head"><h3 class="plan__name">免费版</h3><p class="muted">日常记账需要的一切</p></div>
+          <p class="plan__price"><span class="price">¥0</span><span class="per">永久</span></p>
+        </article>
+        <article class="plan plan--pro">
+          <div class="plan__head"><h3 class="plan__name">青柠 Pro</h3><p class="muted">给认真管钱的你</p></div>
+          <p class="plan__price"><span class="price">¥88</span><span class="per">/ 年</span></p>
+          <p class="plan__note">或 ¥12 / 月。首次订阅可免费试用 14 天。</p>
+        </article>
+      </div>
+      <p class="center-row"><a class="link-more" href="pricing.html">比较两个方案</a></p>
+    </div>
+  </section>
+
+  <section class="section cta-band" aria-labelledby="cta-title">
+    <div class="container">
+      <img class="app-icon" src="assets/img/logo.svg" alt="" width="96" height="96">
+      <h2 class="section-title" id="cta-title">今天就记下第一笔。</h2>
+      <p class="lead">免费下载，无需注册。iPhone、iPad 与 Mac 通用。</p>
+      <div class="actions">
+        <a class="as-button as-button-filled as-button-large" href="https://apps.apple.com/cn/app/lime-ledger/id0000000000">在 App Store 免费下载</a>
+        <a class="link-more" href="pricing.html">了解青柠 Pro</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- footer:start -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="" width="30" height="30"><span>青柠记账</span></a>
+        <p>为 iPhone 与 Mac 设计的记账应用。三秒记一笔，一眼看清一个月。</p>
+      </div>
+      <nav class="footer-nav" aria-label="页脚">
+        <div>
+          <h2>产品</h2>
+          <ul>
+            <li><a href="features.html">功能</a></li>
+            <li><a href="pricing.html">价格</a></li>
+            <li><a href="https://apps.apple.com/cn/app/lime-ledger/id0000000000">在 App Store 下载</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>支持</h2>
+          <ul>
+            <li><a href="faq.html">常见问题</a></li>
+            <li><a href="contact.html">联系我们</a></li>
+            <li><a href="privacy.html">隐私政策</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>公司</h2>
+          <ul>
+            <li><a href="about.html">关于我们</a></li>
+            <li><a href="blog/index.html">博客</a></li>
+            <li><a href="contact.html?topic=press">媒体合作</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <p>© 2026 青柠软件工作室。保留所有权利。</p>
+        <p>Apple、iPhone、iPad、Mac 和 App Store 是 Apple Inc. 在美国和其他国家及地区注册的商标。</p>
+      </div>
+      <div class="appearance">
+        <span id="appearance-label">外观</span>
+        <div class="as-segmented" role="radiogroup" aria-labelledby="appearance-label" data-appearance>
+          <button class="as-segment is-selected" type="button" role="radio" aria-checked="true" data-value="auto">自动</button>
+          <button class="as-segment" type="button" role="radio" aria-checked="false" data-value="light">浅色</button>
+          <button class="as-segment" type="button" role="radio" aria-checked="false" data-value="dark">深色</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="as-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<!-- footer:end -->
+</body>
+</html>

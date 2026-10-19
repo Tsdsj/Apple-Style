@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="ll-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D6F46E"/>
+      <stop offset="1" stop-color="#5CAF2D"/>
+    </linearGradient>
+    <radialGradient id="ll-pulp" cx="50%" cy="42%" r="60%">
+      <stop offset="0" stop-color="#F4FDCF"/>
+      <stop offset="1" stop-color="#BFE65F"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="27" fill="url(#ll-bg)"/>
+  <circle cx="60" cy="60" r="38" fill="#2F7D1A"/>
+  <circle cx="60" cy="60" r="34" fill="#F8FCEB"/>
+  <circle cx="60" cy="60" r="30" fill="url(#ll-pulp)"/>
+  <g transform="rotate(22.5 60 60)" stroke="#F8FCEB" stroke-width="3" stroke-linecap="round">
+    <path d="M30 60h60M60 30v60M38.8 38.8l42.4 42.4M81.2 38.8L38.8 81.2"/>
+  </g>
+  <circle cx="60" cy="60" r="4.5" fill="#F8FCEB"/>
+</svg>

@@ -1,0 +1,55 @@
+{
+  "page": "/contact.html",
+  "fields": [
+    {
+      "name": "name",
+      "type": "text",
+      "required": true,
+      "labelled": true,
+      "autocomplete": "name"
+    },
+    {
+      "name": "email",
+      "type": "email",
+      "required": true,
+      "labelled": true,
+      "autocomplete": "email"
+    },
+    {
+      "name": "topic",
+      "type": "select-one",
+      "required": true,
+      "labelled": true,
+      "autocomplete": null
+    },
+    {
+      "name": "device",
+      "type": "select-one",
+      "required": false,
+      "labelled": true,
+      "autocomplete": null
+    },
+    {
+      "name": "message",
+      "type": "textarea",
+      "required": true,
+      "labelled": true,
+      "autocomplete": null
+    }
+  ],
+  "afterEmpty": {
+    "invalidAria": 5,
+    "invalidNative": 5,
+    "focus": "INPUT name",
+    "alerts": []
+  },
+  "afterValid": {
+    "url": "/contact.html",
+    "invalidAria": 0,
+    "liveText": [
+      "消息已发送"
+    ],
+    "changed": true,
+    "focus": "H2 contact-done-title"
+  }
+}

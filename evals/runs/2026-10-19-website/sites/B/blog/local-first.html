@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>为什么我们坚持“本地优先” — 青柠记账博客</title>
+<meta name="description" content="记账 App 知道你太多事。青柠记账从第一天起就决定，账目数据不经过我们的服务器。本文介绍本地优先的含义、我们为此放弃了什么，又得到了什么。">
+<!-- inject:head -->
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="alternate" type="application/atom+xml" title="青柠记账博客" href="../blog/feed.xml">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/main.js" defer></script>
+<link rel="canonical" href="https://www.limeledger.example/blog/local-first.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="青柠记账 Lime Ledger">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="为什么我们坚持“本地优先” — 青柠记账博客">
+<meta property="og:description" content="记账 App 知道你太多事。青柠记账从第一天起就决定，账目数据不经过我们的服务器。本文介绍本地优先的含义、我们为此放弃了什么，又得到了什么。">
+<meta property="og:url" content="https://www.limeledger.example/blog/local-first.html">
+<meta property="og:image" content="https://www.limeledger.example/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="青柠记账：记账，本该这么轻">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /inject:head -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "为什么我们坚持“本地优先”",
+  "description": "记账 App 知道你太多事。青柠记账从第一天起就决定，账目数据不经过我们的服务器。",
+  "datePublished": "2026-08-20",
+  "dateModified": "2026-08-20",
+  "inLanguage": "zh-CN",
+  "author": { "@type": "Person", "name": "何川" },
+  "publisher": { "@type": "Organization", "name": "青柠工作室", "logo": { "@type": "ImageObject", "url": "https://www.limeledger.example/assets/img/icon-512.png" } },
+  "image": "https://www.limeledger.example/assets/img/og-image.png",
+  "mainEntityOfPage": "https://www.limeledger.example/blog/local-first.html"
+}
+</script>
+</head>
+<body data-nav="blog">
+<!-- inject:header -->
+<a class="skip-link" href="#main">跳到主要内容</a>
+<header class="site-header">
+  <nav class="nav container" aria-label="主导航">
+    <a class="brand" href="../index.html"><img class="brand__mark" src="../assets/img/icon.svg" alt="" width="26" height="26"><span>青柠记账</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单"><span class="nav-toggle__bar"></span><span class="nav-toggle__bar"></span></button>
+    <div class="nav-menu" id="nav-menu">
+      <ul class="nav-links">
+        <li><a href="../features.html">功能</a></li>
+        <li><a href="../pricing.html">价格</a></li>
+        <li><a href="../blog/index.html" aria-current="true">博客</a></li>
+        <li><a href="../faq.html">常见问题</a></li>
+        <li><a href="../about.html">关于</a></li>
+        <li><a href="../contact.html">联系我们</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm nav-cta" href="../index.html#download">免费下载</a>
+    </div>
+  </nav>
+</header>
+<!-- /inject:header -->
+
+<main id="main">
+  <article>
+    <header class="article-head">
+      <div class="container container--text">
+        <div class="post-meta"><a href="index.html">博客</a><span aria-hidden="true">›</span><span class="badge">设计理念</span><time datetime="2026-08-20">2026 年 8 月 20 日</time><span>阅读约 6 分钟</span></div>
+        <h1>为什么我们坚持“本地优先”</h1>
+        <p class="lede">记账 App 知道你太多事：你几点喝咖啡，每月房租多少，给谁转过账。我们从第一天起就决定，这些数据不应该经过我们的服务器。</p>
+        <div class="byline"><span class="avatar" style="--av:#b4460f" aria-hidden="true">川</span><span><b>何川</b>数据与同步</span></div>
+      </div>
+    </header>
+
+    <div class="container container--narrow">
+      <div class="article-cover">
+        <div class="post-cover cover-2">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="#b5e550" stroke-opacity=".2" stroke-width="1.5"><circle cx="320" cy="180" r="80"/><circle cx="320" cy="180" r="130"/><circle cx="320" cy="180" r="180"/><circle cx="320" cy="180" r="230"/><circle cx="320" cy="180" r="280"/></g>
+            <rect x="272" y="98" width="96" height="164" rx="20" fill="#14230d" stroke="#b5e550" stroke-width="3"/>
+            <rect x="304" y="108" width="32" height="8" rx="4" fill="#b5e550" opacity=".5"/>
+            <g transform="translate(320 186)"><path d="M-14-6v-10a14 14 0 0 1 28 0v10" fill="none" stroke="#b5e550" stroke-width="5" stroke-linecap="round"/><rect x="-24" y="-6" width="48" height="38" rx="8" fill="#b5e550"/><circle cy="10" r="5" fill="#14230d"/></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container--text">
+      <div class="prose">
+        <p>做记账 App 的第一天，我们就面临一个选择：要不要搭建自己的服务器和账号系统？</p>
+        <p>几乎所有同类产品都这么做。有了服务器，就可以做网页版、做 Android 版、做“智能理财建议”，还可以更方便地分析用户行为。但我们最终选择了另一条路：<strong>本地优先</strong>。</p>
+
+        <h2>什么是本地优先？</h2>
+        <p>简单来说，就是<strong>数据首先、并且主要存在你自己的设备上</strong>。青柠的每一个功能都在设备本地完成：记账、搜索、统计、生成报表，都不需要联网。</p>
+        <p>多台设备之间的同步，交给 Apple 的 iCloud。你的账本存放在你自己 iCloud 账户的私有数据库里，只有登录同一个 Apple 账户的设备才能读取。青柠没有自己的“云”，也没有你的账号和密码。</p>
+
+        <h2>我们放弃了什么</h2>
+        <p>这个选择是有代价的，而且我们想坦白地说出来：</p>
+        <ul>
+          <li><strong>没有网页版和 Android 版。</strong>iCloud 只在 Apple 设备上提供完整支持，这意味着我们暂时只能服务 iPhone 和 Mac 用户。</li>
+          <li><strong>我们无法帮你找回数据。</strong>如果你关闭了 iCloud 同步又删除了 App，数据就真的没有了。客服也看不到你的账目，排查问题时需要你主动提供信息。</li>
+          <li><strong>做不了“云端 AI 理财顾问”。</strong>任何需要把你的消费明细上传到服务器分析的功能，我们都不会做。</li>
+          <li><strong>更难了解用户。</strong>我们不知道你最常用哪个分类、在哪个页面停留最久。产品决策更多依靠用户来信和我们自己的使用。</li>
+        </ul>
+
+        <h2>我们得到了什么</h2>
+        <p>但换来的东西，我们认为更重要。</p>
+        <h3>快</h3>
+        <p>记一笔账不需要等待网络请求，点下“完成”的瞬间就已经保存好了。在地铁里、飞机上、信号不好的地下停车场，青柠都和平时一样快。</p>
+        <h3>可信</h3>
+        <p>我们不需要请你“相信我们会保护好你的数据”，因为数据压根不在我们手里。没有服务器，就不存在服务器被攻破、数据被泄露的可能。</p>
+        <h3>长久</h3>
+        <p>如果有一天青柠工作室不在了，App 依然可以正常使用，你的数据也依然在你的设备和 iCloud 里。再加上随时可用的 CSV 导出，你永远不会被“锁”在青柠里。</p>
+
+        <blockquote><p>最好的隐私保护，是从一开始就不去收集。</p></blockquote>
+
+        <h2>那数据安全吗？</h2>
+        <p>这是我们最常被问到的问题。青柠在几个层面上保护你的数据：</p>
+        <ol>
+          <li><strong>设备层：</strong>你可以开启面容 ID 或触控 ID 锁，App 切换到后台时会自动模糊界面。</li>
+          <li><strong>同步层：</strong>iCloud 中的数据受 Apple 的安全机制保护；开启 iCloud“高级数据保护”后，同步数据还会进行端到端加密。</li>
+          <li><strong>备份层：</strong>你可以随时导出完整的 CSV 文件，自己保存一份备份。</li>
+        </ol>
+        <p>更多细节，可以阅读我们的<a href="../privacy.html">隐私政策</a>，我们尽量把它写得像人话。</p>
+
+        <h2>写在最后</h2>
+        <p>本地优先不是一个营销口号，而是一系列具体的工程取舍。它让我们少做了很多事，也让我们更专注。我们相信，一个记账 App 最该做好的，是让你安心地把生活交给它记录。</p>
+        <p>如果你对我们的技术选择有任何疑问，欢迎<a href="../contact.html">写信给我们</a>，我会亲自回复。</p>
+      </div>
+
+      <footer class="article-foot">
+        <a class="link-more" href="index.html">所有文章</a>
+        <div><button class="btn btn-quiet btn-sm" type="button" data-copy-link>复制文章链接</button><span class="copy-status" role="status" aria-live="polite"></span></div>
+      </footer>
+    </div>
+  </article>
+
+  <aside class="section" aria-labelledby="related-title">
+    <div class="container container--narrow">
+      <h2 class="headline headline--md" id="related-title" style="margin-bottom:28px">继续阅读</h2>
+      <div class="post-grid" style="margin-top:0">
+        <a class="post-card" href="lime-ledger-3.html">
+          <div class="post-card__body">
+            <div class="post-meta"><span class="badge">产品更新</span><time datetime="2026-09-16">2026 年 9 月 16 日</time></div>
+            <h3 class="post-card__title"><span class="ph">青柠记账 3.0：</span><span class="ph">来到 Mac，</span><span class="ph">预算学会了“滚动”</span></h3>
+            <p>三年来最大的一次更新：Mac 版正式登场，预算支持滚动结余，iPhone 首页也焕然一新。</p>
+          </div>
+        </a>
+        <a class="post-card" href="30-day-habits.html">
+          <div class="post-card__body">
+            <div class="post-meta"><span class="badge">记账方法</span><time datetime="2026-07-08">2026 年 7 月 8 日</time></div>
+            <h3 class="post-card__title">新手记账的五个习惯：从坚持 30 天开始</h3>
+            <p>记账最难的不是方法，而是坚持。这五个小习惯，能帮你轻松跨过最初的 30 天。</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- inject:footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="../index.html"><img class="brand__mark" src="../assets/img/icon.svg" alt="" width="26" height="26"><span>青柠记账</span></a>
+        <p>为 iPhone 与 Mac 设计的记账应用。让记账变轻，让生活更从容。</p>
+      </div>
+      <nav class="footer-nav" aria-label="页脚导航">
+        <div>
+          <h2>产品</h2>
+          <ul><li><a href="../features.html">功能</a></li><li><a href="../pricing.html">价格</a></li><li><a href="../index.html#download">下载</a></li></ul>
+        </div>
+        <div>
+          <h2>支持</h2>
+          <ul><li><a href="../faq.html">常见问题</a></li><li><a href="../contact.html">联系我们</a></li></ul>
+        </div>
+        <div>
+          <h2>公司</h2>
+          <ul><li><a href="../about.html">关于我们</a></li><li><a href="../blog/index.html">博客</a></li><li><a href="../blog/feed.xml">RSS 订阅</a></li></ul>
+        </div>
+        <div>
+          <h2>法律</h2>
+          <ul><li><a href="../privacy.html">隐私政策</a></li><li><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">最终用户许可协议</a></li></ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <p>© 2026 青柠工作室 Lime Ledger Studio。保留所有权利。</p>
+        <p>Apple、iPhone、Mac、iCloud、App Store 和面容 ID 是 Apple Inc. 的商标。</p>
+      </div>
+      <fieldset class="theme-switch js-only">
+        <legend class="sr-only">外观</legend>
+        <span class="theme-switch__label" aria-hidden="true">外观</span>
+        <span class="segmented">
+          <input type="radio" name="theme" id="theme-auto" value="auto" checked><label for="theme-auto">自动</label>
+          <input type="radio" name="theme" id="theme-light" value="light"><label for="theme-light">浅色</label>
+          <input type="radio" name="theme" id="theme-dark" value="dark"><label for="theme-dark">深色</label>
+        </span>
+      </fieldset>
+    </div>
+  </div>
+</footer>
+<!-- /inject:footer -->
+</body>
+</html>

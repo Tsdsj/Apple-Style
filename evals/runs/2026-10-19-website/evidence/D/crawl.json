@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "/index.html",
+    "/features.html",
+    "/pricing.html",
+    "/faq.html",
+    "/blog/index.html",
+    "/about.html",
+    "/contact.html",
+    "/privacy.html",
+    "/blog/lime-ledger-3.html",
+    "/blog/three-accounts.html",
+    "/blog/budget-that-sticks.html"
+  ],
+  "broken": [],
+  "missingAnchors": [],
+  "files": [
+    "404.html",
+    "README.md",
+    "about.html",
+    "assets/css/apple-style.css",
+    "assets/css/site.css",
+    "assets/img/apple-touch-icon.png",
+    "assets/img/favicon.svg",
+    "assets/img/og-image.png",
+    "assets/js/liquid-glass.js",
+    "assets/js/liquid-glass.mjs",
+    "assets/js/site.js",
+    "blog/budget-that-sticks.html",
+    "blog/feed.xml",
+    "blog/index.html",
+    "blog/lime-ledger-3.html",
+    "blog/three-accounts.html",
+    "contact.html",
+    "faq.html",
+    "features.html",
+    "index.html",
+    "pricing.html",
+    "privacy.html",
+    "robots.txt",
+    "sitemap.xml"
+  ],
+  "orphans": [
+    "404.html"
+  ]
+}

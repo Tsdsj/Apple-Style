@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "/index.html",
+    "/features.html",
+    "/pricing.html",
+    "/blog/index.html",
+    "/faq.html",
+    "/about.html",
+    "/contact.html",
+    "/privacy.html",
+    "/blog/lime-ledger-3.html",
+    "/blog/budget-50-30-20.html",
+    "/blog/why-no-ads.html"
+  ],
+  "broken": [],
+  "missingAnchors": [],
+  "files": [
+    "404.html",
+    "README.md",
+    "about.html",
+    "assets/css/apple-style.css",
+    "assets/css/site.css",
+    "assets/img/apple-touch-icon.png",
+    "assets/img/favicon-32.png",
+    "assets/img/favicon.svg",
+    "assets/img/icon-192.png",
+    "assets/img/icon-512.png",
+    "assets/img/icon-square.svg",
+    "assets/img/logo.svg",
+    "assets/img/og-image.png",
+    "assets/js/liquid-glass.js",
+    "assets/js/site.js",
+    "blog/budget-50-30-20.html",
+    "blog/index.html",
+    "blog/lime-ledger-3.html",
+    "blog/why-no-ads.html",
+    "contact.html",
+    "faq.html",
+    "features.html",
+    "index.html",
+    "pricing.html",
+    "privacy.html",
+    "robots.txt",
+    "site.webmanifest",
+    "sitemap.xml"
+  ],
+  "orphans": [
+    "404.html"
+  ]
+}

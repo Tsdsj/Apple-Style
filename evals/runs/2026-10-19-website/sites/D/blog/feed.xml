@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
+  <title>青柠记账博客</title>
+  <subtitle>记账方法、预算习惯与青柠记账的产品更新</subtitle>
+  <link href="https://limeledger.example/blog/feed.xml" rel="self"/>
+  <link href="https://limeledger.example/blog/"/>
+  <id>https://limeledger.example/blog/</id>
+  <updated>2026-10-12T09:00:00+08:00</updated>
+  <author><name>青柠记账团队</name></author>
+  <entry>
+    <title>青柠记账 3.0：为新设计重新打磨的 iPhone 与 Mac 版</title>
+    <link href="https://limeledger.example/blog/lime-ledger-3.html"/>
+    <id>https://limeledger.example/blog/lime-ledger-3.html</id>
+    <published>2026-10-12T09:00:00+08:00</published>
+    <updated>2026-10-12T09:00:00+08:00</updated>
+    <author><name>林沐</name></author>
+    <summary>半年时间，我们几乎重写了每一个界面：新的外观、更快的记账键盘、真正像 Mac 应用的 Mac 版，以及重新设计的报表。</summary>
+  </entry>
+  <entry>
+    <title>三个账户就够了：一套不累的个人记账方法</title>
+    <link href="https://limeledger.example/blog/three-accounts.html"/>
+    <id>https://limeledger.example/blog/three-accounts.html</id>
+    <published>2026-09-28T09:00:00+08:00</published>
+    <updated>2026-09-28T09:00:00+08:00</updated>
+    <author><name>周以宁</name></author>
+    <summary>大多数人的记账坚持不过三周。问题通常不在毅力，而在一开始就把账本设计得太复杂。</summary>
+  </entry>
+  <entry>
+    <title>预算不是节食：怎样定一个真的守得住的月度预算</title>
+    <link href="https://limeledger.example/blog/budget-that-sticks.html"/>
+    <id>https://limeledger.example/blog/budget-that-sticks.html</id>
+    <published>2026-08-30T09:00:00+08:00</published>
+    <updated>2026-08-30T09:00:00+08:00</updated>
+    <author><name>何嘉</name></author>
+    <summary>定预算时，我们总是按照理想中的自己来定。更好的起点，是诚实地看看过去三个月真实的自己。</summary>
+  </entry>
+</feed>

@@ -1,0 +1,310 @@
+{
+  "light /index.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 26,
+        "targets": [
+          ".mac__group:nth-child(2)",
+          ".mac__group:nth-child(6)",
+          ".mac__stat:nth-child(1) > p:nth-child(1)"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 101
+      }
+    ]
+  },
+  "light /features.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".ui-panel[role=\"img\"] > .small"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 27
+      }
+    ]
+  },
+  "light /pricing.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "th-has-data-cells",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /faq.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "light /blog/index.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href$=\"feed.xml\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "light /about.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 11
+      }
+    ]
+  },
+  "light /contact.html": {
+    "violations": [
+      {
+        "id": "landmark-complementary-is-top-level",
+        "impact": "moderate",
+        "nodes": 1,
+        "targets": [
+          "aside"
+        ]
+      },
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a[href$=\"privacy.html#website\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /blog/lime-ledger-3-for-mac.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 26,
+        "targets": [
+          ".mac__group:nth-child(2)",
+          ".mac__group:nth-child(6)",
+          ".mac__stat:nth-child(1) > p:nth-child(1)"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 7
+      }
+    ]
+  },
+  "light /privacy.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "light /blog/why-no-account.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /blog/first-budget-50-30-20.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "targets": [
+          ".split-bar > span:nth-child(1)",
+          "span:nth-child(1) > small",
+          ".split-bar > span:nth-child(2)"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "light /404.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "dark /index.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 99
+      }
+    ]
+  },
+  "dark /features.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          ".ui-panel[role=\"img\"] > .small"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 27
+      }
+    ]
+  },
+  "dark /pricing.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "th-has-data-cells",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /faq.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "dark /blog/index.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "a[href$=\"feed.xml\"]"
+        ]
+      }
+    ],
+    "incomplete": []
+  },
+  "dark /about.html": {
+    "violations": [
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 11
+      }
+    ]
+  },
+  "dark /contact.html": {
+    "violations": [
+      {
+        "id": "landmark-complementary-is-top-level",
+        "impact": "moderate",
+        "nodes": 1,
+        "targets": [
+          "aside"
+        ]
+      },
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1,
+        "targets": [
+          "p > a[href$=\"privacy.html#website\"]"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /blog/lime-ledger-3-for-mac.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 5
+      }
+    ]
+  },
+  "dark /privacy.html": {
+    "violations": [],
+    "incomplete": []
+  },
+  "dark /blog/why-no-account.html": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /blog/first-budget-50-30-20.html": {
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "targets": [
+          ".split-bar > span:nth-child(1)",
+          "span:nth-child(1) > small",
+          ".split-bar > span:nth-child(2)"
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": 1
+      }
+    ]
+  },
+  "dark /404.html": {
+    "violations": [],
+    "incomplete": []
+  }
+}

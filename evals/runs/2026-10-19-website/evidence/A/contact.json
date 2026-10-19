@@ -1,0 +1,50 @@
+{
+  "page": "/contact.html",
+  "fields": [
+    {
+      "name": "name",
+      "type": "text",
+      "required": true,
+      "labelled": true,
+      "autocomplete": "name"
+    },
+    {
+      "name": "email",
+      "type": "email",
+      "required": true,
+      "labelled": true,
+      "autocomplete": "email"
+    },
+    {
+      "name": "topic",
+      "type": "select-one",
+      "required": true,
+      "labelled": true,
+      "autocomplete": null
+    },
+    {
+      "name": "message",
+      "type": "textarea",
+      "required": true,
+      "labelled": true,
+      "autocomplete": null
+    }
+  ],
+  "afterEmpty": {
+    "invalidAria": 4,
+    "invalidNative": 4,
+    "focus": "INPUT name",
+    "alerts": [
+      "还可输入 1000 字"
+    ]
+  },
+  "afterValid": {
+    "url": "/contact.html",
+    "invalidAria": 0,
+    "liveText": [
+      "还可输入 980 字"
+    ],
+    "changed": true,
+    "focus": "H2 "
+  }
+}

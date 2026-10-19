@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>我们为什么不做账号系统 · 青柠记账博客</title>
+  <meta name="description" content="青柠记账没有注册和登录。没有账号，同步怎么做？数据怎么找回？我们又靠什么赚钱？这篇文章认真回答一次。">
+  <meta name="author" content="沈知">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://limeledger.app/blog/why-no-account.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="青柠记账 Lime Ledger">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="我们为什么不做账号系统">
+  <meta property="og:description" content="没有账号，同步怎么做？数据怎么找回？我们又靠什么赚钱？">
+  <meta property="og:url" content="https://limeledger.app/blog/why-no-account.html">
+  <meta property="og:image" content="https://limeledger.app/assets/img/og-image.png">
+  <meta property="article:published_time" content="2026-08-12">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.ico" sizes="32x32">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="青柠记账博客" href="feed.xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>!function(d){d.classList.add("js");try{var t=localStorage.getItem("ll-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}}(document.documentElement);</script>
+  <script src="../assets/js/main.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "我们为什么不做账号系统",
+    "datePublished": "2026-08-12",
+    "author": { "@type": "Person", "name": "沈知" },
+    "publisher": { "@type": "Organization", "name": "Lime Ledger 工作室" },
+    "inLanguage": "zh-CN"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html" aria-label="青柠记账 首页"><img src="../assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+      <div class="nav-menu" id="site-menu">
+        <ul class="nav-links">
+          <li><a href="../features.html">功能</a></li>
+          <li><a href="../pricing.html">价格</a></li>
+          <li><a href="../faq.html">常见问题</a></li>
+          <li><a href="index.html" aria-current="page">博客</a></li>
+          <li><a href="../about.html">关于我们</a></li>
+          <li><a href="../contact.html">联系我们</a></li>
+        </ul>
+      </div>
+      <a class="btn btn-primary btn-sm nav-cta" href="../index.html#download">免费下载</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu"><span class="visually-hidden">菜单</span><span class="nav-toggle__bars" aria-hidden="true"></span></button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article>
+      <header class="article-head">
+        <div class="container container--text">
+          <p class="post-meta"><a href="index.html">博客</a><span class="dot"></span><span>设计思考</span><span class="dot"></span><time datetime="2026-08-12">2026 年 8 月 12 日</time><span class="dot"></span><span>约 5 分钟</span></p>
+          <h1 class="article-title">我们为什么不做账号系统</h1>
+          <p class="lead">不要注册，那怎么同步？怎么找回数据？又怎么赚钱？这篇文章想认真回答一次。</p>
+          <div class="byline"><span class="avatar" style="--c:#e0569b" aria-hidden="true">知</span><span><b>沈知</b><span>数据与隐私工程</span></span></div>
+        </div>
+        <div class="container">
+          <div class="article-hero">
+            <div class="post-cover post-cover--privacy" role="img" aria-label="封面插图：一把锁">
+              <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="36" y="38" width="48" height="38" rx="8"/><path d="M46 38V28a14 14 0 0 1 28 0v10"/><path d="M60 52v10"/></svg>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="container container--text section" style="padding-top:clamp(40px,6vw,72px)">
+        <div class="prose">
+          <p>每隔一段时间，就会有人在邮件里问我们类似的问题：“你们连注册都不要，那数据存在哪儿？”“换手机了怎么办？”“不收集用户信息，你们怎么活下去？”</p>
+          <p>这些都是好问题。不做账号系统，是青柠记账最早、也最重要的一个决定。今天想把背后的考虑完整地讲一遍。</p>
+
+          <h2>一个账号意味着什么</h2>
+          <p>对用户来说，账号只是一个手机号加验证码。但对开发者来说，它意味着服务器上的一张用户表，以及和这张表关联起来的所有数据。</p>
+          <p>一旦有了这张表，很多事情就会自然发生：你需要保护它，需要为它做备份和灾备，需要应对各种安全审计；同时，总会有人提议“既然有了，不如用起来”——做用户画像、做精准推荐、和合作方“打通数据”。</p>
+          <blockquote><p>对一款记账 App 来说，最安全的用户数据，是根本不存在于我们服务器上的数据。</p></blockquote>
+          <p>记账数据比大多数数据都更敏感。它能看出一个人住在哪里、几点上下班、收入多少、有没有孩子、最近是不是在看病。我们不想替任何人保管这些东西，也不认为自己应该保管。</p>
+
+          <h2>没有账号，同步怎么做</h2>
+          <p>答案是：借用你已经有的那个账号——你的 Apple 账户。</p>
+          <p>青柠记账使用 iCloud 中属于你自己的私有数据库来同步。数据从你的 iPhone 出发，存进你的 iCloud，再到达你的 Mac。整个过程中没有一台服务器属于我们。</p>
+          <p>更进一步，我们对账目内容使用了加密字段：数据在离开设备之前就已加密，密钥在你的设备之间由 Apple 账户管理。也就是说，即便数据存放在 iCloud 上，我们和 Apple 也读不到内容。</p>
+          <p>换手机时，只要登录同一个 Apple 账户，数据就会自动回来。这正是“找回数据”在青柠里的样子：不需要找回密码，因为本来就没有密码。</p>
+
+          <h2>我们放弃了什么</h2>
+          <p>这个决定当然有代价。说清楚代价，比只讲好处更诚实：</p>
+          <ul>
+            <li><strong>没有网页版。</strong>没有服务器，就没有办法让你在任意一台电脑的浏览器里登录查看。</li>
+            <li><strong>暂时没有 Android 版。</strong>iCloud 同步只在 Apple 设备之间工作，跨平台需要一整套新的方案。</li>
+            <li><strong>我们对用户如何使用 App 知之甚少。</strong>没有行为统计，很多产品决策只能靠用户来信、访谈和我们自己每天的使用。</li>
+            <li><strong>我们无法替你恢复数据。</strong>如果你关闭了 iCloud 又删除了 App，数据就真的没有了。所以我们在删除前会再三确认，并提醒你先导出。</li>
+          </ul>
+
+          <h2>我们得到了什么</h2>
+          <p>换来的东西，我们觉得更重要：</p>
+          <ul>
+            <li>不存在“用户数据泄露”这种事故，因为没有可以泄露的用户数据库。</li>
+            <li>打开就能用。很多人第一次打开青柠，十秒之内就记下了第一笔。</li>
+            <li>团队可以把精力放在 App 本身，而不是服务器运维、风控和合规流程上。</li>
+            <li>最重要的是信任。我们不需要说服你相信我们会好好保管数据，因为我们根本不保管。</li>
+          </ul>
+
+          <h2>那么，怎么赚钱</h2>
+          <p>靠订阅。青柠记账的核心功能是免费的，需要共享账本、票据扫描等进阶功能的用户，可以订阅青柠 Pro。</p>
+          <p>这是一种很朴素的关系：你为一个好用的工具付费，我们努力让它值得这个价钱。我们不需要靠广告或数据赚钱，也就不需要让你在 App 里多停留一分钟、多看一个推荐位。</p>
+          <p>今天，订阅收入已经可以覆盖六个人的工资和全部开销。这让我们有底气继续做这个不太“主流”的选择。</p>
+
+          <hr>
+          <p>如果你对青柠的隐私设计还有疑问，可以读一读我们的<a href="../privacy.html">隐私政策</a>，或者直接<a href="../contact.html">写信给我们</a>。我们很乐意聊这些。</p>
+        </div>
+
+        <footer class="article-foot">
+          <a class="link-back" href="index.html">返回博客</a>
+          <button class="btn btn-quiet btn-sm" type="button" data-copy-link>复制文章链接</button>
+        </footer>
+      </div>
+    </article>
+
+    <section class="section section--alt" aria-labelledby="related-title">
+      <div class="container">
+        <h2 class="h3" id="related-title">继续阅读</h2>
+        <div class="post-grid">
+          <article class="post-card">
+            <div class="post-cover post-cover--mac" aria-hidden="true">
+              <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="10" width="84" height="56" rx="6"/><path d="M6 78h108"/><circle cx="60" cy="38" r="15"/><path d="M60 23v30M45 38h30M49.4 27.4l21.2 21.2M70.6 27.4 49.4 48.6" stroke-width="2.5"/></svg>
+            </div>
+            <div class="post-card__body">
+              <p class="post-meta"><span>产品更新</span><span class="dot"></span><time datetime="2026-09-24">2026 年 9 月 24 日</time></p>
+              <h3><a href="lime-ledger-3-for-mac.html">青柠记账 3.0：你好，Mac</a></h3>
+              <p>原生 Mac 版、为大屏幕重新设计的报表和完整的键盘快捷键。</p>
+            </div>
+          </article>
+          <article class="post-card">
+            <div class="post-cover post-cover--budget" aria-hidden="true">
+              <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><circle cx="60" cy="45" r="32" opacity=".35"/><path d="M60 13a32 32 0 0 1 30.4 41.9"/><circle cx="60" cy="45" r="18" opacity=".35"/><path d="M60 27a18 18 0 1 1-17.1 23.6"/></svg>
+            </div>
+            <div class="post-card__body">
+              <p class="post-meta"><span>理财方法</span><span class="dot"></span><time datetime="2026-06-30">2026 年 6 月 30 日</time></p>
+              <h3><a href="first-budget-50-30-20.html">第一次做预算？从 50/30/20 开始</a></h3>
+              <p>一条简单的比例，就能帮你迈出第一步。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <a class="brand" href="../index.html"><img src="../assets/img/app-icon.svg" alt="" width="28" height="28"><span>青柠记账</span></a>
+        <p class="footer-tagline">为 iPhone 和 Mac 打造的轻记账。</p>
+      </div>
+      <nav class="footer-grid" aria-label="页脚导航">
+        <div>
+          <h2 class="footer-title">产品</h2>
+          <ul>
+            <li><a href="../features.html">功能介绍</a></li>
+            <li><a href="../pricing.html">价格</a></li>
+            <li><a href="../index.html#download">下载</a></li>
+            <li><a href="lime-ledger-3-for-mac.html">3.0 新功能</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">支持</h2>
+          <ul>
+            <li><a href="../faq.html">常见问题</a></li>
+            <li><a href="../contact.html">联系我们</a></li>
+            <li><a href="../faq.html#cancel-subscription">管理订阅</a></li>
+            <li><a href="../faq.html#export-data">导出数据</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">公司</h2>
+          <ul>
+            <li><a href="../about.html">关于我们</a></li>
+            <li><a href="index.html">博客</a></li>
+            <li><a href="../about.html#join">加入我们</a></li>
+            <li><a href="../contact.html#press">媒体合作</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">法律</h2>
+          <ul>
+            <li><a href="../privacy.html">隐私政策</a></li>
+            <li><a href="../privacy.html#subscription">订阅说明</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer-bottom">
+        <div>
+          <p>© 2026 Lime Ledger 工作室。保留所有权利。</p>
+          <p>iPhone、Mac、iCloud、Siri 和 App Store 是 Apple Inc. 在美国及其他国家和地区注册的商标。青柠记账与 Apple Inc. 无关联。</p>
+        </div>
+        <div class="theme-switch">
+          <span class="theme-switch__label" id="theme-label">外观</span>
+          <fieldset class="segmented" aria-labelledby="theme-label">
+            <legend>外观</legend>
+            <label><input type="radio" name="theme" value="auto" checked><span>自动</span></label>
+            <label><input type="radio" name="theme" value="light"><span>浅色</span></label>
+            <label><input type="radio" name="theme" value="dark"><span>深色</span></label>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

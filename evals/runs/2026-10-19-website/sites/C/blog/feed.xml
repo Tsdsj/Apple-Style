@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>青柠手记 · 青柠记账博客</title>
+    <link>https://limeledger.app/blog/</link>
+    <atom:link href="https://limeledger.app/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>青柠记账的产品更新、设计思考，以及关于钱和生活的小方法。</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 24 Sep 2026 09:00:00 +0800</lastBuildDate>
+    <item>
+      <title>青柠记账 3.0：你好，Mac</title>
+      <link>https://limeledger.app/blog/lime-ledger-3-for-mac.html</link>
+      <guid>https://limeledger.app/blog/lime-ledger-3-for-mac.html</guid>
+      <pubDate>Thu, 24 Sep 2026 09:00:00 +0800</pubDate>
+      <description>我们迄今最大的一次更新：从零写起的原生 Mac 版，为大屏幕重新设计的报表，完整的键盘快捷键，以及 iPhone 上的一系列新功能。</description>
+    </item>
+    <item>
+      <title>我们为什么不做账号系统</title>
+      <link>https://limeledger.app/blog/why-no-account.html</link>
+      <guid>https://limeledger.app/blog/why-no-account.html</guid>
+      <pubDate>Wed, 12 Aug 2026 09:00:00 +0800</pubDate>
+      <description>不要注册，那怎么同步？怎么找回数据？又怎么赚钱？这篇文章想认真回答一次。</description>
+    </item>
+    <item>
+      <title>第一次做预算？从 50/30/20 开始</title>
+      <link>https://limeledger.app/blog/first-budget-50-30-20.html</link>
+      <guid>https://limeledger.app/blog/first-budget-50-30-20.html</guid>
+      <pubDate>Tue, 30 Jun 2026 09:00:00 +0800</pubDate>
+      <description>不用复杂的表格，也不用精确到每一分钱。一条简单的比例，就能帮你迈出第一步。</description>
+    </item>
+  </channel>
+</rss>

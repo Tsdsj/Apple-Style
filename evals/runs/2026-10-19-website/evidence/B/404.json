@@ -1,0 +1,12 @@
+{
+  "file": "404.html",
+  "title": "页面未找到 — 青柠记账 Lime Ledger",
+  "linksHome": true,
+  "noindex": true,
+  "nestedStatus": 404,
+  "nestedStyled": true,
+  "nestedLinksWork": {
+    "checked": 5,
+    "ok": 4
+  }
+}
