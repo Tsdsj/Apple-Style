@@ -1,0 +1,39 @@
+/* Reference site glue (web/examples/site). Brand tokens and a few layout rules only. Everything else comes
+   from the bundles in this folder, which scripts/build-css.py generates from the skill sources. This file is
+   loaded last and counts toward the page budget (it is measured unminified, which overstates it). */
+
+/* Brand: Ferrule teal. Contrast is measured on the real backgrounds in ../README.md. */
+:root {
+  --as-accent: light-dark(#00655d, #5ad9c9);
+  --as-accent-on-tint: light-dark(#00524b, #5ad9c9);
+  --as-action-bg: light-dark(#00655d, #00736a);
+  /* Floating header: 12px + 56px bar + 12px. */
+  --as-site-header-h: 80px;
+}
+@media (max-width: 47.99em) { :root { --as-site-header-h: 116px; } }
+@media (max-width: 23.75em) { :root { --as-site-header-h: 138px; } }
+
+.site-skip {
+  position: absolute; inset-block-start: 8px; inset-inline-start: 8px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--as-radius-s); background: var(--as-bg); color: var(--as-label);
+  font: 600 15px/20px var(--as-font-text); text-decoration: none; transform: translateY(-200%);
+}
+.site-skip:focus { transform: none; outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+.site-page { box-sizing: border-box; max-inline-size: var(--as-site-width); margin-inline: auto; padding: 48px var(--as-margin) 80px; }
+@media (min-width: 48em) { .site-page { padding-inline: var(--as-margin-regular); } }
+.site-page-head { max-inline-size: 40rem; margin-block-end: 32px; }
+.site-page-title { margin: 0 0 12px; font: 600 clamp(2.25rem, 1.7rem + 2.5vw, 3.5rem)/1.1 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.site-page .as-site-breadcrumb { margin-block-end: 24px; }
+.site-page .as-site-tags { margin-block: 0 32px; }
+.site-page .as-site-pagination { margin-block-start: 40px; }
+
+.site-product { display: grid; gap: 32px; align-items: start; }
+@media (min-width: 64em) { .site-product { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; } }
+
+.site-cta-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px 32px; }
+.site-cta-store { display: grid; justify-items: start; gap: 8px; }
+.site-cta-note { margin: 0; font: 400 15px/20px var(--as-font-text); color: var(--as-label-secondary); }
+
+.site-subscribe { margin-block-start: 56px; padding-block-start: 40px; border-block-start: 1px solid var(--as-separator); }
+.site-subscribe-title { margin: 0 0 8px; font: 600 clamp(1.5rem, 1.3rem + .8vw, 2rem)/1.2 var(--as-font-display); color: var(--as-label); }

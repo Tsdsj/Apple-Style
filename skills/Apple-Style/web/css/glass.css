@@ -143,35 +143,6 @@
 }
 .as-glass-interactive:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
 
-/* Glass groups: several items share ONE glass background (toolbar groups,
-   tab bars). Children must NOT be glass themselves — never glass on glass. */
-.as-glass-group { display: inline-flex; align-items: center; gap: 2px; padding: 4px; }
-/* Glass inside a glass group is a markup mistake (glass on glass). Render it
-   flat — content visible and usable, no second material — and let
-   liquid-glass.js warn in the console. Never hide content. */
-.as-glass-group > .as-glass { -webkit-backdrop-filter: none; backdrop-filter: none; background: transparent; box-shadow: none; }
-.as-glass-group > .as-glass::before, .as-glass-group > .as-glass::after { display: none; }
-.as-glass-group > .as-item {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  min-width: calc(var(--as-hit-min) - 8px); min-height: calc(var(--as-hit-min) - 8px);
-  padding: 0 14px; border-radius: var(--as-radius-capsule); border: 0; background: transparent;
-  color: inherit; font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
-  transition: background var(--as-dur-fast) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-spring);
-}
-.as-glass-group > .as-item:hover { background: rgb(128 128 128 / .12); }
-.as-glass-group > .as-item:active { transform: scale(.94); }
-.as-glass-group > .as-item[aria-pressed="true"], .as-glass-group > .as-item.is-selected {
-  background: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .16));
-  box-shadow: 0 1px 4px rgb(0 0 0 / .12);
-}
-.as-glass-group > .as-item.is-selected { color: var(--as-accent); }
-
-/* Element lifts INTO glass only while interacting (sliders, toggles knobs) */
-.as-glass-transient { transition: all var(--as-dur-base) var(--as-ease-spring); }
-.as-glass-transient:not(:active):not(.is-dragging) { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 3px rgb(0 0 0 / .15); }
-
-/* Dimming layer for clear glass / modality */
-.as-dim { position: absolute; inset: 0; background: rgb(0 0 0 / .35); pointer-events: none; }
 
 /* --------------------------------------------------------------------------
    5. Scroll edge effect (replaces bar backgrounds & hard dividers)

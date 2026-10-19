@@ -88,5 +88,38 @@ class CheckSite(unittest.TestCase):
                 self.assertEqual(checks[cid]['status'], 'pass', checks[cid])
 
 
+
+class ReferenceSite(unittest.TestCase):
+    """The skill's own reference site passes every check-site check (plan 3.4), with axe when installed."""
+    @classmethod
+    def setUpClass(cls):
+        reason = skip_reason()
+        if reason:
+            raise unittest.SkipTest(reason)
+        cls.out = tempfile.mkdtemp(prefix='check-site-ref-')
+        env = {**os.environ, 'SITE': str(REPO/'skills/Apple-Style/web/examples/site'), 'PORT': '9391', 'OUT': cls.out}
+        axe = REPO/'node_modules/axe-core/axe.min.js'
+        if axe.exists():
+            env['AXE'] = str(axe)
+        cls.axe = axe.exists()
+        cls.proc = subprocess.run(['npx', 'playwright', 'test', '-c', str(CONFIG)], cwd=REPO, env=env,
+                                  capture_output=True, text=True, timeout=600)
+        with open(os.path.join(cls.out, 'results.json'), encoding='utf-8') as f:
+            cls.results = json.load(f)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.out, ignore_errors=True)
+
+    def test_no_check_fails(self):
+        failed = [c for c in self.results['checks'] if c['status'] == 'fail']
+        self.assertEqual(failed, [], (self.proc.stdout + self.proc.stderr)[-3000:])
+        self.assertEqual(self.proc.returncode, 0)
+
+    def test_axe_ran_when_installed(self):
+        status = {c['id']: c['status'] for c in self.results['checks']}['5']
+        self.assertEqual(status, 'pass' if self.axe else 'not checked')
+
+
 if __name__ == '__main__':
     unittest.main()

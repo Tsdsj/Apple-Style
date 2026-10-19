@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog · Ferrule</title>
+  <meta name="description" content="Notes on planning small-team work: how to start a plan, keep useful notes and write decisions down.">
+  <link rel="canonical" href="https://example.com/blog/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ferrule">
+  <meta property="og:title" content="Blog · Ferrule">
+  <meta property="og:description" content="Notes on planning small-team work.">
+  <meta property="og:url" content="https://example.com/blog/">
+  <meta property="og:image" content="https://example.com/img/social.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/listing.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site-form.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="site-skip" href="#main">Skip to content</a>
+  <header class="as-site-header as-site-header-floating">
+    <div class="as-site-header-inner as-glass as-glass-large">
+      <a class="as-site-brand" href="/">Ferrule</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/blog/" aria-current="page">Blog</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/contact.html">Get started</a>
+    </div>
+  </header>
+
+  <main id="main" class="site-page">
+    <header class="site-page-head">
+      <h1 class="site-page-title">Blog</h1>
+      <p class="as-site-section-lead">Notes on planning small-team work: where to start, what to write down and how to keep decisions findable.</p>
+    </header>
+
+    <nav class="as-site-tags" aria-label="Tags">
+      <ul>
+        <li><a href="/blog/" aria-current="true">All</a></li>
+        <li><a href="/blog/tags/planning.html">Planning</a></li>
+      </ul>
+    </nav>
+
+    <ul class="as-site-postlist">
+      <li class="as-site-post">
+        <p class="as-site-post-meta"><time datetime="2026-10-16">16 October 2026</time> · <span>Planning</span></p>
+        <h2 class="as-site-post-title"><a class="as-site-post-link" href="/blog/third-post.html">Write the decision, not only the task</a></h2>
+        <p class="as-site-post-summary">A task says what to do. A decision says why, and what was rejected. Here is how to keep both.</p>
+      </li>
+      <li class="as-site-post">
+        <p class="as-site-post-meta"><time datetime="2026-10-09">9 October 2026</time> · <span>Planning</span></p>
+        <h2 class="as-site-post-title"><a class="as-site-post-link" href="/blog/second-post.html">Notes that are still useful in March</a></h2>
+        <p class="as-site-post-summary">Most notes die in a week. Three habits keep them readable after the project has moved on.</p>
+      </li>
+    </ul>
+
+    <nav class="as-site-pagination" aria-label="Pagination">
+      <ul>
+        <li><a href="/blog/" aria-current="page">1</a></li>
+        <li><a href="/blog/page-2.html">2</a></li>
+        <li><a href="/blog/page-2.html" rel="next">Next</a></li>
+      </ul>
+    </nav>
+
+    <section class="site-subscribe" aria-labelledby="subscribe-title">
+      <h2 class="site-subscribe-title" id="subscribe-title">Get new posts by email</h2>
+      <p class="as-site-section-lead">One email when a post is published. No other mail.</p>
+      <div class="as-site-form-wrap">
+        <p class="as-site-form-status" role="status" tabindex="-1"></p>
+        <form class="as-form as-site-form" data-site-form data-ajax action="/api/subscribe" method="post"
+          data-success="Thanks. Check your inbox to confirm the subscription."
+          data-failure="We could not add you. Try again in a few minutes.">
+          <div class="as-site-form-summary" tabindex="-1" hidden>
+            <p class="as-site-form-summary-title">Check the highlighted field.</p>
+            <ul></ul>
+          </div>
+          <div class="as-site-form-inline">
+            <div class="as-form-field">
+              <label class="as-form-label" for="s-email">Email <span class="as-site-form-required">(required)</span></label>
+              <input class="as-input" id="s-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="s-email-error">
+              <span class="as-form-error" id="s-email-error" hidden>Enter an email address like name@example.com.</span>
+            </div>
+            <button class="as-button as-button-filled as-button-large" type="submit">Subscribe</button>
+          </div>
+          <div class="as-site-form-trap" aria-hidden="true">
+            <label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Product</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Company</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>© 2026 Ferrule Labs. Questions? <a href="/contact.html">Contact us</a>.</p>
+        <nav aria-label="Legal">
+          <ul class="as-site-footer-legal-links">
+            <li><a href="/privacy.html">Privacy</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

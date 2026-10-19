@@ -15,6 +15,89 @@
    data-platform like the rest of the stylesheet.
    -------------------------------------------------------------------------- */
 
+/* --------------------------------------------------------------------------
+   Moved here from the core layers so that a content website loads less (plan 2.16):
+   glass groups, transient glass and the dim layer (from glass.css); the Mac-platform sizes
+   (from controls.css and base.css); the extra-small and extra-large buttons, the form row and
+   the customizable select picker (from controls.css). A content website does not load them.
+   -------------------------------------------------------------------------- */
+/* Glass groups: several items share ONE glass background (toolbar groups,
+   tab bars). Children must NOT be glass themselves — never glass on glass. */
+.as-glass-group { display: inline-flex; align-items: center; gap: 2px; padding: 4px; }
+/* Glass inside a glass group is a markup mistake (glass on glass). Render it
+   flat — content visible and usable, no second material — and let
+   liquid-glass.js warn in the console. Never hide content. */
+.as-glass-group > .as-glass { -webkit-backdrop-filter: none; backdrop-filter: none; background: transparent; box-shadow: none; }
+.as-glass-group > .as-glass::before, .as-glass-group > .as-glass::after { display: none; }
+.as-glass-group > .as-item {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: calc(var(--as-hit-min) - 8px); min-height: calc(var(--as-hit-min) - 8px);
+  padding: 0 14px; border-radius: var(--as-radius-capsule); border: 0; background: transparent;
+  color: inherit; font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
+  transition: background var(--as-dur-fast) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-spring);
+}
+.as-glass-group > .as-item:hover { background: rgb(128 128 128 / .12); }
+.as-glass-group > .as-item:active { transform: scale(.94); }
+.as-glass-group > .as-item[aria-pressed="true"], .as-glass-group > .as-item.is-selected {
+  background: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .16));
+  box-shadow: 0 1px 4px rgb(0 0 0 / .12);
+}
+.as-glass-group > .as-item.is-selected { color: var(--as-accent); }
+
+/* Element lifts INTO glass only while interacting (sliders, toggles knobs) */
+.as-glass-transient { transition: all var(--as-dur-base) var(--as-ease-spring); }
+.as-glass-transient:not(:active):not(.is-dragging) { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 3px rgb(0 0 0 / .15); }
+
+/* Dimming layer for clear glass / modality */
+.as-dim { position: absolute; inset: 0; background: rgb(0 0 0 / .35); pointer-events: none; }
+/* macOS built-in text styles */
+[data-platform="macos"] .as-root, [data-platform="macos"] .as-body { font-size: 13px; line-height: 16px; }
+[data-platform="macos"] .as-text-largetitle { font: 400 26px/32px var(--as-font-display); }
+[data-platform="macos"] .as-text-title1     { font: 400 22px/26px var(--as-font-display); }
+[data-platform="macos"] .as-text-title2     { font: 400 17px/22px var(--as-font-text); }
+[data-platform="macos"] .as-text-title3     { font: 400 15px/20px var(--as-font-text); }
+[data-platform="macos"] .as-text-headline   { font: 700 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-body       { font: 400 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-callout    { font: 400 12px/15px var(--as-font-text); }
+[data-platform="macos"] .as-text-subhead    { font: 400 11px/14px var(--as-font-text); }
+[data-platform="macos"] .as-text-footnote,
+[data-platform="macos"] .as-text-caption1   { font: 400 10px/13px var(--as-font-text); }
+[data-platform="macos"] .as-text-caption2   { font: 500 10px/13px var(--as-font-text); }
+.as-button-mini   { min-height: 28px; padding: 0 12px; font-size: 13px; line-height: 18px; }
+.as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
+.as-form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+[data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
+[data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
+[data-platform="macos"] .as-input { min-block-size: 22px; padding-inline: 6px; border-radius: var(--as-radius-xs); font-size: 13px; line-height: 16px; }
+[data-platform="macos"] textarea.as-input { min-block-size: 64px; padding-block: 3px; }
+[data-platform="macos"] .as-form-hint, [data-platform="macos"] .as-form-error { font-size: 11px; line-height: 14px; }
+/* Customizable select (Chrome 135+, Safari 27): a menu-like picker with a
+   leading checkmark. Pointer input only: on a touchscreen the platform picker
+   (iOS menu or wheel, Android sheet) is the better control. */
+@supports (appearance: base-select) {
+  @media (pointer: fine) {
+    select.as-input, select.as-input::picker(select) { appearance: base-select; }
+    select.as-input { display: inline-flex; align-items: center; gap: 6px; padding-inline: 12px 10px; }
+    select.as-input::picker-icon { color: var(--as-label-secondary); transition: rotate var(--as-dur-fast) var(--as-ease-soft); }
+    select.as-input:open::picker-icon { rotate: 180deg; }
+    select.as-input::picker(select) {
+      box-sizing: border-box; min-inline-size: anchor-size(inline); margin-block: 4px; padding: 5px;
+      border: 1px solid transparent; border-radius: var(--as-radius-m);
+      background: var(--as-glass-fill-large); color: var(--as-label);
+      -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      box-shadow: var(--as-glass-shadow-large), inset 0 0 0 .5px var(--as-glass-edge);
+    }
+    select.as-input option { display: flex; align-items: center; gap: 6px; min-block-size: 28px; padding: 3px 10px 3px 6px; border-radius: var(--as-radius-xs); }
+    select.as-input option::checkmark { order: -1; inline-size: 14px; color: inherit; }
+    select.as-input option:not(:checked)::checkmark { visibility: hidden; }
+    select.as-input option:is(:hover, :focus-visible) { outline: none; background: var(--as-action-bg); color: var(--as-action-fg); }
+    select.as-input option:disabled { opacity: .45; background: transparent; color: inherit; }
+  }
+}
+
+
+
 :root {
   /* Toast: thick enough that its label keeps ≥ 9:1 over any content. */
   --as-toast-fill: light-dark(rgb(250 250 252 / .86), rgb(44 44 48 / .86));

@@ -24,15 +24,11 @@
   background: linear-gradient(var(--as-glass-tint), var(--as-glass-tint)), var(--_fill); }
 .as-button-glass.as-glass-tinted, .as-button-glass.as-glass-prominent, .as-button-glass.as-glass-clear { color: #fff; }
 .as-button-glass:active { transform: scale(var(--as-flex-x), var(--as-flex-y)); opacity: 1; }
-.as-button-mini   { min-height: 28px; padding: 0 12px; font-size: 13px; line-height: 18px; }
 .as-button-small  { min-height: 32px; padding: 0 14px; font-size: 15px; line-height: 20px; }
 .as-button-large  { min-height: 50px; padding: 0 24px; }
-.as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
 .as-button-icon   { width: var(--as-hit-min); padding: 0; }
 .as-button-destructive { color: var(--as-destructive-text); }
 .as-button-destructive.as-button-filled { background: var(--as-action-destructive); color: var(--as-action-fg); }
-[data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
-[data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
 
 /* Form fields. Markup:
      <div class="as-form-field"><label class="as-form-label" for="title">Title</label>
@@ -47,7 +43,6 @@
 .as-form-hint, .as-form-error { font: 400 13px/18px var(--as-font-text); }
 .as-form-hint { color: var(--as-label-secondary); }
 .as-form-error { color: var(--as-destructive-text); }
-.as-form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .as-input {
   box-sizing: border-box; inline-size: 100%; min-block-size: var(--as-control-h, var(--as-hit-min));
   margin: 0; padding: 0 12px;
@@ -65,31 +60,6 @@ textarea.as-input { min-block-size: 88px; padding-block: 8px; resize: vertical; 
 /* Pop-up button: a real <select class="as-input">. Without customizable select
    the platform draws its own arrow and picker — keep it. */
 select.as-input { padding-inline-end: 8px; cursor: default; }
-/* Customizable select (Chrome 135+, Safari 27): a menu-like picker with a
-   leading checkmark. Pointer input only: on a touchscreen the platform picker
-   (iOS menu or wheel, Android sheet) is the better control. */
-@supports (appearance: base-select) {
-  @media (pointer: fine) {
-    select.as-input, select.as-input::picker(select) { appearance: base-select; }
-    select.as-input { display: inline-flex; align-items: center; gap: 6px; padding-inline: 12px 10px; }
-    select.as-input::picker-icon { color: var(--as-label-secondary); transition: rotate var(--as-dur-fast) var(--as-ease-soft); }
-    select.as-input:open::picker-icon { rotate: 180deg; }
-    select.as-input::picker(select) {
-      box-sizing: border-box; min-inline-size: anchor-size(inline); margin-block: 4px; padding: 5px;
-      border: 1px solid transparent; border-radius: var(--as-radius-m);
-      background: var(--as-glass-fill-large); color: var(--as-label);
-      -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
-      backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
-      box-shadow: var(--as-glass-shadow-large), inset 0 0 0 .5px var(--as-glass-edge);
-    }
-    select.as-input option { display: flex; align-items: center; gap: 6px; min-block-size: 28px; padding: 3px 10px 3px 6px; border-radius: var(--as-radius-xs); }
-    select.as-input option::checkmark { order: -1; inline-size: 14px; color: inherit; }
-    select.as-input option:not(:checked)::checkmark { visibility: hidden; }
-    select.as-input option:is(:hover, :focus-visible) { outline: none; background: var(--as-action-bg); color: var(--as-action-fg); }
-    select.as-input option:disabled { opacity: .45; background: transparent; color: inherit; }
-  }
-}
-
 /* Status pill — a word, not just a colour. The background is the text colour
    at 14 %, and every variant keeps ≥ 4.5:1 on the standard backgrounds in
    both appearances. */
@@ -105,9 +75,6 @@ select.as-input { padding-inline-end: 8px; cursor: default; }
 .as-pill-critical { color: light-dark(#b42318, #ff8a80); }
 .as-pill-dot::before { content: ""; inline-size: 6px; block-size: 6px; border-radius: 50%; background: currentColor; }
 
-[data-platform="macos"] .as-input { min-block-size: 22px; padding-inline: 6px; border-radius: var(--as-radius-xs); font-size: 13px; line-height: 16px; }
-[data-platform="macos"] textarea.as-input { min-block-size: 64px; padding-block: 3px; }
-[data-platform="macos"] .as-form-hint, [data-platform="macos"] .as-form-error { font-size: 11px; line-height: 14px; }
 
 /* Badge / status */
 .as-badge { position: absolute; inset-block-start: -4px; inset-inline-end: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--as-action-destructive); color: var(--as-action-fg); font: 600 12px/18px var(--as-font-text); text-align: center; }

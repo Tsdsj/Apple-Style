@@ -1,6 +1,12 @@
 {
   "name": "apple-style-validation",
   "private": true,
-  "scripts": {"test": "playwright test", "test:python": "python3 -m unittest discover -s tests -p 'test_*.py' -v"},
-  "devDependencies": {"@playwright/test": "1.58.2"}
+  "scripts": {
+    "test": "playwright test",
+    "test:python": "python3 -m unittest discover -s tests -p 'test_*.py' -v"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "axe-core": "4.10.2"
+  }
 }

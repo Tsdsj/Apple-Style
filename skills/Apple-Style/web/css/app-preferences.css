@@ -9,6 +9,8 @@
    -------------------------------------------------------------------------- */
 /* Reduce Transparency → frostier, obscures more of what's behind */
 @media (prefers-reduced-transparency: reduce) {
+  /* own rule: a browser without ::picker() drops the whole selector list */
+  select.as-input::picker(select) { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .as-segmented.is-scrubbing .as-seg-indicator,
   .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(rgb(255 255 255 / .96), rgb(120 120 124 / .96)); }
   /* Window chrome is not .as-glass, so it needs its own opt-out: a menu bar
@@ -50,6 +52,7 @@
    indicator, selected tabs and rows. Those controls opt out of the automatic
    adjustment and redraw their state with the system palette instead. */
 @media (forced-colors: active) {
+  select.as-input::picker(select) { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .as-toggle, .as-segmented, .as-slider { forced-color-adjust: none; }
   .as-toggle { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
   .as-toggle .as-knob { background: CanvasText; box-shadow: none; }

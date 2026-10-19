@@ -38,7 +38,10 @@
 }
 .as-site-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .as-site-hero-media { margin: 0; min-inline-size: 0; overflow: hidden; border-radius: var(--as-radius-xl); background: var(--as-bg-secondary); }
-.as-site-hero-media img { display: block; inline-size: 100%; block-size: auto; }
+/* The picture element is a block and the image keeps the ratio of its width and height attributes while it loads.
+   Without the explicit ratio, Chromium can lay out the image at a different height until it arrives (layout shift). */
+.as-site-hero-media picture { display: block; }
+.as-site-hero-media img { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 3; height: auto; }
 
 /* CJK: keep the phrase rules, break at the line ends the language expects. Other browsers use the fallback value. */
 .as-site-hero:is(:lang(zh), :lang(ja)) :is(.as-site-hero-title, .as-site-hero-sub) {

@@ -7,6 +7,8 @@ DEST="${1:?usage: prepare-demo.sh NEW_OUTPUT_DIRECTORY}"
 mkdir -p "$DEST/demo" "$DEST/skills/Apple-Style/web"
 cp "$ROOT"/demo/*.html "$ROOT"/demo/*.css "$ROOT"/demo/*.js "$DEST/demo/"
 cp "$ROOT"/skills/Apple-Style/web/*.html "$ROOT"/skills/Apple-Style/web/*.css "$ROOT"/skills/Apple-Style/web/*.js "$ROOT"/skills/Apple-Style/web/*.mjs "$DEST/skills/Apple-Style/web/"
+# Reference site (plan 2.16): root-relative paths, so it works when served at the root of a host.
+cp -R "$ROOT/skills/Apple-Style/web/examples" "$DEST/skills/Apple-Style/web/"
 printf '<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=demo/"><title>Apple-Style demos</title><a href="demo/">Open demos</a></html>\n' > "$DEST/index.html"
 touch "$DEST/.nojekyll"
 echo "Prepared $DEST (not deployed)"

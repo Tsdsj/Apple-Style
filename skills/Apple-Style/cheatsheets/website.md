@@ -234,7 +234,7 @@ Those results are directional, not a benchmark.
 
 **Current sizes at this revision** (minified bytes, measured on the repository files; re-measure after any change):
 
-- The five core layers together: 25.2 KB. That leaves about 15 KB of the CSS budget for patterns.
+- The five core layers together: 20.5 KB. That leaves about 19 KB of the CSS budget for patterns. The reference site (`web/examples/site/`) is inside the budget on every page: its home page, the largest, loads 38.5 KB of skill CSS, and its own `site.css` is counted separately.
 - `liquid-glass.js`: about 36 KB minified (the optional lens only).
 
 **How to measure:**

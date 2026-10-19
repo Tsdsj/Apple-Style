@@ -27,19 +27,6 @@
 .as-text-largetitle.as-em, .as-text-title1.as-em, .as-text-title2.as-em { font-weight: 700; }
 .as-text-title3.as-em, .as-text-body.as-em, .as-text-callout.as-em, .as-text-subhead.as-em,
 .as-text-footnote.as-em, .as-text-caption1.as-em, .as-text-caption2.as-em { font-weight: 600; }
-/* macOS built-in text styles */
-[data-platform="macos"] .as-root, [data-platform="macos"] .as-body { font-size: 13px; line-height: 16px; }
-[data-platform="macos"] .as-text-largetitle { font: 400 26px/32px var(--as-font-display); }
-[data-platform="macos"] .as-text-title1     { font: 400 22px/26px var(--as-font-display); }
-[data-platform="macos"] .as-text-title2     { font: 400 17px/22px var(--as-font-text); }
-[data-platform="macos"] .as-text-title3     { font: 400 15px/20px var(--as-font-text); }
-[data-platform="macos"] .as-text-headline   { font: 700 13px/16px var(--as-font-text); }
-[data-platform="macos"] .as-text-body       { font: 400 13px/16px var(--as-font-text); }
-[data-platform="macos"] .as-text-callout    { font: 400 12px/15px var(--as-font-text); }
-[data-platform="macos"] .as-text-subhead    { font: 400 11px/14px var(--as-font-text); }
-[data-platform="macos"] .as-text-footnote,
-[data-platform="macos"] .as-text-caption1   { font: 400 10px/13px var(--as-font-text); }
-[data-platform="macos"] .as-text-caption2   { font: 500 10px/13px var(--as-font-text); }
 .as-secondary { color: var(--as-label-secondary); }
 .as-tertiary  { color: var(--as-label-tertiary); }
 .as-mono { font-family: var(--as-font-mono); font-variant-numeric: tabular-nums; }

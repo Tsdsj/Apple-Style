@@ -10,7 +10,7 @@ Entry point for four companion skills. This one covers composition and web imple
 ## Workflow
 
 1. **Classify the page type first** (table in `cheatsheets/rules-and-evidence.md`, section *Page type*). Read the files for that type:
-   - **Content website** (product, marketing or landing page; docs; blog): `cheatsheets/website.md`, `cheatsheets/website-patterns.md`, `cheatsheets/web-implementation.md`, core layers `web/css/tokens.css`, `base.css`, `glass.css`, `controls.css`, `preferences.css`.
+   - **Content website** (product, marketing or landing page; docs; blog): `cheatsheets/website.md`, `cheatsheets/website-patterns.md`, `cheatsheets/web-implementation.md`, core layers `web/css/tokens.css`, `base.css`, `glass.css`, `controls.css`, `preferences.css`. A complete example that meets the budget and every check: `web/examples/site/` (read its `README.md`).
    - **Web app** (tool, dashboard, console, editor, admin): `cheatsheets/web-implementation.md`, `cheatsheets/web-app.md`, `cheatsheets/components-quickref.md`, `web/demo.html`, the core layers plus `web/css/app.css`, `density.css`, `app-preferences.css`; `window.css` only for split panes.
    - **Deliberate Mac-like window** (the user asked for a Mac look): `web/demo-desktop.html`, `cheatsheets/layout-and-shapes.md`, `cheatsheets/web-app.md` (window section), the web app files, and `web/css/window.css`.
    - **Native** (SwiftUI, UIKit, AppKit): the HIG reference in `../Apple-Style-HIG/reference/INDEX.md` and the native recipe in `../Apple-Style-Liquid-Glass/SKILL.md`. Do not read web files for this type.
@@ -116,6 +116,7 @@ The skip link must be visible on focus; style it in the site CSS.
 - `web/liquid-glass.js`, `web/liquid-glass.mjs`: runtime (classic script, and ES module entry). Web apps use it; websites only for optional lens.
 - `web/js/site-nav.js`: narrow-screen disclosure menu (≤ 2 KB), loaded with `defer`.
 - `web/patterns/*.css`: one reference file per website pattern, tokens only.
+- `web/examples/site/`: reference website (fictional product) using every pattern, with per-page CSS bundles, budgets and check results in its `README.md`.
 - `web/demo.html`, `web/demo-desktop.html`: examples for web apps and the Mac-like window.
 - `scripts/hig-lookup.sh`: search local references. `scripts/update-reference.sh`: transactional, manifest-backed refresh.
 - Repository only, not installed with the skill: [validation commands and evidence](https://github.com/Tsdsj/Apple-Style/blob/main/docs/validation.md) and the [demo index](https://github.com/Tsdsj/Apple-Style/blob/main/demo/index.html).

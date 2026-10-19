@@ -115,7 +115,8 @@ hint/error), `.as-form-label`, `.as-form-hint`, `.as-form-error`, `.as-form-row`
 - Validate on blur and on submit, not on every keystroke; never block typing.
 - `.as-input[aria-invalid="true"]` draws the red edge; the `.as-form-error`
   text is what carries the message. On a failed submit, focus the first invalid
-  field.
+  field, or (for longer forms) an error summary that links to each invalid field
+  (`website-patterns.md`, *Website forms*).
 - `.as-input` draws a default edge (`--as-field-border`) with ≥ 3:1 against the page
   and the field fill in both appearances (WCAG 1.4.11); Increase Contrast strengthens it.
   If you override `border-color` or the fill, re-measure.

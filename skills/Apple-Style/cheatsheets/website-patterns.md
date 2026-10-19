@@ -2,7 +2,7 @@
 
 Scope: [rule strength and evidence](rules-and-evidence.md). Read [website.md](website.md) first for loading, budgets and verification.
 
-Each pattern has a reference CSS file in `../web/patterns/` that uses tokens only. Copy the file, rename the classes if the site uses its own prefix, and keep the core layers (`tokens`, `base`, `glass`, `controls`, `preferences`) loaded. Patterns 2.1–2.14 are written below: header, narrow navigation, footer, hero and display type, section rhythm and feature grid, pricing and comparison, FAQ, article prose, blog list with breadcrumb, pagination and tags, website forms, 404 and legal pages, product imagery and mockups (with the App Store badge), images and media, and scroll entrance. The reference site that combines them (plan 2.16) is not written yet.
+Each pattern has a reference CSS file in `../web/patterns/` that uses tokens only. Copy the file, rename the classes if the site uses its own prefix, and keep the core layers (`tokens`, `base`, `glass`, `controls`, `preferences`) loaded. Patterns 2.1–2.14 are written below: header, narrow navigation, footer, hero and display type, section rhythm and feature grid, pricing and comparison, FAQ, article prose, blog list with breadcrumb, pagination and tags, website forms, 404 and legal pages, product imagery and mockups (with the App Store badge), images and media, and scroll entrance. The reference site in `../web/examples/site/` combines all of them on real pages (home, blog, article, contact, privacy and 404), with the CSS bundles, the byte budget and the checks described in its README.
 
 ## Template
 
@@ -81,6 +81,7 @@ Reference CSS: `../web/patterns/site-nav.css`. Script: `../web/js/site-nav.js` (
   - Nothing is applied by default that changes scrolling or the page behind the panel (no `inert`, no scroll lock).
 - **Responsive:**
   - **Breakpoint: 48em (768 px), project default.** It is a literal in two places: the `max-width: 47.99em` queries in `site-nav.css` and `NARROW` in `site-nav.js`. Change both together (CSS media queries cannot read a custom property).
+  - **No layout shift when the script runs (floating variant).** Without JavaScript the links wrap onto a second row below the breakpoint, and the script moves them behind the Menu button. A floating capsule keeps a 92 px inner height below 48em (114 px below 23.75em, where the links wrap to two rows), so the header has the same height with and without JavaScript. Without this the page below moved by about 24 to 34 px when `site-nav.js` ran (Lighthouse layout shift 0.22 on the reference site). Set `--as-site-header-h` to the total height of the header in each range. The rules are in `../web/patterns/site-header.css`; the measured shift after the change is 0.01 to 0.02 at 320 to 412 px.
   - Above the breakpoint the toggle is hidden and the script closes the panel when the viewport widens (`matchMedia` change), so the links are never hidden behind a closed panel.
   - Below it the panel is a solid `--as-bg` layer under the bar, not glass. Its links are 44 px tall.
 - **Motion:** the panel opens with a short fade and slide only when the user has not asked to reduce motion (`prefers-reduced-motion: no-preference`). The chevron is a shape, so open and closed do not depend on colour.

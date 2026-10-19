@@ -24,3 +24,30 @@ class BuildCss(unittest.TestCase):
             with mock.patch.object(build_css, 'PATTERNS_DIR', pathlib.Path(tmp)):
                 problems, count = build_css.undefined_variables(sources)
         self.assertEqual((problems, count), (['--as-nope'], 1))
+class ExampleBundles(unittest.TestCase):
+    def test_every_listed_source_exists_and_core_comes_first(self):
+        for name, parts in build_css.EXAMPLE_BUNDLES.items():
+            if name == 'base.css':
+                self.assertTrue(parts[0].startswith('css/tokens'), name)
+            for part in parts:
+                self.assertTrue((build_css.WEB / part).is_file(), f'{name} lists missing {part}')
+    def test_bundle_is_the_minified_concatenation_of_its_manifest(self):
+        bundles = build_css.example_bundles()
+        self.assertEqual(sorted(bundles), sorted(build_css.EXAMPLE_BUNDLES))
+        texts = dict(build_css.example_sources())
+        expected = build_css.minify('\n'.join(texts[p] for p in build_css.EXAMPLE_BUNDLES['base.css']))
+        self.assertEqual(bundles['base.css'], expected)
+    def test_check_fails_for_a_stale_or_unlisted_bundle(self):
+        bundles = {'base.css': 'a{b:c}\n'}
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = pathlib.Path(tmp)
+            (folder / 'base.css').write_text('a{b:d}\n')
+            with mock.patch.object(build_css, 'EXAMPLE_CSS_DIR', folder), \
+                 mock.patch.object(build_css, 'example_sources', return_value=[('site.css', ':root{--as-x:1}\n')]), \
+                 mock.patch.object(build_css, 'undefined_variables', return_value=([], 0)):
+                self.assertFalse(build_css.check_examples(bundles))
+                (folder / 'base.css').write_text('a{b:c}\n')
+                (folder / 'extra.css').write_text('a{}\n')
+                self.assertFalse(build_css.check_examples(bundles))
+                (folder / 'extra.css').unlink()
+                self.assertTrue(build_css.check_examples(bundles))

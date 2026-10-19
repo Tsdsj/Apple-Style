@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact · Ferrule</title>
+  <meta name="description" content="Ask about Ferrule plans, migration or a team setup. The form works without a backend in this example; a real site sends it to its own endpoint.">
+  <link rel="canonical" href="https://example.com/contact.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ferrule">
+  <meta property="og:title" content="Contact Ferrule">
+  <meta property="og:description" content="Ask about Ferrule plans, migration or a team setup.">
+  <meta property="og:url" content="https://example.com/contact.html">
+  <meta property="og:image" content="https://example.com/img/social.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site-form.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="site-skip" href="#main">Skip to content</a>
+  <header class="as-site-header as-site-header-floating">
+    <div class="as-site-header-inner as-glass as-glass-large">
+      <a class="as-site-brand" href="/">Ferrule</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/contact.html" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/contact.html">Get started</a>
+    </div>
+  </header>
+
+  <main id="main" class="site-page">
+    <header class="site-page-head">
+      <h1 class="site-page-title">Contact us</h1>
+      <p class="as-site-section-lead">Ask about plans, moving from another tool, or setting up a team. We reply within two working days.</p>
+    </header>
+
+    <div class="as-site-form-wrap">
+      <p class="as-site-form-status" role="status" tabindex="-1"></p>
+      <form class="as-form as-site-form" data-site-form data-ajax action="/api/contact" method="post"
+        data-success="Thanks. We have your message and will reply within two working days."
+        data-failure="We could not send your message. Try again in a few minutes.">
+        <p class="site-form-note">Fields marked <span class="as-site-form-required">(required)</span> must be filled in.</p>
+        <div class="as-site-form-summary" tabindex="-1" hidden>
+          <p class="as-site-form-summary-title">Check the highlighted fields.</p>
+          <ul></ul>
+        </div>
+        <div class="as-site-form-grid">
+          <div class="as-form-field">
+            <label class="as-form-label" for="c-name">Name <span class="as-site-form-required">(required)</span></label>
+            <input class="as-input" id="c-name" name="name" autocomplete="name" required aria-describedby="c-name-error">
+            <span class="as-form-error" id="c-name-error" hidden>Enter your name.</span>
+          </div>
+          <div class="as-form-field">
+            <label class="as-form-label" for="c-email">Work email <span class="as-site-form-required">(required)</span></label>
+            <input class="as-input" id="c-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="c-email-hint c-email-error">
+            <span class="as-form-hint" id="c-email-hint">We reply to this address.</span>
+            <span class="as-form-error" id="c-email-error" hidden>Enter an email address like name@example.com.</span>
+          </div>
+          <div class="as-form-field">
+            <label class="as-form-label" for="c-org">Company <span class="as-site-form-required">(optional)</span></label>
+            <input class="as-input" id="c-org" name="organization" autocomplete="organization">
+          </div>
+          <div class="as-form-field as-site-form-wide">
+            <label class="as-form-label" for="c-message">Message <span class="as-site-form-required">(required)</span></label>
+            <textarea class="as-input" id="c-message" name="message" rows="5" required aria-describedby="c-message-error"></textarea>
+            <span class="as-form-error" id="c-message-error" hidden>Write a message of at least one sentence.</span>
+          </div>
+        </div>
+        <div class="as-site-form-trap" aria-hidden="true">
+          <label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <div class="as-site-form-actions">
+          <button class="as-button as-button-filled as-button-large" type="submit">Send message</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Product</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Company</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>© 2026 Ferrule Labs. Questions? <a href="/contact.html">Contact us</a>.</p>
+        <nav aria-label="Legal">
+          <ul class="as-site-footer-legal-links">
+            <li><a href="/privacy.html">Privacy</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -50,7 +50,7 @@ Run it from the project that has Playwright (`npm i -D @playwright/test`): `SITE
 | axe light and dark, mockups | 5 | serious and critical rules with node counts, both schemes; decorative mockups included |
 | Keyboard narrow menu | 6 | Tab reaches the toggle, Enter opens, Esc closes, focus returns (390 px) |
 | Focus visible | 7 | first 20 Tab stops with an outline or box-shadow |
-| Form empty and valid submit | 8 | error, first invalid field focused and announced; success message |
+| Form empty and valid submit | 8 | error marked and announced, focus on the first invalid field or an error summary linking to it; success message (not checked when no backend answers) |
 | Deep-path 404 | 9 | status, `noindex`, stylesheets and styles at a missing three-level path |
 | No-JS browsing | 10 | primary nav reachable at 390 and 1280 px; main has text |
 | Preferences | 11 | animations under reduced motion; controls under forced colors |

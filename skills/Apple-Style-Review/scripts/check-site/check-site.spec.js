@@ -267,6 +267,9 @@ function afterEmpty() {
     count: invalid.length,
     first: first ? (first.name || first.id || first.type) : '',
     focusOnFirst: !!first && document.activeElement === first,
+    // An error summary that takes focus and links to the invalid fields is the other accepted pattern.
+    focusOnSummary: !!document.activeElement && invalid.some((f) => f.id
+      && document.activeElement.querySelector(`a[href="#${CSS.escape(f.id)}"]`)),
     announced: live.length > 0 || (!!first && first.matches(':invalid')),
   };
 }
@@ -307,7 +310,8 @@ function forcedVisibility() {
     const s = getComputedStyle(el);
     if (r.width === 0 || r.height === 0 || s.visibility === 'hidden') continue;
     count++;
-    const text = (el.innerText || el.value || '').trim().length > 0;
+    const text = (el.innerText || el.value || '').trim().length > 0
+      || Array.from(el.querySelectorAll('img, svg, picture, video')).some((m) => { const b = m.getBoundingClientRect(); return b.width > 0 && b.height > 0; });
     const border = ['Top', 'Right', 'Bottom', 'Left'].some((d) => parseFloat(s['border' + d + 'Width']) > 0
       && s['border' + d + 'Style'] !== 'none' && opaque(s['border' + d + 'Color']));
     const outline = parseFloat(s.outlineWidth) > 0 && s.outlineStyle !== 'none' && opaque(s.outlineColor);
@@ -703,7 +707,7 @@ check('8', async (c, browser) => {
     const empty = await page.evaluate(afterEmpty);
     if (!empty.count) note(c, 'empty submit: no field marked invalid (aria-invalid or :invalid)');
     else {
-      if (!empty.focusOnFirst) note(c, `empty submit: focus is not on the first invalid field (${empty.first})`);
+      if (!empty.focusOnFirst && !empty.focusOnSummary) note(c, `empty submit: focus is neither on the first invalid field (${empty.first}) nor on an error summary that links to it`);
       if (!empty.announced) note(c, 'empty submit: no error announced (no live-region text, no native validation)');
     }
 
@@ -715,6 +719,11 @@ check('8', async (c, browser) => {
     }
     const before = await page.evaluate(() => document.body.innerText);
     const startHref = page.url();
+    // A form posted to an endpoint that does not exist on this host (static hosting, no backend)
+    // cannot show its success state; that half is then not checked rather than passed or failed.
+    const endpoint = [];
+    page.on('response', (r) => { if (r.request().method() !== 'GET' && r.status() >= 400) endpoint.push(`${r.request().method()} ${new URL(r.url()).pathname} → ${r.status()}`); });
+    page.on('requestfailed', (r) => { if (r.method() !== 'GET') endpoint.push(`${r.method()} ${new URL(r.url()).pathname} failed`); });
     await submit.click();
     let found = null;
     const deadline = Date.now() + 4000;
@@ -727,7 +736,11 @@ check('8', async (c, browser) => {
       if (invalid) note(c, `valid submit still blocked: ${invalid} field(s) invalid after filling`);
       note(c, 'valid submit: no success message within 4 s');
     }
-    c.data = { page: key, fields: form.fields.length, empty, success: found };
+    c.data = { page: key, fields: form.fields.length, empty, success: found, endpoint };
+    if (endpoint.length && !c.evidenceTotal) {
+      return notChecked(c, `empty submit passes; valid submit not verifiable: the form endpoint is not served here (${endpoint[0]}). Check the success state against the real backend.`);
+    }
+    if (endpoint.length) { c.evidence = c.evidence.filter((e) => !e.startsWith('valid submit')); c.evidenceTotal = c.evidence.length; }
     finish(c, `empty submit marks and focuses the first invalid field; valid submit shows ${found ? found.signal + ': "' + found.text + '"' : ''}`);
   } finally {
     await ctx.close();

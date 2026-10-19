@@ -10,6 +10,10 @@ apple-style.min.css  a conservative minification of that output.
 Also checks that every var(--as-*) used in css/ and patterns/ is defined (in a
 stylesheet, or set from liquid-glass.js/.mjs), or is used only with a fallback.
 
+examples/site/css/*.css  the reference site's bundles (EXAMPLE_BUNDLES below), minified.
+                     Each bundle is listed explicitly; site.css is hand-written and is
+                     not generated.
+
 Usage: build-css.py          write the generated files
        build-css.py --check  exit non-zero if they differ from the sources, or if
                              an undefined variable is found; writes nothing
@@ -34,6 +38,21 @@ RUNTIME = [WEB / 'liquid-glass.js', WEB / 'liquid-glass.mjs']
 # so it is fixed here rather than taken from directory listing order.
 ORDER = ['tokens.css', 'base.css', 'glass.css', 'controls.css', 'preferences.css',
          'app.css', 'window.css', 'density.css', 'app-preferences.css']
+
+# Reference site bundles (plan 2.16). Each bundle is the listed sources, in this order, minified.
+# The core layers come first, so a bundle keeps the cascade order of apple-style.css. A page loads
+# base.css plus the bundles for the page types it uses; site.css (hand-written) is loaded last.
+EXAMPLE_CSS_DIR = WEB / 'examples/site/css'
+EXAMPLE_HAND_WRITTEN = ['site.css']
+EXAMPLE_BUNDLES = {
+    'base.css': ['css/tokens.css', 'css/base.css', 'css/glass.css', 'css/controls.css', 'css/preferences.css',
+                 'patterns/site-header.css', 'patterns/site-nav.css', 'patterns/site-footer.css', 'patterns/section.css'],
+    'landing.css': ['patterns/hero.css', 'patterns/mockup.css', 'patterns/pricing.css', 'patterns/faq.css',
+                    'patterns/motion.css', 'patterns/media.css'],
+    'article.css': ['patterns/prose.css', 'patterns/legal.css'],
+    'listing.css': ['patterns/blog.css'],
+    'forms.css': ['patterns/site-form.css'],
+}
 
 COMMENT = re.compile(r'/\*.*?\*/', re.S)
 DECLARED = re.compile(r'(?<![\w-])(--as-[\w-]+)\s*:')
@@ -134,6 +153,53 @@ def undefined_variables(sources):
     return problems, len(pattern_files)
 
 
+def example_sources():
+    """(name, text) for every source file a reference-site bundle lists, in bundle order."""
+    seen, out = set(), []
+    for parts in EXAMPLE_BUNDLES.values():
+        for part in parts:
+            if part in seen:
+                continue
+            seen.add(part)
+            path = WEB / part
+            if not path.is_file():
+                fail(f'example bundle lists a missing file: {part}')
+            out.append((part, path.read_text(encoding='utf-8')))
+    for name in EXAMPLE_HAND_WRITTEN:
+        out.append((name, (EXAMPLE_CSS_DIR / name).read_text(encoding='utf-8')))
+    return out
+
+
+def example_bundles():
+    """Minified text of every reference-site bundle, keyed by its file name."""
+    texts = dict(example_sources())
+    return {name: minify('\n'.join(texts[part] for part in parts)) for name, parts in EXAMPLE_BUNDLES.items()}
+
+
+def check_examples(bundles):
+    ok = True
+    for name, expected in bundles.items():
+        path = EXAMPLE_CSS_DIR / name
+        rel = path.as_posix()
+        if not path.exists():
+            print(f'MISSING {rel}; run scripts/build-css.py')
+            ok = False
+        elif path.read_bytes() != expected.encode('utf-8'):
+            print(f'STALE   {rel} differs from its sources; run scripts/build-css.py')
+            ok = False
+        else:
+            print(f'OK      {rel}')
+    listed = set(bundles) | set(EXAMPLE_HAND_WRITTEN)
+    present = {p.name for p in EXAMPLE_CSS_DIR.glob('*.css')} if EXAMPLE_CSS_DIR.is_dir() else set()
+    for name in sorted(present - listed):
+        print(f'EXTRA   examples/site/css/{name} is not in EXAMPLE_BUNDLES; list it or remove it')
+        ok = False
+    problems, _ = undefined_variables(example_sources())
+    for name in problems:
+        print(f'UNDEFINED {name} is used without a fallback in the reference site and is never declared')
+    return ok and not problems
+
+
 def check(sources, full, minified):
     ok = True
     for path, expected in [(OUT, full), (MIN, minified)]:
@@ -152,6 +218,8 @@ def check(sources, full, minified):
     if problems:
         ok = False
     print(f'checked {len(sources)} css files and {pattern_count} pattern files')
+    if not check_examples(example_bundles()):
+        ok = False
     return ok
 
 
@@ -172,9 +240,17 @@ def main():
         for name in problems:
             print(f'UNDEFINED {name}', file=sys.stderr)
         fail('undefined custom properties; declare them or add a fallback')
+    problems, _ = undefined_variables(example_sources())
+    if problems:
+        for name in problems:
+            print(f'UNDEFINED {name} (reference site)', file=sys.stderr)
+        fail('undefined custom properties in the reference site; declare them or add a fallback')
     OUT.write_bytes(full.encode('utf-8'))
     MIN.write_bytes(minified.encode('utf-8'))
     print(f'wrote {OUT.name} ({len(full)} bytes) and {MIN.name} ({len(minified)} bytes)')
+    for name, text in example_bundles().items():
+        (EXAMPLE_CSS_DIR / name).write_bytes(text.encode('utf-8'))
+        print(f'wrote examples/site/css/{name} ({len(text.encode("utf-8"))} bytes, minified)')
 
 
 if __name__ == '__main__':

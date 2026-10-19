@@ -26,6 +26,10 @@
 - `.as-body` 去掉浏览器默认的 8px 外边距；网站快速开始给 `<body>` 加上 `class="as-body"`（否则字体、颜色和背景不生效）。
 - 表单字段示例把错误提示移到 `<label>` 之外：放在标签内的错误一旦显示，会成为字段可访问名称的一部分。
 - Review 新增网站检查清单，与新脚本 `skills/Apple-Style-Review/scripts/check-site/` 的 13 项检查一一对应：全站坏链与锚点、逐页元数据、各宽度横向溢出、正文链接非颜色标识、axe（浅色与深色）、窄屏菜单键盘操作、焦点可见、表单两种提交、深层路径 404、无 JS 浏览、偏好设置、体积预算与 LCP、控制台与请求。没测的项一律记为未检查。用 `tests/fixtures/bad-site/` 验证每个埋入的问题都被查出（`tests/test_check_site.py`），并对照上次评测的站点 A、B 复核结果（3.1–3.3）。
+- 新增参考站 `skills/Apple-Style/web/examples/site/`（虚构产品，10 个页面，用到全部 14 个网站模式）：按页面类型生成的 CSS 包由 `scripts/build-css.py` 维护并纳入 `--check`；每页技能 CSS 压缩后 ≤ 38.7 KB，JS ≤ 3.7 KB；Lighthouse 移动端三页均为 100/100/100/100（LCP 1.35–1.59 秒）。`tests/browser/reference-site.spec.js` 在浅色和深色下对每页跑 axe（0 违规）、五个宽度的溢出、深层 404、键盘、表单与预算；`check-site` 在 CI 中跑参考站，无任何失败项（2.16、2.17、3.4）。
+- 为满足预算，公共层再瘦身（25.2 KB → 20.5 KB）：网站模式与参考站都用不到的规则（玻璃组、临时玻璃、暗化层、Mac 尺寸、select 弹出层、mini/xlarge 按钮等）移入 `app.css`，演示页与测试页的计算样式前后一致。
+- 新增开发依赖 `axe-core@4.10.2`（仅用于仓库测试）。
+- `check-site` 修正：空提交后焦点落在链接到出错字段的错误摘要上也算通过；表单提交到本机不存在的后端时，成功状态记为未检查而非误判为通过；只含图片的链接在强制颜色下视为可见。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

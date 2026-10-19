@@ -9,8 +9,6 @@
   .as-glass { --_fill: light-dark(rgb(245 245 247 / .92), rgb(44 44 46 / .92)); --_blur: 40px; }
   .as-glass::before { opacity: .5; }
   .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
-  /* own rule: a browser without ::picker() drops the whole selector list */
-  select.as-input::picker(select) { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 :root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
 /* Increase Contrast → predominantly black/white with a contrasting border */
@@ -48,7 +46,6 @@
   .as-glass::before, .as-glass::after { display: none; }
   /* Buttons that rely on a fill to look like buttons keep a visible boundary. */
   .as-button-filled, .as-button-tinted, .as-button-gray, .as-button-bordered { border: 1px solid ButtonText; }
-  select.as-input::picker(select) { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 /* No backdrop-filter support → solid material fallback */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
