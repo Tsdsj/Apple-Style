@@ -43,7 +43,9 @@ skills/Apple-Style/
     css/glass.css                材质
     css/controls.css             按钮、开关、分段、滑块、输入框、标签
     css/app.css                  标签栏、侧栏、工具栏、sheet、菜单、列表框、对话框、toast、状态
-    css/window.css               Mac 窗口、分栏、检查器、菜单栏、桌面密度
+    css/window.css               Mac 窗口、分栏、检查器、菜单栏
+    css/density.css              桌面密度（data-density="desktop"）
+    css/preferences.css          偏好设置与强制颜色（含各组件的覆盖，必须最后合并）
     patterns/*.css               每个网站模式一个文件
     js/site-nav.js               窄屏展开菜单，不依赖运行时
     liquid-glass.js / .mjs       应用运行时与折射（保持现有 API）
@@ -56,7 +58,7 @@ skills/Apple-Style/
     check-site/                  网站检查脚本（Playwright 可选）
 ```
 
-`css/` 的具体切分在阶段 1 按实际用量最终确定，规则是：任何网站模式或参考站用到的样式进入公共层（tokens、base、glass、controls），其余进入 `app.css` 或 `window.css`。
+阶段 1 已按原文件的分节完成拆分（合并顺序 tokens、base、glass、controls、window、app、density、preferences，即原分节顺序）。后续调整的规则是：任何网站模式或参考站用到的样式进入公共层（tokens、base、glass、controls），其余进入 `app.css` 或 `window.css`。
 
 ## 清单
 
@@ -70,10 +72,10 @@ skills/Apple-Style/
   - 写明网站上不要做的事：iOS 底部标签栏、假窗口、内容区玻璃、整包引入参考代码。
   - 快速开始改为网站示例：引入 tokens、base 和用到的模式，不加载运行时。
 - [ ] **1.2 `rules-and-evidence.md` 增加页面类型判断表**，与 1.1 的路由一致。
-- [ ] **1.3 拆分 `apple-style.css`** 为 `web/css/*.css`，内容不改，只移动。
-- [ ] **1.4 `scripts/build-css.py`**
+- [x] **1.3 拆分 `apple-style.css`** 为 `web/css/*.css`，内容不改，只移动。
+- [x] **1.4 `scripts/build-css.py`**
   - 按固定顺序合并 `css/*.css` 生成 `apple-style.css`，再生成压缩版。
-  - 检查每个 `var(--as-*)` 都在 tokens 中定义（含 `patterns/`）。
+  - 检查每个 `var(--as-*)` 都有定义（含 `patterns/`）：在样式中声明、由运行时设置，或带回退值。
   - `--check` 模式：生成结果与仓库中的文件不一致就失败，接入 CI。
 - [ ] **1.5 性能预算写入 `website.md` 和 Review**
   - 内容型网站：CSS ≤ 30 KB、JS ≤ 5 KB（未压缩，首页）。
@@ -84,7 +86,7 @@ skills/Apple-Style/
 - [ ] **1.8 W7**：`.as-input` 默认边界达到 3:1（浅色和深色），加回归测试。
 - [ ] **1.9 W4**：`base.css` 中正文段落、列表、表格里的链接默认带下划线；导航、按钮类链接不受影响。加回归测试。
 - [ ] **1.10 W10**：`SKILL.md` 中指向技能目录之外的链接（`../../docs/validation.md`、`../../demo/index.html`）改为仓库 URL 或删除。加一个测试：技能目录内的相对链接不得指向目录之外。
-- [ ] **1.11 同步**：演示页、浏览器测试、安装脚本和打包测试改为使用新结构，原有测试全部通过。
+- [x] **1.11 同步**：演示页、浏览器测试、安装脚本和打包测试改为使用新结构，原有测试全部通过。
 
 **完成标准**：整包 CSS 与拆分前逐字节等价（除顺序注释外），全部现有测试通过；一个只用 tokens、base 和 glass 的空白页 CSS ≤ 30 KB。
 

@@ -57,7 +57,7 @@ window.I18N = {
 
     /* 关于本页 */
     'ov.title': '关于这个演示页',
-    'ov.desc': '本页直接引用技能目录下的 <code>apple-style.css</code> 与 <code>liquid-glass.js</code>，没有复制副本。修改技能里的这两个文件后刷新浏览器，改动会立刻反映在下面所有示例上——可以把这页当作调试与回归验证的工作台。',
+    'ov.desc': '本页直接引用技能目录下的 <code>apple-style.css</code> 与 <code>liquid-glass.js</code>，没有复制副本。样式在 <code>web/css/</code> 中编辑，再运行 <code>python3 scripts/build-css.py</code> 重新生成 <code>apple-style.css</code>；<code>liquid-glass.js</code> 直接修改。刷新浏览器后，改动会立刻反映在下面所有示例上——可以把这页当作调试与回归验证的工作台。',
     'ov.tip': '每个小节右上角标注了对应的速查表文件，便于对照规则来源修改技能内容。点击任意代码片段可拷贝类名。',
     'ov.chip.lens': '透镜折射（lensing）',
     'ov.chip.chroma': '色散（三通道折射）',
@@ -330,7 +330,7 @@ window.I18N = {
     'nav.check': 'Checklist',
 
     'ov.title': 'About this demo',
-    'ov.desc': 'This page loads <code>apple-style.css</code> and <code>liquid-glass.js</code> straight from the skill directory — no copies. Edit those two files in the skill, reload, and every example below reflects the change. Use this page as a workbench for tuning and regression-checking the skill.',
+    'ov.desc': 'This page loads <code>apple-style.css</code> and <code>liquid-glass.js</code> straight from the skill directory — no copies. Edit the styles in <code>web/css/</code> and regenerate <code>apple-style.css</code> with <code>python3 scripts/build-css.py</code>; edit <code>liquid-glass.js</code> directly. Reload, and every example below reflects the change. Use this page as a workbench for tuning and regression-checking the skill.',
     'ov.tip': 'Each section is tagged with the cheatsheet it comes from, so you can jump to the rule you want to edit. Click any code snippet to copy the class names.',
     'ov.chip.lens': 'Lensing',
     'ov.chip.chroma': 'Dispersion (3-channel)',

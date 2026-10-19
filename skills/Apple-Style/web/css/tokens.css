@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Apple-Style — web implementation of Apple's design system (HIG + Liquid Glass)
+   Prefix: as-   |  Source of truth: Apple HIG (Materials, Color, Typography,
+   Layout, Buttons, Toolbars, Tab bars, Sidebars, Sheets, Menus), WWDC25 219/356.
+   Load once. Pair with liquid-glass.js for lensing, adaptivity, morphing.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Root tokens
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+
+  /* Fonts: SF Pro renders natively on Apple devices via -apple-system. Text vs
+     Display optical sizes are chosen automatically by the system font (~20pt). */
+  --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --as-font-rounded: ui-rounded, "SF Pro Rounded", var(--as-font-text);
+  --as-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Spacing (4pt grid) + layout metrics from HIG Layout/Buttons */
+  --as-space-1: 4px;  --as-space-2: 8px;  --as-space-3: 12px; --as-space-4: 16px;
+  --as-space-5: 20px; --as-space-6: 24px; --as-space-8: 32px; --as-space-10: 40px;
+  --as-margin: 16px;              /* compact width layout margin */
+  --as-margin-regular: 20px;      /* regular width layout margin */
+  --as-hit-min: 44px;             /* minimum hit region 44x44pt (visionOS: 60) */
+  --as-readable-width: 672px;     /* readable content guide */
+  --as-tabsidebar-width: 216px;   /* tab bar adapted into a sidebar at regular width */
+
+  /* Shapes. Three types (WWDC25/356): fixed, capsule (radius = height/2),
+     concentric (parent radius − inset). */
+  --as-radius-xs: 6px;  --as-radius-s: 10px; --as-radius-m: 14px; --as-radius-l: 20px;
+  --as-radius-xl: 26px; --as-radius-xxl: 34px; --as-radius-capsule: 9999px;
+  --as-radius-sheet: 38px;        /* iOS 26 sheet corners nest into display corners */
+  --as-radius-window: 24px;       /* macOS 26 window corner */
+
+  /* Motion: spring-ish curves. Liquid Glass is gel-like; use springs, not ease-in-out. */
+  --as-ease-spring: linear(0, 0.009 1.1%, 0.036 2.3%, 0.145 4.9%, 0.318 7.9%, 0.554 11.6%, 0.8 15.9%, 1.006 20.4%, 1.07 22.9%, 1.11 25.5%, 1.128 28.3%, 1.121 31.7%, 1.031 43.7%, 0.996 51.6%, 0.989 60.3%, 0.998 74.8%, 1);
+  --as-ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --as-dur-fast: 160ms; --as-dur-base: 320ms; --as-dur-slow: 560ms;
+
+  /* ---------------- System colors (HIG Color → Specifications) ------------ */
+  --as-red:    light-dark(rgb(255 56 60),   rgb(255 66 69));
+  --as-orange: light-dark(rgb(255 141 40),  rgb(255 146 48));
+  --as-yellow: light-dark(rgb(255 204 0),   rgb(255 214 0));
+  --as-green:  light-dark(rgb(52 199 89),   rgb(48 209 88));
+  --as-mint:   light-dark(rgb(0 200 179),   rgb(0 218 195));
+  --as-teal:   light-dark(rgb(0 195 208),   rgb(0 210 224));
+  --as-cyan:   light-dark(rgb(0 192 232),   rgb(60 211 254));
+  --as-blue:   light-dark(rgb(0 136 255),   rgb(0 145 255));
+  --as-indigo: light-dark(rgb(97 85 245),   rgb(109 124 255));
+  --as-purple: light-dark(rgb(203 48 224),  rgb(219 52 242));
+  --as-pink:   light-dark(rgb(255 45 85),   rgb(255 55 95));
+  --as-brown:  light-dark(rgb(172 127 94),  rgb(183 138 102));
+  --as-gray:   light-dark(rgb(142 142 147), rgb(142 142 147));
+  --as-gray2:  light-dark(rgb(174 174 178), rgb(99 99 102));
+  --as-gray3:  light-dark(rgb(199 199 204), rgb(72 72 74));
+  --as-gray4:  light-dark(rgb(209 209 214), rgb(58 58 60));
+  --as-gray5:  light-dark(rgb(229 229 234), rgb(44 44 46));
+  --as-gray6:  light-dark(rgb(242 242 247), rgb(28 28 30));
+  --as-action-bg: light-dark(#0066cc, #006bd6); /* white text: 5.57:1 / 5.15:1 */
+  --as-action-fg: #fff;
+  --as-action-destructive: light-dark(#b42318, #b92b20);
+  /* Red text for destructive actions (.as-button-destructive, destructive menu
+     items). The system red sample measures 3.57:1 on white and 3.20:1 on
+     secondarySystemBackground, and even its Increase Contrast value misses
+     4.5:1 there, so text has its own shades: ≥ 5.04:1 light and ≥ 4.94:1
+     dark on the standard backgrounds up to tertiary and over large glass. */
+  --as-destructive-text: light-dark(#d1001f, #ff6961);
+  --as-accent: light-dark(#0066cc, #64b5ff);   /* app accent color; override per brand */
+  /* Accent text on an accent tint (.as-button-tinted): the tint lowers the
+     contrast, so light mode uses a darker shade — 5.57:1 on white, 5.04:1 on
+     secondarySystemBackground. Change it together with --as-accent. */
+  --as-accent-on-tint: light-dark(#0058b0, #64b5ff);
+
+  /* Semantic (dynamic) colors — UIKit semantic values, adapt light/dark */
+  --as-label:            light-dark(rgb(0 0 0),              rgb(255 255 255));
+  /* Project default: Apple's light secondaryLabel (60 %) measures 3.44:1 on
+     white and 3.30:1 on secondarySystemBackground, below WCAG 1.4.3 for the
+     meaningful small text it carries. 74 % gives 5.02:1 / 4.72:1; the dark
+     value already passes (≥ 5.27:1 up to tertiarySystemBackground). */
+  --as-label-secondary:  light-dark(rgb(60 60 67 / .74),     rgb(235 235 245 / .60));
+  --as-label-tertiary:   light-dark(rgb(60 60 67 / .30),     rgb(235 235 245 / .30));
+  --as-label-quaternary: light-dark(rgb(60 60 67 / .18),     rgb(235 235 245 / .16));
+  --as-placeholder:      var(--as-label-tertiary);
+  --as-separator:        light-dark(rgb(60 60 67 / .29),     rgb(84 84 88 / .60));
+  --as-separator-opaque: light-dark(rgb(198 198 200),        rgb(56 56 58));
+  --as-link:             var(--as-accent);
+  --as-bg:               light-dark(rgb(255 255 255),        rgb(0 0 0));
+  --as-bg-secondary:     light-dark(rgb(242 242 247),        rgb(28 28 30));
+  --as-bg-tertiary:      light-dark(rgb(255 255 255),        rgb(44 44 46));
+  --as-bg-grouped:       light-dark(rgb(242 242 247),        rgb(0 0 0));
+  --as-bg-grouped-2:     light-dark(rgb(255 255 255),        rgb(28 28 30));
+  --as-bg-grouped-3:     light-dark(rgb(242 242 247),        rgb(44 44 46));
+  --as-fill:             light-dark(rgb(120 120 128 / .20),  rgb(120 120 128 / .36));
+  --as-fill-secondary:   light-dark(rgb(120 120 128 / .16),  rgb(120 120 128 / .32));
+  --as-fill-tertiary:    light-dark(rgb(118 118 128 / .12),  rgb(118 118 128 / .24));
+  --as-fill-quaternary:  light-dark(rgb(116 116 128 / .08),  rgb(118 118 128 / .18));
+
+  /* Standard materials (content layer). Thickness = opacity of fill. */
+  --as-material-ultrathin: light-dark(rgb(255 255 255 / .55), rgb(30 30 30 / .55));
+  --as-material-thin:      light-dark(rgb(255 255 255 / .70), rgb(30 30 30 / .70));
+  --as-material-regular:   light-dark(rgb(255 255 255 / .82), rgb(30 30 30 / .82));
+  --as-material-thick:     light-dark(rgb(255 255 255 / .93), rgb(30 30 30 / .93));
+  --as-material-blur: 30px;
+
+  /* ---------------- Liquid Glass material tokens --------------------------
+     Layers (WWDC25/219): lensing → blur/luminosity → tint → highlights → shadow
+     → interactive glow. Glass has NO inherent color; it takes color from behind. */
+  --as-glass-blur: 14px;                 /* regular, small elements */
+  --as-glass-blur-large: 40px;           /* regular, large surfaces (sidebar/menu/sheet) */
+  --as-glass-saturate: 1.6;
+  --as-glass-fill: light-dark(rgb(255 255 255 / .42), rgb(40 40 44 / .42));      /* luminosity adaptation */
+  --as-glass-fill-large: light-dark(rgb(255 255 255 / .70), rgb(36 36 40 / .72)); /* more opaque when large */
+  --as-glass-fg: light-dark(rgb(0 0 0 / .88), rgb(255 255 255 / .94));
+  --as-glass-fg-secondary: light-dark(rgb(0 0 0 / .55), rgb(255 255 255 / .62));
+  --as-glass-rim-hi: light-dark(rgb(255 255 255 / .58), rgb(255 255 255 / .26));  /* specular rim, lit side */
+  --as-glass-rim-lo: light-dark(rgb(255 255 255 / .14), rgb(255 255 255 / .05));  /* shadow side */
+  --as-glass-rim-width: 1px;             /* hairline. Thicker reads as an outlined pill, not glass */
+  --as-glass-edge:   light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .06));         /* hairline edge for definition */
+  --as-glass-shadow: 0 8px 24px -6px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .14);
+  --as-glass-shadow-large: 0 24px 60px -12px rgb(0 0 0 / .32), 0 6px 16px -6px rgb(0 0 0 / .16);
+  --as-glass-light-angle: 145deg;        /* virtual light source direction (top-left) */
+  --as-glass-lens: 0;                    /* set to 1 by liquid-glass.js when displacement filter is active */
+  --as-glass-tint: transparent;          /* stained-glass tint; use only for primary actions */
+
+  /* Clarity comes from what the material does to the light behind it —
+     refraction, a re-levelled backdrop and one precise edge. It does NOT come
+     from highlights painted onto the surface: a body-wide white gradient or a
+     double bevel is the 2008 glossy-button look, and it reads as cheap plastic
+     the moment there is nothing interesting behind the glass. Interior stays
+     clean; contrast (not brightness) keeps refracted content from going milky. */
+  --as-glass-brightness: 1;              /* brightening washes the material out */
+  --as-glass-contrast: 1.05;             /* re-level so the backdrop keeps its punch */
+  --as-glass-bevel:                      /* light entering the top edge + a faint inner refraction ring */
+    inset 0 0.5px 0 0 rgb(255 255 255 / .20),
+    inset 0 0 12px -10px rgb(0 0 0 / .26);
+  --as-glass-sheen: transparent;         /* opt-in only; see the note above before raising it */
+
+  /* Gel flex. Liquid Glass "instantly flexes" on touch and "moves in tandem
+     with your interaction" (WWDC25/219). liquid-glass.js drives these from the
+     pointer; CSS :active is the no-JS fallback. */
+  --as-flex-x: 1; --as-flex-y: 1;
+  --as-flex-press-x: 1.06; --as-flex-press-y: 1.03;
+}
+
+/* Registered so the light source can glide back to rest instead of snapping
+   when the pointer leaves. Unsupported browsers just skip the transition. */
+@property --as-glass-light-angle { syntax: "<angle>"; inherits: true; initial-value: 145deg; }
+
+/* Explicit theme override (data-theme="light|dark" on <html>) */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
+
+/* Increased contrast variants of system colors (HIG Color spec) */
+@media (prefers-contrast: more) {
+  :root {
+    /* Label and separator alphas tighten too, not just the hues: the default
+       secondaryLabel already passes 4.5:1; Increase Contrast takes it further,
+       and lifts tertiary and quaternary labels and separators as well. */
+    --as-label-secondary:  light-dark(rgb(60 60 67 / .82), rgb(235 235 245 / .82));
+    --as-label-tertiary:   light-dark(rgb(60 60 67 / .60), rgb(235 235 245 / .58));
+    --as-label-quaternary: light-dark(rgb(60 60 67 / .40), rgb(235 235 245 / .38));
+    --as-separator:        light-dark(rgb(60 60 67 / .50), rgb(84 84 88 / .85));
+    --as-red:    light-dark(rgb(233 21 45),   rgb(255 97 101));
+    --as-orange: light-dark(rgb(197 83 0),    rgb(255 160 86));
+    --as-yellow: light-dark(rgb(161 106 0),   rgb(254 223 67));
+    --as-green:  light-dark(rgb(0 137 50),    rgb(74 217 104));
+    --as-mint:   light-dark(rgb(0 133 117),   rgb(84 223 203));
+    --as-teal:   light-dark(rgb(0 129 152),   rgb(59 221 236));
+    --as-cyan:   light-dark(rgb(0 126 174),   rgb(109 217 255));
+    --as-blue:   light-dark(rgb(30 110 244),  rgb(92 184 255));
+    --as-indigo: light-dark(rgb(86 74 222),   rgb(167 170 255));
+    --as-purple: light-dark(rgb(176 47 194),  rgb(234 141 255));
+    --as-pink:   light-dark(rgb(231 18 77),   rgb(255 138 196));
+    --as-brown:  light-dark(rgb(149 109 81),  rgb(219 166 121));
+    --as-destructive-text: light-dark(#b42318, #ff8a80);   /* ≥ 5.8:1 / ≥ 6.1:1 */
+    --as-gray:   light-dark(rgb(108 108 112), rgb(174 174 178));
+    --as-gray2:  light-dark(rgb(142 142 147), rgb(124 124 128));
+    --as-gray3:  light-dark(rgb(174 174 178), rgb(84 84 86));
+    --as-gray4:  light-dark(rgb(188 188 192), rgb(68 68 70));
+    --as-gray5:  light-dark(rgb(216 216 220), rgb(54 54 56));
+    --as-gray6:  light-dark(rgb(235 235 240), rgb(36 36 38));
+  }
+}

@@ -1,0 +1,150 @@
+/* --------------------------------------------------------------------------
+   7. Accessibility + user preferences (applied system-wide, automatically)
+   -------------------------------------------------------------------------- */
+/* Reduce Transparency → frostier, obscures more of what's behind */
+@media (prefers-reduced-transparency: reduce) {
+  .as-glass { --_fill: light-dark(rgb(245 245 247 / .92), rgb(44 44 46 / .92)); --_blur: 40px; }
+  .as-glass::before { opacity: .5; }
+  .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(rgb(255 255 255 / .96), rgb(120 120 124 / .96)); }
+  /* Window chrome is not .as-glass, so it needs its own opt-out: a menu bar
+     and a window toolbar still blur their backdrop otherwise. */
+  .as-menubar, .as-toolbar-window { background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .as-toast { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  /* own rule: a browser without ::picker() drops the whole selector list */
+  select.as-input::picker(select) { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+:root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
+/* Increase Contrast → predominantly black/white with a contrasting border */
+@media (prefers-contrast: more) {
+  .as-glass {
+    --_fill: light-dark(rgb(255 255 255 / .96), rgb(0 0 0 / .96));
+    --_blur: 0px; --as-glass-filter: none;
+    --as-glass-brightness: 1; --as-glass-contrast: 1; --as-glass-sheen: transparent;
+    /* The fill stops following the backdrop here, so the label has to follow
+       the fill: an element that adapt() marked dark would otherwise keep white
+       text on now-white glass. */
+    --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary);
+    color: var(--as-label);
+    box-shadow: var(--_shadow), inset 0 0 0 1.5px var(--as-label);
+  }
+  .as-glass[data-glass-scheme] { --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary); color: var(--as-label); }
+  .as-glass::before, .as-glass::after { display: none; }
+  .as-glass-tinted, .as-glass-prominent,
+  .as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-action-bg)); color: var(--as-action-fg); }
+  .as-glass-clear, .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
+  .as-segmented.is-scrubbing .as-seg-indicator,
+  .as-slider-knob.is-scrubbing { -webkit-backdrop-filter: none; backdrop-filter: none; background: light-dark(#fff, #000); box-shadow: inset 0 0 0 1.5px var(--as-label); }
+  /* Window chrome is not .as-glass, so it needs its own high-contrast pass:
+     opaque frame, a real separator, and no translucency. */
+  .as-menubar, .as-toolbar-window {
+    background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: 0 0 0 0 transparent, inset 0 -1px 0 var(--as-label);
+  }
+  .as-split > .as-split-divider { background: var(--as-label); }
+  /* Increase Contrast additionally uses monochrome selected rows. */
+  .as-split > .as-sidebar .as-row.is-selected { background: var(--as-label); color: var(--as-bg); }
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: var(--as-bg); }
+  /* Fields, toasts and modals get a real edge. */
+  .as-input { border-color: var(--as-label-secondary); }
+  .as-toast { background: var(--as-modal-bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: var(--as-label); }
+  .as-dialog { border-color: var(--as-label); }
+}
+/* Reduce Motion → no elastic / morphing, keep opacity changes */
+@media (prefers-reduced-motion: reduce) {
+  .as-glass, .as-glass *, .as-button, .as-sheet, .as-menu, .as-toggle .as-knob,
+  .as-tabbar .as-glass-group, .as-seg-indicator, .as-slider-knob,
+  .as-toolbar-title[data-reveal-on-scroll],
+  .as-dialog, .as-dialog::backdrop, .as-toast { transition-duration: 1ms !important; }
+  .as-toolbar-title[data-reveal-on-scroll] { transform: none; }
+  .as-skeleton { animation: none; }
+  /* no elastic: keep the illumination, drop the flex and the drag stretch */
+  .as-glass-interactive:active, .as-glass-interactive.is-pressed { --as-flex-x: 1; --as-flex-y: 1; }
+  .as-seg-indicator { --as-ind-sx: 1 !important; }
+  .as-slider-knob { --as-knob-sx: 1 !important; }
+}
+/* Forced colors (Windows High Contrast). The browser flattens backgrounds to
+   Canvas and drops box-shadows, which erases every state this stylesheet
+   paints with a fill: a switch's on/off colour and its knob, the segmented
+   indicator, selected tabs and rows. Those controls opt out of the automatic
+   adjustment and redraw their state with the system palette instead. */
+@media (forced-colors: active) {
+  .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .as-glass::before, .as-glass::after { display: none; }
+  /* Buttons that rely on a fill to look like buttons keep a visible boundary. */
+  .as-button-filled, .as-button-tinted, .as-button-gray, .as-button-bordered { border: 1px solid ButtonText; }
+
+  .as-toggle, .as-segmented, .as-slider { forced-color-adjust: none; }
+  .as-toggle { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-toggle .as-knob { background: CanvasText; box-shadow: none; }
+  .as-toggle[aria-checked="true"] { background: Highlight; box-shadow: inset 0 0 0 1px Highlight; }
+  .as-toggle[aria-checked="true"] .as-knob { background: HighlightText; }
+  :root .as-toggle:disabled, :root .as-toggle[aria-disabled="true"] { opacity: 1; box-shadow: inset 0 0 0 1px GrayText; }
+  .as-toggle:disabled .as-knob, .as-toggle[aria-disabled="true"] .as-knob { background: GrayText; }
+
+  .as-segmented { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  .as-segmented .as-segment { color: CanvasText; }
+  .as-segmented .as-segment.is-selected { background: Highlight; color: HighlightText; box-shadow: none; }
+  .as-segmented .as-seg-indicator, .as-segmented.is-scrubbing .as-seg-indicator {
+    background: Highlight; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  :root .as-segmented .as-segment:disabled, :root .as-segmented .as-segment[aria-disabled="true"] { opacity: 1; color: GrayText; }
+
+  /* The native thumb comes back and the glass overlay knob goes away: the
+     overlay is a painted circle, and the native thumb is drawn by the system. */
+  .as-slider::-webkit-slider-runnable-track { background: linear-gradient(to right, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, Highlight var(--as-value, 50%), CanvasText var(--as-value, 50%)); }
+  .as-slider::-webkit-slider-thumb, .as-slider.is-upgraded::-webkit-slider-thumb { opacity: 1; background: Canvas; box-shadow: inset 0 0 0 2px CanvasText; }
+  .as-slider::-moz-range-track { background: CanvasText; }
+  .as-slider::-moz-range-progress { background: Highlight; }
+  .as-slider::-moz-range-thumb, .as-slider.is-upgraded::-moz-range-thumb { opacity: 1; background: Canvas; border: 2px solid CanvasText; box-shadow: none; }
+  .as-slider-knob { display: none; }
+
+  /* Selection that was carried by a tinted background. */
+  .as-tabbar .as-tab.is-selected, .as-glass-group > .as-item.is-selected,
+  .as-glass-group > .as-item[aria-pressed="true"], .as-sidebar .as-row.is-selected,
+  .as-split > .as-sidebar .as-row.is-selected, .as-menubar .as-menubar-item[aria-expanded="true"],
+  .as-toolbar-window .as-toolbar-group > .as-item[aria-pressed="true"] {
+    forced-color-adjust: none; background: Highlight; color: HighlightText; box-shadow: none;
+  }
+  .as-sidebar .as-row.is-selected svg,
+  .as-split > .as-sidebar .as-row.is-selected .as-secondary,
+  .as-split > .as-sidebar .as-row.is-selected .as-tertiary { color: HighlightText; }
+
+  /* forced-color-adjust is inherited: everything inside a selected option is
+     drawn with the author's colours, so it needs system colours too. A page's
+     own coloured text inside an option needs the same rule. */
+  .as-option[aria-selected="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .as-option[aria-selected="true"] :is(.as-secondary, .as-tertiary, .as-pill) { color: HighlightText; }
+  .as-option[aria-selected="true"] .as-pill { background: transparent; border-color: HighlightText; }
+  .as-option:focus-visible { outline-color: CanvasText; }
+  .as-skeleton { forced-color-adjust: none; background: GrayText; }
+  .as-toast { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  select.as-input::picker(select) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* No backdrop-filter support → solid material fallback */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .as-glass { --_fill: light-dark(rgb(250 250 252 / .94), rgb(40 40 44 / .94)); }
+}
+
+/* Utilities */
+.as-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.as-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.as-safe-bottom { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* Prominent controls keep the accessible foreground when adaptivity samples
+   a light backdrop. Custom --as-tint overrides need their own contrast check. */
+.as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { color: var(--as-action-fg); }
+.as-segment:disabled, .as-segment[aria-disabled="true"],
+.as-toggle:disabled, .as-toggle[aria-disabled="true"] { opacity: .45; cursor: default; }
+
+/* Keep content and navigation usable in narrow containers. */
+.as-alert { box-sizing: border-box; max-inline-size: 100%; }
+.as-tabbar .as-tab { box-sizing: border-box; }
+@media (max-width: 600px) {
+  .as-toolbar { flex-wrap: wrap; gap: 8px; }
+  .as-toolbar-title { min-inline-size: 0; overflow-wrap: anywhere; }
+  .as-toolbar .as-search { min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; }
+}

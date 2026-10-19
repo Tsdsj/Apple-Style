@@ -4,7 +4,7 @@ Scope: [rule strength and evidence](rules-and-evidence.md). Platform recommendat
 
 The other cheatsheets carry Apple's design rules. This one carries what the web
 needs on top of them, and the places where a literal reading of the HIG produces
-broken or illegal web code. Pair with `web/apple-style.css` + `web/liquid-glass.js`.
+broken or illegal web code. Pair with `web/apple-style.css` + `web/liquid-glass.js`. The stylesheet is edited in `web/css/*.css`; `web/apple-style.css` and `web/apple-style.min.css` are generated from those files by `scripts/build-css.py`.
 
 ## Two traps to get right before anything else
 

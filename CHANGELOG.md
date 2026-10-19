@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+网站优先改造 阶段 1（[改造清单](docs/plan/2026-10-19-website-first-plan.md) 1.3、1.4、1.11）：
+
+- 样式表源文件拆分到 `skills/Apple-Style/web/css/*.css`，内容未改动。`apple-style.css` 由 `scripts/build-css.py` 按原节顺序合并生成，与拆分前逐字节一致；新增压缩版 `apple-style.min.css`。
+- `scripts/build-css.py --check` 检查生成文件是否过期，以及是否使用了未声明的 `var(--as-*)`；`tests/test_build_css.py` 把它接入 CI。
+- 演示页的说明、技能文件的文件列表和打包测试改为指向新结构。
+
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 
 - 强制颜色（Windows 对比度主题）：开关、分段选中、滑块、选中的标签/分组项/侧栏行/菜单栏项改用系统色绘制，状态不再消失；填充类按钮保留可见边界。

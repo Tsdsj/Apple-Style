@@ -62,6 +62,7 @@ Optional structures: `.as-tabbar[data-sidebar]` opts into the project's width-ba
 
 - `cheatsheets/`: topic references plus shared rule scope and evidence definitions.
 - `web/apple-style.css`, `web/liquid-glass.js`, `web/liquid-glass.mjs`: dependency-free Web assets (classic script / CommonJS, and its ES module entry).
+- `web/css/*.css`: the stylesheet source, split by layer. `web/apple-style.css` and `web/apple-style.min.css` are generated from it by `scripts/build-css.py` in the repository; edit the sources, not the generated files.
 - `web/demo.html`, `web/demo-desktop.html`: minimal examples, linked from `../../demo/index.html`.
 - `scripts/hig-lookup.sh`: search local references.
 - `scripts/update-reference.sh`: transactional manifest-backed refresh; failures leave the previous library intact.

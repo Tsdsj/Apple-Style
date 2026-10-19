@@ -1,0 +1,182 @@
+/* --------------------------------------------------------------------------
+   6c. Web app components — form fields, pop-up button, selectable list,
+   modal dialog, toast, empty and loading states, status pills
+
+   What a real web application needs on top of the platform controls above.
+   Each one is built on the native element that already owns its behaviour
+   (<input>, <select>, <dialog>), so focus, validation, Escape and the
+   accessibility tree come from the browser. The two that have no native
+   element — the selectable list and the toast — get their keyboard model and
+   live region from liquid-glass.js (listbox(), toast()). All of them follow
+   data-density and data-platform like the rest of the stylesheet.
+   -------------------------------------------------------------------------- */
+:root {
+  /* A modal holds a form: it is an opaque content surface, not glass — large
+     glass lets the list behind it show through the fields. */
+  --as-modal-bg: light-dark(rgb(255 255 255), rgb(44 44 46));
+  /* Toast: thick enough that its label keeps ≥ 9:1 over any content. */
+  --as-toast-fill: light-dark(rgb(250 250 252 / .86), rgb(44 44 48 / .86));
+}
+
+/* Form fields. Markup:
+     <label class="as-form-field"><span class="as-form-label">Title</span>
+       <input class="as-input" aria-describedby="title-error" required>
+       <span class="as-form-error" id="title-error" hidden>Enter a title.</span></label>
+   The label is visible text, never only a placeholder. Errors are text next to
+   the field plus aria-invalid="true" — the red edge alone carries nothing. */
+.as-form { display: grid; gap: 16px; }
+.as-form-field { display: grid; gap: 6px; min-inline-size: 0; }
+.as-form-label { font-weight: 500; color: var(--as-label); }
+.as-form-hint, .as-form-error { font: 400 13px/18px var(--as-font-text); }
+.as-form-hint { color: var(--as-label-secondary); }
+.as-form-error { color: var(--as-destructive-text); }
+.as-form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.as-input {
+  box-sizing: border-box; inline-size: 100%; min-block-size: var(--as-control-h, var(--as-hit-min));
+  margin: 0; padding: 0 12px;
+  /* transparent, so Windows High Contrast draws it as the field's edge */
+  border: 1px solid transparent; border-radius: var(--as-radius-s);
+  background: var(--as-fill-tertiary); color: var(--as-label);
+  font: 400 var(--as-field-font, 17px)/22px var(--as-font-text); letter-spacing: normal;
+}
+.as-input::placeholder { color: var(--as-label-secondary); opacity: 1; }
+.as-input:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 1px; }
+.as-input[aria-invalid="true"] { border-color: var(--as-destructive-text); }
+.as-input:disabled { opacity: .5; cursor: default; }
+textarea.as-input { min-block-size: 88px; padding-block: 8px; resize: vertical; }
+/* Pop-up button: a real <select class="as-input">. Without customizable select
+   the platform draws its own arrow and picker — keep it. */
+select.as-input { padding-inline-end: 8px; cursor: default; }
+/* Customizable select (Chrome 135+, Safari 27): a menu-like picker with a
+   leading checkmark. Pointer input only: on a touchscreen the platform picker
+   (iOS menu or wheel, Android sheet) is the better control. */
+@supports (appearance: base-select) {
+  @media (pointer: fine) {
+    select.as-input, select.as-input::picker(select) { appearance: base-select; }
+    select.as-input { display: inline-flex; align-items: center; gap: 6px; padding-inline: 12px 10px; }
+    select.as-input::picker-icon { color: var(--as-label-secondary); transition: rotate var(--as-dur-fast) var(--as-ease-soft); }
+    select.as-input:open::picker-icon { rotate: 180deg; }
+    select.as-input::picker(select) {
+      box-sizing: border-box; min-inline-size: anchor-size(inline); margin-block: 4px; padding: 5px;
+      border: 1px solid transparent; border-radius: var(--as-radius-m);
+      background: var(--as-glass-fill-large); color: var(--as-label);
+      -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      box-shadow: var(--as-glass-shadow-large), inset 0 0 0 .5px var(--as-glass-edge);
+    }
+    select.as-input option { display: flex; align-items: center; gap: 6px; min-block-size: 28px; padding: 3px 10px 3px 6px; border-radius: var(--as-radius-xs); }
+    select.as-input option::checkmark { order: -1; inline-size: 14px; color: inherit; }
+    select.as-input option:not(:checked)::checkmark { visibility: hidden; }
+    select.as-input option:is(:hover, :focus-visible) { outline: none; background: var(--as-action-bg); color: var(--as-action-fg); }
+    select.as-input option:disabled { opacity: .45; background: transparent; color: inherit; }
+  }
+}
+
+/* Selectable list — role="listbox" with role="option" rows; LiquidGlass
+   upgrades .as-listbox with the single-select keyboard model (one tab stop,
+   arrows move the selection, Home/End, type-ahead). Selection is the
+   aria-selected attribute: set it to select from code. */
+.as-listbox { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 4px; list-style: none; }
+.as-listbox[aria-orientation="horizontal"] { flex-direction: row; flex-wrap: wrap; }
+.as-option {
+  display: flex; align-items: center; gap: 10px; box-sizing: border-box;
+  min-block-size: var(--as-hit-min); padding: 6px 12px; border-radius: var(--as-radius-s);
+  color: var(--as-label); cursor: default; -webkit-tap-highlight-color: transparent;
+}
+.as-option:hover { background: var(--as-fill-quaternary); }
+/* Outside the row, so it shows on the accent-filled selected row too. */
+.as-option:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 1px; }
+.as-option[aria-selected="true"] { background: var(--as-action-bg); color: var(--as-action-fg); }
+.as-option[aria-selected="true"] :is(.as-secondary, .as-tertiary) { color: var(--as-action-fg); }
+.as-option[aria-disabled="true"], .as-listbox[aria-disabled="true"] { opacity: .45; }
+
+/* Modal dialog — <dialog class="as-dialog"> opened with showModal(): the
+   browser supplies focus containment, the inert page, Escape and focus
+   return. Header and footer stay put while a long body scrolls. Footer
+   actions sit at the trailing end, the primary action last. Do not compose
+   with .as-glass: a backdrop filter would also capture the toast. */
+.as-dialog {
+  box-sizing: border-box; inline-size: min(var(--as-dialog-inline-size, 520px), calc(100% - 32px));
+  max-inline-size: none; max-block-size: calc(100% - 32px);
+  margin: auto; padding: 0; overscroll-behavior: contain;
+  border: 1px solid transparent; border-radius: var(--as-radius-xl);
+  background: var(--as-modal-bg); color: var(--as-label);
+  box-shadow: var(--as-glass-shadow-large), 0 0 0 .5px var(--as-glass-edge);
+  opacity: 0; translate: 0 8px; scale: .98;
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), translate var(--as-dur-base) var(--as-ease-soft), scale var(--as-dur-base) var(--as-ease-soft),
+              overlay var(--as-dur-base) allow-discrete, display var(--as-dur-base) allow-discrete;
+}
+.as-dialog[open] { opacity: 1; translate: none; scale: none; }
+.as-dialog::backdrop { background: rgb(0 0 0 / 0); transition: background-color var(--as-dur-base) var(--as-ease-soft), overlay var(--as-dur-base) allow-discrete, display var(--as-dur-base) allow-discrete; }
+.as-dialog[open]::backdrop { background: rgb(0 0 0 / .32); }
+@starting-style {
+  .as-dialog[open] { opacity: 0; translate: 0 8px; scale: .98; }
+  .as-dialog[open]::backdrop { background: rgb(0 0 0 / 0); }
+}
+.as-dialog-header { position: sticky; inset-block-start: 0; z-index: 1; display: flex; align-items: center; gap: 8px; padding: 18px 20px 8px; background: var(--as-modal-bg); }
+.as-dialog-title { flex: 1; min-inline-size: 0; margin: 0; font: 700 20px/25px var(--as-font-display); }   /* bolder, leading-aligned */
+.as-dialog-body { padding: 8px 20px 20px; }
+.as-dialog-footer { position: sticky; inset-block-end: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 12px 20px 18px; background: var(--as-modal-bg); }
+
+/* Toast — a short status message that needs no action. LiquidGlass.toast()
+   creates or reuses one per layer (the page, or the open modal dialog, whose
+   inert backdrop would otherwise hide it from assistive technology) and
+   announces it through role="status". Never the only place an error or an
+   action appears: it leaves after a few seconds. */
+.as-toast {
+  position: fixed; inset-block-end: var(--as-toast-bottom, max(24px, env(safe-area-inset-bottom))); inset-inline-start: 50%; z-index: 60;
+  box-sizing: border-box; inline-size: max-content; max-inline-size: calc(100vw - 32px);
+  padding: 10px 18px; border: 1px solid transparent; border-radius: var(--as-radius-capsule);
+  background: var(--as-toast-fill); color: var(--as-label);
+  -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+  backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+  box-shadow: var(--as-glass-shadow), inset 0 0 0 .5px var(--as-glass-edge);
+  font: 500 15px/20px var(--as-font-text); text-align: center; overflow-wrap: anywhere;
+  pointer-events: none; opacity: 0; translate: -50% 8px;
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), translate var(--as-dur-base) var(--as-ease-spring);
+}
+.as-toast:dir(rtl) { translate: 50% 8px; }
+.as-toast.is-on { opacity: 1; translate: -50% 0; }
+.as-toast.is-on:dir(rtl) { translate: 50% 0; }
+/* Above a floating tab bar (58 px tall, 12 px off the bottom), not on it. */
+:root:has(.as-tabbar) { --as-toast-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 70px); }
+@media (min-width: 1024px) { :root:has(.as-tabbar[data-sidebar]) { --as-toast-bottom: max(24px, env(safe-area-inset-bottom)); } }
+
+/* Empty state — says what belongs here and how to get it (ContentUnavailableView). */
+.as-empty { display: grid; justify-items: center; align-content: center; gap: 6px; padding: 64px 24px; text-align: center; color: var(--as-label-secondary); }
+.as-empty[hidden] { display: none; }
+.as-empty > svg { inline-size: 44px; block-size: 44px; margin-block-end: 6px; color: var(--as-label-secondary); }
+.as-empty-title { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); }
+.as-empty p { margin: 0; max-inline-size: 40ch; }
+.as-empty .as-button { margin-block-start: 10px; }
+
+/* Loading placeholder — shaped like the content it stands in for. Mark the
+   placeholders aria-hidden and the region aria-busy="true". */
+.as-skeleton { display: block; block-size: var(--as-skeleton-h, 1em); border-radius: var(--as-radius-xs); background: var(--as-fill-tertiary); animation: as-skeleton-pulse 1.6s var(--as-ease-soft) infinite alternate; }
+@keyframes as-skeleton-pulse { to { opacity: .45; } }
+
+/* Status pill — a word, not just a colour. The background is the text colour
+   at 14 %, and every variant keeps ≥ 4.5:1 on the standard backgrounds in
+   both appearances. */
+.as-pill {
+  display: inline-flex; align-items: center; gap: 5px; box-sizing: border-box; min-block-size: 20px;
+  padding: 0 8px; border: 1px solid transparent; border-radius: var(--as-radius-capsule);
+  background: color-mix(in srgb, currentColor 14%, transparent); color: var(--as-label);
+  font: 500 12px/18px var(--as-font-text); letter-spacing: 0; white-space: nowrap; vertical-align: middle;
+}
+.as-pill-info     { color: light-dark(#004f9e, #8ec8ff); }
+.as-pill-success  { color: light-dark(#006b32, #7ee495); }
+.as-pill-warning  { color: light-dark(#8a4600, #ffc266); }
+.as-pill-critical { color: light-dark(#b42318, #ff8a80); }
+.as-pill-dot::before { content: ""; inline-size: 6px; block-size: 6px; border-radius: 50%; background: currentColor; }
+.as-option[aria-selected="true"] .as-pill { background: rgb(0 0 0 / .22); color: var(--as-action-fg); }
+
+/* Mac density */
+[data-platform="macos"] .as-input { min-block-size: 22px; padding-inline: 6px; border-radius: var(--as-radius-xs); font-size: 13px; line-height: 16px; }
+[data-platform="macos"] textarea.as-input { min-block-size: 64px; padding-block: 3px; }
+[data-platform="macos"] .as-form-hint, [data-platform="macos"] .as-form-error { font-size: 11px; line-height: 14px; }
+[data-platform="macos"] .as-option { min-block-size: var(--as-row-min); padding: 2px 8px; border-radius: var(--as-radius-xs); }
+[data-platform="macos"] .as-dialog { border-radius: var(--as-radius-l); }
+[data-platform="macos"] .as-dialog-title { font: 700 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-toast { padding: 6px 14px; font-size: 13px; line-height: 16px; }
+[data-platform="macos"] .as-empty-title { font-size: 15px; line-height: 20px; }
