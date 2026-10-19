@@ -42,3 +42,26 @@ tvOS: Title 1 76/96 Medium … Body 29/36 Medium. watchOS Large (40–42mm): Lar
 - **Line length**: readable content guide ≈ 672pt (iPad/Mac); avoid lines over ~80 characters.
 - **Numbers**: tabular figures for columns/timers (`font-variant-numeric: tabular-nums`; SF has monospaced digits variant).
 - Right-to-left: use system text alignment (leading/trailing), never hard-code left.
+
+## Web display type
+
+Sources: the largest iOS text style is Large Title, 34/41 (`../../Apple-Style-HIG/reference/hig/typography.md`). The SF Pro tracking table in the same file lists values for iOS point sizes; applying them to CSS pixels is a visual heuristic.
+
+- *Project default* — marketing headlines go beyond 34pt, so they use a fluid `clamp()` scale. No Apple size applies to a hero. Use `rem` in `clamp()` so the reader's default font size still applies (WCAG 1.4.4):
+
+  ```css
+  :root {
+    --site-display-xl: clamp(2.5rem, 1.5rem + 4.5vw, 5rem);    /* about 40 → 80 px */
+    --site-display-l:  clamp(2rem, 1.25rem + 3vw, 3.5rem);     /* about 32 → 56 px */
+  }
+  .hero-title { font: 700 var(--site-display-xl)/1.05 var(--as-font-display); text-wrap: balance; }
+  ```
+
+  These class names are examples. A `.as-display-*` pattern is planned in `website-patterns.md`.
+- *Official data, heuristic use* — tracking. For SF Pro the HIG table is positive from 24 to 76pt (+0.22pt at 64pt; +0.40pt at 34pt) and 0 at 80pt and above. For SF on the web, keep display tracking near 0: about +0.004 to +0.008em at 48–64px, 0 at 80px and above. Do not copy generic negative display tracking onto SF. For a non-SF brand face, measure in the browser.
+- *Project default* — `text-wrap: balance` on headlines and `text-wrap: pretty` on paragraphs. Both are progressive enhancement: browsers without them wrap as usual.
+- *Project default* — CJK line breaks: `word-break: auto-phrase` (Chromium only; other browsers use `normal`) with `line-break: strict`. Treat `auto-phrase` as an enhancement, not a requirement.
+- *Project default, caveat* — `word-break: keep-all` stops breaks between CJK characters, so a long Chinese line can overflow or not wrap at all. Use it for Korean text, or for short Chinese phrases with explicit breaks. Do not apply it to Chinese body text.
+- *Visual heuristic* — CJK body line-height about 1.7; no faux italics for CJK (the font has no italic, and the browser slants it); `letter-spacing: 0` for CJK (also in `web-implementation.md`, *Two traps*).
+- *Visual heuristic* — reading measure: Latin 60–75 characters (`ch`); CJK 35–45 characters, which is `max-inline-size: 40em` because 1em is one CJK character at body size. The HIG 672pt readable-width guide (`layout-and-shapes.md`) is a guide for running text, not a page cap.
+- *Observed convention* — set `lang` (`zh-Hans`, `ja`, `ko`) on the element. Browsers use it to choose regional CJK glyph forms.

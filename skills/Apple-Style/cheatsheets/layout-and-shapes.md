@@ -54,3 +54,31 @@ The derivation is the reusable part: **264 + 380 in a 1024px window squeezes the
 - Pair glass with a **dimming layer** when a task interrupts the main flow (modality); parallel tasks get glass separation without dimming. Dragging a sheet up → glass becomes more opaque and grows slightly.
 - Remove custom sheet/popover background views.
 - Lists/tables/forms: larger row height & padding, bigger section radius, title-style section headers, use grouped form style.
+
+## Web page layout
+
+Sources: WCAG 2.2 1.4.10 Reflow (content must work at 320 CSS px wide without two-dimensional scrolling); HIG *Layout* for the margin and readable-width guides, cited in the sections above. Labels below are for the web.
+
+- *Official requirement* (WCAG 1.4.10) — no horizontal scrolling at 320 CSS px. Test at 320 px; this is the first check in *Verify before shipping*.
+- *Project default* — page gutters of 16px at narrow widths (`--as-margin`), matching the HIG compact layout margin. Widen to 20px (`--as-margin-regular`) from about 768px.
+- *Project default* — content has two widths. Running text uses `--as-readable-width` (672px). Sections, cards and grids use a wide container, `--as-site-width` (1120px, project default; see `website-patterns.md`). Use a grid so full-bleed sections can break out of the container:
+
+  ```css
+  .page {
+    display: grid;
+    grid-template-columns: minmax(var(--as-margin), 1fr) min(var(--as-site-width, 1120px), 100% - 2 * var(--as-margin)) minmax(var(--as-margin), 1fr);
+  }
+  .page > * { grid-column: 2; }
+  .page > .full-bleed { grid-column: 1 / -1; }
+  ```
+
+- *Visual heuristic* — section vertical rhythm with a fluid clamp: `padding-block: clamp(3rem, 2rem + 5vw, 7rem)`. Alternate background tokens (`--as-bg`, `--as-bg-secondary`) to separate sections.
+- *Project default* — feature grids use auto-fit with a minimum that cannot overflow at 320 px: `grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));`. A 12-column grid (`repeat(12, minmax(0, 1fr))`) is available when the layout needs fixed spans.
+- *Project default* — breakpoints follow the content, not device widths. Components use container queries, which respond to their own width:
+
+  ```css
+  .feature-grid { container-type: inline-size; }
+  @container (min-width: 36rem) { .feature { display: grid; grid-template-columns: 1fr 1fr; } }
+  ```
+
+  The stylesheet's 768 / 1024 / 1280 px tiers are project defaults (see *Metrics* above). Nothing about a marketing page requires them.

@@ -101,7 +101,7 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 - `attach(el, { scale: 12, rim: 14, chroma: false, lens: true, adapt: true })` 只处理一块玻璃。重复 attach 合并显式参数，并在 resize、外观变化及滤镜重新生成时保留配置；`scale: 0` 有效。
 - `refresh()` 刷新滤镜与背景采样；`morph` / `materialize` 返回 Promise，销毁期间取消不会造成未处理的 rejection。直接操作原有 helper 的 API 仍保留。
 - `radiogroup` 选择值；`tablist` 切换内容，作者必须提供每个 tab 的 `aria-controls` 与对应 panel。默认箭头同步焦点和选择；`data-activation="manual"` 的 tabs 用 Enter/Space 激活。禁用项跳过，click/键盘/拖拽均可用，取消不提交。
-- 控件维护 DOM 状态并发出冒泡 `change`；不要在 click 中再次切换同一状态。React/Vue 请在 mount 后 init、unmount 前 destroy；[完整示例](skills/Apple-Style/cheatsheets/web-implementation.md#runtime-lifecycle-and-frameworks)。
+- 控件维护 DOM 状态并发出冒泡 `change`；不要在 click 中再次切换同一状态。React/Vue 请在 mount 后 init、unmount 前 destroy；[完整示例](skills/Apple-Style/cheatsheets/web-app.md#runtime-lifecycle-and-frameworks)。
 - 打包工具与框架：把 `liquid-glass.mjs` 与 `liquid-glass.js` 放在同一目录，`import LiquidGlass, { init } from './liquid-glass.mjs'`。服务端渲染、Worker 和无 DOM 的测试环境中导入不会报错（API 为空操作）；同一页面同时用 `<script>` 和模块时只有一个运行时。
 - Tailwind v4 / 级联层：样式表默认不分层，普通 `<link>` 行为不变；需要让工具类覆盖组件时，用 `@import "./apple-style.css" layer(components);` 导入到工具类之下的层。
 - `data-shortcuts`：⌘ 在 Apple 平台为 Command、其他平台为 Ctrl；焦点在文本框或富文本中时，全选、复制/剪切/粘贴、撤销/重做、光标移动与删除留给输入框，其他命令（如 ⌘S）照常执行。

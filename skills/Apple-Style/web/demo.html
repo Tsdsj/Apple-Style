@@ -280,7 +280,7 @@
   function closeMenu(restore) { menu.classList.remove('is-open'); shareBtn.setAttribute('aria-expanded', 'false'); setTimeout(() => menu.hidden = true, 300); if (restore) shareBtn.focus(); }
   document.addEventListener('pointerdown', e => { if (!menu.hidden && !menu.contains(e.target) && !shareBtn.contains(e.target)) closeMenu(false); });
   // Up/Down move, Escape closes and returns focus, Tab closes — the menu
-  // keyboard contract from cheatsheets/web-implementation.md
+  // keyboard contract from cheatsheets/web-app.md
   menu.addEventListener('keydown', e => {
     const items = [...menu.querySelectorAll('.as-menu-item')], i = items.indexOf(document.activeElement);
     if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
