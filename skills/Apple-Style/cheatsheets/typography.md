@@ -57,7 +57,7 @@ Sources: the largest iOS text style is Large Title, 34/41 (`../../Apple-Style-HI
   .hero-title { font: 700 var(--site-display-xl)/1.05 var(--as-font-display); text-wrap: balance; }
   ```
 
-  These class names are examples. A `.as-display-*` pattern is planned in `website-patterns.md`.
+  These class names are examples. The reference pattern is `.as-site-hero-title` in `website-patterns.md` (*Hero and display type*), with the same numbers defined as `--as-display-1` and `--as-display-2` in `../web/patterns/hero.css`.
 - *Official data, heuristic use* — tracking. For SF Pro the HIG table is positive from 24 to 76pt (+0.22pt at 64pt; +0.40pt at 34pt) and 0 at 80pt and above. For SF on the web, keep display tracking near 0: about +0.004 to +0.008em at 48–64px, 0 at 80px and above. Do not copy generic negative display tracking onto SF. For a non-SF brand face, measure in the browser.
 - *Project default* — `text-wrap: balance` on headlines and `text-wrap: pretty` on paragraphs. Both are progressive enhancement: browsers without them wrap as usual.
 - *Project default* — CJK line breaks: `word-break: auto-phrase` (Chromium only; other browsers use `normal`) with `line-break: strict`. Treat `auto-phrase` as an enhancement, not a requirement.

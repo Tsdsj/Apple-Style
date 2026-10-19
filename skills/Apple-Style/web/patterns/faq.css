@@ -1,0 +1,33 @@
+/* ==========================================================================
+   FAQ with native disclosure (pattern 2.7). No JavaScript.
+   Each question is a <details> with a <summary>. The chevron is a shape that
+   turns on open, so open and closed do not depend on colour.
+   Project defaults: the 44px summary height on every pointer (the rows are full
+   width, so the target is already wide), the 9px chevron, the 16rem answer measure.
+   Reduced motion: official reference is WCAG 2.3.3 (AAA, Animation from Interactions);
+   the rule here follows prefers-reduced-motion and removes the chevron transition.
+   ========================================================================== */
+.as-site-faq { margin: 0; }
+.as-site-faq-item { border-block-end: 1px solid var(--as-separator); }
+.as-site-faq-item:first-child { border-block-start: 1px solid var(--as-separator); }
+.as-site-faq-item > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; box-sizing: border-box;
+  min-block-size: var(--as-hit-min); padding: 14px 0; cursor: pointer; list-style: none;
+  font: 600 19px/25px var(--as-font-display); color: var(--as-label);
+}
+.as-site-faq-item > summary::-webkit-details-marker { display: none; }
+.as-site-faq-item > summary::after {
+  content: ""; flex: none; inline-size: 9px; block-size: 9px; margin-inline-end: 4px;
+  border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  transition: transform var(--as-dur-fast) var(--as-ease-soft);
+}
+.as-site-faq-item[open] > summary::after { transform: rotate(-135deg); }
+.as-site-faq-item > summary:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; border-radius: var(--as-radius-xs); }
+@media (prefers-reduced-motion: reduce) { .as-site-faq-item > summary::after { transition: none; } }
+.as-site-faq-answer { max-inline-size: 40rem; padding-block-end: 20px; }
+.as-site-faq-answer p {
+  margin: 0; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+.as-site-faq-answer p + p { margin-block-start: 12px; }
+@media (forced-colors: active) { .as-site-faq-item { border-color: CanvasText; } }

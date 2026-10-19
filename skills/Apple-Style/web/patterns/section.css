@@ -1,0 +1,43 @@
+/* ==========================================================================
+   Section rhythm, feature grid and card (pattern 2.5). Requires the core layers.
+   Layout: observed convention (apple.com-style marketing pages, 2026-10-19, not
+   re-verified online in this revision). Project defaults: the clamp rhythm, the
+   16 and 20 px gaps, the 16rem grid minimum and the 1120 px width (site-header.css
+   declares --as-site-width; the fallback here keeps this file standalone).
+   The card is a content surface: a solid background, not glass.
+   ========================================================================== */
+.as-site-section {
+  --_gutter: var(--as-margin);
+  box-sizing: border-box; padding-block: clamp(3rem, 2rem + 5vw, 7rem);
+  /* Text lines up with the header and footer edges, which are --as-site-width wide with a gutter inside. */
+  padding-inline: max(var(--_gutter), calc((100% - var(--as-site-width, 1120px)) / 2 + var(--_gutter)));
+}
+@media (min-width: 48em) { .as-site-section { --_gutter: var(--as-margin-regular); } }
+/* Alternating background. The surface for cards and tables steps up one level so they still read as raised. */
+.as-site-section-alt { --as-site-surface: var(--as-bg-tertiary); background: var(--as-bg-secondary); }
+.as-site-section-title {
+  margin: 0 0 16px; font: 600 var(--as-display-2, clamp(2rem, 1.25rem + 3vw, 3.5rem))/1.1 var(--as-font-display);
+  letter-spacing: 0; color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-section-lead {
+  margin: 0 0 clamp(32px, 4vw, 56px); max-inline-size: 36em;
+  font: 400 19px/1.45 var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty;
+}
+.as-site-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 16px; margin: 0; padding: 0; list-style: none;
+}
+@media (min-width: 48em) { .as-site-grid { gap: 20px; } }
+/* Nested media inside a card can use .as-concentric (base.css) with --as-concentric-inset set to the card padding. */
+.as-site-card {
+  --as-container-radius: var(--as-radius-l);
+  box-sizing: border-box; display: grid; align-content: start; gap: 8px; min-inline-size: 0; margin: 0;
+  padding: 24px; border-radius: var(--as-container-radius);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+}
+.as-site-card-title { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-site-card p {
+  margin: 0; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+@media (forced-colors: active) { .as-site-card { border: 1px solid CanvasText; } }

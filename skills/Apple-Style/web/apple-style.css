@@ -249,6 +249,9 @@
   text-decoration-thickness: 2px;
 }
 :where(nav, [role="navigation"]) :where(a) { text-decoration: none; }
+/* Link colour: the browser default (#00e, visited purple) fails contrast in dark mode.
+   --as-link meets 4.5:1 on the standard backgrounds in both appearances. */
+:where(a:not([class])) { color: var(--as-link); }
 
 /* --------------------------------------------------------------------------
    2. Shapes

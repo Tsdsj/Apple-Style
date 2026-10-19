@@ -1,0 +1,56 @@
+/* ==========================================================================
+   Blog list, breadcrumb, pagination and tags (pattern 2.9). Requires the core
+   layers. Observed convention (2026-10-19, not re-verified online in this
+   revision); the sizes are project defaults.
+   Card link: the title link's ::after covers the whole card. The meta line and
+   summary sit above it (z-index), so their text stays selectable and is not a link.
+   Current items (breadcrumb, pagination, tags) are marked by aria-current and by
+   weight or a ring, not by colour alone.
+   ========================================================================== */
+.as-site-postlist { display: grid; margin: 0; padding: 0; list-style: none; border-block-start: 1px solid var(--as-separator); }
+.as-site-post { position: relative; display: grid; gap: 8px; padding-block: 24px; border-block-end: 1px solid var(--as-separator); }
+.as-site-post > :not(.as-site-post-title) { position: relative; z-index: 1; }
+.as-site-post-meta { margin: 0; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); }
+.as-site-post-title { margin: 0; font: 600 clamp(1.25rem, 1.1rem + .6vw, 1.5rem)/1.25 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+/* Classed link: base.css leaves it plain, so the heading style and the hover underline carry it. */
+.as-site-post-link { color: var(--as-label); text-decoration: none; }
+.as-site-post-link::after { content: ""; position: absolute; inset: 0; z-index: 0; }
+.as-site-post-link:hover { text-decoration: underline; text-underline-offset: .2em; }
+.as-site-post-summary { margin: 0; max-inline-size: 40em; font: 400 17px/1.45 var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+
+/* Breadcrumb: a nav with an ordered list. The separator is generated, and the list keeps the order. */
+.as-site-breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; margin: 0; padding: 0; list-style: none; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+.as-site-breadcrumb li + li::before { content: "/"; margin-inline: 8px; color: var(--as-label-secondary); }
+.as-site-breadcrumb a { display: inline-flex; align-items: center; min-block-size: 32px; color: var(--as-label-secondary); text-decoration: none; }
+.as-site-breadcrumb a:hover { color: var(--as-label); text-decoration: underline; text-underline-offset: .25em; }
+.as-site-breadcrumb [aria-current="page"] { font-weight: 600; color: var(--as-label); }
+
+/* Pagination: a nav with a list of links. Prev and next carry their words. The current page has a ring and weight. */
+.as-site-pagination ul { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.as-site-pagination a {
+  display: inline-flex; align-items: center; justify-content: center; min-inline-size: 36px; min-block-size: 36px;
+  padding: 0 12px; border-radius: var(--as-radius-capsule); color: var(--as-label); text-decoration: none; font: 400 15px/20px var(--as-font-text);
+}
+.as-site-pagination a:hover { background: var(--as-fill-tertiary); }
+.as-site-pagination [aria-current="page"] { font-weight: 600; box-shadow: inset 0 0 0 1.5px var(--as-label); }
+
+/* Tags: a nav with a list of capsule links. The capsule and the words carry the link, not the colour. */
+.as-site-tags ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.as-site-tags a {
+  display: inline-flex; align-items: center; min-block-size: 32px; padding: 0 12px;
+  border-radius: var(--as-radius-capsule); background: var(--as-fill-tertiary); color: var(--as-label);
+  font: 500 14px/20px var(--as-font-text); text-decoration: none;
+}
+.as-site-tags a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.as-site-tags [aria-current="true"] { font-weight: 600; box-shadow: inset 0 0 0 1.5px var(--as-label); }
+
+.as-site-breadcrumb a:focus-visible, .as-site-pagination a:focus-visible, .as-site-tags a:focus-visible, .as-site-post-link:focus-visible {
+  outline: 2px solid var(--as-accent); outline-offset: 2px;
+}
+@media (pointer: coarse) {
+  .as-site-pagination a, .as-site-tags a { min-block-size: var(--as-hit-min); }
+}
+@media (forced-colors: active) {
+  .as-site-pagination [aria-current="page"], .as-site-tags [aria-current="true"] { outline: 2px solid CanvasText; outline-offset: 2px; }
+  .as-site-tags a { border: 1px solid CanvasText; }
+}

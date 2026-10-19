@@ -19,6 +19,8 @@
 - `web-implementation.md` 只保留所有网页通用的内容（含表单），应用组件的约定移到新的 `web-app.md`；`components-quickref.md` 分为网站和 Web 应用两部分（2.18）。
 - `typography.md` 增加网页大字号与中日韩排版，`layout-and-shapes.md` 增加网页布局，Liquid Glass 技能增加“网站上的玻璃”（2.19）。
 - 参考库新增 `marketing/` 分类：用事务式刷新收录 developer.apple.com 的 App Store 营销指南与预购页（徽章用法、Apple 产品图、产品名称与商标写法），来源增至 210 个；`hig-lookup.sh --page` 可查到这两页（2.20）。
+- 新增网站模式：主视觉与大字号 `hero.css`、版块与功能网格 `section.css`、价格与对比表 `pricing.css`、FAQ `faq.css`、文章排版 `prose.css`、博客列表/面包屑/分页/标签 `blog.css`，均写入 `website-patterns.md`，测试在 `tests/browser/content-patterns.spec.js`（2.4–2.9）。文章页（公共层 + 页眉页脚 + 版块、文章、博客）压缩后 38.3 KB，落地页（+ 主视觉、价格、FAQ）39.8 KB。
+- 没有类名的链接改用 `--as-link` 颜色：浏览器默认的 #0000EE 在深色背景上对比度约 2.2:1。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

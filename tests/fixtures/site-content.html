@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site content fixture</title>
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/tokens.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/base.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/glass.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/controls.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/css/preferences.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-header.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-nav.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/site-footer.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/hero.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/section.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/pricing.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/faq.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/prose.css">
+  <link rel="stylesheet" href="../../skills/Apple-Style/web/patterns/blog.css">
+  <style>
+    .fx-skip { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform: translateY(-200%); }
+    .fx-skip:focus { transform: none; }
+    .fx-measure { box-sizing: border-box; max-inline-size: 65ch; margin-inline: auto; }
+    .fx-crumbs { padding-block-start: 24px; }
+  </style>
+  <script src="../../skills/Apple-Style/web/js/site-nav.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="fx-skip as-button as-button-filled" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="#top">Example</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing" aria-current="page">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#blog">Blog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="#pricing">Get started</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="top" class="as-site-hero as-site-hero-split" aria-labelledby="hero-title">
+      <div class="as-site-hero-body">
+        <p class="as-site-eyebrow">New in 2026</p>
+        <h1 class="as-site-hero-title" id="hero-title">Plan the work. Ship it on time.</h1>
+        <p class="as-site-hero-sub">A short subhead that says what the product does, with a <a href="#features">link to the features</a>.</p>
+        <div class="as-site-hero-actions">
+          <a class="as-button as-button-filled as-button-large" href="#pricing">Get started</a>
+          <a class="as-button as-button-tinted as-button-large" href="#article">Read the guide</a>
+        </div>
+      </div>
+      <figure class="as-site-hero-media">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='900'%3E%3Crect width='1200' height='900' fill='%23d2d2d7'/%3E%3Ccircle cx='600' cy='420' r='240' fill='%23a1a1a6'/%3E%3C/svg%3E" width="1200" height="900" alt="">
+      </figure>
+    </section>
+
+    <section id="overlay" class="as-site-hero as-site-hero-overlay" aria-labelledby="overlay-title">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Crect width='1600' height='900' fill='%23ffffff'/%3E%3C/svg%3E" alt="">
+      <div class="as-site-hero-body">
+        <p class="as-site-eyebrow">Overlay variant</p>
+        <h2 class="as-site-hero-title" id="overlay-title">Text on a scrim over a white image</h2>
+        <p class="as-site-hero-sub">The scrim makes the backdrop dark enough for white text in both appearances.</p>
+        <div class="as-site-hero-actions"><a class="as-button as-button-filled as-button-large" href="#faq">Read the FAQ</a></div>
+      </div>
+    </section>
+
+    <section id="features" class="as-site-section" aria-labelledby="features-title">
+      <h2 class="as-site-section-title" id="features-title">Everything in one place</h2>
+      <p class="as-site-section-lead">A lead paragraph that sets up the grid below. It is short enough to read in one or two lines on a laptop.</p>
+      <ul class="as-site-grid">
+        <li class="as-site-card"><h3 class="as-site-card-title">Shared plans</h3><p>Card text with <a href="#article">a link to the guide</a> and enough words to wrap onto a second line.</p></li>
+        <li class="as-site-card"><h3 class="as-site-card-title">Timelines</h3><p>A second card with the same structure, so the grid can be checked for even heights.</p></li>
+        <li class="as-site-card"><h3 class="as-site-card-title">Reviews</h3><p>A third card. At 320 px the cards stack into one column.</p></li>
+      </ul>
+    </section>
+
+    <section id="pricing" class="as-site-section as-site-section-alt" aria-labelledby="pricing-title">
+      <h2 class="as-site-section-title" id="pricing-title">Pricing</h2>
+      <p class="as-site-section-lead">Three plans. The middle one is recommended for most teams.</p>
+      <ul class="as-site-plans">
+        <li class="as-site-plan">
+          <h3 class="as-site-plan-name">Starter</h3>
+          <p class="as-site-plan-price"><span class="as-site-plan-amount">$0</span><span>per month</span></p>
+          <p class="as-site-plan-desc">For one person who is trying the product.</p>
+          <ul class="as-site-plan-list"><li>3 projects</li><li>Email support</li></ul>
+          <a class="as-button as-button-gray as-button-large" href="#faq">Choose Starter</a>
+        </li>
+        <li class="as-site-plan as-site-plan-recommended">
+          <p class="as-site-plan-flag"><span class="as-pill as-pill-info">Recommended</span></p>
+          <h3 class="as-site-plan-name">Pro</h3>
+          <p class="as-site-plan-price"><span class="as-site-plan-amount">$12</span><span>per seat, per month</span></p>
+          <p class="as-site-plan-desc">For a team that ships every week.</p>
+          <ul class="as-site-plan-list"><li>Unlimited projects</li><li>Priority support</li></ul>
+          <a class="as-button as-button-filled as-button-large" href="#faq">Choose Pro</a>
+        </li>
+        <li class="as-site-plan">
+          <h3 class="as-site-plan-name">Team</h3>
+          <p class="as-site-plan-price"><span class="as-site-plan-amount">$29</span><span>per seat, per month</span></p>
+          <p class="as-site-plan-desc">For several teams that need admin controls.</p>
+          <ul class="as-site-plan-list"><li>Unlimited projects</li><li>Admin controls</li></ul>
+          <a class="as-button as-button-gray as-button-large" href="#faq">Choose Team</a>
+        </li>
+      </ul>
+      <div class="as-site-compare-region" role="region" aria-label="Plan comparison" tabindex="0">
+        <table class="as-site-compare">
+          <caption>Compare plans</caption>
+          <thead>
+            <tr><th scope="col">Feature</th><th scope="col">Starter</th><th scope="col">Pro</th><th scope="col">Team</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Projects</th><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+            <tr><th scope="row">Priority support</th>
+              <td><span class="as-site-mark as-site-mark-no" aria-hidden="true">–</span><span class="as-sr-only">Not included</span></td>
+              <td><span class="as-site-mark" aria-hidden="true">✓</span><span class="as-sr-only">Included</span></td>
+              <td><span class="as-site-mark" aria-hidden="true">✓</span><span class="as-sr-only">Included</span></td></tr>
+            <tr><th scope="row">Admin controls</th>
+              <td><span class="as-site-mark as-site-mark-no" aria-hidden="true">–</span><span class="as-sr-only">Not included</span></td>
+              <td><span class="as-site-mark as-site-mark-no" aria-hidden="true">–</span><span class="as-sr-only">Not included</span></td>
+              <td><span class="as-site-mark" aria-hidden="true">✓</span><span class="as-sr-only">Included</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="faq" class="as-site-section" aria-labelledby="faq-title">
+      <h2 class="as-site-section-title" id="faq-title">Questions</h2>
+      <div class="as-site-faq">
+        <details class="as-site-faq-item" name="faq">
+          <summary>How do I cancel?</summary>
+          <div class="as-site-faq-answer"><p>Open the billing page and choose Cancel. Your projects stay available for 30 days.</p></div>
+        </details>
+        <details class="as-site-faq-item" name="faq" open>
+          <summary>Can I change plans later?</summary>
+          <div class="as-site-faq-answer"><p>Yes. Changes take effect on the next billing date.</p><p>Unused time is credited to your account.</p></div>
+        </details>
+        <details class="as-site-faq-item" name="faq">
+          <summary>Where is my data stored?</summary>
+          <div class="as-site-faq-answer"><p>In the region you choose when you create the workspace.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="as-site-section" id="article" aria-label="Guide">
+      <nav class="as-site-breadcrumb fx-measure fx-crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="#top">Home</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><span aria-current="page">Start with a plan</span></li>
+        </ol>
+      </nav>
+      <article class="as-prose" lang="en">
+        <h2>Start with a plan</h2>
+        <p>Begin by listing the work. Then <a href="#pricing">compare the plans</a> and pick the one that matches the team size.</p>
+        <ul>
+          <li>Write one line per project.</li>
+          <li>Read the <a href="#faq">questions</a> before you buy.</li>
+        </ul>
+        <blockquote><p>A plan that nobody can read is not a plan.</p></blockquote>
+        <figure>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'%3E%3Crect width='1200' height='800' fill='%23e8e8ed'/%3E%3Crect x='200' y='300' width='800' height='200' rx='24' fill='%23c7c7cc'/%3E%3C/svg%3E" width="1200" height="800" alt="Three steps in a row">
+          <figcaption>Figure 1. The three steps, drawn as blocks.</figcaption>
+        </figure>
+        <h3>Install the tool</h3>
+        <p>Run <code>npm install example-cli</code> in the project folder, then start the first run.</p>
+        <pre tabindex="0"><code>const configuration = { project: "launch", owner: "design", tags: ["alpha", "beta"], notes: "this line is intentionally long so that it must scroll inside the pre element" };</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Limits by plan" tabindex="0">
+          <table>
+            <caption>Limits by plan</caption>
+            <thead><tr><th scope="col">Plan</th><th scope="col">Projects</th><th scope="col">Storage per project</th><th scope="col">Support response time</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Starter</th><td>3</td><td>1 GB</td><td>Two business days</td></tr>
+              <tr><th scope="row">Pro</th><td>Unlimited</td><td>50 GB</td><td>One business day</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>A long link that must wrap rather than widen the page: <a href="#top">https://example.com/a/very/long/path/that/does/not/break/normally/anywhere</a>.</p>
+        <hr>
+        <p>The last paragraph closes the article.</p>
+      </article>
+    </section>
+
+    <section id="blog" class="as-site-section" aria-labelledby="blog-title">
+      <h2 class="as-site-section-title" id="blog-title">From the blog</h2>
+      <ul class="as-site-postlist">
+        <li class="as-site-post">
+          <p class="as-site-post-meta"><time datetime="2026-10-02">2 October 2026</time> · <span>Design</span></p>
+          <h3 class="as-site-post-title"><a class="as-site-post-link" href="#article">Start with a plan</a></h3>
+          <p class="as-site-post-summary">A summary of the post in two sentences. The summary text stays selectable and does not open the post.</p>
+        </li>
+        <li class="as-site-post">
+          <p class="as-site-post-meta"><time datetime="2026-09-18">18 September 2026</time> · <span>Accessibility</span></p>
+          <h3 class="as-site-post-title"><a class="as-site-post-link" href="#article">Keyboard paths that work on a phone</a></h3>
+          <p class="as-site-post-summary">Notes on focus order, disclosure and the narrow navigation.</p>
+        </li>
+        <li class="as-site-post">
+          <p class="as-site-post-meta"><time datetime="2026-08-30">30 August 2026</time> · <span>Performance</span></p>
+          <h3 class="as-site-post-title"><a class="as-site-post-link" href="#article">Keeping the stylesheet small</a></h3>
+          <p class="as-site-post-summary">What we removed, what we kept, and how the budget was measured.</p>
+        </li>
+      </ul>
+      <nav class="as-site-pagination" aria-label="Pagination">
+        <ul>
+          <li><a href="#blog" rel="prev">Previous</a></li>
+          <li><a href="#blog">1</a></li>
+          <li><a href="#blog" aria-current="page">2</a></li>
+          <li><a href="#blog">3</a></li>
+          <li><a href="#blog" rel="next">Next</a></li>
+        </ul>
+      </nav>
+      <nav class="as-site-tags" aria-label="Tags" style="margin-block-start: 32px">
+        <ul>
+          <li><a href="#blog">Design</a></li>
+          <li><a href="#blog" aria-current="true">Accessibility</a></li>
+          <li><a href="#blog">Performance</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section id="zh-hero" class="as-site-hero" lang="zh-Hans" aria-labelledby="zh-title">
+      <div class="as-site-hero-body">
+        <p class="as-site-eyebrow">中文版面</p>
+        <h2 class="as-site-hero-title" id="zh-title">规划工作，按时交付</h2>
+        <p class="as-site-hero-sub">一段简短的介绍文字，说明产品能做什么，以及适合哪些团队使用。</p>
+        <div class="as-site-hero-actions"><a class="as-button as-button-filled as-button-large" href="#pricing">开始使用</a></div>
+      </div>
+    </section>
+    <section class="as-site-section" lang="zh-Hans">
+      <article class="as-prose" lang="zh-Hans">
+        <h2>先列出工作</h2>
+        <p>把每一项工作写成一行，然后比较不同方案，选出适合团队规模的那一个。中文段落的行宽应当控制在约四十个字左右，这样读起来不会觉得疲劳，视线也容易回到下一行的开头。</p>
+        <p>如果段落里有<a href="#pricing">链接</a>，它应当保留下划线，这样读者不必依靠颜色去分辨它。</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Product</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Company</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#top">About the team and the long address for wrapping</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>© 2026 Example Co. Questions? <a href="#faq">Read the FAQ</a>.</p>
+        <nav aria-label="Legal">
+          <ul class="as-site-footer-legal-links">
+            <li><a href="#top">Privacy</a></li>
+            <li><a href="#top">Terms</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

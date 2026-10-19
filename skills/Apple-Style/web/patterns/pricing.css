@@ -1,0 +1,63 @@
+/* ==========================================================================
+   Pricing plans and comparison table (pattern 2.6). Requires the core layers and
+   the visually hidden utility .as-sr-only (preferences.css).
+   Layout: observed convention (2026-10-19, not re-verified online in this revision).
+   Project defaults: the 2px recommended border, the 34rem table minimum and the
+   scroll container. The surface token comes from section.css; fallback below.
+   ========================================================================== */
+.as-site-plans {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 16px; align-items: stretch; margin: 0; padding: 0; list-style: none;
+}
+.as-site-plan {
+  --as-container-radius: var(--as-radius-l);
+  position: relative; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; min-inline-size: 0; margin: 0;
+  padding: 28px 24px 24px; border: 1px solid var(--as-separator); border-radius: var(--as-container-radius);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+}
+/* Recommended: a 2px border and a text badge, two cues that do not depend on colour. The padding is
+   1px smaller so the content lines up with the other plans. */
+.as-site-plan-recommended { border: 2px solid var(--as-accent); padding: 27px 23px 23px; }
+.as-site-plan-flag { position: absolute; inset-block-start: 16px; inset-inline-end: 16px; margin: 0; }
+.as-site-plan-name { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); }
+.as-site-plan-price {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin: 4px 0 0;
+  font: 400 15px/20px var(--as-font-text); color: var(--as-label-secondary);
+}
+.as-site-plan-amount { font: 600 2.75rem/1 var(--as-font-display); color: var(--as-label); font-variant-numeric: tabular-nums; }
+.as-site-plan-desc { margin: 0; font: 400 15px/20px var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+.as-site-plan-list { display: grid; gap: 8px; margin: 4px 0 8px; padding: 0; list-style: none; font: 400 15px/20px var(--as-font-text); }
+.as-site-plan > .as-button { margin-block-start: auto; }
+
+.as-site-compare-region {
+  margin-block-start: clamp(40px, 6vw, 72px); max-inline-size: 100%; overflow-x: auto; overscroll-behavior-x: contain;
+  border-radius: var(--as-radius-l); background: var(--as-site-surface, var(--as-bg-secondary));
+}
+.as-site-compare-region:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+.as-site-compare {
+  box-sizing: border-box; inline-size: 100%; min-inline-size: 34rem; border-collapse: separate; border-spacing: 0;
+  font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; color: var(--as-label);
+}
+.as-site-compare caption {
+  caption-side: top; padding: 20px 20px 12px; text-align: start;
+  font: 600 19px/24px var(--as-font-display); color: var(--as-label);
+}
+/* position: relative keeps the visually hidden text of a mark inside its cell, so it cannot widen the page. */
+.as-site-compare th, .as-site-compare td {
+  position: relative; padding: 12px 20px; border-block-end: 1px solid var(--as-separator); text-align: start; vertical-align: middle;
+}
+.as-site-compare th { font-weight: 600; }
+.as-site-compare tbody th[scope="row"] { font-weight: 400; }
+/* The row headers stay in view while the table scrolls. Their background hides the cells passing under them. */
+.as-site-compare tbody th[scope="row"] { position: sticky; inset-inline-start: 0; z-index: 1; background: var(--as-site-surface, var(--as-bg-secondary)); }
+/* Marks have a text alternative in .as-sr-only; the glyph is aria-hidden. The shape differs, so colour is not the only cue. */
+.as-site-mark { font-size: 1.0625rem; font-weight: 600; color: var(--as-label); }
+.as-site-mark-no { font-weight: 400; color: var(--as-label-secondary); }
+
+@media (forced-colors: active) {
+  .as-site-plan { border: 1px solid CanvasText; }
+  .as-site-plan-recommended { border: 2px solid CanvasText; }
+  .as-site-compare-region { border: 1px solid CanvasText; }
+  .as-site-compare th, .as-site-compare td { border-block-end: 1px solid CanvasText; }
+  .as-site-compare tbody th[scope="row"] { background: Canvas; }
+}

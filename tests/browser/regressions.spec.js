@@ -509,6 +509,15 @@ test.describe('links in running text are underlined by default (1.9)', () => {
     await load(page, `<p><a id="p" href="#p">Prose link</a></p>`);
     expect(await decoration(page, 'p')).toContain('underline');
   });
+  for (const colorScheme of ['light', 'dark']) {
+    test(`an unclassed link meets 4.5:1 on the standard backgrounds in ${colorScheme}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      const backgrounds = ['--as-bg', '--as-bg-secondary', '--as-bg-grouped', '--as-bg-grouped-2', '--as-bg-tertiary'];
+      await load(page, backgrounds.map((bg, i) => `<p style="background:var(${bg})"><a id="l${i}" href="#l${i}">Link</a></p>`).join(''));
+      for (let i = 0; i < backgrounds.length; i++)
+        expect(await renderedContrast(page, `#l${i}`), `link on ${backgrounds[i]}`).toBeGreaterThanOrEqual(4.5);
+    });
+  }
   test('an author rule for a link overrides the default underline', async ({ page }) => {
     await load(page, `<style>p a { text-decoration: none; }</style><p><a id="p" href="#p">Prose link</a></p>`);
     expect(await decoration(page, 'p')).toBe('none');

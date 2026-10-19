@@ -1,0 +1,66 @@
+/* ==========================================================================
+   Hero and display type (pattern 2.4). Requires the core layers (tokens, base,
+   glass, controls, preferences). --as-site-width comes from site-header.css; the
+   fallback in the rules keeps this file standalone.
+   Layout: observed convention (apple.com-style marketing pages, 2026-10-19, not
+   re-verified online in this revision; not an Apple guideline).
+   Type scale: project default, the numbers in typography.md (Web display type).
+   Variants: .as-site-hero-split (media beside the text from 64em) and
+   .as-site-hero-overlay (text on a full-bleed image behind a scrim).
+   ========================================================================== */
+:root {
+  /* Fluid display sizes in rem, so the reader's default font size still applies. */
+  --as-display-1: clamp(2.5rem, 1.5rem + 4.5vw, 5rem);    /* about 40 → 80 px */
+  --as-display-2: clamp(2rem, 1.25rem + 3vw, 3.5rem);     /* about 32 → 56 px */
+  /* Text over an image is always white. The scrim is the same in both appearances. */
+  --as-site-on-media: rgb(255 255 255);
+  --as-site-scrim: rgb(0 0 0 / .6);
+  --as-site-media-fallback: rgb(0 0 0);
+}
+
+.as-site-hero {
+  box-sizing: border-box; display: grid; align-items: center; gap: 32px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: clamp(40px, 6vw, 88px) var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-hero { padding-inline: var(--as-margin-regular); } }
+@media (min-width: 64em) { .as-site-hero-split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; } }
+.as-site-hero-body { min-inline-size: 0; }
+.as-site-eyebrow { margin: 0 0 12px; font: 600 15px/20px var(--as-font-text); letter-spacing: -.24px; color: var(--as-label-secondary); }
+/* Display tracking stays at 0 for SF (typography.md, Web display type). */
+.as-site-hero-title {
+  margin: 0 0 16px; font: 600 var(--as-display-1)/1.05 var(--as-font-display); letter-spacing: 0;
+  color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-hero-sub {
+  margin: 0 0 32px; max-inline-size: 34em; font: 400 clamp(1.0625rem, 1rem + .6vw, 1.375rem)/1.4 var(--as-font-text);
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+.as-site-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.as-site-hero-media { margin: 0; min-inline-size: 0; overflow: hidden; border-radius: var(--as-radius-xl); background: var(--as-bg-secondary); }
+.as-site-hero-media img { display: block; inline-size: 100%; block-size: auto; }
+
+/* CJK: keep the phrase rules, break at the line ends the language expects. Other browsers use the fallback value. */
+.as-site-hero:is(:lang(zh), :lang(ja)) :is(.as-site-hero-title, .as-site-hero-sub) {
+  word-break: normal; word-break: auto-phrase; line-break: strict;
+}
+
+/* Overlay: the image is behind the text, and the scrim sits between them. The scrim is 0.6 black,
+   so over any backdrop each channel is at most 255 x 0.4 = 102, and white text is at least 5.7:1.
+   That holds only where the scrim covers the text block, so the whole hero is covered here. */
+.as-site-hero-overlay {
+  display: block; position: relative; isolation: isolate; overflow: hidden; max-inline-size: none;
+  padding-block: clamp(64px, 12vw, 128px); padding-inline: 0;
+  color: var(--as-site-on-media); background: var(--as-site-media-fallback);
+}
+.as-site-hero-overlay > img { position: absolute; inset: 0; z-index: -2; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.as-site-hero-overlay::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--as-site-scrim); }
+.as-site-hero-overlay .as-site-hero-body {
+  position: relative; box-sizing: border-box; max-inline-size: var(--as-site-width, 1120px); margin-inline: auto; padding-inline: var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-hero-overlay .as-site-hero-body { padding-inline: var(--as-margin-regular); } }
+.as-site-hero-overlay :is(.as-site-eyebrow, .as-site-hero-title, .as-site-hero-sub) { color: var(--as-site-on-media); }
+@media (forced-colors: active) {
+  .as-site-hero-overlay { background: Canvas; color: CanvasText; }
+  .as-site-hero-overlay > img, .as-site-hero-overlay::before { display: none; }
+}
