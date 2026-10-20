@@ -226,12 +226,13 @@ test.describe('dialog', () => {
 test.describe('toast', () => {
   test('announces through role="status", hides after its duration and cleans up', async ({ page }) => {
     await load(page, '<p>Page</p>');
-    await page.evaluate(() => LiquidGlass.toast('Saved', { duration: 300 }));
+    // Long enough that a slow runner still sees the shown state before it starts hiding.
+    await page.evaluate(() => LiquidGlass.toast('Saved', { duration: 1500 }));
     const t = page.locator('body > .as-toast');
     await expect(t).toHaveAttribute('role', 'status');
     await expect(t).toHaveText('Saved');
     await expect(t).toHaveClass(/is-on/);
-    expect(await t.evaluate(el => getComputedStyle(el).opacity)).toBe('1');
+    await expect.poll(() => t.evaluate(el => getComputedStyle(el).opacity)).toBe('1');  // after the fade-in
     await expect(t).not.toHaveClass(/is-on/);
     await expect(t).toHaveText('');
     // A repeated message still changes the region so it is announced again.
