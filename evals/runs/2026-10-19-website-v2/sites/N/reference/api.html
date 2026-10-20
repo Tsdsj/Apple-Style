@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API reference · Tidepool</title>
+  <meta name="description" content="Reference for every tidepool command, flag, exit code and environment variable, with defaults.">
+  <link rel="canonical" href="https://tidepool.example/reference/api.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="API reference · Tidepool">
+  <meta property="og:description" content="Reference for every tidepool command, flag, exit code and environment variable, with defaults.">
+  <meta property="og:url" content="https://tidepool.example/reference/api.html">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html">Quick start</a></li>
+          <li><a href="/guides/configuration.html">Guides</a></li>
+          <li><a href="/reference/api.html" aria-current="page">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation">
+      <details class="docs-menu" data-docs-menu open>
+        <summary>Documentation menu</summary>
+        <div class="docs-menu-body">
+          <ul class="docs-groups">
+        <li>
+          <p class="docs-group-title">Getting started</p>
+          <ul class="docs-group-links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Guides</p>
+          <ul class="docs-group-links">
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Reference</p>
+          <ul class="docs-group-links">
+            <li><a href="/reference/api.html" aria-current="page">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </li>
+          </ul>
+        </div>
+      </details>
+    </nav>
+    <main id="main" class="docs-main">
+      <p class="docs-kicker">Reference</p>
+      <h1 class="docs-title">API reference</h1>
+      <p class="docs-lead">Every command, flag and environment variable of the tidepool command. Commands are grouped by task. Flags with a default value can be left out.</p>
+      <p class="as-site-updated">Last updated <time datetime="2026-09-28">28 September 2026</time></p>
+      <nav class="as-site-toc docs-toc" aria-labelledby="toc-title">
+        <p class="as-site-toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#synopsis">Synopsis</a></li>
+          <li><a href="#global">Global flags</a></li>
+          <li><a href="#setup">Setup</a></li>
+          <li><a href="#sync">Sync and history</a></li>
+          <li><a href="#config">Configuration</a></li>
+          <li><a href="#plugins">Plugins</a></li>
+          <li><a href="#diagnostics">Diagnostics</a></li>
+          <li><a href="#exit-codes">Exit codes</a></li>
+          <li><a href="#environment">Environment variables</a></li>
+        </ol>
+      </nav>
+      <article class="as-prose docs-article is-wide">
+<h2 id="synopsis">Synopsis</h2>
+        <pre tabindex="0"><code>tidepool [global flags] &lt;command&gt; [arguments] [command flags]</code></pre>
+        <p>Commands print human-readable output by default. Commands that accept <code>--json</code> print one JSON document instead, which is suitable for scripts.</p>
+
+        <h2 id="global">Global flags</h2>
+        <p>Global flags go before the command name.</p>
+        <div class="as-prose-table" role="region" aria-label="Global flags" tabindex="0">
+  <table>
+    <caption>Global flags</caption>
+    <thead><tr><th scope="col">Flag</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--config PATH</code></td><td>path</td><td>search order</td><td>Use this config file. Same as <code>TIDEPOOL_CONFIG</code>.</td></tr>
+          <tr><td><code>-v, --verbose</code></td><td>flag</td><td>off</td><td>Print info messages to standard error. Repeat it for debug messages.</td></tr>
+          <tr><td><code>-q, --quiet</code></td><td>flag</td><td>off</td><td>Print only errors.</td></tr>
+          <tr><td><code>--no-color</code></td><td>flag</td><td>off</td><td>Turn colour output off.</td></tr>
+          <tr><td><code>-h, --help</code></td><td>flag</td><td></td><td>Show help for the command and exit.</td></tr>
+          <tr><td><code>--version</code></td><td>flag</td><td></td><td>Print the version and exit. Same as <code>tidepool version</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+        <h2 id="setup">Setup</h2>
+        <h3 id="cmd-init">init</h3>
+        <pre tabindex="0"><code>tidepool init [DIR] [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for init" tabindex="0">
+  <table>
+    <caption>Flags and arguments for init</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>DIR</code></td><td>path</td><td><code>.</code></td><td>Folder to set up. It is created when it does not exist.</td></tr>
+          <tr><td><code>--pool NAME</code></td><td>string</td><td>prompt</td><td>Pool name to write into <code>tidepool.yaml</code>.</td></tr>
+          <tr><td><code>--force</code></td><td>flag</td><td>off</td><td>Overwrite an existing <code>tidepool.yaml</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-login">login</h3>
+        <pre tabindex="0"><code>tidepool login [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for login" tabindex="0">
+  <table>
+    <caption>Flags and arguments for login</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--token-stdin</code></td><td>flag</td><td>off</td><td>Read the token from standard input instead of prompting for it.</td></tr>
+          <tr><td><code>--endpoint URL</code></td><td>URL</td><td>config value</td><td>Sign in to another API host.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-logout">logout</h3>
+        <p>Removes the stored token. Takes no arguments and no flags.</p>
+        <pre tabindex="0"><code>tidepool logout</code></pre>
+        
+
+        <h2 id="sync">Sync and history</h2>
+        <h3 id="cmd-status">status</h3>
+        <pre tabindex="0"><code>tidepool status [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for status" tabindex="0">
+  <table>
+    <caption>Flags and arguments for status</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--json</code></td><td>flag</td><td>off</td><td>Print the status as JSON.</td></tr>
+          <tr><td><code>--pool NAME</code></td><td>string</td><td>config value</td><td>Pool to compare the folder with.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-sync">sync</h3>
+        <pre tabindex="0"><code>tidepool sync [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for sync" tabindex="0">
+  <table>
+    <caption>Flags and arguments for sync</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--dry-run</code></td><td>flag</td><td>off</td><td>Show what would change. Nothing is sent.</td></tr>
+          <tr><td><code>--jobs N</code></td><td>integer, 1 to 16</td><td>config value</td><td>Number of files uploaded at the same time.</td></tr>
+          <tr><td><code>--resolve MODE</code></td><td><code>local</code>, <code>remote</code> or <code>ask</code></td><td><code>ask</code></td><td>How to handle conflicts. <code>ask</code> prompts in a terminal. Without a terminal it stops with exit code 6.</td></tr>
+          <tr><td><code>--exclude GLOB</code></td><td>glob</td><td>none</td><td>Skip matching paths for this run only. Repeat the flag for more patterns.</td></tr>
+          <tr><td><code>--yes</code></td><td>flag</td><td>off</td><td>Do not ask for confirmation.</td></tr>
+          <tr><td><code>--pool NAME</code></td><td>string</td><td>config value</td><td>Pool to sync with.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-pull">pull</h3>
+        <pre tabindex="0"><code>tidepool pull [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for pull" tabindex="0">
+  <table>
+    <caption>Flags and arguments for pull</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--force</code></td><td>flag</td><td>off</td><td>Replace local changes with the pool copy.</td></tr>
+          <tr><td><code>--dry-run</code></td><td>flag</td><td>off</td><td>Show what would change. Nothing is written.</td></tr>
+          <tr><td><code>--pool NAME</code></td><td>string</td><td>config value</td><td>Pool to pull from.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-history">history</h3>
+        <pre tabindex="0"><code>tidepool history [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for history" tabindex="0">
+  <table>
+    <caption>Flags and arguments for history</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--limit N</code></td><td>integer</td><td>20</td><td>Number of revisions to show, newest first.</td></tr>
+          <tr><td><code>--json</code></td><td>flag</td><td>off</td><td>Print the revisions as JSON.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-restore">restore</h3>
+        <pre tabindex="0"><code>tidepool restore REVISION [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for restore" tabindex="0">
+  <table>
+    <caption>Flags and arguments for restore</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>REVISION</code></td><td>integer</td><td>required</td><td>Revision number from <code>tidepool history</code>.</td></tr>
+          <tr><td><code>--dry-run</code></td><td>flag</td><td>off</td><td>List the files that would change. Nothing is written.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+
+        <h2 id="config">Configuration</h2>
+        <h3 id="cmd-config-get">config get</h3>
+        <pre tabindex="0"><code>tidepool config get KEY</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for config get" tabindex="0">
+  <table>
+    <caption>Flags and arguments for config get</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>KEY</code></td><td>string</td><td>required</td><td>A setting name from the configuration guide. Prints its value.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-config-set">config set</h3>
+        <pre tabindex="0"><code>tidepool config set KEY VALUE</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for config set" tabindex="0">
+  <table>
+    <caption>Flags and arguments for config set</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>KEY</code></td><td>string</td><td>required</td><td>A setting name from the configuration guide.</td></tr>
+          <tr><td><code>VALUE</code></td><td>string</td><td>required</td><td>New value. It is checked against the setting type before it is written.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-config-validate">config validate</h3>
+        <pre tabindex="0"><code>tidepool config validate [--file PATH]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for config validate" tabindex="0">
+  <table>
+    <caption>Flags and arguments for config validate</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--file PATH</code></td><td>path</td><td>config in use</td><td>Check another file instead.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+
+        <h2 id="plugins">Plugins</h2>
+        <h3 id="cmd-plugin-list">plugin list</h3>
+        <pre tabindex="0"><code>tidepool plugin list [--json]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for plugin list" tabindex="0">
+  <table>
+    <caption>Flags and arguments for plugin list</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--json</code></td><td>flag</td><td>off</td><td>Print the plugins as JSON.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-plugin-install">plugin install</h3>
+        <pre tabindex="0"><code>tidepool plugin install SOURCE [--version V]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for plugin install" tabindex="0">
+  <table>
+    <caption>Flags and arguments for plugin install</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>SOURCE</code></td><td>name or path</td><td>required</td><td>A plugin name from the registry, or a folder that holds a manifest.</td></tr>
+          <tr><td><code>--version V</code></td><td>string</td><td>latest</td><td>Version to install. Only for registry plugins.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-plugin-remove">plugin remove</h3>
+        <pre tabindex="0"><code>tidepool plugin remove NAME</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for plugin remove" tabindex="0">
+  <table>
+    <caption>Flags and arguments for plugin remove</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>NAME</code></td><td>string</td><td>required</td><td>Installed plugin to remove.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+
+        <h2 id="diagnostics">Diagnostics</h2>
+        <h3 id="cmd-doctor">doctor</h3>
+        <pre tabindex="0"><code>tidepool doctor [flags]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for doctor" tabindex="0">
+  <table>
+    <caption>Flags and arguments for doctor</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--json</code></td><td>flag</td><td>off</td><td>Print the checks as JSON. Tokens are hidden.</td></tr>
+          <tr><td><code>--verbose</code></td><td>flag</td><td>off</td><td>Show the details behind each check.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+        <h3 id="cmd-version">version</h3>
+        <pre tabindex="0"><code>tidepool version [--json]</code></pre>
+        <div class="as-prose-table" role="region" aria-label="Flags for version" tabindex="0">
+  <table>
+    <caption>Flags and arguments for version</caption>
+    <thead><tr><th scope="col">Flag or argument</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>--json</code></td><td>flag</td><td>off</td><td>Print the version, commit and build date as JSON.</td></tr>
+    </tbody>
+  </table>
+</div>
+        
+
+        <h2 id="exit-codes">Exit codes</h2>
+        <div class="as-prose-table" role="region" aria-label="Exit codes" tabindex="0">
+  <table>
+    <caption>Exit codes</caption>
+    <thead><tr><th scope="col">Code</th><th scope="col">Meaning</th></tr></thead>
+    <tbody>
+          <tr><td><code>0</code></td><td>Success.</td></tr>
+          <tr><td><code>1</code></td><td>General failure, or <code>doctor</code> found a failing check.</td></tr>
+          <tr><td><code>2</code></td><td>Usage error: unknown command or flag.</td></tr>
+          <tr><td><code>3</code></td><td>Configuration error.</td></tr>
+          <tr><td><code>4</code></td><td>Authentication error.</td></tr>
+          <tr><td><code>5</code></td><td>Network error.</td></tr>
+          <tr><td><code>6</code></td><td>Sync conflict left unresolved.</td></tr>
+          <tr><td><code>7</code></td><td>Plugin error.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+        <h2 id="environment">Environment variables</h2>
+        <div class="as-prose-table" role="region" aria-label="Environment variables" tabindex="0">
+  <table>
+    <caption>Environment variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">Meaning</th></tr></thead>
+    <tbody>
+          <tr><td><code>TIDEPOOL_CONFIG</code></td><td>Path to the config file.</td></tr>
+          <tr><td><code>TIDEPOOL_POOL</code></td><td>Pool name. Overrides <code>pool</code>.</td></tr>
+          <tr><td><code>TIDEPOOL_TOKEN</code></td><td>Token for this run. Overrides the stored token.</td></tr>
+          <tr><td><code>TIDEPOOL_LOG</code></td><td>Log level: <code>error</code>, <code>warn</code>, <code>info</code> or <code>debug</code>.</td></tr>
+          <tr><td><code>TIDEPOOL_CA_BUNDLE</code></td><td>Extra certificates for TLS, in PEM format.</td></tr>
+          <tr><td><code>NO_COLOR</code></td><td>Turns colour output off when set.</td></tr>
+    </tbody>
+  </table>
+</div>
+      </article>
+            <nav class="docs-pager" aria-label="Previous and next pages">
+        <a class="docs-pager-prev" href="/guides/troubleshooting.html"><span class="docs-pager-label">Previous</span><span class="docs-pager-title">Troubleshooting</span></a>
+        <a class="docs-pager-next" href="/changelog.html"><span class="docs-pager-label">Next</span><span class="docs-pager-title">Changelog</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

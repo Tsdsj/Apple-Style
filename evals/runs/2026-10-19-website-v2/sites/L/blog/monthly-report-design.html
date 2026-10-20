@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我们如何设计“一眼看懂”的月度报表 · 青柠记账博客</title>
+<meta name="description" content="月度报表只回答三个问题。我们在设计中删掉了其他的一切，并解释为什么这样做。">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://lime-ledger.example/blog/monthly-report-design.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="青柠记账 Lime Ledger">
+<meta property="og:title" content="我们如何设计“一眼看懂”的月度报表 · 青柠记账博客">
+<meta property="og:description" content="月度报表只回答三个问题。我们在设计中删掉了其他的一切，并解释为什么这样做。">
+<meta property="og:url" content="https://lime-ledger.example/blog/monthly-report-design.html">
+<meta property="og:locale" content="zh_CN">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('ll-theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+  document.documentElement.className = 'no-js';
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <nav class="nav container" aria-label="主导航">
+    <a class="brand" href="/"><img src="/assets/img/icon.svg" alt="" width="24" height="24">青柠记账</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><span class="sr-only">打开菜单</span><span class="bars" aria-hidden="true"></span></button>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">价格</a></li>
+        <li><a href="/blog/" aria-current="page">博客</a></li>
+        <li><a href="/faq.html">常见问题</a></li>
+        <li><a href="/about.html">关于我们</a></li>
+        <li><a class="nav-cta" href="/#download">免费下载</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
+<article class="article">
+  <div class="container">
+    <header class="article-head">
+      <p class="eyebrow">博客</p>
+      <h1>我们如何设计“一眼看懂”的月度报表</h1>
+      <p class="meta"><time datetime="2026-09-18">2026 年 9 月 18 日</time> · 5 分钟阅读 · 青柠记账团队</p>
+    </header>
+
+    <div class="prose">
+      <p>第一版月度报表有十四个图表。测试用户打开后，平均要花三十秒才能说出“这个月我花了多少钱”。我们决定从头开始。</p>
+
+      <h2>只回答三个问题</h2>
+      <p>我们认为，大多数人打开报表时只想知道三件事：这个月花了多少？钱花在了哪里？和上个月相比有没有变化？报表的每一个区域，都只为其中一个问题服务。</p>
+
+      <h2>一个强调色，其余都是灰</h2>
+      <p>图表里只使用一种强调色。分类按占比从大到小排列，第一名使用强调色，其余使用灰阶。视线会自然落在最重要的那一项上，而不是被十种颜色分散注意力。</p>
+
+      <h2>数字要读得出来</h2>
+      <p>大金额使用千分位分隔，小数默认隐藏，只有在单笔明细中才显示两位。我们发现，“¥3,286”比“¥3,286.40”更容易被记住，而精确的数字随时可以点开查看。</p>
+
+      <h2>深色模式不是简单反色</h2>
+      <p>深色模式下，我们没有直接反转颜色，而是重新调整了灰阶的层次。卡片与背景之间保持足够的对比，同时降低整体亮度，减少夜间使用时的刺眼感。</p>
+
+      <h2>删减，是最难的部分</h2>
+      <p>每一个被删掉的图表，都曾经有人喜欢。但报表的价值不在于信息多少，而在于能否在几秒之内给出答案。我们保留了最常用的三个视图，其余的放进“更多分析”里，需要的人依然可以找到。</p>
+
+      <blockquote>好的报表不是展示所有数据，而是帮你决定下一步该做什么。</blockquote>
+    </div>
+
+    <footer class="article-foot">
+      <p>喜欢这样的设计讨论？<a href="/blog/">回到博客列表</a>，或者<a href="/contact.html">给我们留言</a>，告诉我们你希望看到什么。</p>
+    </footer>
+  </div>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">产品</p>
+        <ul>
+          <li><a href="/features.html">功能介绍</a></li>
+          <li><a href="/pricing.html">价格</a></li>
+          <li><a href="/#download">下载</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">资源</p>
+        <ul>
+          <li><a href="/blog/">博客</a></li>
+          <li><a href="/faq.html">常见问题</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">公司</p>
+        <ul>
+          <li><a href="/about.html">关于我们</a></li>
+          <li><a href="/contact.html">联系我们</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">法律</p>
+        <ul>
+          <li><a href="/privacy.html">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 青柠记账 Lime Ledger. 保留所有权利。</p>
+      <button class="theme-toggle" type="button" data-theme-toggle>外观：跟随系统</button>
+    </div>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

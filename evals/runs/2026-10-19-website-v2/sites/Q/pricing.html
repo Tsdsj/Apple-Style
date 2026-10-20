@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Northline 价格方案：免费版、团队版与企业版，附功能对比与常见问题。（虚构产品）">
+  <title>Northline 价格 — 选择适合团队的方案</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem("northline-theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">跳到正文</a>
+
+  <header class="site-nav">
+    <nav class="wrap nav-inner" aria-label="主导航">
+      <a class="brand" href="index.html" aria-label="Northline 首页">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="currentColor" opacity=".16"/>
+          <path d="M4.5 15.5 9 11l3.5 3.5L20 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Northline
+      </a>
+      <div class="nav-links">
+        <a class="hide-sm" href="index.html#features">功能</a>
+        <a class="hide-sm" href="index.html#stories">客户</a>
+        <a href="pricing.html" aria-current="page">价格</a>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="切换到深色模式">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>
+          </svg>
+        </button>
+        <a class="btn btn-primary btn-small" href="#plans">免费开始</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="pricing-title">
+      <div class="wrap">
+        <p class="eyebrow">价格</p>
+        <h1 id="pricing-title">选择适合团队的方案</h1>
+        <p class="lead">从两个人的小项目，到全公司的统一部署。每一档都包含完整的时间线与文档协作，按席位计费，价格以人民币计。</p>
+
+        <div class="billing" role="group" aria-label="计费周期">
+          <button class="seg is-active" type="button" data-billing="monthly" aria-pressed="true">按月付费</button>
+          <button class="seg" type="button" data-billing="yearly" aria-pressed="false">按年付费 <span class="save">省 20%</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="plans" aria-label="方案">
+      <div class="wrap">
+        <div class="plans">
+          <article class="plan">
+            <h2>免费版</h2>
+            <p class="plan-desc">适合个人或两人小组，先体验 Northline 的基本时间线。</p>
+            <div class="price"><span class="cur">¥</span><span class="amount">0</span></div>
+            <p class="price-unit">永久免费</p>
+            <a class="btn btn-secondary" href="index.html#trial">免费开始</a>
+            <ul class="plan-list">
+              <li>最多 5 位成员</li>
+              <li>3 个项目</li>
+              <li>1 GB 文件存储</li>
+              <li>基础时间线与评论</li>
+              <li>社区支持</li>
+            </ul>
+          </article>
+
+          <article class="plan featured" aria-labelledby="team-name">
+            <span class="badge">推荐</span>
+            <h2 id="team-name">团队版</h2>
+            <p class="plan-desc">适合 5 人以上的团队，文档、任务与自动化一起用。</p>
+            <div class="price">
+              <span class="cur">¥</span><span class="amount" data-price-monthly="68" data-price-yearly="54">68</span>
+            </div>
+            <p class="price-unit" data-billing-note data-monthly-note="每位成员 / 月，按月计费，随时取消" data-yearly-note="每位成员 / 月，按年支付，合计 ¥648 / 人">每位成员 / 月，按月计费，随时取消</p>
+            <a class="btn btn-primary" href="index.html#trial">开始 14 天试用</a>
+            <ul class="plan-list">
+              <li>按席位计费，不限项目数量</li>
+              <li>实时协作文档，评论一键转任务</li>
+              <li>50 GB 文件存储</li>
+              <li>自动化流程 1,000 次 / 月</li>
+              <li>14 天内的数据回溯</li>
+              <li>邮件支持，1 个工作日内回复</li>
+            </ul>
+          </article>
+
+          <article class="plan" aria-labelledby="enterprise-name">
+            <h2 id="enterprise-name">企业版</h2>
+            <p class="plan-desc">面向大型组织，提供安全合规、数据控制与专属支持。</p>
+            <div class="price"><span class="custom">定制报价</span></div>
+            <p class="price-unit">根据成员规模与部署需求确定</p>
+            <a class="btn btn-secondary" href="mailto:sales@northline.example">联系销售</a>
+            <ul class="plan-list">
+              <li>包含团队版全部功能</li>
+              <li>单点登录（SAML / OIDC）</li>
+              <li>审计日志与数据导出</li>
+              <li>可选的数据驻留区域</li>
+              <li>99.95% 服务等级协议</li>
+              <li>专属客户成功经理</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="compare" aria-labelledby="compare-title">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">功能对比</p>
+          <h2 id="compare-title">每一项，都写清楚。</h2>
+          <p class="lead">如果某项功能在你的方案中不可用，表格中会以「—」标注。</p>
+        </header>
+
+        <div class="compare-wrap">
+          <table class="compare">
+            <caption class="sr-only">Northline 三个方案的功能对比</caption>
+            <colgroup>
+              <col>
+              <col>
+              <col>
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">功能</th>
+                <th scope="col">免费版</th>
+                <th scope="col" class="is-featured">团队版</th>
+                <th scope="col">企业版</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group"><th scope="rowgroup" colspan="4">协作与成员</th></tr>
+              <tr>
+                <th scope="row">成员数量</th>
+                <td>最多 5 人</td>
+                <td>按席位</td>
+                <td>不限</td>
+              </tr>
+              <tr>
+                <th scope="row">项目数量</th>
+                <td>3 个</td>
+                <td>不限</td>
+                <td>不限</td>
+              </tr>
+              <tr>
+                <th scope="row">实时协作文档</th>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+              </tr>
+              <tr>
+                <th scope="row">评论转任务</th>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+              </tr>
+
+              <tr class="group"><th scope="rowgroup" colspan="4">自动化与数据</th></tr>
+              <tr>
+                <th scope="row">自动化流程（次 / 月）</th>
+                <td>100</td>
+                <td>1,000</td>
+                <td>不限</td>
+              </tr>
+              <tr>
+                <th scope="row">文件存储</th>
+                <td>1 GB</td>
+                <td>50 GB</td>
+                <td>按需扩展</td>
+              </tr>
+              <tr>
+                <th scope="row">数据回溯</th>
+                <td>7 天</td>
+                <td>14 天</td>
+                <td>1 年</td>
+              </tr>
+
+              <tr class="group"><th scope="rowgroup" colspan="4">安全与管理</th></tr>
+              <tr>
+                <th scope="row">单点登录</th>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+              </tr>
+              <tr>
+                <th scope="row">审计日志与导出</th>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+              </tr>
+              <tr>
+                <th scope="row">数据驻留区域</th>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="no">—<span class="sr-only">不包含</span></span></td>
+                <td><span class="yes">✓<span class="sr-only">包含</span></span></td>
+              </tr>
+
+              <tr class="group"><th scope="rowgroup" colspan="4">支持</th></tr>
+              <tr>
+                <th scope="row">支持方式</th>
+                <td>社区论坛</td>
+                <td>邮件，1 个工作日内</td>
+                <td>专属经理与电话</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">常见问题</p>
+          <h2 id="faq-title">还有疑问？</h2>
+        </header>
+
+        <div class="faq">
+          <details>
+            <summary>14 天试用结束后会发生什么？</summary>
+            <p>试用结束后，账户会自动降为免费版。超出免费版上限的项目会保留为只读状态，所有数据都不会被删除，升级后即可继续编辑。</p>
+          </details>
+          <details>
+            <summary>按席位计费如何计算？</summary>
+            <p>只有被邀请并处于激活状态的成员计入席位。仅查看指定项目的访客不计费，也不占用成员数量。</p>
+          </details>
+          <details>
+            <summary>可以中途升级或降级吗？</summary>
+            <p>可以。升级立即生效，按剩余天数补足差价；降级会在当前计费周期结束后生效，不会中断正在进行的工作。</p>
+          </details>
+          <details>
+            <summary>按年付费可以退款吗？</summary>
+            <p>年付方案在购买后 30 天内可申请全额退款。超过 30 天后，我们按未使用的完整月份比例退还。</p>
+          </details>
+          <details>
+            <summary>数据存放在哪里？</summary>
+            <p>默认存放在华东的数据中心，并全程加密传输。企业版可以选择其他数据驻留区域，具体以合同约定为准。</p>
+          </details>
+          <details>
+            <summary>学校或非营利组织有折扣吗？</summary>
+            <p>有。请发送邮件至 sales@northline.example 说明你的机构类型与团队规模，我们会在两个工作日内回复。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="currentColor" opacity=".16"/>
+              <path d="M4.5 15.5 9 11l3.5 3.5L20 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Northline
+          </a>
+          <p>团队协作，回到清晰。</p>
+        </div>
+        <div>
+          <h3>产品</h3>
+          <ul>
+            <li><a href="index.html#features">功能</a></li>
+            <li><a href="pricing.html">价格</a></li>
+            <li>更新日志</li>
+          </ul>
+        </div>
+        <div>
+          <h3>公司</h3>
+          <ul>
+            <li>关于我们</li>
+            <li>招聘</li>
+            <li>联系我们</li>
+          </ul>
+        </div>
+        <div>
+          <h3>支持</h3>
+          <ul>
+            <li>帮助中心</li>
+            <li>安全与隐私</li>
+            <li>服务条款</li>
+          </ul>
+        </div>
+      </div>
+      <p class="fine footer-legal">© 2026 Northline Labs（虚构公司）。Northline 为虚构产品，页面中的价格与数据均为示例。</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

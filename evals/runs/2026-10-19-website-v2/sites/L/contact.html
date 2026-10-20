@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>联系我们 · 青柠记账</title>
+<meta name="description" content="产品问题、合作咨询或学生优惠申请，都可以通过表单留言。工作日通常一个工作日内回复。">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://lime-ledger.example/contact.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="青柠记账 Lime Ledger">
+<meta property="og:title" content="联系我们 · 青柠记账">
+<meta property="og:description" content="产品问题、合作咨询或学生优惠申请，都可以通过表单留言。工作日通常一个工作日内回复。">
+<meta property="og:url" content="https://lime-ledger.example/contact.html">
+<meta property="og:locale" content="zh_CN">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('ll-theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+  document.documentElement.className = 'no-js';
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <nav class="nav container" aria-label="主导航">
+    <a class="brand" href="/"><img src="/assets/img/icon.svg" alt="" width="24" height="24">青柠记账</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><span class="sr-only">打开菜单</span><span class="bars" aria-hidden="true"></span></button>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">价格</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/faq.html">常见问题</a></li>
+        <li><a href="/about.html">关于我们</a></li>
+        <li><a class="nav-cta" href="/#download">免费下载</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">联系我们</p>
+    <h1>告诉我们你的想法。</h1>
+    <p class="lede">产品问题、合作咨询或学生优惠申请，都可以在这里留言。工作日通常在 1 个工作日内回复。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container contact-grid">
+    <aside>
+      <dl class="contact-list">
+        <div>
+          <dt>产品支持</dt>
+          <dd><a href="mailto:support@lime-ledger.example">support@lime-ledger.example</a><br><span class="muted">账单导入、同步与订阅问题</span></dd>
+        </div>
+        <div>
+          <dt>商务与媒体</dt>
+          <dd><a href="mailto:hello@lime-ledger.example">hello@lime-ledger.example</a><br><span class="muted">合作、采访与媒体资料</span></dd>
+        </div>
+        <div>
+          <dt>回复时间</dt>
+          <dd>工作日 9:00 – 18:00（北京时间）</dd>
+        </div>
+      </dl>
+    </aside>
+
+    <form class="form" id="contact-form" novalidate>
+      <div class="field">
+        <label for="name">姓名<span class="req">必填</span></label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="40" required aria-describedby="name-error">
+        <p class="error" id="name-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="email">邮箱<span class="req">必填</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="120" required aria-describedby="email-error">
+        <p class="error" id="email-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="topic">留言主题<span class="req">必填</span></label>
+        <select id="topic" name="topic" required aria-describedby="topic-error">
+          <option value="">请选择一个主题</option>
+          <option value="product">产品咨询</option>
+          <option value="sync">账单导入与同步问题</option>
+          <option value="billing">订阅与退款</option>
+          <option value="student">学生优惠</option>
+          <option value="partner">合作与媒体</option>
+          <option value="other">其他</option>
+        </select>
+        <p class="error" id="topic-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="message">留言内容<span class="req">至少 10 个字</span></label>
+        <textarea id="message" name="message" maxlength="1000" required aria-describedby="message-error"></textarea>
+        <p class="error" id="message-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="check" for="consent">
+          <input id="consent" name="consent" type="checkbox" required aria-describedby="consent-error">
+          <span>我已阅读并同意<a href="/privacy.html">隐私政策</a>，同意青柠记账就此留言与我联系。</span>
+        </label>
+        <p class="error" id="consent-error" hidden></p>
+      </div>
+
+      <button class="btn" type="submit">发送留言</button>
+      <p class="fine">本站暂未接入留言后端，提交的内容不会离开你的浏览器。</p>
+      <p class="form-status" id="form-status" role="status"></p>
+    </form>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">产品</p>
+        <ul>
+          <li><a href="/features.html">功能介绍</a></li>
+          <li><a href="/pricing.html">价格</a></li>
+          <li><a href="/#download">下载</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">资源</p>
+        <ul>
+          <li><a href="/blog/">博客</a></li>
+          <li><a href="/faq.html">常见问题</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">公司</p>
+        <ul>
+          <li><a href="/about.html">关于我们</a></li>
+          <li><a href="/contact.html">联系我们</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">法律</p>
+        <ul>
+          <li><a href="/privacy.html">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 青柠记账 Lime Ledger. 保留所有权利。</p>
+      <button class="theme-toggle" type="button" data-theme-toggle>外观：跟随系统</button>
+    </div>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

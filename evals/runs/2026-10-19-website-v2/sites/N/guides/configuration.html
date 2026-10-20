@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuration · Tidepool</title>
+  <meta name="description" content="Every Tidepool setting in tidepool.yaml, the order in which values are read, ignore rules, environment variables and how to validate the file.">
+  <link rel="canonical" href="https://tidepool.example/guides/configuration.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="Configuration · Tidepool">
+  <meta property="og:description" content="Every Tidepool setting in tidepool.yaml, the order in which values are read, ignore rules, environment variables and how to validate the file.">
+  <meta property="og:url" content="https://tidepool.example/guides/configuration.html">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html">Quick start</a></li>
+          <li><a href="/guides/configuration.html" aria-current="page">Guides</a></li>
+          <li><a href="/reference/api.html">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation">
+      <details class="docs-menu" data-docs-menu open>
+        <summary>Documentation menu</summary>
+        <div class="docs-menu-body">
+          <ul class="docs-groups">
+        <li>
+          <p class="docs-group-title">Getting started</p>
+          <ul class="docs-group-links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Guides</p>
+          <ul class="docs-group-links">
+            <li><a href="/guides/configuration.html" aria-current="page">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Reference</p>
+          <ul class="docs-group-links">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </li>
+          </ul>
+        </div>
+      </details>
+    </nav>
+    <main id="main" class="docs-main">
+      <p class="docs-kicker">Guides</p>
+      <h1 class="docs-title">Configuration</h1>
+      <p class="docs-lead">Tidepool reads one YAML file per project. This guide lists each setting, the order in which values are read and how to check the file.</p>
+      <p class="as-site-updated">Last updated <time datetime="2026-10-02">2 October 2026</time></p>
+      <nav class="as-site-toc docs-toc" aria-labelledby="toc-title">
+        <p class="as-site-toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#where">Where Tidepool looks</a></li>
+          <li><a href="#settings">Settings</a></li>
+          <li><a href="#ignore">Ignore rules</a></li>
+          <li><a href="#environment">Environment variables</a></li>
+          <li><a href="#validate">Check the file</a></li>
+          <li><a href="#secrets">Secrets</a></li>
+        </ol>
+      </nav>
+      <article class="as-prose docs-article">
+<h2 id="where">Where Tidepool looks</h2>
+        <p>Tidepool uses the first config file it finds, in this order:</p>
+        <ol>
+          <li>The path given with <code>--config</code>.</li>
+          <li>The path in <code>TIDEPOOL_CONFIG</code>.</li>
+          <li><code>tidepool.yaml</code> in the current folder.</li>
+          <li><code>~/.config/tidepool/config.yaml</code>.</li>
+        </ol>
+
+        <h2 id="settings">Settings</h2>
+        <p>Every setting has a default. Only <code>pool</code> must be set.</p>
+        <div class="as-prose-table" role="region" aria-label="Settings" tabindex="0">
+  <table>
+    <caption>Settings in tidepool.yaml</caption>
+    <thead><tr><th scope="col">Key</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+    <tbody>
+          <tr><td><code>pool</code></td><td>string</td><td>none, required</td><td>Name of the pool to sync with. Create the pool in the web app first.</td></tr>
+          <tr><td><code>root</code></td><td>path</td><td><code>.</code></td><td>Folder to sync, relative to the config file.</td></tr>
+          <tr><td><code>endpoint</code></td><td>URL</td><td><code>https://api.tidepool.example</code></td><td>API host. Change it only for a self-hosted pool.</td></tr>
+          <tr><td><code>ignore</code></td><td>list of globs</td><td><code>".git/", "*.tmp"</code></td><td>Paths that are never uploaded. See the ignore rules below.</td></tr>
+          <tr><td><code>concurrency</code></td><td>integer, 1 to 16</td><td>4</td><td>Files uploaded at the same time.</td></tr>
+          <tr><td><code>keep_history</code></td><td>boolean</td><td><code>true</code></td><td>Create a revision on each sync. Set it to <code>false</code> to keep only the latest state.</td></tr>
+          <tr><td><code>timeout</code></td><td>duration</td><td><code>30s</code></td><td>How long one request may take before it fails with error E401.</td></tr>
+          <tr><td><code>plugins</code></td><td>list</td><td>empty</td><td>Plugins to run, with their options. See the plugins guide.</td></tr>
+    </tbody>
+  </table>
+</div>
+        <h3>A complete example</h3>
+        <pre tabindex="0"><code>pool: notes-team
+root: .
+endpoint: https://api.tidepool.example
+ignore:
+  - &quot;.git/&quot;
+  - &quot;*.tmp&quot;
+  - &quot;drafts/**&quot;
+concurrency: 6
+keep_history: true
+timeout: 45s
+plugins:
+  - name: markdown-lint
+    version: &quot;1.2.0&quot;
+    options:
+      max_line_length: 100</code></pre>
+
+        <h2 id="ignore">Ignore rules</h2>
+        <p>Patterns use glob syntax and are relative to <code>root</code>:</p>
+        <ul>
+          <li><code>*</code> matches any characters within one folder.</li>
+          <li><code>**</code> matches any number of folders, including none.</li>
+          <li><code>?</code> matches one character.</li>
+          <li>A pattern that ends with <code>/</code> matches a folder and everything inside it.</li>
+        </ul>
+        <p>Negated patterns (starting with <code>!</code>) are not supported. Write a narrower pattern instead.</p>
+
+        <h2 id="environment">Environment variables</h2>
+        <p>Values are read in this order. The first one that is set wins:</p>
+        <ol>
+          <li>A command-line flag.</li>
+          <li>An environment variable.</li>
+          <li>The config file.</li>
+          <li>The default.</li>
+        </ol>
+        <div class="as-prose-table" role="region" aria-label="Environment variables" tabindex="0">
+  <table>
+    <caption>Environment variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">Overrides</th><th scope="col">Example</th></tr></thead>
+    <tbody>
+          <tr><td><code>TIDEPOOL_CONFIG</code></td><td>Path to the config file</td><td><code>/etc/tidepool/prod.yaml</code></td></tr>
+          <tr><td><code>TIDEPOOL_POOL</code></td><td><code>pool</code></td><td><code>notes-team</code></td></tr>
+          <tr><td><code>TIDEPOOL_TOKEN</code></td><td>The stored token for this run</td><td>A token from the pool settings page</td></tr>
+          <tr><td><code>TIDEPOOL_LOG</code></td><td>Log level: <code>error</code>, <code>warn</code>, <code>info</code> or <code>debug</code></td><td><code>debug</code></td></tr>
+          <tr><td><code>TIDEPOOL_CA_BUNDLE</code></td><td>Extra certificates for TLS, in PEM format</td><td><code>/etc/ssl/corp-ca.pem</code></td></tr>
+          <tr><td><code>NO_COLOR</code></td><td>Turns colour output off when set</td><td><code>1</code></td></tr>
+    </tbody>
+  </table>
+</div>
+
+        <h2 id="validate">Check the file</h2>
+        <p>Run <code>tidepool config validate</code> after each change. It reports unknown keys and wrong types with the line number.</p>
+        <pre tabindex="0"><code>$ tidepool config validate
+tidepool.yaml: 1 problem
+  line 6: unknown key &quot;concurency&quot; (did you mean &quot;concurrency&quot;?)
+$ echo $?
+3</code></pre>
+        <p>Exit code 3 means a configuration problem. The full list of exit codes is in the <a href="/reference/api.html#exit-codes">API reference</a>.</p>
+        <p>To read or change one value from the command line, use <code>tidepool config get concurrency</code> and <code>tidepool config set concurrency 8</code>. <code>config set</code> keeps your comments and the order of the keys.</p>
+
+        <h2 id="secrets">Secrets</h2>
+        <p><code>tidepool login</code> stores the token in the system keychain on macOS. On Linux it stores the token in <code>~/.config/tidepool/credentials</code>, a file that only your user can read. In CI, set <code>TIDEPOOL_TOKEN</code> from the CI secret store instead.</p>
+      </article>
+            <nav class="docs-pager" aria-label="Previous and next pages">
+        <a class="docs-pager-prev" href="/quick-start.html"><span class="docs-pager-label">Previous</span><span class="docs-pager-title">Quick start</span></a>
+        <a class="docs-pager-next" href="/guides/plugins.html"><span class="docs-pager-label">Next</span><span class="docs-pager-title">Plugins</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

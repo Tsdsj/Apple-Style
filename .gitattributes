@@ -1,0 +1,3 @@
+# Generated evaluation output is kept byte-for-byte as the agents wrote it; whitespace checks do not apply.
+evals/runs/*/sites/** -whitespace
+evals/runs/*/app/** -whitespace

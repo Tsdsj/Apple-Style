@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuration · Tidepool Docs</title>
+<meta name="description" content="Reference for tidepool.toml: tasks, environment variables, local overrides and validation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="../index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="../quick-start.html">Quick start</a>
+    <a href="../reference/api.html">API reference</a>
+    <a href="../changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="../index.html">Introduction</a></li>
+          <li><a href="../quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="../guides/configuration.html" aria-current="page">Configuration</a></li>
+          <li><a href="../guides/plugins.html">Plugins</a></li>
+          <li><a href="../guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="../reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="../changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Guides</p><h1>Configuration</h1>
+<p class="lead">Everything Tidepool does for a project is described in <code>tidepool.toml</code>, at the project root.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#finding-the-file">Finding the file</a></li><li class="lvl2"><a href="#top-level-keys">Top-level keys</a></li><li class="lvl2"><a href="#tasks">Tasks</a></li><li class="lvl2"><a href="#environment">Environment</a></li><li class="lvl2"><a href="#local-overrides">Local overrides</a></li><li class="lvl2"><a href="#validating">Validating</a></li><li class="lvl2"><a href="#schema-versions">Schema versions</a></li></ul></details>
+<h2 id="finding-the-file">Finding the file</h2>
+<p>Tidepool looks for <code>tidepool.toml</code> in the current directory first, then in each parent directory, and stops at the first match. To use a different file, pass <code>--config PATH</code> or set <code>TIDEPOOL_CONFIG</code>. The flag wins over the variable.</p>
+<h2 id="top-level-keys">Top-level keys</h2>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Key</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>name</code></td><td>string</td><td>yes</td><td>Project name, shown in <code>doctor</code> output and logs.</td></tr><tr><td><code>version</code></td><td>integer</td><td>yes</td><td>Schema version. Currently <code>1</code>.</td></tr><tr><td><code>description</code></td><td>string</td><td>no</td><td>One-line summary of the project.</td></tr><tr><td><code>env</code></td><td>table of strings</td><td>no</td><td>Default environment variables for every task. See <a href="#environment">Environment</a>.</td></tr><tr><td><code>plugins</code></td><td>table</td><td>no</td><td>Plugin specifications, keyed by local name. See the <a href="../guides/plugins.html">plugins guide</a>.</td></tr><tr><td><code>tasks</code></td><td>table</td><td>no</td><td>Named tasks, keyed by task name.</td></tr></tbody></table></div>
+<h2 id="tasks">Tasks</h2>
+<p>Each entry under <code>[tasks]</code> defines a named task. The fields are:</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>run</code></td><td>string or array of strings</td><td>required</td><td>A string runs through <code>sh -c</code>. An array runs the program directly, with no shell.</td></tr><tr><td><code>description</code></td><td>string</td><td>none</td><td>Shown by <code>tidepool run --help</code>.</td></tr><tr><td><code>inputs</code></td><td>array of globs</td><td>none</td><td>Files that affect the task. Used to skip work that has not changed.</td></tr><tr><td><code>outputs</code></td><td>array of paths</td><td>none</td><td>Files the task produces.</td></tr><tr><td><code>depends_on</code></td><td>array of task names</td><td>none</td><td>Tasks to run first. Dependency cycles are rejected.</td></tr><tr><td><code>env</code></td><td>table of strings</td><td>none</td><td>Extra variables for this task only.</td></tr><tr><td><code>timeout</code></td><td>duration</td><td><code>10m</code></td><td>Maximum run time before the task is stopped.</td></tr></tbody></table></div>
+<p>Here is one task with a shell string and one with an argument array:</p>
+<div class="code"><pre tabindex="0"><code>[tasks.build]
+description = "Compile the app"
+run = "make build"
+inputs = ["src/**/*.c", "Makefile"]
+outputs = ["build/app"]
+depends_on = ["gen"]
+timeout = "5m"
+
+[tasks.gen]
+run = ["./scripts/gen-headers.sh", "--verbose"]</code></pre></div>
+<div class="callout" role="note"><p><strong>Note:</strong> Use the array form when an argument contains spaces or characters the shell would interpret. It avoids quoting problems across shells.</p></div>
+<p>Durations are a number followed by a unit: <code>s</code>, <code>m</code>, <code>h</code> or <code>d</code>, for example <code>30s</code>, <code>5m</code> or <code>2h</code>. Mixed units such as <code>1h30m</code> are not supported.</p>
+<h2 id="environment">Environment</h2>
+<p><code>[env]</code> sets defaults for every task. A variable that is already set in your shell is not overwritten. A task's own <code>env</code> table always wins for that task, even over your shell:</p>
+<div class="code"><pre tabindex="0"><code>[env]
+LOG_FORMAT = "json"
+
+[tasks.test]
+run = "pytest -q"
+env = { PYTHONHASHSEED = "0", LOG_FORMAT = "text" }</code></pre></div>
+<h2 id="local-overrides">Local overrides</h2>
+<p>Put machine-specific settings in <code>tidepool.local.toml</code>, next to <code>tidepool.toml</code>, and add that file to <code>.gitignore</code>. Tidepool merges it over the main file. Tables merge key by key. Arrays and scalar values replace the value from the main file:</p>
+<div class="code"><pre tabindex="0"><code># tidepool.local.toml
+[tasks.test]
+timeout = "30m"</code></pre></div>
+<h2 id="validating">Validating</h2>
+<p>Run <code>tidepool config validate</code> after editing the file. It reports each problem with a line number:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool config validate
+tidepool.toml:9:1: error: unknown key "timout" in [tasks.test]
+  did you mean "timeout"?
+1 error, 0 warnings</code></pre></div>
+<p>Validation exits with code 3 when it finds errors. Add <code>--strict</code> to treat warnings as errors too.</p>
+<div class="callout warn" role="note"><p><strong>Warning:</strong> Everything in <code>tidepool.toml</code> is committed to git. Keep tokens and passwords out of the file. Reference them from environment variables that your shell or a secrets manager sets.</p></div>
+<h2 id="schema-versions">Schema versions</h2>
+<p>The <code>version</code> key tells Tidepool how to read the file. Version <code>1</code> is the only schema that Tidepool 0.5 reads. Files that declare a newer version are rejected with exit code 3, and the error names the release you need.</p>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="../quick-start.html"><span class="small">Previous</span>Quick start</a><a class="next" href="../guides/plugins.html"><span class="small">Next</span>Plugins</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#finding-the-file">Finding the file</a></li><li class="lvl2"><a href="#top-level-keys">Top-level keys</a></li><li class="lvl2"><a href="#tasks">Tasks</a></li><li class="lvl2"><a href="#environment">Environment</a></li><li class="lvl2"><a href="#local-overrides">Local overrides</a></li><li class="lvl2"><a href="#validating">Validating</a></li><li class="lvl2"><a href="#schema-versions">Schema versions</a></li></ul></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+/* Apple-Style patterns for the home, pricing and FAQ pages.
+   Parts, in order: patterns/hero.css, patterns/pricing.css, patterns/faq.css, patterns/mockup.css, patterns/motion.css.
+   Source: Apple-Style web/css and web/patterns (copied, not edited). */
+
+/* ---- patterns/hero.css ---- */
+/* ==========================================================================
+   Hero and display type (pattern 2.4). Requires the core layers (tokens, base,
+   glass, controls, preferences). --as-site-width comes from site-header.css; the
+   fallback in the rules keeps this file standalone.
+   Layout: observed convention (apple.com-style marketing pages, 2026-10-19, not
+   re-verified online in this revision; not an Apple guideline).
+   Type scale: project default, the numbers in typography.md (Web display type).
+   Variants: .as-site-hero-split (media beside the text from 64em) and
+   .as-site-hero-overlay (text on a full-bleed image behind a scrim).
+   ========================================================================== */
+:root {
+  /* Fluid display sizes in rem, so the reader's default font size still applies. */
+  --as-display-1: clamp(2.5rem, 1.5rem + 4.5vw, 5rem);    /* about 40 → 80 px */
+  --as-display-2: clamp(2rem, 1.25rem + 3vw, 3.5rem);     /* about 32 → 56 px */
+  /* Text over an image is always white. The scrim is the same in both appearances. */
+  --as-site-on-media: rgb(255 255 255);
+  --as-site-scrim: rgb(0 0 0 / .6);
+  --as-site-media-fallback: rgb(0 0 0);
+}
+
+.as-site-hero {
+  box-sizing: border-box; display: grid; align-items: center; gap: 32px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: clamp(40px, 6vw, 88px) var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-hero { padding-inline: var(--as-margin-regular); } }
+@media (min-width: 64em) { .as-site-hero-split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; } }
+.as-site-hero-body { min-inline-size: 0; }
+.as-site-eyebrow { margin: 0 0 12px; font: 600 15px/20px var(--as-font-text); letter-spacing: -.24px; color: var(--as-label-secondary); }
+/* Display tracking stays at 0 for SF (typography.md, Web display type). */
+.as-site-hero-title {
+  margin: 0 0 16px; font: 600 var(--as-display-1)/1.05 var(--as-font-display); letter-spacing: 0;
+  color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-hero-sub {
+  margin: 0 0 32px; max-inline-size: 34em; font: 400 clamp(1.0625rem, 1rem + .6vw, 1.375rem)/1.4 var(--as-font-text);
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+.as-site-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.as-site-hero-media { margin: 0; min-inline-size: 0; overflow: hidden; border-radius: var(--as-radius-xl); background: var(--as-bg-secondary); }
+/* The picture element is a block and the image keeps the ratio of its width and height attributes while it loads.
+   Without the explicit ratio, Chromium can lay out the image at a different height until it arrives (layout shift). */
+.as-site-hero-media picture { display: block; }
+.as-site-hero-media img { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 3; height: auto; }
+
+/* CJK: keep the phrase rules, break at the line ends the language expects. Other browsers use the fallback value. */
+.as-site-hero:is(:lang(zh), :lang(ja)) :is(.as-site-hero-title, .as-site-hero-sub) {
+  word-break: normal; word-break: auto-phrase; line-break: strict;
+}
+
+/* Overlay: the image is behind the text, and the scrim sits between them. The scrim is 0.6 black,
+   so over any backdrop each channel is at most 255 x 0.4 = 102, and white text is at least 5.7:1.
+   That holds only where the scrim covers the text block, so the whole hero is covered here. */
+.as-site-hero-overlay {
+  display: block; position: relative; isolation: isolate; overflow: hidden; max-inline-size: none;
+  padding-block: clamp(64px, 12vw, 128px); padding-inline: 0;
+  color: var(--as-site-on-media); background: var(--as-site-media-fallback);
+}
+.as-site-hero-overlay > img { position: absolute; inset: 0; z-index: -2; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.as-site-hero-overlay::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--as-site-scrim); }
+.as-site-hero-overlay .as-site-hero-body {
+  position: relative; box-sizing: border-box; max-inline-size: var(--as-site-width, 1120px); margin-inline: auto; padding-inline: var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-hero-overlay .as-site-hero-body { padding-inline: var(--as-margin-regular); } }
+.as-site-hero-overlay :is(.as-site-eyebrow, .as-site-hero-title, .as-site-hero-sub) { color: var(--as-site-on-media); }
+@media (forced-colors: active) {
+  .as-site-hero-overlay { background: Canvas; color: CanvasText; }
+  .as-site-hero-overlay > img, .as-site-hero-overlay::before { display: none; }
+}
+
+/* ---- patterns/pricing.css ---- */
+/* ==========================================================================
+   Pricing plans and comparison table (pattern 2.6). Requires the core layers and
+   the visually hidden utility .as-sr-only (preferences.css).
+   Layout: observed convention (2026-10-19, not re-verified online in this revision).
+   Project defaults: the 2px recommended border, the 34rem table minimum and the
+   scroll container. The surface token comes from section.css; fallback below.
+   ========================================================================== */
+.as-site-plans {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 16px; align-items: stretch; margin: 0; padding: 0; list-style: none;
+}
+.as-site-plan {
+  --as-container-radius: var(--as-radius-l);
+  position: relative; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; min-inline-size: 0; margin: 0;
+  padding: 28px 24px 24px; border: 1px solid var(--as-separator); border-radius: var(--as-container-radius);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+}
+/* Recommended: a 2px border and a text badge, two cues that do not depend on colour. The padding is
+   1px smaller so the content lines up with the other plans. */
+.as-site-plan-recommended { border: 2px solid var(--as-accent); padding: 27px 23px 23px; }
+.as-site-plan-flag { position: absolute; inset-block-start: 16px; inset-inline-end: 16px; margin: 0; }
+.as-site-plan-name { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); }
+.as-site-plan-price {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin: 4px 0 0;
+  font: 400 15px/20px var(--as-font-text); color: var(--as-label-secondary);
+}
+.as-site-plan-amount { font: 600 2.75rem/1 var(--as-font-display); color: var(--as-label); font-variant-numeric: tabular-nums; }
+.as-site-plan-desc { margin: 0; font: 400 15px/20px var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+.as-site-plan-list { display: grid; gap: 8px; margin: 4px 0 8px; padding: 0; list-style: none; font: 400 15px/20px var(--as-font-text); }
+.as-site-plan > .as-button { margin-block-start: auto; }
+
+.as-site-compare-region {
+  margin-block-start: clamp(40px, 6vw, 72px); max-inline-size: 100%; overflow-x: auto; overscroll-behavior-x: contain;
+  border-radius: var(--as-radius-l); background: var(--as-site-surface, var(--as-bg-secondary));
+}
+.as-site-compare-region:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+.as-site-compare {
+  box-sizing: border-box; inline-size: 100%; min-inline-size: 34rem; border-collapse: separate; border-spacing: 0;
+  font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; color: var(--as-label);
+}
+.as-site-compare caption {
+  caption-side: top; padding: 20px 20px 12px; text-align: start;
+  font: 600 19px/24px var(--as-font-display); color: var(--as-label);
+}
+/* position: relative keeps the visually hidden text of a mark inside its cell, so it cannot widen the page. */
+.as-site-compare th, .as-site-compare td {
+  position: relative; padding: 12px 20px; border-block-end: 1px solid var(--as-separator); text-align: start; vertical-align: middle;
+}
+.as-site-compare th { font-weight: 600; }
+.as-site-compare tbody th[scope="row"] { font-weight: 400; }
+/* The row headers stay in view while the table scrolls. Their background hides the cells passing under them. */
+.as-site-compare tbody th[scope="row"] { position: sticky; inset-inline-start: 0; z-index: 1; background: var(--as-site-surface, var(--as-bg-secondary)); }
+/* Marks have a text alternative in .as-sr-only; the glyph is aria-hidden. The shape differs, so colour is not the only cue. */
+.as-site-mark { font-size: 1.0625rem; font-weight: 600; color: var(--as-label); }
+.as-site-mark-no { font-weight: 400; color: var(--as-label-secondary); }
+
+@media (forced-colors: active) {
+  .as-site-plan { border: 1px solid CanvasText; }
+  .as-site-plan-recommended { border: 2px solid CanvasText; }
+  .as-site-compare-region { border: 1px solid CanvasText; }
+  .as-site-compare th, .as-site-compare td { border-block-end: 1px solid CanvasText; }
+  .as-site-compare tbody th[scope="row"] { background: Canvas; }
+}
+
+/* ---- patterns/faq.css ---- */
+/* ==========================================================================
+   FAQ with native disclosure (pattern 2.7). No JavaScript.
+   Each question is a <details> with a <summary>. The chevron is a shape that
+   turns on open, so open and closed do not depend on colour.
+   Project defaults: the 44px summary height on every pointer (the rows are full
+   width, so the target is already wide), the 9px chevron, the 16rem answer measure.
+   Reduced motion: official reference is WCAG 2.3.3 (AAA, Animation from Interactions);
+   the rule here follows prefers-reduced-motion and removes the chevron transition.
+   ========================================================================== */
+.as-site-faq { margin: 0; }
+.as-site-faq-item { border-block-end: 1px solid var(--as-separator); }
+.as-site-faq-item:first-child { border-block-start: 1px solid var(--as-separator); }
+.as-site-faq-item > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; box-sizing: border-box;
+  min-block-size: var(--as-hit-min); padding: 14px 0; cursor: pointer; list-style: none;
+  font: 600 19px/25px var(--as-font-display); color: var(--as-label);
+}
+.as-site-faq-item > summary::-webkit-details-marker { display: none; }
+.as-site-faq-item > summary::after {
+  content: ""; flex: none; inline-size: 9px; block-size: 9px; margin-inline-end: 4px;
+  border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  transition: transform var(--as-dur-fast) var(--as-ease-soft);
+}
+.as-site-faq-item[open] > summary::after { transform: rotate(-135deg); }
+.as-site-faq-item > summary:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; border-radius: var(--as-radius-xs); }
+@media (prefers-reduced-motion: reduce) { .as-site-faq-item > summary::after { transition: none; } }
+.as-site-faq-answer { max-inline-size: 40rem; padding-block-end: 20px; }
+.as-site-faq-answer p {
+  margin: 0; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+.as-site-faq-answer p + p { margin-block-start: 12px; }
+@media (forced-colors: active) { .as-site-faq-item { border-color: CanvasText; } }
+
+/* ---- patterns/mockup.css ---- */
+/* ==========================================================================
+   Product mockup (pattern 2.12): an HTML drawing of a screen, without a device
+   frame. Requires the core layers. Every colour is a token. The content is solid
+   (no glass). The text is real text, so it meets the body-text contrast rules in
+   both appearances (WCAG 1.4.3), whether or not the block is aria-hidden.
+   Layout and treatment: observed convention and project default (not an Apple
+   guideline). See website-patterns.md, Product imagery, for when to use it.
+   ========================================================================== */
+.as-site-mockup {
+  box-sizing: border-box; display: grid; gap: 12px; margin: 0; padding: 16px;
+  border: 1px solid var(--as-separator); border-radius: var(--as-radius-l);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+  font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; min-inline-size: 0;
+}
+.as-site-mockup-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.as-site-mockup-title { margin: 0; font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-label); overflow-wrap: anywhere; }
+.as-site-mockup-muted { color: var(--as-label-secondary); }
+.as-site-mockup-rows { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.as-site-mockup-row {
+  box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px;
+  min-block-size: var(--as-hit-min); padding: 8px 12px; border-radius: var(--as-radius-s); background: var(--as-bg-tertiary);
+}
+.as-site-mockup-row > span:first-child { min-inline-size: 0; overflow-wrap: anywhere; }
+.as-site-mockup-value { font-variant-numeric: tabular-nums; color: var(--as-label); }
+/* A status word is text. The pill is the same .as-pill used elsewhere, so its colour rules apply. */
+.as-site-mockup-row .as-pill { flex: 0 0 auto; }
+
+@media (forced-colors: active) {
+  .as-site-mockup, .as-site-mockup-row { border: 1px solid CanvasText; background: Canvas; color: CanvasText; }
+  .as-site-mockup-muted { color: CanvasText; }
+}
+
+/* App Store badge link (website-patterns.md, Product imagery). The artwork is Apple's, is supplied by Apple,
+   and is not shipped in this repository. Height is 40 px, the onscreen minimum in the App Store marketing
+   guidelines; the width follows the artwork's own ratio, so it is never stretched. Clear space is one quarter
+   of the badge height (10 px at 40 px), kept as padding of the link, so nothing else sits inside it. The artwork
+   gets no filter, transform, animation or opacity change. */
+.as-site-store-badge { display: inline-block; padding: 10px; border-radius: var(--as-radius-s); line-height: 0; }
+.as-site-store-badge img { display: block; block-size: 40px; inline-size: auto; max-inline-size: none; }
+.as-site-store-badge:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* ---- patterns/motion.css ---- */
+/* ==========================================================================
+   Scroll entrance (pattern 2.14). Requires the core layers only.
+   Content is visible without this file and without the animation. The reveal is
+   added only when the browser supports scroll-driven animations (@supports) and
+   the user has not asked for less motion (prefers-reduced-motion: no-preference).
+   It is an opacity and a short translation of 16 px, once, as the element enters.
+   No scroll-jacking, no parallax on text, and no animation that repeats.
+   Motion rationale: motion-and-interaction.md. Layout and timing values here are
+   project defaults (not an Apple guideline).
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .as-site-reveal {
+      animation: as-site-reveal linear both;
+      animation-timeline: view();
+      /* Finishes when the element is 40% into the viewport: a short, one-time reveal. */
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+@keyframes as-site-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}

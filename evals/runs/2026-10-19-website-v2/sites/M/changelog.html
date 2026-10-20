@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · Tidepool Docs</title>
+<meta name="description" content="Release history for Tidepool.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="quick-start.html">Quick start</a>
+    <a href="reference/api.html">API reference</a>
+    <a href="changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="index.html">Introduction</a></li>
+          <li><a href="quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="guides/configuration.html">Configuration</a></li>
+          <li><a href="guides/plugins.html">Plugins</a></li>
+          <li><a href="guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="changelog.html" aria-current="page">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Project</p><h1>Changelog</h1>
+<p class="lead">Notable changes in each release. Tidepool follows semantic versioning. Before 1.0, a minor release may contain breaking changes, and those are marked <strong>Breaking</strong>.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#0-5-0-2026-09-30">0.5.0 (2026-09-30)</a></li><li class="lvl2"><a href="#0-4-2-2026-08-14">0.4.2 (2026-08-14)</a></li><li class="lvl2"><a href="#0-4-0-2026-07-02">0.4.0 (2026-07-02)</a></li><li class="lvl2"><a href="#0-3-0-2026-05-20">0.3.0 (2026-05-20)</a></li><li class="lvl2"><a href="#0-2-0-2026-03-11">0.2.0 (2026-03-11)</a></li><li class="lvl2"><a href="#0-1-0-2026-01-15">0.1.0 (2026-01-15)</a></li></ul></details>
+<h2 id="0-5-0-2026-09-30">0.5.0 (2026-09-30)</h2>
+<ul><li>Added <code>depends_on</code> for tasks. Cycles are reported when the file is validated.</li><li>Added <code>tidepool doctor --json</code>.</li><li>Added <code>tidepool sync --locked</code> for CI.</li><li><strong>Breaking:</strong> the task key <code>cmd</code> is renamed to <code>run</code>. The old key still loads, with a warning, until 0.6.</li><li>Fixed: the lock file was written with CRLF line endings on Windows.</li></ul>
+<h2 id="0-4-2-2026-08-14">0.4.2 (2026-08-14)</h2>
+<ul><li>Fixed: <code>cache prune --older-than</code> ignored its argument.</li><li>Fixed: fish completion did not offer plugin names.</li></ul>
+<h2 id="0-4-0-2026-07-02">0.4.0 (2026-07-02)</h2>
+<ul><li>Added plugin hooks, starting with <code>after_sync</code>.</li><li>Added <code>tidepool plugin update</code>.</li><li><strong>Breaking:</strong> lock file format v2. Run <code>tidepool sync</code> once after upgrading to regenerate <code>tidepool.lock</code>.</li></ul>
+<h2 id="0-3-0-2026-05-20">0.3.0 (2026-05-20)</h2>
+<ul><li>Added local overrides in <code>tidepool.local.toml</code>.</li><li>Added <code>tidepool run --dry-run</code>.</li><li>Added <code>tidepool cache prune</code>.</li></ul>
+<h2 id="0-2-0-2026-03-11">0.2.0 (2026-03-11)</h2>
+<ul><li>Added plugins, with SHA-256 checksum verification.</li><li>Added <code>tidepool plugin add</code>, <code>remove</code> and <code>list</code>.</li></ul>
+<h2 id="0-1-0-2026-01-15">0.1.0 (2026-01-15)</h2>
+<ul><li>First public release: <code>init</code>, <code>run</code>, <code>config</code> and <code>--version</code>.</li></ul>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="reference/api.html"><span class="small">Previous</span>API reference</a><span></span></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#0-5-0-2026-09-30">0.5.0 (2026-09-30)</a></li><li class="lvl2"><a href="#0-4-2-2026-08-14">0.4.2 (2026-08-14)</a></li><li class="lvl2"><a href="#0-4-0-2026-07-02">0.4.0 (2026-07-02)</a></li><li class="lvl2"><a href="#0-3-0-2026-05-20">0.3.0 (2026-05-20)</a></li><li class="lvl2"><a href="#0-2-0-2026-03-11">0.2.0 (2026-03-11)</a></li><li class="lvl2"><a href="#0-1-0-2026-01-15">0.1.0 (2026-01-15)</a></li></ul></aside>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

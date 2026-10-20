@@ -1207,7 +1207,9 @@ select.as-input { padding-inline-end: 8px; cursor: default; }
      a pane's padding would be added on top of its flex-basis and every
      column would come out 16–28px wider than the token says. */
   .as-split > * { box-sizing: border-box; }
-  .as-split > [hidden] { display: none; }
+  /* !important: pane rules below (.as-split > .as-inspector, …) set display with the
+     same specificity and come later, so without it a hidden pane stayed visible. */
+  .as-split > [hidden] { display: none !important; }
 
   /* The leading pane. `.as-sidebar` keeps its row/section-title vocabulary but
      stops being a floating absolutely-positioned glass slab. */

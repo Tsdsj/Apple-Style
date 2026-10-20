@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tidepool · Sync files to a pool, with history</title>
+  <meta name="description" content="Tidepool is a command-line tool that syncs a folder to a shared pool, keeps a numbered history of every sync and runs plugins. Install it with one command.">
+  <link rel="canonical" href="https://tidepool.example/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="Tidepool · Sync files to a pool, with history">
+  <meta property="og:description" content="Tidepool is a command-line tool that syncs a folder to a shared pool, keeps a numbered history of every sync and runs plugins. Install it with one command.">
+  <meta property="og:url" content="https://tidepool.example/">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Tidepool",
+   "applicationCategory": "DeveloperApplication", "operatingSystem": "macOS, Linux",
+   "softwareVersion": "1.4.0"}
+  </script>
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html">Quick start</a></li>
+          <li><a href="/guides/configuration.html">Guides</a></li>
+          <li><a href="/reference/api.html">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="as-site-section docs-hero" aria-labelledby="hero-title">
+      <p class="docs-kicker">Command-line tool &middot; version 1.4.0</p>
+      <h1 class="docs-hero-title" id="hero-title">Sync your files to a pool, with a history you can read.</h1>
+      <p class="as-site-section-lead">Tidepool is a small command-line tool. It sends the changes in a folder to a shared pool, keeps a numbered history of every sync, and runs plugins at the points you choose. The configuration is one YAML file in your project.</p>
+      <div class="docs-actions">
+        <a class="as-button as-button-filled as-button-large" href="/quick-start.html">Quick start</a>
+        <a class="as-button as-button-tinted as-button-large" href="/reference/api.html">API reference</a>
+      </div>
+    </section>
+
+    <section class="as-site-section as-site-section-alt" id="install" aria-labelledby="install-title">
+      <h2 class="as-site-section-title" id="install-title">Install</h2>
+      <p class="as-site-section-lead">Use the installer on macOS or Linux, or a package manager. All three methods install the same binary.</p>
+      <div class="as-prose docs-install">
+        <h3>macOS and Linux</h3>
+        <pre tabindex="0"><code>curl -fsSL https://tidepool.example/install.sh | sh</code></pre>
+        <h3>Homebrew</h3>
+        <pre tabindex="0"><code>brew install tidepool/tap/tidepool</code></pre>
+        <h3>npm</h3>
+        <pre tabindex="0"><code>npm install --global @tidepool/cli</code></pre>
+        <p>Check the install. The command prints the version and the platform the binary was built for.</p>
+        <pre tabindex="0"><code>tidepool version</code></pre>
+      </div>
+    </section>
+
+    <section class="as-site-section" id="features" aria-labelledby="features-title">
+      <h2 class="as-site-section-title" id="features-title">What it does</h2>
+      <p class="as-site-section-lead">Three parts, each of them useful on its own.</p>
+      <ul class="as-site-grid">
+        <li class="as-site-card">
+          <h3 class="as-site-card-title">A history for every sync</h3>
+          <p>Each sync creates a numbered revision. You can list them, look at the changes and restore an earlier one.</p>
+        </li>
+        <li class="as-site-card">
+          <h3 class="as-site-card-title">One file to configure</h3>
+          <p>Settings live in <code>tidepool.yaml</code>, next to your files. Commit it with the project and review changes like any other.</p>
+        </li>
+        <li class="as-site-card">
+          <h3 class="as-site-card-title">Plugins at fixed points</h3>
+          <p>A plugin is an executable that reads JSON lines. It can skip files, check a sync before it starts or report after it ends.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="as-site-section as-site-section-alt" aria-labelledby="latest-title">
+      <h2 class="as-site-section-title" id="latest-title">Latest release</h2>
+      <p class="as-site-section-lead">Version 1.4.0 was released on 28 September 2026. It adds offline queueing, the history and restore commands and a <code>--resolve</code> option for conflicts.</p>
+      <p><a href="/changelog.html">Read the full changelog</a></p>
+    </section>
+  </main>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

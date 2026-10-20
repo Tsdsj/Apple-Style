@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plugins · Tidepool</title>
+  <meta name="description" content="Write, install and enable Tidepool plugins: hooks, the JSON line protocol, an example plugin, timeouts and security.">
+  <link rel="canonical" href="https://tidepool.example/guides/plugins.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="Plugins · Tidepool">
+  <meta property="og:description" content="Write, install and enable Tidepool plugins: hooks, the JSON line protocol, an example plugin, timeouts and security.">
+  <meta property="og:url" content="https://tidepool.example/guides/plugins.html">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html">Quick start</a></li>
+          <li><a href="/guides/configuration.html" aria-current="page">Guides</a></li>
+          <li><a href="/reference/api.html">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation">
+      <details class="docs-menu" data-docs-menu open>
+        <summary>Documentation menu</summary>
+        <div class="docs-menu-body">
+          <ul class="docs-groups">
+        <li>
+          <p class="docs-group-title">Getting started</p>
+          <ul class="docs-group-links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Guides</p>
+          <ul class="docs-group-links">
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html" aria-current="page">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Reference</p>
+          <ul class="docs-group-links">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </li>
+          </ul>
+        </div>
+      </details>
+    </nav>
+    <main id="main" class="docs-main">
+      <p class="docs-kicker">Guides</p>
+      <h1 class="docs-title">Plugins</h1>
+      <p class="docs-lead">Plugins extend a sync at fixed points. A plugin is an executable that reads JSON lines on standard input and writes JSON lines on standard output. Use one written by someone else, or write your own in any language.</p>
+      <p class="as-site-updated">Last updated <time datetime="2026-10-12">12 October 2026</time></p>
+      <nav class="as-site-toc docs-toc" aria-labelledby="toc-title">
+        <p class="as-site-toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#hooks">Hooks</a></li>
+          <li><a href="#install">Install a plugin</a></li>
+          <li><a href="#enable">Enable a plugin</a></li>
+          <li><a href="#write">Write a plugin</a></li>
+          <li><a href="#example">Example plugin</a></li>
+          <li><a href="#failures">Timeouts and failures</a></li>
+          <li><a href="#security">Security</a></li>
+        </ol>
+      </nav>
+      <article class="as-prose docs-article">
+<h2 id="hooks">Hooks</h2>
+        <p>A plugin takes part in a sync through one or more hooks. Declare the hooks in the plugin manifest.</p>
+        <div class="as-prose-table" role="region" aria-label="Hooks" tabindex="0">
+  <table>
+    <caption>Plugin hooks</caption>
+    <thead><tr><th scope="col">Hook</th><th scope="col">When it runs</th><th scope="col">Allowed responses</th></tr></thead>
+    <tbody>
+          <tr><td><code>filter_file</code></td><td>Once for each file that passes the ignore rules, before the file is uploaded</td><td><code>{"action": "keep"}</code> or <code>{"action": "skip"}</code></td></tr>
+          <tr><td><code>before_sync</code></td><td>Once before a sync starts. The request includes the number of files.</td><td><code>{"action": "continue"}</code> or <code>{"action": "abort", "message": "..."}</code></td></tr>
+          <tr><td><code>after_sync</code></td><td>Once after a sync. The request includes the new revision number.</td><td><code>{"action": "continue"}</code></td></tr>
+    </tbody>
+  </table>
+</div>
+
+        <h2 id="install">Install a plugin</h2>
+        <p>Install a plugin by name from the registry, or from a folder on disk.</p>
+        <pre tabindex="0"><code>$ tidepool plugin install markdown-lint --version 1.2.0
+Installed markdown-lint 1.2.0 to ~/.local/share/tidepool/plugins/markdown-lint
+
+$ tidepool plugin list
+NAME           VERSION  HOOKS
+markdown-lint  1.2.0    filter_file, before_sync
+
+$ tidepool plugin remove markdown-lint
+Removed markdown-lint.</code></pre>
+        <p>Installing from a folder copies it. While you develop a plugin, run <code>tidepool plugin install ./my-plugin</code> again after each change.</p>
+
+        <h2 id="enable">Enable a plugin</h2>
+        <p>Installing a plugin does not run it. List it under <code>plugins</code> in the config file. Plugins run in the order they are listed. Each request carries the options from the config file under the key <code>options</code>.</p>
+        <pre tabindex="0"><code>plugins:
+  - name: markdown-lint
+    version: &quot;1.2.0&quot;
+    options:
+      max_line_length: 100</code></pre>
+
+        <h2 id="write">Write a plugin</h2>
+        <p>A plugin folder holds a manifest named <code>tidepool-plugin.json</code> and the executable it names:</p>
+        <pre tabindex="0"><code>{
+  &quot;name&quot;: &quot;filter-drafts&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;executable&quot;: &quot;./filter-drafts.py&quot;,
+  &quot;hooks&quot;: [&quot;filter_file&quot;],
+  &quot;timeout_ms&quot;: 5000
+}</code></pre>
+        <p>For each hook, Tidepool writes one JSON request on a line to the plugin's standard input, and reads one JSON response on a line from its standard output. Write log messages to standard error only. Anything else on standard output is treated as an invalid response. A request looks like this:</p>
+        <pre tabindex="0"><code>{&quot;hook&quot;:&quot;filter_file&quot;,&quot;path&quot;:&quot;plans/q4.md&quot;,&quot;size&quot;:2048,&quot;options&quot;:{&quot;max_line_length&quot;:100}}
+{&quot;hook&quot;:&quot;before_sync&quot;,&quot;pool&quot;:&quot;notes-team&quot;,&quot;files&quot;:12}</code></pre>
+
+        <h2 id="example">Example plugin</h2>
+        <p>This plugin skips every file whose name ends in <code>.draft.md</code>. It keeps all other files and answers the other hooks with <code>continue</code>:</p>
+        <pre tabindex="0"><code>#!/usr/bin/env python3
+import json
+import sys
+
+for line in sys.stdin:
+    request = json.loads(line)
+    if request[&quot;hook&quot;] == &quot;filter_file&quot;:
+        skip = request[&quot;path&quot;].endswith(&quot;.draft.md&quot;)
+        response = {&quot;action&quot;: &quot;skip&quot; if skip else &quot;keep&quot;}
+    else:
+        response = {&quot;action&quot;: &quot;continue&quot;}
+    print(json.dumps(response), flush=True)</code></pre>
+        <p>Save the script next to the manifest, make it executable with <code>chmod +x filter-drafts.py</code> and install the folder with <code>tidepool plugin install ./filter-drafts</code>.</p>
+
+        <h2 id="failures">Timeouts and failures</h2>
+        <ul>
+          <li>A plugin that does not answer within <code>timeout_ms</code> is stopped, and Tidepool reports error E501. The default is 5000 milliseconds.</li>
+          <li>For <code>filter_file</code>, a failing plugin keeps the file and logs a warning. The sync goes on.</li>
+          <li>For <code>before_sync</code>, a failing plugin stops the sync. Set <code>on_error: continue</code> in the manifest to turn the failure into a warning.</li>
+          <li>A response line that is not valid JSON is reported as error E502.</li>
+        </ul>
+
+        <h2 id="security">Security</h2>
+        <div class="docs-note"><p><strong>Note:</strong> A plugin runs with your user's permissions and can read every file you can read. Install only plugins you trust, and read the source of a new plugin before you enable it.</p></div>
+      </article>
+            <nav class="docs-pager" aria-label="Previous and next pages">
+        <a class="docs-pager-prev" href="/guides/configuration.html"><span class="docs-pager-label">Previous</span><span class="docs-pager-title">Configuration</span></a>
+        <a class="docs-pager-next" href="/guides/troubleshooting.html"><span class="docs-pager-label">Next</span><span class="docs-pager-title">Troubleshooting</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

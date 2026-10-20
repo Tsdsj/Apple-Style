@@ -1,0 +1,62 @@
+/* --------------------------------------------------------------------------
+   1. Base + typography (iOS Large default Dynamic Type; macOS via data-platform)
+   -------------------------------------------------------------------------- */
+.as-root, .as-body {
+  font-family: var(--as-font-text);
+  font-size: 17px; line-height: 22px;
+  color: var(--as-label);
+  background: var(--as-bg);
+  accent-color: var(--as-accent);   /* native checkboxes, radios, progress */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern";
+}
+.as-body { margin: 0; }   /* full-width bars and sections reach the viewport edge */
+.as-text-largetitle { font: 400 34px/41px var(--as-font-display); letter-spacing: .4px; }
+.as-text-title1     { font: 400 28px/34px var(--as-font-display); letter-spacing: .36px; }
+.as-text-title2     { font: 400 22px/28px var(--as-font-display); letter-spacing: .35px; }
+.as-text-title3     { font: 400 20px/25px var(--as-font-display); letter-spacing: .38px; }
+.as-text-headline   { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-text-body       { font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-text-callout    { font: 400 16px/21px var(--as-font-text); letter-spacing: -.32px; }
+.as-text-subhead    { font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; }
+.as-text-footnote   { font: 400 13px/18px var(--as-font-text); letter-spacing: -.08px; }
+.as-text-caption1   { font: 400 12px/16px var(--as-font-text); letter-spacing: 0; }
+.as-text-caption2   { font: 400 11px/13px var(--as-font-text); letter-spacing: .07px; }
+/* Emphasized weights per HIG table */
+.as-text-largetitle.as-em, .as-text-title1.as-em, .as-text-title2.as-em { font-weight: 700; }
+.as-text-title3.as-em, .as-text-body.as-em, .as-text-callout.as-em, .as-text-subhead.as-em,
+.as-text-footnote.as-em, .as-text-caption1.as-em, .as-text-caption2.as-em { font-weight: 600; }
+.as-secondary { color: var(--as-label-secondary); }
+.as-tertiary  { color: var(--as-label-tertiary); }
+.as-mono { font-family: var(--as-font-mono); font-variant-numeric: tabular-nums; }
+.as-tabular { font-variant-numeric: tabular-nums; }
+.as-readable { max-width: var(--as-readable-width); }
+
+/* Links in running text are underlined, so a link is not told apart by colour
+   alone (WCAG 1.4.1). Navigation links are plain, and so is <a class="as-button">
+   (controls.css). A link that carries a class keeps its own look. Everything here
+   is wrapped in :where(), so its specificity is zero and any author rule wins. */
+:where(p, li, dd, td, th, blockquote, figcaption) :where(a:not([class], :is(nav, [role="navigation"]) a)) {
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em;
+}
+:where(p, li, dd, td, th, blockquote, figcaption) :where(a:not([class], :is(nav, [role="navigation"]) a):hover) {
+  text-decoration-thickness: 2px;
+}
+:where(nav, [role="navigation"]) :where(a) { text-decoration: none; }
+/* Link colour: the browser default (#00e, visited purple) fails contrast in dark mode.
+   --as-link meets 4.5:1 on the standard backgrounds in both appearances. */
+:where(a:not([class])) { color: var(--as-link); }
+
+/* --------------------------------------------------------------------------
+   2. Shapes
+   -------------------------------------------------------------------------- */
+.as-capsule { border-radius: var(--as-radius-capsule); }
+/* Concentric: a container declares --as-container-radius on itself; a child
+   with .as-concentric sets --as-concentric-inset to its distance from the
+   container edge (usually the container padding). Optional minimum radius. */
+.as-container { border-radius: var(--as-container-radius, var(--as-radius-xl)); }
+.as-concentric {
+  border-radius: max(var(--as-concentric-min, 0px),
+                     calc(var(--as-container-radius, var(--as-radius-xl)) - var(--as-concentric-inset, 0px)));
+}

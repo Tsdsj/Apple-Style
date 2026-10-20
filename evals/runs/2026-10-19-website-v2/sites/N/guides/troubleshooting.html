@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Troubleshooting · Tidepool</title>
+  <meta name="description" content="Diagnose Tidepool with the doctor command, read the logs, look up error codes E101 to E503 and resolve sync conflicts.">
+  <link rel="canonical" href="https://tidepool.example/guides/troubleshooting.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="Troubleshooting · Tidepool">
+  <meta property="og:description" content="Diagnose Tidepool with the doctor command, read the logs, look up error codes E101 to E503 and resolve sync conflicts.">
+  <meta property="og:url" content="https://tidepool.example/guides/troubleshooting.html">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html">Quick start</a></li>
+          <li><a href="/guides/configuration.html" aria-current="page">Guides</a></li>
+          <li><a href="/reference/api.html">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation">
+      <details class="docs-menu" data-docs-menu open>
+        <summary>Documentation menu</summary>
+        <div class="docs-menu-body">
+          <ul class="docs-groups">
+        <li>
+          <p class="docs-group-title">Getting started</p>
+          <ul class="docs-group-links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Guides</p>
+          <ul class="docs-group-links">
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html" aria-current="page">Troubleshooting</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Reference</p>
+          <ul class="docs-group-links">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </li>
+          </ul>
+        </div>
+      </details>
+    </nav>
+    <main id="main" class="docs-main">
+      <p class="docs-kicker">Guides</p>
+      <h1 class="docs-title">Troubleshooting</h1>
+      <p class="docs-lead">Start with the doctor command. Most problems show up there with a suggested fix. This guide lists the error codes, where the logs are and what to include in a bug report.</p>
+      <p class="as-site-updated">Last updated <time datetime="2026-10-15">15 October 2026</time></p>
+      <nav class="as-site-toc docs-toc" aria-labelledby="toc-title">
+        <p class="as-site-toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#start">Start with doctor</a></li>
+          <li><a href="#logs">Logs</a></li>
+          <li><a href="#errors">Error codes</a></li>
+          <li><a href="#slow">A sync is slow</a></li>
+          <li><a href="#conflicts">Conflicts</a></li>
+          <li><a href="#report">Report a problem</a></li>
+        </ol>
+      </nav>
+      <article class="as-prose docs-article">
+<h2 id="start">Start with doctor</h2>
+        <p><code>tidepool doctor</code> checks the config file, the sign-in, the route to the endpoint, the TLS certificates and every installed plugin. Each check reports <code>pass</code>, <code>warn</code> or <code>fail</code>:</p>
+        <pre tabindex="0"><code>$ tidepool doctor
+[pass] config    tidepool.yaml is valid
+[pass] auth      signed in to notes-team
+[warn] network   HTTPS_PROXY is set; checking through the proxy
+[fail] plugins   markdown-lint 1.2.0 is not executable (E503)
+1 failure, 1 warning</code></pre>
+        <p>The command exits with 0 when no check fails and with 1 when one does. Add <code>--verbose</code> to see the details behind each check.</p>
+
+        <h2 id="logs">Logs</h2>
+        <p>Tidepool writes one log file per day to <code>~/.cache/tidepool/logs/</code> and keeps seven days of them. Use <code>-v</code> to print informational messages to standard error. Set <code>TIDEPOOL_LOG=debug</code> to log every request. Tokens are never written to the log.</p>
+
+        <h2 id="errors">Error codes</h2>
+        <p>Each error message starts with a code. Find the code in the table below.</p>
+        <div class="as-prose-table" role="region" aria-label="Error codes" tabindex="0">
+  <table>
+    <caption>Error codes and fixes</caption>
+    <thead><tr><th scope="col">Code</th><th scope="col">Message</th><th scope="col">Likely cause</th><th scope="col">Fix</th></tr></thead>
+    <tbody>
+          <tr><td><code>E101</code></td><td>config file not found</td><td>No <code>tidepool.yaml</code> in the folder or on the search path</td><td>Run <code>tidepool init</code>, or pass <code>--config</code>.</td></tr>
+          <tr><td><code>E102</code></td><td>unknown key</td><td>A typo, or a key from a newer version</td><td>Fix the spelling. Run <code>tidepool config validate</code>.</td></tr>
+          <tr><td><code>E201</code></td><td>not signed in</td><td>No stored token, and <code>TIDEPOOL_TOKEN</code> is empty</td><td>Run <code>tidepool login</code>.</td></tr>
+          <tr><td><code>E202</code></td><td>token rejected</td><td>The token was revoked or has expired</td><td>Create a new token, then run <code>tidepool login</code> again.</td></tr>
+          <tr><td><code>E301</code></td><td>conflict on a file</td><td>The pool copy changed after your last pull</td><td>Use <code>--resolve local</code> or <code>--resolve remote</code>, or edit the file and sync again.</td></tr>
+          <tr><td><code>E401</code></td><td>request timed out</td><td>A slow or blocked network, or a proxy</td><td>Check the connection. Raise <code>timeout</code> in the config file. Proxies set in <code>HTTPS_PROXY</code> are used.</td></tr>
+          <tr><td><code>E402</code></td><td>certificate not trusted</td><td>A corporate proxy re-signs HTTPS traffic</td><td>Add the proxy certificate authority with <code>TIDEPOOL_CA_BUNDLE</code>.</td></tr>
+          <tr><td><code>E501</code></td><td>plugin timed out</td><td>The plugin is slow or stuck</td><td>Fix the plugin, or raise <code>timeout_ms</code> in its manifest.</td></tr>
+          <tr><td><code>E502</code></td><td>plugin wrote invalid JSON</td><td>A print statement or a banner went to standard output</td><td>Write logs to standard error.</td></tr>
+          <tr><td><code>E503</code></td><td>plugin is not executable</td><td>The execute bit is missing, or the manifest names the wrong file</td><td>Run <code>chmod +x</code> on the file, and check <code>executable</code> in the manifest.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+        <h2 id="slow">A sync is slow</h2>
+        <p>Run <code>tidepool sync --dry-run</code> first. It shows how many files would be uploaded. Then:</p>
+        <ul>
+          <li>Add large generated folders, such as build output, to <code>ignore</code>.</li>
+          <li>Raise <code>concurrency</code> up to 16 on a fast connection.</li>
+          <li>Lower it to 1 on a slow or metered connection.</li>
+        </ul>
+
+        <h2 id="conflicts">Conflicts</h2>
+        <p>A conflict means the same file changed on this computer and in the pool. Tidepool never overwrites either copy without a choice. <code>tidepool status</code> lists the conflicted files. Then pick one of these:</p>
+        <ul>
+          <li><code>tidepool sync --resolve local</code> keeps your copy.</li>
+          <li><code>tidepool sync --resolve remote</code> takes the pool copy.</li>
+          <li>Edit the file to combine both, then run <code>tidepool sync</code> again.</li>
+        </ul>
+        <div class="docs-note"><p><strong>Note:</strong> <code>tidepool pull --force</code> replaces local changes with the pool copy. It cannot be undone, so run <code>tidepool pull --dry-run</code> first.</p></div>
+
+        <h2 id="report">Report a problem</h2>
+        <p>Open an issue on the <a href="https://tidepool.example/issues">issue tracker</a>. Include the output of <code>tidepool doctor --json</code> and the last 50 lines of the log. Doctor hides tokens, but check the output before you post it, and remove any file names you do not want to share.</p>
+      </article>
+            <nav class="docs-pager" aria-label="Previous and next pages">
+        <a class="docs-pager-prev" href="/guides/plugins.html"><span class="docs-pager-label">Previous</span><span class="docs-pager-title">Plugins</span></a>
+        <a class="docs-pager-next" href="/reference/api.html"><span class="docs-pager-label">Next</span><span class="docs-pager-title">API reference</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

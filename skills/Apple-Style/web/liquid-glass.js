@@ -1115,7 +1115,8 @@
     const rich = target.isContentEditable;
     const field = rich || target.tagName === 'TEXTAREA' || (target.tagName === 'INPUT' && !NON_TEXT_INPUTS.test(target.type));
     if (!field) return false;
-    return combo.code ? FIELD_CODES.has(combo.code) || (rich && RICH_CODES.has(combo.code)) : FIELD_KEYS.has(combo.key);
+    // ⌥ turns a letter into a different command (⌥⌘I is not Italic), so only plain or ⇧ letter combos belong to the field.
+    return combo.code ? !combo.alt && (FIELD_CODES.has(combo.code) || (rich && RICH_CODES.has(combo.code))) : FIELD_KEYS.has(combo.key);
   }
   function modifiersMatch(combo, e) {
     if (combo.shift !== e.shiftKey || combo.alt !== e.altKey) return false;

@@ -1,0 +1,89 @@
+/* Apple-Style article prose, legal page and 404 patterns.
+   Parts, in order: patterns/prose.css, patterns/legal.css.
+   Source: Apple-Style web/css and web/patterns (copied, not edited). */
+
+/* ---- patterns/prose.css ---- */
+/* ==========================================================================
+   Article body (pattern 2.8): .as-prose. Requires the core layers.
+   Measure: Latin 65ch (visual heuristic, 60–75ch in the typography guide); CJK
+   40em under :lang(zh) and :lang(ja) (visual heuristic, about 40 characters).
+   Links: this file does NOT set text-decoration on links. base.css underlines
+   links inside running text (WCAG 1.4.1, audit W4). Do not reset all links.
+   Scrolling: long code and wide tables scroll inside their own box, not the page.
+   ========================================================================== */
+.as-prose {
+  box-sizing: border-box; max-inline-size: 65ch; margin-inline: auto; overflow-wrap: break-word;
+  font: 400 1.0625rem/1.6 var(--as-font-text); color: var(--as-label);
+}
+.as-prose:is(:lang(zh), :lang(ja)) { max-inline-size: 40em; font-size: 1.0625rem; line-height: 1.7; word-break: normal; word-break: auto-phrase; line-break: strict; }
+.as-prose > :first-child { margin-block-start: 0; }
+.as-prose h2 { margin: 2em 0 .5em; font: 600 clamp(1.5rem, 1.3rem + .8vw, 2rem)/1.2 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-prose h3 { margin: 1.75em 0 .4em; font: 600 1.25rem/1.3 var(--as-font-text); color: var(--as-label); text-wrap: balance; }
+.as-prose p { margin: 0 0 1.1em; text-wrap: pretty; }
+.as-prose :is(ul, ol) { margin: 0 0 1.1em; padding-inline-start: 1.4em; }
+.as-prose li + li { margin-block-start: .3em; }
+.as-prose a { color: var(--as-link); }
+.as-prose blockquote {
+  margin: 1.5em 0; padding-inline-start: 1em; border-inline-start: 3px solid var(--as-separator-opaque);
+  font-size: 1.1875rem; line-height: 1.5; color: var(--as-label-secondary);
+}
+.as-prose figure { margin: 2em 0; }
+.as-prose img { display: block; max-inline-size: 100%; block-size: auto; height: auto; border-radius: var(--as-radius-m); }
+.as-prose figcaption { margin-block-start: 8px; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+.as-prose :not(pre) > code { padding: .1em .35em; border-radius: var(--as-radius-xs); background: var(--as-fill-tertiary); font-size: .9em; }
+.as-prose code, .as-prose pre { font-family: var(--as-font-mono); }
+.as-prose pre {
+  margin: 0 0 1.1em; padding: 16px 20px; overflow-x: auto; max-inline-size: 100%; tab-size: 2;
+  border-radius: var(--as-radius-m); background: var(--as-bg-secondary); font-size: 14px; line-height: 20px; white-space: pre;
+}
+.as-prose pre code { font: inherit; background: none; }
+/* Wrap a table in .as-prose-table (role="region", tabindex="0", aria-label) so it scrolls inside the article. */
+.as-prose-table { max-inline-size: 100%; margin: 0 0 1.1em; overflow-x: auto; border-radius: var(--as-radius-s); }
+.as-prose table { inline-size: 100%; border-collapse: collapse; font-size: 15px; line-height: 20px; }
+.as-prose caption { padding-block-end: 8px; text-align: start; font-weight: 600; }
+.as-prose th, .as-prose td { padding: 8px 12px; border-block-end: 1px solid var(--as-separator); text-align: start; vertical-align: top; }
+.as-prose th { font-weight: 600; }
+.as-prose hr { margin: 2.5em 0; border: 0; border-block-start: 1px solid var(--as-separator); }
+
+/* ---- patterns/legal.css ---- */
+/* ==========================================================================
+   Legal pages and the 404 page (pattern 2.11). Requires the core layers. Legal
+   text itself is article prose (prose.css); this file adds the table of contents,
+   the last-updated line and the 404 layout. Layout: observed convention and
+   project defaults, not an Apple guideline. The HTTP 404 status and noindex are
+   set by the page and the host, see website-patterns.md.
+   ========================================================================== */
+
+/* Table of contents: a nav with a list of in-page links. The headings it points to are in the article.
+   The html scroll-padding from site-header.css keeps each target below a sticky header. */
+.as-site-toc { box-sizing: border-box; margin: 0 0 32px; padding: 16px 20px; border-radius: var(--as-radius-m); background: var(--as-bg-secondary); }
+.as-site-toc-title { margin: 0 0 8px; font: 600 15px/20px var(--as-font-text); color: var(--as-label); }
+.as-site-toc ol { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font: 400 15px/20px var(--as-font-text); }
+.as-site-toc a { display: inline-flex; align-items: center; min-block-size: 32px; color: var(--as-link); }
+.as-site-toc a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.as-site-toc a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+@media (pointer: coarse) { .as-site-toc a { min-block-size: var(--as-hit-min); } }
+
+/* Last updated: the date is a <time> element. The text is secondary, the value is in the datetime attribute. */
+.as-site-updated { margin: 0 0 24px; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+
+/* 404: a centred message, one search or link row, and no redirect. Text is left-aligned from 48em. */
+.as-site-404 {
+  box-sizing: border-box; display: grid; justify-items: start; gap: 16px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: clamp(48px, 10vw, 120px) var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-404 { padding-inline: var(--as-margin-regular); } }
+/* The large numeral is decoration: the page title and the h1 carry the message, so the numeral is aria-hidden in the markup. */
+.as-site-404-code { margin: 0; font: 600 clamp(3rem, 2rem + 6vw, 6rem)/1 var(--as-font-display); color: var(--as-label-secondary); font-variant-numeric: tabular-nums; }
+.as-site-404-title { margin: 0; font: 600 clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem)/1.15 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-site-404-text { margin: 0; max-inline-size: 36em; font: 400 17px/1.45 var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+.as-site-404-links { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 8px; }
+.as-site-404-search { display: flex; flex-wrap: wrap; gap: 12px; inline-size: 100%; max-inline-size: 36rem; }
+.as-site-404-search .as-form-field { flex: 1 1 16rem; }
+.as-site-404-search .as-button { flex: 0 0 auto; }
+
+@media (forced-colors: active) {
+  .as-site-toc { border: 1px solid CanvasText; }
+  .as-site-toc a { color: LinkText; }
+}

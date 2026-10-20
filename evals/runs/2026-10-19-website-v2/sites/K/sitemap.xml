@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://limeledger.example/</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/features.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/pricing.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/faq.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/blog/</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/blog/why-local-first.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/blog/budget-first-month.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/blog/one-sentence-entry.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/about.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/contact.html</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://limeledger.example/privacy.html</loc><lastmod>2026-10-19</lastmod></url>
+</urlset>

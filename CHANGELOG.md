@@ -34,6 +34,9 @@
 - 演示首页改为先展示参考网站，再进入组件工作台（仓库根目录 `index.html`，打包时原样复制）；打包时由 `scripts/relativize-site.py` 把参考站的根相对路径改写为相对路径，部署在 Pages 子路径下也能加载。新增 `tests/test_relativize_site.py` 与在 `/Apple-Style/` 子路径下检查打包结果的 `tests/browser/pages-package.spec.js`（4.3）。
 - `website.md` 中多页共享页眉页脚的校验脚本改为匹配 `as-site-header` / `as-site-footer`，比较前去掉每页不同的 `aria-current`，并报告缺少页眉页脚的页面（原脚本类名不匹配，且在正确的站点上也会报错）。
 - README 改为以网站为主的定位，新增“网站使用”一节。
+- 修复：`.as-split > [hidden]` 改为 `!important`，否则 `.as-split > .as-inspector` 等规则会让隐藏的分栏面板继续显示（技能自带的桌面演示也受影响）。
+- 修复：焦点在文本框或富文本中时，带 ⌥ 的菜单快捷键不再被当成编辑键（⌥⌘I 不是斜体）。两处都有回归测试，并确认修复前测试失败。
+- 对照重测（4.2）：3 个网站任务各一组启用 / 未启用技能，加一组 Web 应用回归，见 `evals/runs/2026-10-19-website-v2/`。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

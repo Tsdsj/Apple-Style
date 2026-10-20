@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plugins · Tidepool Docs</title>
+<meta name="description" content="Add, pin, update and write Tidepool plugins.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="../index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="../quick-start.html">Quick start</a>
+    <a href="../reference/api.html">API reference</a>
+    <a href="../changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="../index.html">Introduction</a></li>
+          <li><a href="../quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="../guides/configuration.html">Configuration</a></li>
+          <li><a href="../guides/plugins.html" aria-current="page">Plugins</a></li>
+          <li><a href="../guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="../reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="../changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Guides</p><h1>Plugins</h1>
+<p class="lead">Plugins add tools, tasks and checks to Tidepool. A plugin is a versioned package that <code>tidepool sync</code> downloads, verifies and installs.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#adding-a-plugin">Adding a plugin</a></li><li class="lvl2"><a href="#managing-plugins">Managing plugins</a></li><li class="lvl2"><a href="#version-constraints">Version constraints</a></li><li class="lvl2"><a href="#the-lock-file">The lock file</a></li><li class="lvl2"><a href="#writing-a-plugin">Writing a plugin</a></li><li class="lvl2"><a href="#trust-and-security">Trust and security</a></li></ul></details>
+<h2 id="adding-a-plugin">Adding a plugin</h2>
+<p>Add a plugin with the CLI, or write the table yourself:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool plugin add node --version "^2.1"
+added node 2.1.4 (source tidepool/node); run `tidepool sync` to install</code></pre></div>
+<p>This writes a table into <code>tidepool.toml</code>:</p>
+<div class="code"><pre tabindex="0"><code>[plugins.node]
+source = "tidepool/node"
+version = "^2.1"</code></pre></div>
+<p>Then run <code>tidepool sync</code> to download and install the plugin. Without <code>--version</code>, Tidepool pins the newest release and writes a caret range around it, such as <code>^2.1.4</code>.</p>
+<h2 id="managing-plugins">Managing plugins</h2>
+<div class="code"><pre tabindex="0"><code>$ tidepool plugin list
+NAME  VERSION  CONSTRAINT  STATUS
+node  2.1.4    ^2.1        installed
+
+$ tidepool plugin update node    # newest release allowed by the constraint
+$ tidepool plugin remove node</code></pre></div>
+<h2 id="version-constraints">Version constraints</h2>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Constraint</th><th>Accepts</th><th>Notes</th></tr></thead><tbody><tr><td><code>2.1.4</code></td><td>exactly <code>2.1.4</code></td><td>Pins one release.</td></tr><tr><td><code>~2.1</code></td><td><code>2.1.0</code> up to, but not including, <code>2.2.0</code></td><td>Patch updates only.</td></tr><tr><td><code>^2.1</code></td><td><code>2.1.0</code> up to, but not including, <code>3.0.0</code></td><td>Minor and patch updates. The default style.</td></tr><tr><td><code>*</code></td><td>any release</td><td>Not recommended for shared projects.</td></tr></tbody></table></div>
+<h2 id="the-lock-file">The lock file</h2>
+<p><code>tidepool sync</code> writes <code>tidepool.lock</code> with the exact version and checksum of every plugin it installed. Commit the lock file. In CI, run <code>tidepool sync --locked</code>, which fails instead of changing the lock file:</p>
+<div class="code"><pre tabindex="0"><code>[[plugin]]
+name = "node"
+source = "tidepool/node"
+version = "2.1.4"
+sha256 = "9f2c4e7a0d18b6c3e5a2f94d71c0b8e6a3d5f2c19e7b4a80d6c3f1e2b9a7d540"</code></pre></div>
+<h2 id="writing-a-plugin">Writing a plugin</h2>
+<p>A plugin is a directory with a <code>plugin.toml</code> manifest and any executables it needs:</p>
+<div class="code"><pre tabindex="0"><code>my-plugin/
+  plugin.toml
+  bin/
+    after-sync</code></pre></div>
+<p>The manifest names the plugin and the hooks it provides:</p>
+<div class="code"><pre tabindex="0"><code>name = "my-plugin"
+version = "0.1.0"
+description = "Format generated files after sync"
+
+[hooks]
+after_sync = "bin/after-sync"</code></pre></div>
+<p>Hooks are executables. Tidepool starts each hook with a JSON description of the project on standard input, and reads one JSON object from standard output. A non-zero exit status fails the step, and Tidepool prints whatever the hook wrote to standard error. The available hooks are <code>before_sync</code>, <code>after_sync</code>, <code>before_run</code> and <code>after_run</code>.</p>
+<h2 id="trust-and-security">Trust and security</h2>
+<p>Plugins run with your user's permissions. Tidepool checks SHA-256 checksums against the lock file, but it does not sandbox plugin processes. Install only plugins you trust, and read the <code>plugin.toml</code> of a plugin before you add it to a shared project.</p>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="../guides/configuration.html"><span class="small">Previous</span>Configuration</a><a class="next" href="../guides/troubleshooting.html"><span class="small">Next</span>Troubleshooting</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#adding-a-plugin">Adding a plugin</a></li><li class="lvl2"><a href="#managing-plugins">Managing plugins</a></li><li class="lvl2"><a href="#version-constraints">Version constraints</a></li><li class="lvl2"><a href="#the-lock-file">The lock file</a></li><li class="lvl2"><a href="#writing-a-plugin">Writing a plugin</a></li><li class="lvl2"><a href="#trust-and-security">Trust and security</a></li></ul></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

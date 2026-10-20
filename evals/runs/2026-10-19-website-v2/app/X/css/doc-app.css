@@ -1,0 +1,117 @@
+/* ==========================================================================
+   Document window — prototype layer.
+   Loaded after the Apple-Style layers (tokens … window, density,
+   app-preferences). Everything here is specific to this prototype: the
+   document list, the editor and the compact (640–1023 px) inspector overlay.
+   ========================================================================== */
+
+:root {
+  /* The stylesheet's stack is Latin-only. Add CJK faces; no SF font is shipped. */
+  --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
+  /* Document list width. Project default, measured for two-line rows. */
+  --as-list-column-w: 240px;
+}
+@media (min-width: 1280px) { :root { --as-list-column-w: 280px; } }
+
+/* ---- Toolbar in the frame: title shrinks before the controls do ---------- */
+.as-toolbar-window .as-toolbar-title { min-inline-size: 0; flex: 0 1 auto; }
+.as-toolbar-window .as-spacer { flex: 1 1 0; min-inline-size: 0; }
+
+/* ---- Document list (leading content list) -------------------------------- */
+.as-split > .doc-list {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--as-bg);
+  box-shadow: inset -.5px 0 0 var(--as-separator);
+}
+.doc-list-head { display: flex; flex-direction: column; gap: 8px; padding: 10px 10px 8px; flex: none; }
+.doc-list-title { margin: 0; font: 600 13px/16px var(--as-font-text); color: var(--as-label); }
+.doc-list .as-search {
+  min-block-size: 24px; padding: 0 8px; gap: 6px; box-sizing: border-box;
+  border-radius: var(--as-radius-xs);
+  background: var(--as-fill-tertiary);
+  box-shadow: inset 0 0 0 .5px var(--as-separator);
+}
+.doc-list .as-search input { font: 400 13px/16px var(--as-font-text); }
+.doc-list .as-search svg { inline-size: 14px; block-size: 14px; flex: none; color: var(--as-label-secondary); }
+.doc-listbox {
+  flex: 1 1 auto; min-block-size: 0; overflow: auto; overscroll-behavior: contain;
+  padding: 2px 6px 12px; gap: 1px;
+}
+.doc-row {
+  display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+  min-block-size: 44px; padding: 6px 8px; box-sizing: border-box;
+  border-radius: var(--as-radius-xs);
+  font: 400 13px/16px var(--as-font-text); color: var(--as-label);
+  cursor: default;
+}
+.doc-row .doc-name {
+  font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.doc-row .doc-meta { font: 400 11px/14px var(--as-font-text); color: var(--as-label-secondary); }
+.doc-row[aria-selected="true"] { background: var(--as-action-bg); color: var(--as-action-fg); }
+.doc-row[aria-selected="true"] .doc-meta { color: var(--as-action-fg); }
+.doc-row:focus-visible { outline: 2px solid var(--as-accent); outline-offset: -2px; }
+.doc-empty { margin: 0; padding: 16px 12px; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); }
+
+/* ---- Editor (content pane) ----------------------------------------------- */
+.doc-editor-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 16px; box-sizing: border-box;
+  font: 400 11px/14px var(--as-font-text); color: var(--as-label-secondary);
+}
+.doc-page {
+  box-sizing: border-box; margin-inline: auto;
+  padding: 20px clamp(16px, 4vw, 36px) 72px;
+}
+.doc-title {
+  display: block; inline-size: 100%; box-sizing: border-box;
+  margin: 0 0 14px; padding: 2px 0; border: 0; border-radius: 4px;
+  background: transparent; color: var(--as-label);
+  font: 700 24px/30px var(--as-font-text); letter-spacing: 0;
+}
+.doc-title::placeholder { color: var(--as-label-tertiary); }
+.doc-title:focus-visible,
+.doc-body:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 4px; }
+.doc-body {
+  min-block-size: 60dvh; color: var(--as-label);
+  font: 400 15px/24px var(--as-font-text); letter-spacing: 0;
+  overflow-wrap: anywhere; outline: none;
+}
+.doc-body p { margin: 0 0 .85em; }
+
+/* ---- Inspector (trailing pane) ------------------------------------------ */
+.doc-inspector-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-block-size: 36px; box-sizing: border-box;
+}
+.doc-inspector-title {
+  margin: 0; flex: 1 1 auto; min-inline-size: 0; white-space: nowrap;
+  font: 600 13px/16px var(--as-font-text); color: var(--as-label);
+  outline: none;
+}
+.doc-inspector-title:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; border-radius: 4px; }
+.doc-field-label { color: var(--as-label-secondary); white-space: nowrap; }
+.doc-inspector .as-input { min-inline-size: 0; inline-size: 132px; }
+.doc-inspector .as-field > .as-input { margin-inline-start: auto; }
+.doc-actions .as-button { inline-size: 100%; justify-content: center; box-sizing: border-box; }
+.doc-close { flex: none; }
+.doc-actions { display: flex; flex-direction: column; gap: 8px; padding: 8px 0 4px; }
+.doc-close { display: none; }
+
+/* ---- Compact tier (640–1023 px): the inspector becomes an overlay -------- */
+@media (max-width: 1023.98px) {
+  .as-split { position: relative; }
+  /* window.css hides dividers below 1024 px, but its own divider rule (display:block)
+     comes later in the file and wins at 640–1023 px once the window tier starts at 640.
+     Dividers stay hidden here: the list width is fixed and the inspector is an overlay. */
+  .as-split > .as-split-divider { display: none; }
+  .as-split:has(> .doc-list:not([hidden])) { --as-list-w: var(--as-list-column-w); }
+  /* The overlay covers the editor only. The list stays usable beside it. */
+  .as-split > .as-inspector {
+    position: absolute; inset-block: 0; inset-inline: var(--as-list-w, 0px) 0;
+    z-index: 14; flex: none; inline-size: auto;
+    box-shadow: -1px 0 0 var(--as-separator), -10px 0 24px rgb(0 0 0 / .14);
+  }
+  .doc-close { display: inline-flex; }
+}

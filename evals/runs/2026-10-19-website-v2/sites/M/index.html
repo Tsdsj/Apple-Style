@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidepool Docs</title>
+<meta name="description" content="Tidepool is a command-line tool that keeps project tools, plugins and tasks in sync. Install it with one command.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="quick-start.html">Quick start</a>
+    <a href="reference/api.html">API reference</a>
+    <a href="changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="index.html" aria-current="page">Introduction</a></li>
+          <li><a href="quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="guides/configuration.html">Configuration</a></li>
+          <li><a href="guides/plugins.html">Plugins</a></li>
+          <li><a href="guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<h1>Tidepool</h1>
+<p class="lead">Tidepool keeps a project's tools, plugins and tasks in sync across machines. You describe everything in one file, <code>tidepool.toml</code>, that lives next to your code.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#install">Install</a></li><li class="lvl2"><a href="#why-tidepool">Why Tidepool</a></li><li class="lvl2"><a href="#where-to-next">Where to next</a></li></ul></details>
+<h2 id="install">Install</h2>
+<p>Download and run the install script:</p>
+<div class="code"><pre tabindex="0"><code>$ curl -fsSL https://tidepool.example/install.sh | sh</code></pre></div>
+<p>Or install with Homebrew on macOS and Linux:</p>
+<div class="code"><pre tabindex="0"><code>$ brew install tidepool/tap/tidepool</code></pre></div>
+<p>Then confirm the binary is on your path:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool --version
+tidepool 0.5.0 (linux/x86_64)</code></pre></div>
+<h2 id="why-tidepool">Why Tidepool</h2>
+<ul><li><strong>One file.</strong> Tools, plugins and tasks live in <code>tidepool.toml</code>. Review changes to your environment the same way you review code.</li><li><strong>Reproducible.</strong> <code>tidepool sync</code> resolves plugin versions, verifies SHA-256 checksums and records the result in <code>tidepool.lock</code>.</li><li><strong>Small.</strong> Eight commands and no background daemon. Tidepool only uses the network during <code>sync</code> and <code>plugin add</code> or <code>plugin update</code>.</li><li><strong>Portable.</strong> Linux, macOS and Windows through WSL, on x86_64 and arm64.</li></ul>
+<h2 id="where-to-next">Where to next</h2>
+<ul class="cards">
+<li><a href="quick-start.html"><strong>Quick start</strong><span>Create a project and run your first task in about five minutes.</span></a></li>
+<li><a href="guides/configuration.html"><strong>Configuration</strong><span>Tasks, environment variables and local overrides.</span></a></li>
+<li><a href="guides/plugins.html"><strong>Plugins</strong><span>Add, pin and update plugins, and write your own.</span></a></li>
+<li><a href="guides/troubleshooting.html"><strong>Troubleshooting</strong><span>Read doctor output, exit codes and common errors.</span></a></li>
+<li><a href="reference/api.html"><strong>API reference</strong><span>Every command, flag and environment variable.</span></a></li>
+</ul>
+<div class="callout" role="note"><p><strong>Note:</strong> This documentation describes Tidepool 0.5.0. Earlier releases are listed in the changelog.</p></div>
+    </article>
+<nav class="pager" aria-label="Pages"><span></span><a class="next" href="quick-start.html"><span class="small">Next</span>Quick start</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#install">Install</a></li><li class="lvl2"><a href="#why-tidepool">Why Tidepool</a></li><li class="lvl2"><a href="#where-to-next">Where to next</a></li></ul></aside>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

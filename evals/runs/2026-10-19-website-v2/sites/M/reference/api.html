@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API reference · Tidepool Docs</title>
+<meta name="description" content="Every Tidepool command, flag, subcommand and environment variable.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="../index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="../quick-start.html">Quick start</a>
+    <a href="../reference/api.html">API reference</a>
+    <a href="../changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="../index.html">Introduction</a></li>
+          <li><a href="../quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="../guides/configuration.html">Configuration</a></li>
+          <li><a href="../guides/plugins.html">Plugins</a></li>
+          <li><a href="../guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="../reference/api.html" aria-current="page">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="../changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Reference</p><h1>API reference</h1>
+<p class="lead">Tidepool's public interface is its command line and the <code>tidepool.toml</code> schema. This page lists every command, flag and environment variable. Exit codes are listed in <a href="../guides/troubleshooting.html#exit-codes">Troubleshooting</a>.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#synopsis">Synopsis</a></li><li class="lvl2"><a href="#global-flags">Global flags</a></li><li class="lvl2"><a href="#commands">Commands</a></li><li class="lvl3"><a href="#init">init</a></li><li class="lvl3"><a href="#sync">sync</a></li><li class="lvl3"><a href="#run">run</a></li><li class="lvl3"><a href="#plugin">plugin</a></li><li class="lvl3"><a href="#config">config</a></li><li class="lvl3"><a href="#doctor">doctor</a></li><li class="lvl3"><a href="#cache">cache</a></li><li class="lvl3"><a href="#completion">completion</a></li><li class="lvl2"><a href="#environment-variables">Environment variables</a></li></ul></details>
+<h2 id="synopsis">Synopsis</h2>
+<div class="code"><pre tabindex="0"><code>tidepool [GLOBAL FLAGS] COMMAND [COMMAND FLAGS] [ARGUMENTS]</code></pre></div>
+<p>Uppercase words are placeholders. Square brackets mark optional parts.</p>
+<h2 id="global-flags">Global flags</h2>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>--config PATH</code></td><td>searched upward</td><td>Use this config file. Overrides <code>TIDEPOOL_CONFIG</code>.</td></tr><tr><td><code>-v</code>, <code>--verbose</code></td><td>off</td><td>Print more output. Repeat for more detail.</td></tr><tr><td><code>-q</code>, <code>--quiet</code></td><td>off</td><td>Print errors only.</td></tr><tr><td><code>--no-color</code></td><td>off</td><td>Disable colors. <code>NO_COLOR</code> has the same effect.</td></tr><tr><td><code>-h</code>, <code>--help</code></td><td></td><td>Show help for the command and exit.</td></tr><tr><td><code>--version</code></td><td></td><td>Print the version and exit.</td></tr></tbody></table></div>
+<h2 id="commands">Commands</h2>
+<h3 id="init">init</h3>
+<div class="code"><pre tabindex="0"><code>tidepool init [DIR] [--force] [--template NAME]</code></pre></div>
+<p>Creates <code>tidepool.toml</code> in DIR, or in the current directory. Refuses to overwrite an existing file unless <code>--force</code> is given.</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Flag or argument</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>DIR</code></td><td><code>.</code></td><td>Directory to initialize.</td></tr><tr><td><code>--force</code></td><td>off</td><td>Overwrite an existing <code>tidepool.toml</code>.</td></tr><tr><td><code>--template NAME</code></td><td><code>minimal</code></td><td>Starter template. One of <code>minimal</code>, <code>node</code>, <code>python</code> or <code>c</code>.</td></tr></tbody></table></div>
+<h3 id="sync">sync</h3>
+<div class="code"><pre tabindex="0"><code>tidepool sync [--locked] [--offline] [--jobs N]</code></pre></div>
+<p>Resolves, downloads and installs plugins, then writes <code>tidepool.lock</code>.</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>--locked</code></td><td>off</td><td>Fail with exit code 3 if the lock file would change. Use in CI.</td></tr><tr><td><code>--offline</code></td><td>off</td><td>Use only artifacts already in the cache.</td></tr><tr><td><code>--jobs N</code></td><td><code>4</code></td><td>Number of parallel downloads. <code>TIDEPOOL_JOBS</code> sets the same default.</td></tr></tbody></table></div>
+<h3 id="run">run</h3>
+<div class="code"><pre tabindex="0"><code>tidepool run TASK [--timeout DURATION] [--no-deps] [--force] [--dry-run] [-- ARGS...]</code></pre></div>
+<p>Runs a task and its <code>depends_on</code> tasks. Arguments after <code>--</code> are appended to the task's command.</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Flag or argument</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>TASK</code></td><td>required</td><td>Name of a task in <code>[tasks]</code>.</td></tr><tr><td><code>--timeout DURATION</code></td><td>task setting</td><td>Overrides the task's <code>timeout</code>.</td></tr><tr><td><code>--no-deps</code></td><td>off</td><td>Skip <code>depends_on</code> tasks.</td></tr><tr><td><code>--force</code></td><td>off</td><td>Ignore cached results and run the task anyway.</td></tr><tr><td><code>--dry-run</code></td><td>off</td><td>Print the resolved command and exit without running it.</td></tr></tbody></table></div>
+<h3 id="plugin">plugin</h3>
+<div class="code"><pre tabindex="0"><code>tidepool plugin add NAME [--version CONSTRAINT]
+tidepool plugin remove NAME
+tidepool plugin list [--json]
+tidepool plugin update [NAME]</code></pre></div>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Subcommand</th><th>Description</th></tr></thead><tbody><tr><td><code>add NAME</code></td><td>Adds <code>[plugins.NAME]</code> to the configuration. <code>--version CONSTRAINT</code> sets the version range. Without it, Tidepool uses a caret range around the newest release.</td></tr><tr><td><code>remove NAME</code></td><td>Removes the plugin from the configuration and the lock file.</td></tr><tr><td><code>list</code></td><td>Shows the plugins in the project. <code>--json</code> prints JSON.</td></tr><tr><td><code>update [NAME]</code></td><td>Moves plugins to the newest release their constraint allows. Without NAME, updates every plugin.</td></tr></tbody></table></div>
+<h3 id="config">config</h3>
+<div class="code"><pre tabindex="0"><code>tidepool config get KEY
+tidepool config set KEY VALUE
+tidepool config validate [--strict]</code></pre></div>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Subcommand</th><th>Description</th></tr></thead><tbody><tr><td><code>get KEY</code></td><td>Prints the value at a dotted key, for example <code>tasks.build.timeout</code>.</td></tr><tr><td><code>set KEY VALUE</code></td><td>Writes a value into <code>tidepool.toml</code>, leaving comments in place where possible.</td></tr><tr><td><code>validate</code></td><td>Checks the file. <code>--strict</code> treats warnings as errors. Exits with code 3 on errors.</td></tr></tbody></table></div>
+<h3 id="doctor">doctor</h3>
+<div class="code"><pre tabindex="0"><code>tidepool doctor [--json]</code></pre></div>
+<p>Runs health checks on the config, the binary, the cache and each plugin. Exits with code 1 if any check fails. See <a href="../guides/troubleshooting.html">Troubleshooting</a>.</p>
+<h3 id="cache">cache</h3>
+<div class="code"><pre tabindex="0"><code>tidepool cache prune [--older-than DURATION]</code></pre></div>
+<p>Deletes cached downloads and task results that have not been used recently. <code>--older-than</code> defaults to <code>30d</code>.</p>
+<h3 id="completion">completion</h3>
+<div class="code"><pre tabindex="0"><code>tidepool completion SHELL</code></pre></div>
+<p>Prints a completion script for SHELL, which is <code>bash</code>, <code>zsh</code> or <code>fish</code>. For example, <code>tidepool completion bash &gt; ~/.local/share/bash-completion/completions/tidepool</code> installs it for bash.</p>
+<h2 id="environment-variables">Environment variables</h2>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>TIDEPOOL_CONFIG</code></td><td>searched upward</td><td>Path to the configuration file.</td></tr><tr><td><code>TIDEPOOL_HOME</code></td><td><code>~/.tidepool</code></td><td>Directory for the cache and installed plugins.</td></tr><tr><td><code>TIDEPOOL_LOG</code></td><td><code>info</code></td><td>One of <code>error</code>, <code>warn</code>, <code>info</code>, <code>debug</code> or <code>trace</code>.</td></tr><tr><td><code>TIDEPOOL_JOBS</code></td><td><code>4</code></td><td>Default for <code>sync --jobs</code>.</td></tr><tr><td><code>NO_COLOR</code></td><td>unset</td><td>Disables colored output when set to any non-empty value.</td></tr></tbody></table></div>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="../guides/troubleshooting.html"><span class="small">Previous</span>Troubleshooting</a><a class="next" href="../changelog.html"><span class="small">Next</span>Changelog</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#synopsis">Synopsis</a></li><li class="lvl2"><a href="#global-flags">Global flags</a></li><li class="lvl2"><a href="#commands">Commands</a></li><li class="lvl3"><a href="#init">init</a></li><li class="lvl3"><a href="#sync">sync</a></li><li class="lvl3"><a href="#run">run</a></li><li class="lvl3"><a href="#plugin">plugin</a></li><li class="lvl3"><a href="#config">config</a></li><li class="lvl3"><a href="#doctor">doctor</a></li><li class="lvl3"><a href="#cache">cache</a></li><li class="lvl3"><a href="#completion">completion</a></li><li class="lvl2"><a href="#environment-variables">Environment variables</a></li></ul></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick start · Tidepool</title>
+  <meta name="description" content="Install Tidepool, create a project, sign in and run the first sync in about five minutes.">
+  <link rel="canonical" href="https://tidepool.example/quick-start.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tidepool">
+  <meta property="og:title" content="Quick start · Tidepool">
+  <meta property="og:description" content="Install Tidepool, create a project, sign in and run the first sync in about five minutes.">
+  <meta property="og:url" content="https://tidepool.example/quick-start.html">
+  <meta property="og:image" content="https://tidepool.example/img/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+  try { var t = localStorage.getItem("tidepool-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/css/apple-core.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <script src="/js/site-nav.js" defer></script>
+  <script src="/js/site.js" defer></script>
+</head>
+<body class="as-body">
+  <a class="docs-skip" href="#main">Skip to content</a>
+  <header class="as-site-header">
+    <div class="as-site-header-inner">
+      <a class="as-site-brand" href="/">Tidepool</a>
+      <nav class="as-site-nav" data-site-nav aria-label="Primary">
+        <button class="as-site-nav-toggle" type="button" aria-controls="site-links" aria-expanded="false" hidden>Menu</button>
+        <ul class="as-site-nav-links" id="site-links">
+          <li><a href="/quick-start.html" aria-current="page">Quick start</a></li>
+          <li><a href="/guides/configuration.html">Guides</a></li>
+          <li><a href="/reference/api.html">API reference</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <a class="as-button as-button-filled as-button-small" href="/#install">Install</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation">
+      <details class="docs-menu" data-docs-menu open>
+        <summary>Documentation menu</summary>
+        <div class="docs-menu-body">
+          <ul class="docs-groups">
+        <li>
+          <p class="docs-group-title">Getting started</p>
+          <ul class="docs-group-links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html" aria-current="page">Quick start</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Guides</p>
+          <ul class="docs-group-links">
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="docs-group-title">Reference</p>
+          <ul class="docs-group-links">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </li>
+          </ul>
+        </div>
+      </details>
+    </nav>
+    <main id="main" class="docs-main">
+      <p class="docs-kicker">Getting started</p>
+      <h1 class="docs-title">Quick start</h1>
+      <p class="docs-lead">Install Tidepool, create a project, sign in and run your first sync. The steps take about five minutes.</p>
+      <p class="as-site-updated">Last updated <time datetime="2026-09-28">28 September 2026</time></p>
+      <nav class="as-site-toc docs-toc" aria-labelledby="toc-title">
+        <p class="as-site-toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#requirements">Requirements</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#set-up">Set up a project</a></li>
+          <li><a href="#sign-in">Sign in</a></li>
+          <li><a href="#first-sync">Run the first sync</a></li>
+          <li><a href="#next-steps">Next steps</a></li>
+        </ol>
+      </nav>
+      <article class="as-prose docs-article">
+<h2 id="requirements">Requirements</h2>
+        <p>Tidepool runs on these systems:</p>
+        <ul>
+          <li>macOS 13 or later.</li>
+          <li>Linux on x86_64 or arm64, with glibc 2.31 or later.</li>
+        </ul>
+        <p>Syncing needs a network connection and a token from a pool. Changes made while you are offline wait in a local queue. Windows is not supported in version 1.x.</p>
+
+        <h2 id="install">Install</h2>
+        <p>Pick one method. The installer puts the binary in <code>~/.local/bin/tidepool</code> and does not need administrator rights.</p>
+        <h3>Installer</h3>
+        <pre tabindex="0"><code>curl -fsSL https://tidepool.example/install.sh | sh</code></pre>
+        <h3>Homebrew</h3>
+        <pre tabindex="0"><code>brew install tidepool/tap/tidepool</code></pre>
+        <h3>npm</h3>
+        <pre tabindex="0"><code>npm install --global @tidepool/cli</code></pre>
+        <p>If <code>tidepool</code> is not found, open a new terminal. Then check the version:</p>
+        <pre tabindex="0"><code>$ tidepool version
+tidepool 1.4.0 (linux/arm64, built 2026-09-28)</code></pre>
+
+        <h2 id="set-up">Set up a project</h2>
+        <p>Go to the folder you want to sync and run <code>tidepool init</code>. Use <code>--pool</code> to name the pool.</p>
+        <pre tabindex="0"><code>$ cd ~/notes
+$ tidepool init --pool notes-team
+Created tidepool.yaml</code></pre>
+        <p>The file starts with a few settings. You can change any of them later. The configuration guide lists every setting.</p>
+        <pre tabindex="0"><code>pool: notes-team
+root: .
+ignore:
+  - &quot;.git/&quot;
+  - &quot;*.tmp&quot;</code></pre>
+
+        <h2 id="sign-in">Sign in</h2>
+        <p>Create a token on the settings page of your pool, then run <code>tidepool login</code>. The prompt does not show the token as you type it. In a script, pipe the token in with <code>--token-stdin</code> instead.</p>
+        <pre tabindex="0"><code>$ tidepool login
+Token:
+Signed in to notes-team.</code></pre>
+        <div class="docs-note"><p><strong>Note:</strong> Tidepool never writes a token to <code>tidepool.yaml</code>. If a token reaches a repository, revoke it on the settings page and sign in again.</p></div>
+
+        <h2 id="first-sync">Run the first sync</h2>
+        <p>Check what would change before anything is sent:</p>
+        <pre tabindex="0"><code>$ tidepool status
+Pool: notes-team (connected)
+  A  inbox/2026-10-19.md
+  M  plans/q4.md
+2 changes, 0 conflicts
+
+$ tidepool sync --dry-run
+Would upload 2 files (3.4 KB). Nothing was sent.
+
+$ tidepool sync
+Uploaded 2 files. Revision 1 created.</code></pre>
+        <p>Each successful sync creates a revision. List them with <code>tidepool history</code>, and go back to one with <code>tidepool restore</code>.</p>
+
+        <h2 id="next-steps">Next steps</h2>
+        <ul>
+          <li>Set ignore rules, concurrency and timeouts in the <a href="/guides/configuration.html">configuration guide</a>.</li>
+          <li>Add behaviour with the <a href="/guides/plugins.html">plugins guide</a>.</li>
+          <li>If something fails, start with the <a href="/guides/troubleshooting.html">troubleshooting guide</a>.</li>
+        </ul>
+      </article>
+            <nav class="docs-pager" aria-label="Previous and next pages">
+        <a class="docs-pager-prev" href="/"><span class="docs-pager-label">Previous</span><span class="docs-pager-title">Introduction</span></a>
+        <a class="docs-pager-next" href="/guides/configuration.html"><span class="docs-pager-label">Next</span><span class="docs-pager-title">Configuration</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="as-site-footer">
+    <div class="as-site-footer-inner">
+      <nav class="as-site-footer-sitemap" aria-label="Sitemap">
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Docs</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/quick-start.html">Quick start</a></li>
+            <li><a href="/guides/configuration.html">Configuration</a></li>
+            <li><a href="/guides/plugins.html">Plugins</a></li>
+            <li><a href="/guides/troubleshooting.html">Troubleshooting</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Reference</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="/reference/api.html">API reference</a></li>
+            <li><a href="/changelog.html">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="as-site-footer-col">
+          <h2 class="as-site-footer-heading">Project</h2>
+          <ul class="as-site-footer-list">
+            <li><a href="https://tidepool.example/source">Source code</a></li>
+            <li><a href="https://tidepool.example/issues">Issue tracker</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="as-site-footer-legal">
+        <p>&copy; 2026 Tidepool contributors. Released under the MIT License.</p>
+        <fieldset class="docs-theme">
+          <legend>Appearance</legend>
+          <div class="docs-theme-options">
+            <label><input type="radio" name="theme" value="system" checked> System</label>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

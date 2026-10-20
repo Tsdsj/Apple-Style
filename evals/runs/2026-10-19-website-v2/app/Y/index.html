@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh-CN" class="as-root" data-platform="macos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>文档编辑器窗口 · 700 与 1440</title>
+<link rel="stylesheet" href="apple-style.css">
+<style>
+  /* Prototype chrome only. Tokens, controls and the split-view runtime come from
+     apple-style.css and liquid-glass.js. Window layout below is driven by the
+     window's own width (container query), so the same markup works at 700 and 1440. */
+  :root { --dw-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "WenQuanYi Zen Hei", "Microsoft YaHei", sans-serif; }
+  [hidden] { display: none !important; }
+  .sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; padding: 0; border: 0; }
+
+  body.as-body { margin: 0; min-height: 100dvh; background: var(--as-bg-secondary); font-family: var(--dw-font); }
+
+  .proto-head { max-inline-size: 1520px; margin: 0 auto; padding: 28px 20px 8px; color: var(--as-label); }
+  .proto-head h1 { margin: 0 0 6px; font: 700 22px/28px var(--dw-font); }
+  .proto-head p { margin: 0 0 8px; font: 400 13px/19px var(--dw-font); color: var(--as-label-secondary); max-inline-size: 72ch; }
+  .proto-head kbd { font: 500 12px/16px var(--as-font-mono); padding: 1px 6px; border-radius: 5px; background: var(--as-fill-tertiary); color: var(--as-label); }
+
+  .stage { display: flex; flex-direction: column; gap: 40px; padding: 16px 20px 56px; }
+  .win-wrap { overflow-x: auto; padding: 4px 6px 28px; }
+  .win-cap { margin: 0 0 10px; font: 600 13px/18px var(--dw-font); color: var(--as-label-secondary); }
+
+  /* ---------- Window frame ---------- */
+  .dw {
+    --as-font-text: var(--dw-font);
+    --as-font-display: var(--dw-font);
+    container: dw / inline-size;
+    position: relative; display: flex; flex-direction: column; box-sizing: border-box;
+    max-inline-size: none; overflow: hidden; border-radius: 12px;
+    background: var(--as-bg-grouped);
+    box-shadow: 0 0 0 .5px var(--as-separator), 0 18px 40px -14px rgb(0 0 0 / .32);
+    font: 400 13px/16px var(--dw-font); color: var(--as-label);
+  }
+  .dw .dw-toolbar { flex: none; }
+  .dw .dw-doc-name { flex: 0 1 auto; min-inline-size: 0; }
+  .dw .dw-search { inline-size: 200px; }
+  .dw .dw-search input { min-inline-size: 0; }
+  .dw .dw-split { flex: 1 1 auto; min-block-size: 0; display: flex; position: relative; overflow: hidden; }
+
+  /* Pane metrics follow the window width, not the viewport. Starting points from
+     apple-style.css (264/380 at >=1280, 220/300 at 1024-1279), plus a compact tier. */
+  @container dw (min-width: 1280px) {
+    .dw .dw-split { --as-sidebar-w: 264px; --as-inspector-w: 380px; --as-content-min: 480px; }
+  }
+  @container dw (min-width: 1024px) and (max-width: 1279.98px) {
+    .dw .dw-split { --as-sidebar-w: 220px; --as-inspector-w: 300px; --as-content-min: 380px; }
+  }
+  @container dw (max-width: 1023.98px) {
+    .dw .dw-split { --as-sidebar-w: 200px; --as-content-min: 360px; }
+    /* No room for dividers: panes are fixed, the property panel is an overlay. */
+    .dw .as-split > .as-split-divider { display: none; }
+    .dw .as-inspector {
+      position: absolute; inset-block: 0; inset-inline-end: 0; z-index: 15;
+      flex: none; inline-size: 280px; box-sizing: border-box;
+      background: var(--as-bg-secondary);
+      box-shadow: -10px 0 28px -8px rgb(0 0 0 / .28), inset .5px 0 0 var(--as-separator);
+    }
+    .dw .dw-close { display: inline-flex; }
+    .dw .dw-search { inline-size: 150px; }
+  }
+
+  /* ---------- Document list (leading pane) ---------- */
+  .dw .dw-list { display: flex; flex-direction: column; min-block-size: 0; }
+  .dw .dw-list .as-section-title { display: flex; gap: 6px; align-items: baseline; }
+  .dw .dw-list-body { flex: 1 1 auto; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+  .dw .dw-listbox[aria-busy="true"] { opacity: .5; }
+  .dw .dw-listbox .as-option {
+    min-block-size: 44px; padding: 4px 8px; gap: 1px; box-sizing: border-box;
+    flex-direction: column; align-items: stretch; justify-content: center;
+    font: 400 13px/16px var(--dw-font);
+  }
+  .dw .dw-listbox .as-option:not([aria-selected="true"]):hover { background: var(--as-bg); }
+  .dw .dw-doc-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dw .dw-doc-meta { font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dw .dw-empty { margin: 0; padding: 24px 14px; text-align: center; font: 400 13px/18px var(--dw-font); color: var(--as-label-secondary); }
+  .dw .dw-empty strong { display: block; margin-block-end: 4px; color: var(--as-label); font-weight: 600; }
+  .dw .dw-empty .as-button { margin-block-start: 10px; }
+  .dw .dw-skeleton { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+  .dw .dw-skeleton span { display: block; block-size: 10px; border-radius: 4px; background: var(--as-fill-tertiary); }
+  .dw .dw-skeleton span:nth-child(2n) { inline-size: 62%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .dw .dw-skeleton span { animation: dw-pulse 1.4s var(--as-ease-soft) infinite; }
+  }
+  @keyframes dw-pulse { 50% { opacity: .45; } }
+
+  /* ---------- Editor (middle pane) ---------- */
+  .dw .dw-editor { display: flex; flex-direction: column; background: var(--as-bg); }
+  .dw .dw-editor-head { flex: none; box-sizing: border-box; inline-size: 100%; max-inline-size: 672px; min-block-size: 26px; margin-inline: auto; padding: 8px 24px 0; font: 400 11px/14px var(--dw-font); color: var(--as-label-secondary); }
+  .dw .dw-page { box-sizing: border-box; inline-size: 100%; max-inline-size: 672px; margin-inline: auto; padding: 8px 24px 40px; }
+  .dw .dw-title {
+    display: block; box-sizing: border-box; inline-size: 100%; margin: 0; padding: 4px 4px;
+    border: 0; border-radius: 6px; background: transparent; color: var(--as-label);
+    font: 600 26px/32px var(--dw-font); letter-spacing: 0; outline: none;
+  }
+  .dw .dw-title::placeholder { color: var(--as-label-tertiary); }
+  .dw .dw-body {
+    display: block; box-sizing: border-box; inline-size: 100%; min-block-size: 340px; margin-block-start: 12px; padding: 4px;
+    border: 0; border-radius: 6px; background: transparent; color: var(--as-label); resize: none; outline: none;
+    font: 400 15px/24px var(--dw-font); letter-spacing: 0;
+  }
+  .dw :is(.dw-title, .dw-body):focus-visible { box-shadow: 0 0 0 2px var(--as-accent); }
+  .dw :is(.dw-title, .dw-body):disabled { opacity: .5; }
+
+  /* ---------- Properties (trailing pane, overlay when compact) ---------- */
+  .dw .dw-props { display: flex; flex-direction: column; box-sizing: border-box; padding: 4px 14px 16px; }
+  .dw .dw-props-head { display: flex; align-items: center; gap: 8px; min-block-size: 30px; }
+  .dw .dw-props-title { flex: 1; margin: 0; font: 600 13px/16px var(--dw-font); color: var(--as-label); outline: none; }
+  .dw .dw-props-title:focus-visible { box-shadow: 0 0 0 2px var(--as-accent); border-radius: 4px; }
+  .dw .dw-close { display: none; align-items: center; justify-content: center; inline-size: 24px; block-size: 24px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--as-label-secondary); cursor: default; }
+  .dw .dw-close:hover { background: var(--as-fill-tertiary); }
+  .dw .dw-close svg { inline-size: 14px; block-size: 14px; }
+  .dw .dw-field { display: flex; align-items: center; gap: 12px; min-block-size: 30px; font: 400 13px/16px var(--dw-font); }
+  .dw .dw-field + .dw-field { box-shadow: inset 0 .5px 0 var(--as-separator); }
+  .dw .dw-field > :first-child { flex: 0 0 48px; color: var(--as-label-secondary); }
+  .dw .dw-field > :last-child { flex: 1 1 auto; min-inline-size: 0; }
+  .dw .dw-field .as-input { inline-size: 100%; box-sizing: border-box; }
+  .dw .dw-field.dw-static > :last-child { text-align: end; font-variant-numeric: tabular-nums; }
+  .dw .dw-field.dw-switch > :first-child { flex: 1 1 auto; }
+  .dw .dw-field.dw-switch > .as-toggle { flex: 0 0 51px; inline-size: 51px; margin-inline-start: auto; }
+  .dw .dw-props .as-inspector-title { margin: 14px 0 6px; }
+
+  /* ---------- Split dividers are controls (runtime gives them keyboard + ARIA) ---------- */
+  .dw .as-split > .as-split-divider { cursor: col-resize; }
+
+  .win-foot { max-inline-size: 1520px; margin: 0 auto; padding: 0 20px 48px; font: 400 12px/18px var(--dw-font); color: var(--as-label-secondary); }
+</style>
+</head>
+<body class="as-body">
+
+<header class="proto-head">
+  <h1>macOS 文档编辑器：窗口设计原型（700 与 1440）</h1>
+  <p>同一套窗口结构渲染两次。布局由窗口自身宽度决定（容器查询），不由浏览器视口决定。700 宽时文档列表与编辑区常显，属性以浮层打开；1440 宽时三栏同时可见。</p>
+  <p>
+    <kbd>⌥⌘S</kbd> 显示或隐藏文档列表 · <kbd>⌥⌘I</kbd> 显示或隐藏属性 · <kbd>F6</kbd> / <kbd>⇧F6</kbd> 在区域之间循环 · <kbd>Esc</kbd> 关闭 700 宽时的属性浮层
+  </p>
+</header>
+
+<main class="stage" id="stage"></main>
+
+<footer class="win-foot">
+  原型在 Chromium 中验证。快捷键为网页近似：浏览器保留的组合（如 ⌘N、⌘F）未绑定，原生应用应使用系统标准快捷键。
+</footer>
+
+<!-- One window, cloned for each width. Markup carries no IDs, so two copies do not clash. -->
+<template id="win-tpl">
+  <div class="win-wrap" role="group" aria-labelledby="">
+    <h2 class="win-cap"></h2>
+    <div class="dw">
+
+      <div class="as-toolbar as-toolbar-window dw-toolbar" role="group">
+        <div class="as-toolbar-group">
+          <button class="as-item dw-list-toggle" type="button" aria-pressed="true" aria-label="隐藏文档列表">
+            <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M9 5v14"/></svg>
+          </button>
+        </div>
+        <div class="as-toolbar-title dw-doc-name" aria-live="off">季度规划草案</div>
+        <div class="as-spacer"></div>
+        <div class="as-toolbar-group">
+          <button class="as-item dw-new" type="button" aria-label="新建文档">
+            <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <div class="as-toolbar-group">
+          <button class="as-item dw-props-toggle" type="button" aria-pressed="true" aria-label="隐藏属性">
+            <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M15 5v14"/></svg>
+          </button>
+        </div>
+        <div class="as-search dw-search" role="search" aria-label="">
+          <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+          <input class="dw-search-input" type="search" aria-label="搜索文档" placeholder="搜索">
+        </div>
+        <button class="as-button as-button-filled as-button-small dw-share" type="button">共享</button>
+      </div>
+
+      <div class="as-split dw-split">
+
+        <aside class="as-sidebar dw-list" aria-label="文档列表" aria-busy="true" tabindex="-1">
+          <div class="as-section-title">文档 <span class="dw-count as-secondary"></span></div>
+          <div class="dw-list-body">
+            <div class="dw-skeleton" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="as-listbox dw-listbox" role="listbox" aria-label="文档列表" tabindex="-1" hidden></div>
+            <div class="dw-empty" hidden></div>
+          </div>
+        </aside>
+
+        <div class="as-split-divider dw-div-list" role="separator" aria-label="调整文档列表宽度" data-min="180" data-max="360"></div>
+
+        <section class="as-content dw-editor" aria-label="编辑区">
+          <div class="dw-editor-head dw-save" aria-live="off"></div>
+          <div class="dw-page">
+            <input class="dw-title" type="text" aria-label="文档标题" placeholder="标题">
+            <textarea class="dw-body" aria-label="正文" rows="12" spellcheck="false"></textarea>
+          </div>
+        </section>
+
+        <div class="as-split-divider dw-div-props" role="separator" aria-label="调整属性宽度" data-min="240" data-max="520"></div>
+
+        <aside class="as-inspector dw-props" aria-label="属性">
+          <div class="dw-props-head">
+            <h3 class="dw-props-title" tabindex="-1">属性</h3>
+            <button class="dw-close" type="button" aria-label="关闭属性">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+            </button>
+          </div>
+          <div class="as-inspector-title">文档</div>
+          <label class="dw-field"><span>状态</span>
+            <select class="as-input dw-f-status">
+              <option>草稿</option><option>审阅中</option><option>已发布</option>
+            </select>
+          </label>
+          <label class="dw-field"><span>标签</span>
+            <input class="as-input dw-f-tags" type="text" autocomplete="off">
+          </label>
+          <div class="dw-field dw-static"><span>字数</span><span class="dw-f-words"></span></div>
+          <div class="dw-field dw-static"><span>创建</span><span class="dw-f-created"></span></div>
+          <div class="dw-field dw-static"><span>修改</span><span class="dw-f-modified"></span></div>
+          <div class="as-inspector-title">共享</div>
+          <div class="dw-field dw-switch">
+            <span>允许评论</span>
+            <button class="as-toggle dw-comments" type="button" role="switch" aria-checked="true" aria-label="允许评论"><span class="as-knob"></span></button>
+          </div>
+        </aside>
+
+      </div>
+
+      <p class="sr-only dw-live" role="status"></p>
+    </div>
+  </div>
+</template>
+
+<script src="liquid-glass.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const SEED = [
+    { id: 'd1', title: '季度规划草案', when: '今天 14:20', status: '草稿', tags: '规划, Q4', created: '10月2日',
+      body: '第四季度的目标是把编辑器的首次打开时间缩短到 1 秒以内，并完成离线草稿的同步。\n\n本稿列出三个里程碑：性能基线、同步协议和评审流程。每个里程碑都需要负责人和截止日期。' },
+    { id: 'd2', title: '产品评审纪要', when: '今天 09:05', status: '已发布', tags: '评审', created: '10月18日',
+      body: '参会：设计、工程、产品。\n\n结论：保留现有的文档列表结构，属性面板改为可隐藏。' },
+    { id: 'd3', title: '发布清单', when: '昨天', status: '审阅中', tags: '发布', created: '10月15日',
+      body: '1. 检查键盘焦点顺序\n2. 验证隐藏面板的恢复路径\n3. 复核浅色与深色外观' },
+    { id: 'd4', title: '用户访谈提纲', when: '10月14日', status: '草稿', tags: '研究', created: '10月10日',
+      body: '请受访者描述最近一次整理文档的过程，记录他们在哪里停下来。' },
+    { id: 'd5', title: '设计原则笔记', when: '10月12日', status: '已发布', tags: '设计', created: '9月28日',
+      body: '内容优先，控件其次。玻璃材质只用于导航和控制层，不用于正文。' },
+    { id: 'd6', title: '周报模板', when: '9月30日', status: '草稿', tags: '模板', created: '9月30日',
+      body: '本周完成\n\n下周计划\n\n风险与阻塞' }
+  ];
+
+  const SIZES = [
+    { w: 700, h: 620, cap: 'A · 700 × 620 · 紧凑：列表与编辑区常显，属性以浮层打开' },
+    { w: 1440, h: 900, cap: 'B · 1440 × 900 · 完整：三栏，属性固定在右侧' }
+  ];
+
+  const tpl = document.getElementById('win-tpl');
+  const stage = document.getElementById('stage');
+  let n = 0;
+  SIZES.forEach(sz => {
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    const capId = 'win-cap-' + (++n);
+    const cap = node.querySelector('.win-cap');
+    cap.id = capId; cap.textContent = sz.cap;
+    node.setAttribute('aria-labelledby', capId);
+    const dw = node.querySelector('.dw');
+    dw.style.width = sz.w + 'px';
+    dw.style.height = sz.h + 'px';
+    dw.dataset.size = String(sz.w);
+    stage.appendChild(node);
+    mount(dw, sz.w);
+  });
+
+  function mount(dw, width) {
+    const q = s => dw.querySelector(s);
+    const P = (width < 1024 ? 'A 窗口 700' : 'B 窗口 1440') + ' · ';
+    q('.dw-list').setAttribute('aria-label', P + '文档列表');
+    q('.dw-editor').setAttribute('aria-label', P + '编辑区');
+    q('.dw-props').setAttribute('aria-label', P + '属性');
+    q('.dw-search').setAttribute('aria-label', P + '搜索');
+    q('.dw-toolbar').setAttribute('aria-label', P + '工具栏');
+    const toolbar = q('.dw-toolbar');
+    const listBtn = q('.dw-list-toggle'), propsBtn = q('.dw-props-toggle');
+    const newBtn = q('.dw-new'), shareBtn = q('.dw-share');
+    const search = q('.dw-search-input'), docName = q('.dw-doc-name');
+    const list = q('.dw-list'), lb = q('.dw-listbox'), count = q('.dw-count');
+    const skel = q('.dw-skeleton'), empty = q('.dw-empty'), listDiv = q('.dw-div-list');
+    const editor = q('.dw-editor'), title = q('.dw-title'), body = q('.dw-body'), save = q('.dw-save');
+    const props = q('.dw-props'), propsTitle = q('.dw-props-title'), propsClose = q('.dw-close');
+    const propsDiv = q('.dw-div-props');
+    const fStatus = q('.dw-f-status'), fTags = q('.dw-f-tags'), fWords = q('.dw-f-words');
+    const fCreated = q('.dw-f-created'), fModified = q('.dw-f-modified');
+    const live = q('.dw-live');
+
+    const S = { docs: SEED.map(d => ({ ...d })), curId: 'd1', filter: '', listState: 'loading', saveT: 0 };
+    const overlay = () => dw.offsetWidth < 1024;
+    const words = s => s.replace(/\s+/g, '').length;
+    const fmt = v => v.toLocaleString('zh-CN');
+    const docById = id => S.docs.find(d => d.id === id);
+    const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    function say(msg) {
+      live.textContent = '';
+      requestAnimationFrame(() => { live.textContent = msg; });
+    }
+
+    /* ---- Document list: loading, empty, error, populated ---- */
+    function setListState(st) {
+      S.listState = st;
+      dw.dataset.listState = st;
+      list.setAttribute('aria-busy', String(st === 'loading'));
+    }
+    function renderList() {
+      const st = S.listState;
+      skel.hidden = st !== 'loading';
+      if (st === 'loading') { lb.hidden = true; empty.hidden = true; return; }
+      count.textContent = String(S.docs.length);
+      if (st === 'error') {
+        lb.hidden = true; empty.hidden = false;
+        empty.innerHTML = '<strong>无法读取文档列表</strong>请检查网络连接后重试。<br><button class="as-button as-button-gray as-button-small dw-retry" type="button">重试</button>';
+        return;
+      }
+      const shown = S.docs.filter(d => !S.filter || d.title.includes(S.filter));
+      if (!S.docs.length) {
+        lb.hidden = true; empty.hidden = false;
+        empty.innerHTML = '<strong>还没有文档</strong>新建一个文档开始写作。<br><button class="as-button as-button-filled as-button-small dw-new-empty" type="button">新建文档</button>';
+        return;
+      }
+      if (!shown.length) {
+        lb.hidden = true; empty.hidden = false;
+        empty.innerHTML = '<strong>没有匹配的文档</strong>换个关键词再试。';
+        return;
+      }
+      empty.hidden = true; lb.hidden = false;
+      lb.innerHTML = shown.map(d =>
+        `<div class="as-option dw-doc" role="option" tabindex="-1" data-id="${d.id}" aria-selected="${d.id === S.curId}">` +
+        `<span class="dw-doc-title">${esc(d.title)}</span>` +
+        `<span class="as-secondary dw-doc-meta">${esc(d.when)} · ${fmt(words(d.body))} 字</span></div>`
+      ).join('');
+    }
+    function load() {
+      setListState('loading'); renderList();
+      setTimeout(() => { setListState('populated'); renderList(); }, 450);
+    }
+
+    /* ---- Editor and properties ---- */
+    function openDoc(id, opts) {
+      const d = docById(id); if (!d) return;
+      S.curId = id;
+      title.value = d.title; body.value = d.body;
+      title.disabled = body.disabled = false;
+      docName.textContent = d.title;
+      save.textContent = '已自动保存 · ' + d.when;
+      fStatus.value = d.status; fTags.value = d.tags;
+      fWords.textContent = fmt(words(d.body)); fCreated.textContent = d.created; fModified.textContent = d.when;
+      lb.querySelectorAll('.as-option').forEach(o => o.setAttribute('aria-selected', String(o.dataset.id === id)));
+      if (opts && opts.focus) title.focus();
+    }
+    function queueSave() {
+      save.textContent = '正在编辑…';
+      clearTimeout(S.saveT);
+      S.saveT = setTimeout(() => { save.textContent = '已自动保存 · 刚刚'; }, 700);
+    }
+    function createDoc() {
+      const d = { id: 'n' + Date.now(), title: '未命名文档', when: '刚刚', status: '草稿', tags: '', created: '今天', body: '' };
+      S.docs.unshift(d); S.filter = ''; search.value = '';
+      setListState('populated'); renderList(); openDoc(d.id, { focus: true });
+      say('已新建文档');
+    }
+
+    /* ---- Panes: hide, show, and where focus goes ---- */
+    function setPane(name, open, reason) {
+      const isList = name === 'list';
+      const pane = isList ? list : props;
+      const btn = isList ? listBtn : propsBtn;
+      const div = isList ? listDiv : propsDiv;
+      const label = isList ? '文档列表' : '属性';
+      if (open === !pane.hidden) return;
+      if (!open) {
+        const hadFocus = pane.contains(document.activeElement);
+        pane.hidden = true; div.hidden = true;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', '显示' + label);
+        // Never leave focus on a hidden element: hand it to the control that restores the pane.
+        if (hadFocus) btn.focus();
+        say(label + '已隐藏');
+      } else {
+        pane.hidden = false; div.hidden = false;
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-label', '隐藏' + label);
+        say(label + '已显示');
+        // Keyboard restore moves focus into the pane. In compact width the property
+        // panel is an overlay, so it always takes focus, like a popover.
+        if (reason === 'keyboard' || (!isList && overlay())) {
+          requestAnimationFrame(() => focusPane(name));
+        }
+      }
+    }
+    // The list region always has somewhere to land: the selected row, the listbox,
+    // the retry or create action in an empty or error state, or the pane itself.
+    function listTarget() {
+      if (!lb.hidden) return lb.querySelector('[aria-selected="true"]') || lb;
+      if (!empty.hidden) return empty.querySelector('button') || list;
+      return list;   // loading: nothing to focus yet, the pane takes focus
+    }
+    function focusPane(name) {
+      if (name === 'list') {
+        listTarget().focus();
+      } else if (overlay()) {
+        propsTitle.focus();
+      } else {
+        (props.querySelector('select, input, .as-toggle') || propsTitle).focus();
+      }
+    }
+    function cycle(dir) {
+      const zones = [
+        { box: toolbar, target: () => listBtn, on: true },
+        { box: list, target: listTarget, on: !list.hidden },
+        { box: editor, target: () => title, on: true },
+        { box: props, target: () => overlay() ? propsTitle : (props.querySelector('select, input') || propsTitle), on: !props.hidden }
+      ].filter(z => z.on);
+      const i = zones.findIndex(z => z.box.contains(document.activeElement));
+      const next = i < 0 ? (dir > 0 ? zones[0] : zones[zones.length - 1]) : zones[(i + dir + zones.length) % zones.length];
+      next.target().focus();
+    }
+
+    /* ---- Wiring ---- */
+    listBtn.addEventListener('click', e => setPane('list', list.hidden, e.detail === 0 ? 'keyboard' : 'pointer'));
+    propsBtn.addEventListener('click', e => setPane('props', props.hidden, e.detail === 0 ? 'keyboard' : 'pointer'));
+    propsClose.addEventListener('click', () => setPane('props', false, 'pointer'));
+    newBtn.addEventListener('click', createDoc);
+    shareBtn.addEventListener('click', () => say('已复制共享链接'));
+    dw.addEventListener('click', e => {
+      if (e.target.closest('.dw-new-empty')) createDoc();
+      if (e.target.closest('.dw-retry')) { load(); }
+    });
+    dw.addEventListener('dw:error', () => { setListState('error'); renderList(); });
+
+    lb.addEventListener('change', () => {
+      const sel = lb.querySelector('[aria-selected="true"]');
+      if (sel) openDoc(sel.dataset.id);
+    });
+    search.addEventListener('input', () => { S.filter = search.value.trim(); renderList(); });
+
+    title.addEventListener('input', () => {
+      const d = docById(S.curId); if (!d) return;
+      d.title = title.value || '无标题';
+      docName.textContent = d.title;
+      const t = lb.querySelector(`[data-id="${d.id}"] .dw-doc-title`); if (t) t.textContent = d.title;
+      queueSave();
+    });
+    body.addEventListener('input', () => {
+      const d = docById(S.curId); if (!d) return;
+      d.body = body.value;
+      fWords.textContent = fmt(words(d.body));
+      const m = lb.querySelector(`[data-id="${d.id}"] .dw-doc-meta`);
+      if (m) m.textContent = `${d.when} · ${fmt(words(d.body))} 字`;
+      queueSave();
+    });
+    fStatus.addEventListener('change', () => { const d = docById(S.curId); if (d) d.status = fStatus.value; });
+    fTags.addEventListener('input', () => { const d = docById(S.curId); if (d) d.tags = fTags.value; });
+
+    dw.addEventListener('keydown', e => {
+      const mod = (e.metaKey || e.ctrlKey) && e.altKey;
+      if (mod && e.code === 'KeyS') { e.preventDefault(); setPane('list', list.hidden, 'keyboard'); }
+      else if (mod && e.code === 'KeyI') { e.preventDefault(); setPane('props', props.hidden, 'keyboard'); }
+      else if (e.key === 'F6') { e.preventDefault(); cycle(e.shiftKey ? -1 : 1); }
+      else if (e.key === 'Escape' && overlay() && !props.hidden) { e.preventDefault(); setPane('props', false, 'keyboard'); }
+    });
+    // The compact property overlay is transient: a pointer press outside it dismisses it.
+    document.addEventListener('pointerdown', e => {
+      if (!overlay() || props.hidden) return;
+      if (props.contains(e.target) || propsBtn.contains(e.target)) return;
+      setPane('props', false, 'pointer');
+    });
+
+    // Initial state: compact windows start with the overlay closed.
+    if (width < 1024) {
+      props.hidden = true; propsDiv.hidden = true;
+      propsBtn.setAttribute('aria-pressed', 'false');
+      propsBtn.setAttribute('aria-label', '显示属性');
+    }
+
+    LiquidGlass.init(dw);
+    openDoc('d1');
+    load();
+  }
+})();
+</script>
+</body>
+</html>

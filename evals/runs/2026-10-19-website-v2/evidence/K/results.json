@@ -1,0 +1,297 @@
+{
+  "tool": "check-site",
+  "site": "/home/user/Apple-Style/evals/runs/2026-10-19-website-v2/sites/K",
+  "base": "http://127.0.0.1:9503",
+  "seconds": 92,
+  "widths": [
+    320,
+    390,
+    768,
+    1024,
+    1440
+  ],
+  "pages": [
+    "/index.html",
+    "/features.html",
+    "/pricing.html",
+    "/faq.html",
+    "/blog/index.html",
+    "/about.html",
+    "/contact.html",
+    "/blog/why-local-first.html",
+    "/blog/budget-first-month.html",
+    "/blog/one-sentence-entry.html",
+    "/privacy.html"
+  ],
+  "axe": true,
+  "lighthouse": true,
+  "counts": {
+    "pass": 12,
+    "not checked": 1
+  },
+  "checks": [
+    {
+      "id": "1",
+      "item": "Crawl and anchors",
+      "name": "Broken internal links and #anchors",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "11 pages, 244 internal links, 23 #anchors: all resolve",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "pages": 11,
+        "links": 244,
+        "hashLinks": 23,
+        "broken": 0,
+        "missingAnchors": 0
+      }
+    },
+    {
+      "id": "2",
+      "item": "Per-page metadata",
+      "name": "Metadata, headings and landmarks per page",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "11 pages: metadata, one h1, no skipped levels, landmarks and skip link present",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {}
+    },
+    {
+      "id": "3",
+      "item": "320 px overflow",
+      "name": "Horizontal overflow at each width",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "55 page × width combinations (320, 390, 768, 1024, 1440 px): no horizontal overflow",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "combinations": 55,
+        "widths": [
+          320,
+          390,
+          768,
+          1024,
+          1440
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "item": "Running-text links",
+      "name": "Links in running text distinguishable without colour",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "4 running-text link(s): each underlined, or with a border or background",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "runningTextLinks": 4
+      }
+    },
+    {
+      "id": "5",
+      "item": "axe light and dark",
+      "name": "axe-core WCAG 2.2 AA and best practice, light and dark",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "axe ran 22 page × scheme times: no serious or critical violations",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "runs": 22,
+        "rules": []
+      }
+    },
+    {
+      "id": "6",
+      "item": "Keyboard narrow menu",
+      "name": "Narrow-screen menu: Tab, Enter, Esc, focus return",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "[data-site-nav] button[aria-controls] reached by Tab (3 presses); Enter opens, Esc closes, focus returns",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "toggle": "[data-site-nav] button[aria-controls]",
+        "presses": 3,
+        "open": {
+          "expanded": "true",
+          "links": 6
+        },
+        "esc": {
+          "expanded": "false",
+          "links": 0,
+          "focus": true
+        }
+      }
+    },
+    {
+      "id": "7",
+      "item": "Focus visible",
+      "name": "Focus indicator on the first 20 Tab stops",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "20 Tab stops, each with a visible focus indicator",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "stops": 20
+      }
+    },
+    {
+      "id": "8",
+      "item": "Form empty and valid submit",
+      "name": "Form errors and focus; success message",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "empty submit marks and focuses the first invalid field; valid submit shows live region or success element: \"已收到你的消息，我们会在两个工作日内回复。\"",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "page": "/contact.html",
+        "fields": 4,
+        "empty": {
+          "count": 3,
+          "first": "name",
+          "focusOnFirst": false,
+          "focusOnSummary": true,
+          "announced": true
+        },
+        "success": {
+          "signal": "live region or success element",
+          "text": "已收到你的消息，我们会在两个工作日内回复。"
+        },
+        "endpoint": []
+      }
+    },
+    {
+      "id": "9",
+      "item": "Deep-path 404",
+      "name": "Missing deep path: 404, noindex, styles",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "/a/b/c/missing-xyz returns 404 with noindex; styles match the home page",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "status": 404,
+        "noindex": true,
+        "failedCss": 0,
+        "homeStyle": {
+          "fontFamily": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Hiragino Sans GB\", \"Noto Sans CJK SC\", \"Source Han Sans SC\", \"Microsoft YaHei\", \"WenQuanYi Zen Hei\", system-ui, \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)"
+        },
+        "deepStyle": {
+          "fontFamily": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Hiragino Sans GB\", \"Noto Sans CJK SC\", \"Source Han Sans SC\", \"Microsoft YaHei\", \"WenQuanYi Zen Hei\", system-ui, \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)"
+        }
+      }
+    },
+    {
+      "id": "10",
+      "item": "No-JS browsing",
+      "name": "Primary navigation and main content without JavaScript",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "11 pages at 390 and 1280 px without JS: primary nav reachable, main content present",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "loads": 22
+      }
+    },
+    {
+      "id": "11",
+      "item": "Preferences",
+      "name": "Reduced motion and forced colours",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "reduced motion: no animation or transition over 10 ms on load; forced colours: controls stay visible",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "forcedControls": 26
+      }
+    },
+    {
+      "id": "12",
+      "item": "Budget and LCP",
+      "name": "Render-blocking CSS and JS budget; optional Lighthouse",
+      "ran": true,
+      "status": "not checked",
+      "reason": "LCP 1357 ms (median of 3, mobile) needs the same page without the reference code as baseline (website.md); not compared here",
+      "summary": "render-blocking CSS ≈ 43.3 KB minified (budget 80 KB); JS 3.6 KB as served; Lighthouse median LCP 1357 ms, performance 86 (3 runs)",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "cssRawBytes": 76614,
+        "cssMinifiedEstimateBytes": 43292,
+        "jsRawBytes": 3603,
+        "blockingScripts": [],
+        "cssBudgetBytes": 80000,
+        "jsBudgetBytes": 5000,
+        "lighthouse": {
+          "runs": [
+            {
+              "lcp": 1356.646,
+              "performance": 86
+            },
+            {
+              "lcp": 1503.97,
+              "performance": 86
+            },
+            {
+              "lcp": 1356.124,
+              "performance": 100
+            }
+          ],
+          "medianLcpMs": 1356.646,
+          "medianPerformance": 86
+        }
+      }
+    },
+    {
+      "id": "13",
+      "item": "Console and requests",
+      "name": "Console errors, failed and external requests",
+      "ran": true,
+      "status": "pass",
+      "reason": "",
+      "summary": "11 pages: no console errors, page errors or failed requests; external origins listed: 0",
+      "evidence": [],
+      "evidenceTotal": 0,
+      "notes": [],
+      "data": {
+        "externalOrigins": []
+      }
+    }
+  ]
+}

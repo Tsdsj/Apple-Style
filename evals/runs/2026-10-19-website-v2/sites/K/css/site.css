@@ -1,0 +1,148 @@
+/* ==========================================================================
+   青柠记账 site layer. Loaded last, so it overrides the Apple-Style bundles.
+   Holds: Chinese type, the lime brand colours, the page layout, and the few
+   rules this site adds to the skill patterns. Everything else comes from
+   apple-core.css, landing.css, article.css, listing.css and forms.css.
+   ========================================================================== */
+
+/* ---- Type. Chinese faces come before the generic family (website.md, Fonts). ---- */
+:root {
+  --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "WenQuanYi Zen Hei", system-ui,
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "WenQuanYi Zen Hei", system-ui,
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* ---- Brand: lime. Text pairs were measured on the page backgrounds (README). ---- */
+  --as-accent: light-dark(#3f6b00, #bfe86b);          /* 6.34:1 on white, 5.68:1 on bg-secondary */
+  --as-accent-on-tint: light-dark(#2f5300, #bfe86b);
+  --as-action-bg: light-dark(#3f6b00, #4a7a00);       /* white text: 6.34:1 / 5.15:1 */
+  --as-lime: #b6e33a;                                  /* decoration only: logo and dots, never text */
+}
+
+/* ---- Chinese text: the Latin tracking and the Latin line heights are wrong for it. ---- */
+html:lang(zh-Hans) body * { letter-spacing: 0; }
+html:lang(zh-Hans) body :is(p, li, dd, dt, td, th, summary, figcaption, label) { line-height: 1.7; }
+html:lang(zh-Hans) body :is(h1, h2, h3) { line-height: 1.3; }
+
+/* ---- Skip link: present for keyboard users, off-screen until it takes focus. ---- */
+.as-skip-link {
+  position: absolute; inset-inline-start: 16px; inset-block-start: 8px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--as-radius-s);
+  background: var(--as-action-bg); color: var(--as-action-fg); text-decoration: none;
+  font: 600 15px/20px var(--as-font-text); transform: translateY(-200%);
+}
+.as-skip-link:focus-visible { transform: none; outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* ---- Header brand with the logo mark. ---- */
+.as-site-brand { gap: 10px; }
+.as-site-logo { inline-size: 26px; block-size: 26px; flex: none; }
+
+/* ---- Page layout ---- */
+.as-site-container {
+  box-sizing: border-box; max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding-inline: var(--as-margin); padding-block-end: clamp(56px, 8vw, 112px);
+}
+@media (min-width: 48em) { .as-site-container { padding-inline: var(--as-margin-regular); } }
+/* Story text inside a section: left edge on the same line as the section heading, 40em measure. */
+.as-site-story { max-inline-size: 40em; margin-inline: 0; }
+
+.as-site-page-head {
+  box-sizing: border-box; max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: clamp(40px, 6vw, 84px) var(--as-margin) clamp(24px, 3vw, 40px);
+}
+@media (min-width: 48em) { .as-site-page-head { padding-inline: var(--as-margin-regular); } }
+.as-site-page-title {
+  margin: 0 0 16px; font: 600 clamp(2.25rem, 1.6rem + 3vw, 4rem)/1.2 var(--as-font-display); letter-spacing: 0;
+  color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-page-lead {
+  margin: 0; max-inline-size: 36em; font: 400 clamp(1.0625rem, 1rem + .6vw, 1.3125rem)/1.55 var(--as-font-text);
+  color: var(--as-label-secondary); text-wrap: pretty;
+}
+
+/* Small sub-heading inside a two-column block (contact page). */
+.as-site-h2-small { font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem); margin-block-end: 12px; }
+.as-site-cta-row { margin: 32px 0 0; }
+.as-site-cta-row a:not(.as-button) { font-weight: 500; }
+.as-site-cta-row .as-button { margin-block-end: 0; }
+.as-site-hero-actions + .as-site-cta-row { margin-block-start: 0; }
+
+/* ---- Home hero: the drawn app screen sits on a quiet card, no device frame. ---- */
+.as-site-hero-media { padding: 16px; background: var(--as-bg-secondary); }
+.as-site-hero-media .as-site-mockup { border: 0; background: var(--as-bg); }
+.as-site-hero-media .as-site-mockup-row { background: var(--as-bg-secondary); }
+.as-site-hero-media .as-site-mockup > p:not(.as-site-mockup-title) { margin: 0; color: var(--as-label-secondary); }
+
+/* Two-line key points with a lime dot (decoration only). */
+.as-site-points { display: grid; gap: 16px; max-inline-size: 40rem; margin: 0; padding: 0; list-style: none; }
+.as-site-points li {
+  position: relative; padding-inline-start: 28px;
+  font: 400 clamp(1.0625rem, 1rem + .4vw, 1.1875rem)/1.55 var(--as-font-text); color: var(--as-label); text-wrap: pretty;
+}
+.as-site-points li::before {
+  content: ""; position: absolute; inset-inline-start: 0; inset-block-start: .55em;
+  inline-size: 10px; block-size: 10px; border-radius: 50%; background: var(--as-lime);
+}
+
+/* Reveal target on the home page: its own block, with a gap above the plans. */
+.as-site-reveal .as-site-plans { margin-block-start: 8px; }
+
+/* ---- Features and pricing cards: plain text lines, no glass on content. ---- */
+.as-site-section .as-site-grid { margin-block-start: 8px; }
+
+/* ---- FAQ group headings ---- */
+.as-site-faq-group {
+  margin: 56px 0 8px; font: 600 clamp(1.5rem, 1.3rem + .8vw, 2rem)/1.3 var(--as-font-display); color: var(--as-label);
+}
+.as-site-faq-group:first-child { margin-block-start: 0; }
+.as-site-container .as-site-faq + .as-site-faq-group { margin-block-start: 56px; }
+
+/* ---- Article pages ---- */
+.as-site-article-wrap {
+  box-sizing: border-box; max-inline-size: calc(40em + 2 * var(--as-margin)); margin-inline: auto;
+  padding: 24px var(--as-margin) clamp(56px, 8vw, 112px);
+}
+@media (min-width: 48em) { .as-site-article-wrap { padding-inline: var(--as-margin-regular); max-inline-size: calc(40em + 2 * var(--as-margin-regular)); } }
+.as-site-article-head { margin: 24px 0 32px; }
+.as-site-article-title {
+  margin: 0 0 14px; font: 600 clamp(2rem, 1.5rem + 2.2vw, 3rem)/1.25 var(--as-font-display); letter-spacing: 0;
+  color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-article-wrap .as-site-post-meta { margin: 0; font-size: 14px; }
+.as-site-article-wrap .as-prose { max-inline-size: 100%; }
+.as-site-article-wrap .as-site-breadcrumb { margin-block-start: 8px; }
+.as-site-article-wrap .as-site-cta-row { margin-block-start: 48px; }
+/* Article h2s start a new section: a little room above, the same as the prose spacing. */
+.as-site-article-wrap .as-prose h2:first-child { margin-block-start: 0; }
+.as-site-story > p:first-child { margin-block-start: 0; }
+
+
+/* Breadcrumb inside a post: the link colour is the body text colour, separators as in the pattern. */
+.as-site-breadcrumb ol { row-gap: 4px; }
+
+/* ---- Blog list ---- */
+.as-site-container .as-site-postlist { margin-block-start: 0; }
+.as-site-container .as-site-post:first-child { padding-block-start: 0; }
+
+
+/* ---- Contact ---- */
+.as-site-contact {
+  box-sizing: border-box; display: grid; gap: 56px; max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: 8px var(--as-margin) clamp(56px, 8vw, 112px);
+}
+@media (min-width: 48em) { .as-site-contact { padding-inline: var(--as-margin-regular); } }
+@media (min-width: 64em) { .as-site-contact { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 72px; align-items: start; } }
+.as-site-form-note { margin: 0 0 20px; font: 400 15px/22px var(--as-font-text); color: var(--as-label-secondary); }
+.as-site-channels { display: grid; gap: 24px; margin: 0; }
+.as-site-channels > div { display: grid; gap: 4px; }
+.as-site-channels dt { font: 600 15px/22px var(--as-font-text); color: var(--as-label-secondary); }
+.as-site-channels dd { margin: 0; font: 400 17px/1.6 var(--as-font-text); color: var(--as-label); overflow-wrap: anywhere; }
+.as-site-contact .as-site-form-wrap { max-inline-size: 40rem; }
+
+/* ---- Footer: the Apple trademark line sits under the copyright ---- */
+.as-site-footer-legal p { font-size: 13px; line-height: 1.5; }
+
+/* ---- 404 ---- */
+.as-site-404 { min-block-size: 56vh; align-content: center; }

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting · Tidepool Docs</title>
+<meta name="description" content="Read tidepool doctor output, understand exit codes and fix the most common errors.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="../index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="../quick-start.html">Quick start</a>
+    <a href="../reference/api.html">API reference</a>
+    <a href="../changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="../index.html">Introduction</a></li>
+          <li><a href="../quick-start.html">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="../guides/configuration.html">Configuration</a></li>
+          <li><a href="../guides/plugins.html">Plugins</a></li>
+          <li><a href="../guides/troubleshooting.html" aria-current="page">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="../reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="../changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Guides</p><h1>Troubleshooting</h1>
+<p class="lead">Most problems show up in <code>tidepool doctor</code>. This page explains its output, the exit codes, and the errors people hit most often.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#start-with-doctor">Start with doctor</a></li><li class="lvl2"><a href="#common-errors">Common errors</a></li><li class="lvl3"><a href="#no-tidepool-toml-found">No tidepool.toml found</a></li><li class="lvl3"><a href="#lock-file-is-out-of-date">Lock file is out of date</a></li><li class="lvl3"><a href="#checksum-mismatch">Checksum mismatch</a></li><li class="lvl3"><a href="#permission-denied-on-the-cache">Permission denied on the cache</a></li><li class="lvl3"><a href="#network-request-failed">Network request failed</a></li><li class="lvl3"><a href="#task-timed-out">Task timed out</a></li><li class="lvl2"><a href="#exit-codes">Exit codes</a></li><li class="lvl2"><a href="#getting-more-detail">Getting more detail</a></li></ul></details>
+<h2 id="start-with-doctor">Start with doctor</h2>
+<p><code>tidepool doctor</code> checks the configuration, the binary, the cache and every installed plugin. Each line is <code>ok</code>, <code>warn</code> or <code>fail</code>:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool doctor
+[ok]   config        tidepool.toml parsed (schema v1)
+[ok]   binary        tidepool 0.5.0 (linux/x86_64)
+[warn] cache         4.2 GB in ~/.tidepool/cache; run `tidepool cache prune`
+[fail] plugin node   lock file is out of date; run `tidepool sync`
+Summary: 2 ok, 1 warning, 1 failure</code></pre></div>
+<p><code>doctor</code> exits with code 1 when any check fails. Add <code>--json</code> for machine-readable output, which is useful when you attach results to a bug report.</p>
+<h2 id="common-errors">Common errors</h2>
+<h3 id="no-tidepool-toml-found">No tidepool.toml found</h3>
+<div class="code"><pre tabindex="0"><code>error: no tidepool.toml found (searched from /home/you/app to /)</code></pre></div>
+<p>Tidepool searched the current directory and its parents. Run <code>tidepool init</code> in the project root, or pass <code>--config PATH</code>. Exit code 3.</p>
+<h3 id="lock-file-is-out-of-date">Lock file is out of date</h3>
+<div class="code"><pre tabindex="0"><code>error: lock file is out of date; run `tidepool sync` and commit tidepool.lock</code></pre></div>
+<p><code>tidepool sync --locked</code> found plugin requirements that differ from <code>tidepool.lock</code>. Run <code>tidepool sync</code> on your machine, review the change to the lock file, and commit it. Exit code 3.</p>
+<h3 id="checksum-mismatch">Checksum mismatch</h3>
+<div class="code"><pre tabindex="0"><code>error: checksum mismatch for node 2.1.4
+  expected 9f2c4e7a...a7d540
+  got      1b08c3e6...0f2a1f</code></pre></div>
+<p>The downloaded archive is not the one recorded in the lock file. Causes include a corrupted download, a proxy that rewrites responses, and a plugin release that was replaced after publication. Run <code>tidepool cache prune</code> and try again. If the error persists, do not edit the lock file by hand. Report it instead. Exit code 5.</p>
+<h3 id="permission-denied-on-the-cache">Permission denied on the cache</h3>
+<div class="code"><pre tabindex="0"><code>error: permission denied: /home/you/.tidepool/cache</code></pre></div>
+<p>This usually means an earlier Tidepool run used root. Fix the ownership of <code>~/.tidepool</code>, or point Tidepool somewhere else with <code>TIDEPOOL_HOME</code>. Avoid <code>sudo</code> for normal commands, because it leaves root-owned files in your home directory.</p>
+<h3 id="network-request-failed">Network request failed</h3>
+<p>Exit code 4. Make sure any proxy settings are present in the environment that Tidepool runs in. Run with <code>TIDEPOOL_LOG=debug</code> to see the URL and status code of each request. If you only need what is already cached, use <code>tidepool sync --offline</code>.</p>
+<h3 id="task-timed-out">Task timed out</h3>
+<div class="code"><pre tabindex="0"><code>error: task "build" timed out after 5m</code></pre></div>
+<p>A task is stopped when it reaches its <code>timeout</code>, which defaults to <code>10m</code>. If the task is legitimately slow, raise the limit in <code>tidepool.toml</code> or in <code>tidepool.local.toml</code>. Exit code 124 matches <code>timeout(1)</code>.</p>
+<h2 id="exit-codes">Exit codes</h2>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>0</code></td><td>Success.</td></tr><tr><td><code>1</code></td><td>Generic failure, or <code>doctor</code> found a failing check.</td></tr><tr><td><code>2</code></td><td>Usage error, such as an unknown flag.</td></tr><tr><td><code>3</code></td><td>Configuration or lock file error.</td></tr><tr><td><code>4</code></td><td>Network error while fetching plugins.</td></tr><tr><td><code>5</code></td><td>Checksum mismatch.</td></tr><tr><td><code>124</code></td><td>A task timed out.</td></tr></tbody></table></div>
+<h2 id="getting-more-detail">Getting more detail</h2>
+<ul><li><code>-v</code> prints each step. <code>-vv</code> also prints the commands that tasks run.</li><li><code>TIDEPOOL_LOG=trace</code> logs everything, including HTTP headers. Remove tokens before you paste logs anywhere.</li><li>Include the output of <code>tidepool doctor --json</code> and <code>tidepool --version</code> in bug reports.</li></ul>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="../guides/plugins.html"><span class="small">Previous</span>Plugins</a><a class="next" href="../reference/api.html"><span class="small">Next</span>API reference</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#start-with-doctor">Start with doctor</a></li><li class="lvl2"><a href="#common-errors">Common errors</a></li><li class="lvl3"><a href="#no-tidepool-toml-found">No tidepool.toml found</a></li><li class="lvl3"><a href="#lock-file-is-out-of-date">Lock file is out of date</a></li><li class="lvl3"><a href="#checksum-mismatch">Checksum mismatch</a></li><li class="lvl3"><a href="#permission-denied-on-the-cache">Permission denied on the cache</a></li><li class="lvl3"><a href="#network-request-failed">Network request failed</a></li><li class="lvl3"><a href="#task-timed-out">Task timed out</a></li><li class="lvl2"><a href="#exit-codes">Exit codes</a></li><li class="lvl2"><a href="#getting-more-detail">Getting more detail</a></li></ul></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

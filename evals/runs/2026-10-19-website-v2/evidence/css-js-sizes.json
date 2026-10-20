@@ -1,0 +1,50 @@
+{
+ "K": {
+  "pages": 12,
+  "css_files": 6,
+  "skill_css_min": 45791,
+  "own_css_min": 6982,
+  "js_raw": 6399,
+  "uses_as": 12
+ },
+ "L": {
+  "pages": 11,
+  "css_files": 1,
+  "skill_css_min": 6,
+  "own_css_min": 16069,
+  "js_raw": 6467,
+  "uses_as": 0
+ },
+ "M": {
+  "pages": 8,
+  "css_files": 1,
+  "skill_css_min": 5,
+  "own_css_min": 7946,
+  "js_raw": 4522,
+  "uses_as": 0
+ },
+ "N": {
+  "pages": 8,
+  "css_files": 3,
+  "skill_css_min": 31674,
+  "own_css_min": 7357,
+  "js_raw": 5224,
+  "uses_as": 8
+ },
+ "P": {
+  "pages": 3,
+  "css_files": 5,
+  "skill_css_min": 40670,
+  "own_css_min": 3788,
+  "js_raw": 3603,
+  "uses_as": 3
+ },
+ "Q": {
+  "pages": 2,
+  "css_files": 1,
+  "skill_css_min": 4,
+  "own_css_min": 12960,
+  "js_raw": 2485,
+  "uses_as": 0
+ }
+}

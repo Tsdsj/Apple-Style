@@ -1,0 +1,72 @@
+/* Northline site styles. Loads after the Apple-Style layers. It overrides tokens and adds page layout
+   only; the pattern rules in apple-shell.css, apple-home.css and apple-pricing.css are not edited. */
+
+:root {
+  /* Chinese text: the CJK faces come before the generic family (Apple-Style website.md, Fonts).
+     The names are installed fonts; no font file is served. */
+  --as-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Microsoft YaHei", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Tighter display ceiling than the token default (80 px): Chinese headlines wrap to too many lines at 1440 px. */
+  --as-display-1: clamp(2.5rem, 1.5rem + 3vw, 4.25rem);
+  --as-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Microsoft YaHei", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Total height of the floating header (outer padding 12 px x 2 plus the inner capsule). Kept equal
+     with and without JavaScript, so the page does not move when the menu is enhanced. */
+  --as-site-header-h: 80px;
+}
+@media (max-width: 47.99em) { :root { --as-site-header-h: 116px; } }
+@media (max-width: 23.75em) { :root { --as-site-header-h: 138px; } }
+
+/* Skip link: off screen until it receives focus. */
+.as-skip-link {
+  position: absolute; inset-inline-start: 16px; inset-block-start: -100px; z-index: 100;
+  padding: 8px 14px; border-radius: var(--as-radius-s);
+  background: var(--as-bg-tertiary); color: var(--as-label); box-shadow: 0 0 0 1px var(--as-separator);
+  font: 600 15px/20px var(--as-font-text); text-decoration: none;
+}
+.as-skip-link:focus { inset-block-start: 12px; }
+.as-skip-link:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* Negative tracking is designed for Latin. Chinese text uses none (web-implementation.md). */
+html:lang(zh-Hans) body * { letter-spacing: 0; }
+
+/* Chinese running text needs more leading than the Latin pattern values. */
+.as-site-hero-sub, .as-site-section-lead, .as-site-card p, .as-site-plan-desc,
+.as-site-faq-answer p, .as-site-quote-by, .as-site-mockup-muted { line-height: 1.65; }
+.as-site-plan-list { line-height: 1.65; }
+
+/* Hero: the product mockup fills the right-hand column. */
+.as-site-hero-media { background: none; min-inline-size: 0; }
+.as-site-hero-media .as-site-mockup { inline-size: 100%; }
+.as-site-hero-actions .as-button-large { min-inline-size: 9.5rem; }
+
+/* Feature cards and testimonials: an even top edge, with the detail at the bottom of each card. */
+.as-site-card { min-block-size: 100%; }
+.as-site-card-title { margin-block-end: 4px; }
+
+/* Testimonials. */
+.as-site-quote { gap: 16px; }
+.as-site-quote blockquote { margin: 0; }
+.as-site-quote blockquote p { color: var(--as-label); font-size: 18px; line-height: 1.65; }
+.as-site-quote-by { margin: auto 0 0; font-size: 15px; }
+.as-site-quote-by strong { color: var(--as-label); font-weight: 600; }
+
+/* Closing call to action. */
+.as-site-cta .as-site-section-lead { margin-block-end: 32px; }
+
+/* Pricing page. */
+.as-site-plan-price { margin-block-end: 8px; }
+.as-site-plan > .as-button { box-sizing: border-box; inline-size: 100%; }
+.as-site-plan-desc { min-block-size: 3.3em; }
+.as-site-compare th[scope="col"], .as-site-compare td { text-align: center; }
+.as-site-compare th[scope="col"]:first-child, .as-site-compare tbody th[scope="row"] { text-align: start; }
+.as-site-compare td { white-space: nowrap; }
+.as-site-faq { max-inline-size: 48rem; }
+
+/* Page title (not used on the home page): keep the hero's left edge aligned with the sections below. */
+.as-site-hero.ns-page-hero { padding-block-end: clamp(24px, 3vw, 40px); }
+.ns-page-hero .as-site-hero-sub { max-inline-size: 36em; }
+
+/* 404 page. */
+.ns-404 { min-block-size: 56dvh; align-content: center; }
+.ns-404 .as-site-hero-title { font-size: clamp(2rem, 1.25rem + 3vw, 3.5rem); }

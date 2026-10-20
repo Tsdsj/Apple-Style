@@ -1,0 +1,121 @@
+{
+ "K": {
+  "uncompressed": {
+   "performance": 86.0,
+   "lcp_ms": 1351.983,
+   "cls": 0.271,
+   "fcp_ms": 1351.665,
+   "tbt_ms": 0,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 86.0,
+   "lcp_ms": 1055.762,
+   "cls": 0.271,
+   "fcp_ms": 910.796,
+   "tbt_ms": 0,
+   "runs": 3
+  }
+ },
+ "L": {
+  "uncompressed": {
+   "performance": 100,
+   "lcp_ms": 1011.854,
+   "cls": 0.023,
+   "fcp_ms": 949.903,
+   "tbt_ms": 9,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 100,
+   "lcp_ms": 1052.669,
+   "cls": 0.023,
+   "fcp_ms": 986.669,
+   "tbt_ms": 10,
+   "runs": 3
+  }
+ },
+ "M": {
+  "uncompressed": {
+   "performance": 100,
+   "lcp_ms": 962.795,
+   "cls": 0,
+   "fcp_ms": 962.795,
+   "tbt_ms": 0,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 100,
+   "lcp_ms": 949.799,
+   "cls": 0,
+   "fcp_ms": 949.799,
+   "tbt_ms": 0,
+   "runs": 3
+  }
+ },
+ "N": {
+  "uncompressed": {
+   "performance": 85.0,
+   "lcp_ms": 1356.278,
+   "cls": 0.291,
+   "fcp_ms": 1206.278,
+   "tbt_ms": 0,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 85.0,
+   "lcp_ms": 958.446,
+   "cls": 0.291,
+   "fcp_ms": 908.446,
+   "tbt_ms": 0,
+   "runs": 3
+  }
+ },
+ "P": {
+  "uncompressed": {
+   "performance": 100,
+   "lcp_ms": 1502.605,
+   "cls": 0.017,
+   "fcp_ms": 1352.605,
+   "tbt_ms": 0,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 100,
+   "lcp_ms": 1083.587,
+   "cls": 0.017,
+   "fcp_ms": 1035.587,
+   "tbt_ms": 6,
+   "runs": 3
+  }
+ },
+ "Q": {
+  "uncompressed": {
+   "performance": 100,
+   "lcp_ms": 1119.833,
+   "cls": 0,
+   "fcp_ms": 1119.833,
+   "tbt_ms": 0,
+   "runs": 3
+  },
+  "gzip": {
+   "performance": 100,
+   "lcp_ms": 1194.097,
+   "cls": 0,
+   "fcp_ms": 1194.097,
+   "tbt_ms": 0,
+   "runs": 3
+  }
+ },
+ "REF": {
+  "gzip": {
+   "performance": 100,
+   "lcp_ms": 1356.024,
+   "cls": 0,
+   "fcp_ms": 906.024,
+   "tbt_ms": 0,
+   "runs": 3
+  }
+ },
+ "_note": "Home page (/), Lighthouse 12.8 mobile emulation, median of 3 runs. uncompressed: check-site serve.py; gzip: gzip for text assets. REF = skills/Apple-Style/web/examples/site after the as-js fix (gzip only)."
+}

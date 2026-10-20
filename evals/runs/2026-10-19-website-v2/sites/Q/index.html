@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Northline 把任务、文档与讨论放进同一条时间线，让团队的每一步都看得清。（虚构产品）">
+  <title>Northline — 让每一步，都看得清</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem("northline-theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">跳到正文</a>
+
+  <header class="site-nav">
+    <nav class="wrap nav-inner" aria-label="主导航">
+      <a class="brand" href="index.html" aria-label="Northline 首页">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="currentColor" opacity=".16"/>
+          <path d="M4.5 15.5 9 11l3.5 3.5L20 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Northline
+      </a>
+      <div class="nav-links">
+        <a class="hide-sm" href="#features">功能</a>
+        <a class="hide-sm" href="#stories">客户</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="切换到深色模式">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>
+          </svg>
+        </button>
+        <a class="btn btn-primary btn-small" href="#trial">免费开始</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow">团队协作，回到清晰</p>
+        <h1 id="hero-title">让每一步，<br>都看得清。</h1>
+        <p class="lead">Northline 把任务、文档与讨论放进同一条时间线。少开几次会，多推进几件事，每个人都知道下一步是什么。</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="#trial">免费开始</a>
+          <a class="btn-link" href="pricing.html">查看价格 →</a>
+        </div>
+        <p class="fine">无需信用卡 · 团队版含 14 天试用</p>
+
+        <div class="mock" aria-hidden="true">
+          <div class="mock-bar">
+            <i></i><i></i><i></i>
+            <b>本周 · 研发冲刺</b>
+          </div>
+          <ul class="mock-list">
+            <li>
+              <span class="dot done"></span>
+              <div><strong>确定首页改版范围</strong><small>已完成 · 林晓 · 09:12</small></div>
+              <span class="tag ok">完成</span>
+            </li>
+            <li>
+              <span class="dot"></span>
+              <div><strong>撰写定价说明文档</strong><small>进行中 · 周岚 · 11:40</small></div>
+              <span class="tag">进行中</span>
+            </li>
+            <li>
+              <span class="dot"></span>
+              <div><strong>评审无障碍检查清单</strong><small>待办 · 陈默 · 周五</small></div>
+              <span class="tag muted">待办</span>
+            </li>
+            <li>
+              <span class="dot"></span>
+              <div><strong>发布前的回归测试</strong><small>自动化 · 下周一 09:00</small></div>
+              <span class="tag muted">计划</span>
+            </li>
+          </ul>
+          <div class="mock-progress"><span style="width: 58%"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">功能</p>
+          <h2 id="features-title">六个设计决定，<br>让进展一目了然。</h2>
+          <p class="lead">我们没有堆砌功能，只把最常用的几件事做到足够好。</p>
+        </header>
+
+        <div class="feature-grid">
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/><circle cx="18" cy="12" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg>
+            </div>
+            <h3>统一时间线</h3>
+            <p>任务、文档与讨论按发生的先后排列。打开一个项目，就能看清它从哪里来、现在停在哪里。</p>
+          </article>
+
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg>
+            </div>
+            <h3>实时协作文档</h3>
+            <p>多人同时编辑，每一处修改都有记录。评论可以一键转为任务，并保留原本的上下文。</p>
+          </article>
+
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg>
+            </div>
+            <h3>安静的提醒</h3>
+            <p>只在截止前和被点名时提醒你。专注时段内，通知会自动收进每日摘要，不打断手上的事。</p>
+          </article>
+
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="15" width="6" height="5" rx="1"/><path d="M9 6.5h3a2 2 0 0 1 2 2v6a2 2 0 0 0 2 2h1"/></svg>
+            </div>
+            <h3>可视化自动化</h3>
+            <p>用「当……则……」的规则连接表单、审批与通知。重复的步骤交给流程去做，你只处理例外。</p>
+          </article>
+
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <h3>分级权限与审计</h3>
+            <p>按项目和角色设置可见范围。关键操作全部留痕，管理员可随时查看并导出记录。</p>
+          </article>
+
+          <article class="card feature">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="10" rx="2"/><rect x="17" y="8" width="4" height="10" rx="1"/><path d="M8 19h4"/></svg>
+            </div>
+            <h3>多端实时同步</h3>
+            <p>网页、桌面与手机共享同一份数据。离线时的修改会在联网后自动合并，不会互相覆盖。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="stats-title">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">成效</p>
+          <h2 id="stats-title">数字，说的是同一件事。</h2>
+        </header>
+        <dl class="stats">
+          <div>
+            <dd class="stat-num">38%</dd>
+            <dt class="stat-label">每周会议时长平均减少</dt>
+          </div>
+          <div>
+            <dd class="stat-num">2.4×</dd>
+            <dt class="stat-label">跨团队交付速度（相较上一季度）</dt>
+          </div>
+          <div>
+            <dd class="stat-num">12 分钟</dd>
+            <dt class="stat-label">新成员平均上手时间</dt>
+          </div>
+        </dl>
+        <p class="note">以上为虚构示例数据，仅用于展示版式。</p>
+      </div>
+    </section>
+
+    <section class="section alt" id="stories" aria-labelledby="stories-title">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">客户评价</p>
+          <h2 id="stories-title">来自真正忙碌的团队。</h2>
+        </header>
+        <div class="quote-grid">
+          <figure class="card quote">
+            <blockquote>“以前每周要开三次进度会，现在大家直接在时间线上看状态。会议少了一半，事情反而推得更快。”</blockquote>
+            <figcaption><strong>周岚</strong>运营负责人 · 川海物流（虚构）</figcaption>
+          </figure>
+          <figure class="card quote">
+            <blockquote>“文档和任务终于在同一个地方。评论一键变成任务，设计评审不再被埋在聊天记录里。”</blockquote>
+            <figcaption><strong>陈默</strong>产品设计师 · 星砚设计（虚构）</figcaption>
+          </figure>
+          <figure class="card quote">
+            <blockquote>“权限和审计做得克制却很完整。团队扩到六十人后，我们依然能说清每一次变更是谁做的。”</blockquote>
+            <figcaption><strong>林晓</strong>技术负责人 · 木棉教育（虚构）</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band" id="trial" aria-labelledby="cta-title">
+      <div class="wrap">
+        <h2 id="cta-title">从下一条任务开始。</h2>
+        <p class="lead">团队版含 14 天完整试用。试用结束后，你可以按需选择方案，或保留免费版继续使用。</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="pricing.html#plans">选择方案</a>
+          <a class="btn-link" href="pricing.html#compare">对比全部功能 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="currentColor" opacity=".16"/>
+              <path d="M4.5 15.5 9 11l3.5 3.5L20 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Northline
+          </a>
+          <p>团队协作，回到清晰。</p>
+        </div>
+        <div>
+          <h3>产品</h3>
+          <ul>
+            <li><a href="index.html#features">功能</a></li>
+            <li><a href="pricing.html">价格</a></li>
+            <li>更新日志</li>
+          </ul>
+        </div>
+        <div>
+          <h3>公司</h3>
+          <ul>
+            <li>关于我们</li>
+            <li>招聘</li>
+            <li>联系我们</li>
+          </ul>
+        </div>
+        <div>
+          <h3>支持</h3>
+          <ul>
+            <li>帮助中心</li>
+            <li>安全与隐私</li>
+            <li>服务条款</li>
+          </ul>
+        </div>
+      </div>
+      <p class="fine footer-legal">© 2026 Northline Labs（虚构公司）。Northline 为虚构产品，页面中的客户、评价与数据均为示例。</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

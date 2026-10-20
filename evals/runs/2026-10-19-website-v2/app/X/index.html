@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="zh-CN" class="as-root" data-platform="macos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>文稿 · 窗口原型</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/glass.css">
+<link rel="stylesheet" href="css/controls.css">
+<link rel="stylesheet" href="css/preferences.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/window.css">
+<link rel="stylesheet" href="css/density.css">
+<link rel="stylesheet" href="css/app-preferences.css">
+<link rel="stylesheet" href="css/doc-app.css">
+<style>
+  /* Hidden panes must stay hidden. window.css sets .as-inspector to display:block
+     later in the cascade than its own [hidden] rule, so the attribute loses. */
+  .as-split > [hidden] { display: none !important; }
+  body { margin: 0; }
+</style>
+</head>
+<body class="as-body">
+
+<!-- One window. At 1024 px and up: three panes side by side. From 640 to 1023 px:
+     the list and editor stay side by side and the inspector becomes an overlay
+     over the editor. Panes never resize themselves; the user drags the dividers
+     or hides a pane. -->
+<div class="as-window" id="win">
+
+  <div class="as-menubar" role="menubar" aria-label="菜单" data-shortcuts>
+    <button class="as-menubar-item as-menubar-app" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-menu="mDoc">文稿</button>
+    <button class="as-menubar-item" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-menu="mView">显示</button>
+  </div>
+
+  <!-- Toolbar in the window frame. Leading: list toggle, then the title.
+       Trailing: new document, inspector toggle, one primary action.
+       Search lives in the list header (see README: why not in the toolbar). -->
+  <header class="as-toolbar as-toolbar-window">
+    <div class="as-toolbar-group">
+      <button class="as-item" id="tList" type="button" aria-pressed="true" aria-label="文档列表"
+              title="文档列表 (⌥⌘S)">
+        <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M9 5v14"/></svg>
+      </button>
+    </div>
+    <h1 class="as-toolbar-title" id="docTitle">第三季度路线图</h1>
+    <div class="as-spacer"></div>
+    <div class="as-toolbar-group">
+      <button class="as-item" id="tNew" type="button" aria-label="新建文稿" title="新建文稿">
+        <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+      </button>
+    </div>
+    <div class="as-toolbar-group">
+      <button class="as-item" id="tInspector" type="button" aria-pressed="false" aria-label="属性"
+              title="属性 (⌥⌘I)">
+        <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M15 5v14"/></svg>
+      </button>
+    </div>
+    <button class="as-button as-button-filled as-button-small" id="tShare" type="button">分享</button>
+  </header>
+
+  <div class="as-split" id="split">
+
+    <!-- Content list: documents. A real listbox, so one tab stop and arrow keys. -->
+    <section class="as-list-column doc-list" id="listPane" aria-label="文稿列表">
+      <div class="doc-list-head">
+        <h2 class="doc-list-title">文稿</h2>
+        <div class="as-search" role="search">
+          <svg class="as-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+          <input type="search" id="q" aria-label="搜索文稿" placeholder="搜索" autocomplete="off">
+        </div>
+      </div>
+      <div class="as-listbox doc-listbox" id="docs" role="listbox" aria-label="文稿"></div>
+      <p class="doc-empty" id="docEmpty" hidden>没有匹配的文稿。</p>
+    </section>
+
+    <div class="as-split-divider" id="divList" data-min="200" data-max="360" data-var="--as-list-column-w"
+         aria-label="文稿列表宽度"></div>
+
+    <!-- Editor. The page is readable width (672 px); the header stays put while the text scrolls. -->
+    <main class="as-content doc-editor" id="editor" aria-label="编辑区">
+      <div class="as-scroll-edge as-edge-top as-edge-hard doc-editor-head">
+        <span id="saveState" aria-live="polite">已保存</span>
+        <span id="wordCount">字数 0</span>
+      </div>
+      <div class="as-readable doc-page">
+        <input class="doc-title" id="titleField" type="text" aria-label="文稿标题" autocomplete="off">
+        <div class="doc-body" id="docBody" contenteditable="true" role="textbox" aria-multiline="true"
+             aria-label="正文" spellcheck="true"></div>
+      </div>
+    </main>
+
+    <div class="as-split-divider" id="divInspector" data-min="260" data-max="480" data-var="--as-inspector-w"
+         aria-label="属性宽度"></div>
+
+    <!-- Optional properties. Hidden by default below 1024 px; shown by default above it. -->
+    <aside class="as-inspector doc-inspector" id="inspector" aria-label="属性" hidden>
+      <div class="as-scroll-edge as-edge-top as-edge-hard">
+        <div class="doc-inspector-head">
+          <h2 class="doc-inspector-title" id="insHead" tabindex="-1">属性</h2>
+          <button class="as-button as-button-gray as-button-small doc-close" id="insClose" type="button">关闭</button>
+        </div>
+      </div>
+
+      <div class="as-inspector-title">文稿</div>
+      <div class="as-field"><label class="doc-field-label" for="insStatus">状态</label>
+        <select class="as-input" id="insStatus">
+          <option>草稿</option><option>审阅中</option><option>已发布</option>
+        </select>
+      </div>
+      <div class="as-field"><span>字数</span><span class="as-tabular" id="insWords">0</span></div>
+      <div class="as-field"><span>段落</span><span class="as-tabular" id="insParas">0</span></div>
+      <div class="as-field"><span>作者</span><span id="insAuthor"></span></div>
+      <div class="as-field"><span>创建</span><span id="insCreated"></span></div>
+      <div class="as-field"><span>修改</span><span id="insModified"></span></div>
+
+      <div class="as-inspector-title">标签</div>
+      <div class="as-field"><label class="doc-field-label" for="insTags">标签</label>
+        <input class="as-input" id="insTags" type="text" autocomplete="off">
+      </div>
+
+      <div class="as-inspector-title">共享</div>
+      <div class="as-field"><span id="insCommentsLabel">允许评论</span>
+        <button class="as-toggle" id="insComments" type="button" role="switch" aria-checked="true" aria-labelledby="insCommentsLabel"><span class="as-knob"></span></button>
+      </div>
+
+      <div class="as-inspector-title">操作</div>
+      <div class="doc-actions">
+        <button class="as-button as-button-gray" id="insCopy" type="button">复制链接</button>
+        <button class="as-button as-button-filled" id="insPdf" type="button">导出 PDF</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Menu-bar menus. Every printed shortcut is wired by the runtime (data-shortcuts)
+     and runs the same item's click handler. -->
+<div class="as-glass as-glass-large as-menu" id="mDoc" role="menu" aria-label="文稿" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdNew" type="button"><span>新建文稿</span></button>
+  <div class="as-menu-sep" role="separator"></div>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdExport" type="button"><span>导出为 PDF…</span><span class="as-shortcut">⇧⌘E</span></button>
+</div>
+<div class="as-glass as-glass-large as-menu" id="mView" role="menu" aria-label="显示" hidden>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdList" type="button"><span class="lbl">隐藏文档列表</span><span class="as-shortcut">⌥⌘S</span></button>
+  <button class="as-menu-item" role="menuitem" tabindex="-1" id="cmdInspector" type="button"><span class="lbl">显示属性</span><span class="as-shortcut">⌥⌘I</span></button>
+</div>
+
+<div class="as-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="js/liquid-glass.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var COMPACT = window.matchMedia('(max-width: 1023.98px)');
+
+  /* ---- Sample data (fictional) ------------------------------------------- */
+  var DOCS = [
+    { id: 'd1', title: '第三季度路线图', status: '审阅中', updated: '今天 14:32', author: '林越',
+      created: '2026年10月12日', tags: '产品, 规划', comments: true,
+      text: '本季度的目标是把离线保存做稳，并在十一月前完成共享评论的第一版。\n\n一、离线保存：先写入本地，联网后同步；冲突时保留两份并提示用户选择。\n\n二、共享评论：先支持段落级评论，暂不做行内标注。' },
+    { id: 'd2', title: '用户访谈纪要 · 第三周', status: '草稿', updated: '昨天 17:05', author: '周岚',
+      created: '2026年10月14日', tags: '研究', comments: false,
+      text: '共访谈六位用户，其中四位提到导出格式的问题。\n\n多数人希望保留原有段落样式，而不是导出后重新排版。' },
+    { id: 'd3', title: '发布说明 v2.4', status: '已发布', updated: '10月17日', author: '林越',
+      created: '2026年10月9日', tags: '发布', comments: true,
+      text: '本版本修复了长文稿滚动时标题栏抖动的问题。\n\n新增：文稿属性面板可以通过 ⌥⌘I 显示或隐藏。' },
+    { id: 'd4', title: '设计评审记录', status: '草稿', updated: '10月16日', author: '陈墨',
+      created: '2026年10月7日', tags: '设计', comments: true,
+      text: '评审结论：列表与编辑区保持并列，属性面板在窄窗口中以覆盖方式出现。\n\n待办：确认焦点在面板隐藏后的落点。' },
+    { id: 'd5', title: '隐私政策修订（待法务）', status: '审阅中', updated: '10月15日', author: '周岚',
+      created: '2026年10月2日', tags: '法务', comments: false,
+      text: '第四条新增“离线保存”相关说明。\n\n第七条的保存期限待法务确认。' },
+    { id: 'd6', title: '会议笔记 10/16', status: '草稿', updated: '10月16日', author: '陈墨',
+      created: '2026年10月16日', tags: '', comments: false,
+      text: '讨论了窗口最小宽度。\n\n结论：700 px 为设计下限，不保证更窄的窗口。' }
+  ];
+
+  var docs = DOCS.map(function (d) { return Object.assign({}, d); });
+  var currentId = docs[0].id;
+  var query = '';
+  var listOpen = true;
+  var inspOpen = !COMPACT.matches;
+  var saveTimer = 0;
+
+  var el = {
+    list: $('listPane'), listbox: $('docs'), search: $('q'), empty: $('docEmpty'),
+    editor: $('editor'), title: $('titleField'), body: $('docBody'),
+    saveState: $('saveState'), wordCount: $('wordCount'), docTitle: $('docTitle'),
+    tList: $('tList'), tInspector: $('tInspector'), tNew: $('tNew'), tShare: $('tShare'),
+    inspector: $('inspector'), insHead: $('insHead'), insClose: $('insClose'),
+    insStatus: $('insStatus'), insWords: $('insWords'), insParas: $('insParas'),
+    insAuthor: $('insAuthor'), insCreated: $('insCreated'), insModified: $('insModified'),
+    insTags: $('insTags'), insComments: $('insComments'),
+    insCopy: $('insCopy'), insPdf: $('insPdf')
+  };
+
+  function cur() { return docs.find(function (d) { return d.id === currentId; }); }
+  function rowOf(id) { return $('row-' + id); }
+  function nowLabel() {
+    var t = new Date();
+    return '今天 ' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+  }
+  function fmt(n) { return n.toLocaleString('zh-CN'); }
+  function countChars(text) { return text.replace(/\s+/g, '').length; }
+  function countParas(text) { return text.split('\n').filter(function (l) { return l.trim(); }).length; }
+  function metaOf(d) { return d.updated + ' · ' + d.status; }
+
+  /* ---- Toast (runtime) ------------------------------------------------------ */
+  function flash(msg) { if (window.LiquidGlass) LiquidGlass.toast(msg); }
+
+  /* ---- Document list --------------------------------------------------------- */
+  function renderList() {
+    var q = query.trim().toLowerCase();
+    var shown = docs.filter(function (d) {
+      return !q || d.title.toLowerCase().indexOf(q) !== -1 || d.text.toLowerCase().indexOf(q) !== -1;
+    });
+    if (shown.length && !shown.some(function (d) { return d.id === currentId; })) {
+      currentId = shown[0].id;
+      renderEditor();
+    }
+    el.listbox.textContent = '';
+    shown.forEach(function (d) {
+      var row = document.createElement('div');
+      row.className = 'as-option doc-row';
+      row.id = 'row-' + d.id;
+      row.setAttribute('role', 'option');
+      row.tabIndex = -1;
+      row.setAttribute('aria-selected', String(d.id === currentId));
+      var name = document.createElement('span');
+      name.className = 'doc-name'; name.textContent = d.title;
+      var meta = document.createElement('span');
+      meta.className = 'doc-meta'; meta.textContent = metaOf(d);
+      row.appendChild(name); row.appendChild(meta);
+      el.listbox.appendChild(row);
+    });
+    el.empty.hidden = shown.length > 0;
+  }
+  function updateRow(d) {
+    var row = rowOf(d.id);
+    if (!row) return;
+    row.querySelector('.doc-name').textContent = d.title;
+    row.querySelector('.doc-meta').textContent = metaOf(d);
+  }
+  function selectedRow() { return el.listbox.querySelector('[aria-selected="true"]'); }
+
+  /* ---- Editor and inspector --------------------------------------------------- */
+  function fillBody(text) {
+    el.body.textContent = '';
+    // Blank lines are separators, not empty paragraphs: paragraph spacing comes from CSS.
+    text.split('\n').forEach(function (line) {
+      if (!line) return;
+      var p = document.createElement('p');
+      p.textContent = line;
+      el.body.appendChild(p);
+    });
+  }
+  function readBody() {
+    return Array.prototype.map.call(el.body.childNodes, function (n) {
+      return n.nodeType === 1 && n.tagName === 'BR' ? '' : n.textContent;
+    }).join('\n');
+  }
+  function refreshCounts() {
+    var d = cur();
+    var words = countChars(d.text);
+    el.wordCount.textContent = '字数 ' + fmt(words);
+    el.insWords.textContent = fmt(words);
+    el.insParas.textContent = String(countParas(d.text));
+  }
+  function renderEditor() {
+    var d = cur();
+    el.title.value = d.title;
+    el.docTitle.textContent = d.title;
+    fillBody(d.text);
+    el.insStatus.value = d.status;
+    el.insAuthor.textContent = d.author;
+    el.insCreated.textContent = d.created;
+    el.insModified.textContent = d.updated;
+    el.insTags.value = d.tags;
+    el.insComments.setAttribute('aria-checked', String(d.comments));
+    el.saveState.textContent = '已保存';
+    refreshCounts();
+  }
+  function scheduleSave() {
+    var d = cur();
+    el.saveState.textContent = '正在保存…';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      d.updated = '刚刚';
+      el.insModified.textContent = d.updated;
+      updateRow(d);
+      el.saveState.textContent = '已保存';
+    }, 700);
+  }
+
+  /* ---- Layout state: which panes are visible, and whether the inspector overlays ---- */
+  function isOverlay() { return COMPACT.matches && inspOpen; }
+  function syncLayout() {
+    // While the overlay covers the editor, the editor is inert: no focus, no selection.
+    var overlay = isOverlay();
+    var wasInert = el.editor.inert;
+    el.editor.inert = overlay;
+    // Focus inside the editor must not be left on an inert element.
+    if (overlay && !wasInert && el.editor.contains(document.activeElement)) el.insHead.focus();
+    el.tInspector.setAttribute('aria-pressed', String(inspOpen));
+    el.tList.setAttribute('aria-pressed', String(listOpen));
+    $('cmdList').querySelector('.lbl').textContent = listOpen ? '隐藏文档列表' : '显示文档列表';
+    $('cmdInspector').querySelector('.lbl').textContent = inspOpen ? '隐藏属性' : '显示属性';
+  }
+  function setList(show) {
+    listOpen = show;
+    el.list.hidden = !show;
+    // A hidden pane must not keep focus. Move it to the editor title.
+    if (!show && el.list.contains(document.activeElement)) el.title.focus();
+    syncLayout();
+  }
+  function setInspector(show, opts) {
+    opts = opts || {};
+    inspOpen = show;
+    el.inspector.hidden = !show;
+    syncLayout();
+    if (!show && el.inspector.contains(document.activeElement)) el.tInspector.focus();
+    // An overlay covers content, so focus moves into it. An inline pane does not
+    // steal focus: typing continues and Tab reaches the pane in source order.
+    if (show && isOverlay() && !opts.noFocus) el.insHead.focus();
+  }
+  COMPACT.addEventListener('change', syncLayout);
+
+  /* ---- Toolbar and shortcut-bound commands --------------------------------------- */
+  el.tList.addEventListener('click', function () { setList(!listOpen); });
+  el.tInspector.addEventListener('click', function () { setInspector(!inspOpen); });
+  el.insClose.addEventListener('click', function () { setInspector(false); el.tInspector.focus(); });
+  $('cmdList').addEventListener('click', function () { setList(!listOpen); });
+  $('cmdInspector').addEventListener('click', function () { setInspector(!inspOpen); });
+
+  el.tNew.addEventListener('click', newDoc);
+  $('cmdNew').addEventListener('click', newDoc);
+  el.tShare.addEventListener('click', function () { flash('分享面板（原型未实现）'); });
+  $('cmdExport').addEventListener('click', exportPdf);
+  el.insPdf.addEventListener('click', exportPdf);
+  el.insCopy.addEventListener('click', function () { flash('已复制文稿链接（原型）'); });
+
+  function newDoc() {
+    var d = { id: 'n' + Date.now(), title: '无标题文稿', status: '草稿', updated: nowLabel(),
+      author: '我', created: '今天', tags: '', comments: true, text: '' };
+    docs.unshift(d);
+    query = ''; el.search.value = '';
+    currentId = d.id;
+    renderList(); renderEditor();
+    if (!listOpen) setList(true);
+    el.title.focus(); el.title.select();
+    flash('已新建文稿');
+  }
+  function exportPdf() { flash('已导出 PDF（原型，未生成文件）'); }
+
+  /* ---- Listbox: selection drives the editor; Enter moves focus into the text ------- */
+  el.listbox.addEventListener('change', function () {
+    var row = selectedRow();
+    if (!row) return;
+    currentId = row.id.replace('row-', '');
+    renderEditor();
+  });
+  el.listbox.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.altKey && !e.metaKey && !e.ctrlKey) {
+      e.preventDefault();
+      el.title.focus();
+    }
+  });
+  el.search.addEventListener('input', function () { query = el.search.value; renderList(); });
+  el.search.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown' || e.key === 'Enter') {
+      var target = selectedRow() || el.listbox.querySelector('[role="option"]');
+      if (target) { e.preventDefault(); target.focus(); }
+    }
+  });
+
+  /* ---- Editing ----------------------------------------------------------------- */
+  el.title.addEventListener('input', function () {
+    var d = cur();
+    d.title = el.title.value;
+    el.docTitle.textContent = d.title;
+    updateRow(d);
+    scheduleSave();
+  });
+  el.body.addEventListener('input', function () {
+    var d = cur();
+    d.text = readBody();
+    refreshCounts();
+    scheduleSave();
+  });
+  el.insStatus.addEventListener('change', function () {
+    var d = cur(); d.status = el.insStatus.value; updateRow(d); scheduleSave();
+  });
+  el.insTags.addEventListener('change', function () { cur().tags = el.insTags.value; scheduleSave(); });
+  // The runtime flips aria-checked and fires change; read it, do not toggle again.
+  el.insComments.addEventListener('change', function () {
+    cur().comments = el.insComments.getAttribute('aria-checked') === 'true';
+    scheduleSave();
+  });
+
+  /* ---- Menus ------------------------------------------------------------------- */
+  var openMenu = null;
+  function closeMenu(restore) {
+    if (!openMenu) return;
+    var m = openMenu.menu, btn = openMenu.btn;
+    var hadFocus = m.contains(document.activeElement);
+    openMenu = null;
+    m.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    setTimeout(function () { if (!m.classList.contains('is-open')) m.hidden = true; }, 300);
+    if (restore || hadFocus) btn.focus();
+  }
+  document.querySelectorAll('.as-menubar-item[data-menu]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var menu = $(btn.getAttribute('data-menu'));
+      if (openMenu && openMenu.menu === menu) return closeMenu(true);
+      if (openMenu) closeMenu(false);
+      var r = btn.getBoundingClientRect();
+      menu.hidden = false;
+      menu.style.top = (r.bottom + 2) + 'px';
+      menu.style.left = r.left + 'px';
+      btn.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { menu.classList.add('is-open'); });
+      openMenu = { menu: menu, btn: btn };
+      menu.querySelector('.as-menu-item').focus();
+    });
+  });
+  document.querySelectorAll('.as-menu[role="menu"] .as-menu-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      // Commands run first (their own listeners). Then the menu closes, and
+      // focus returns to the menu-bar title only if it is still inside the menu.
+      if (openMenu) closeMenu(false);
+    });
+  });
+  document.addEventListener('pointerdown', function (e) {
+    if (openMenu && !openMenu.menu.contains(e.target) && !e.target.closest('.as-menubar-item')) closeMenu(false);
+  });
+  document.querySelectorAll('.as-menu[role="menu"]').forEach(function (menu) {
+    menu.addEventListener('keydown', function (e) {
+      var items = Array.prototype.slice.call(menu.querySelectorAll('.as-menu-item'));
+      var i = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeMenu(true); }
+      else if (e.key === 'Tab') closeMenu(false);
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        var bar = Array.prototype.slice.call(document.querySelectorAll('.as-menubar-item[data-menu]'));
+        var at = bar.indexOf(openMenu && openMenu.btn);
+        if (at < 0) return;
+        e.preventDefault();
+        bar[(at + (e.key === 'ArrowRight' ? 1 : bar.length - 1)) % bar.length].click();
+      }
+    });
+  });
+
+  /* ---- Option shortcuts. The runtime's menu-shortcut binder hands ⌘I to a focused
+          rich-text editor (italic) and does not look at Option, so ⌥⌘I was swallowed
+          inside the body. These two are owned here; the runtime skips a handled event. ---- */
+  var APPLE = /mac|iphone|ipad/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '');
+  document.addEventListener('keydown', function (e) {
+    if (!e.altKey || e.shiftKey) return;
+    var cmd = APPLE ? (e.metaKey && !e.ctrlKey) : (e.ctrlKey && !e.metaKey);   // ⌘ = Command on Apple, Ctrl elsewhere
+    if (!cmd) return;
+    if (e.code === 'KeyI') { e.preventDefault(); $('cmdInspector').click(); }
+    else if (e.code === 'KeyS') { e.preventDefault(); $('cmdList').click(); }
+  });
+
+  /* ---- Escape closes the overlay and returns focus to its toggle ---------------- */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !openMenu && isOverlay()) {
+      e.preventDefault();
+      setInspector(false);
+      el.tInspector.focus();
+    }
+  });
+
+  /* ---- Start ------------------------------------------------------------------- */
+  if (window.LiquidGlass) LiquidGlass.init();
+  renderList();
+  renderEditor();
+  setList(true);
+  setInspector(inspOpen, { noFocus: true });
+})();
+</script>
+</body>
+</html>

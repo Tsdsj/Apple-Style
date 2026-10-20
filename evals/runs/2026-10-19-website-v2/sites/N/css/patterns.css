@@ -1,0 +1,326 @@
+/* Apple-Style website patterns used by this site, concatenated.
+   Copied unchanged from web/patterns/. */
+
+/* ==========================================================================
+   Site header (pattern 2.1). Requires the core layers (tokens, base, glass,
+   controls, preferences). Observed convention (apple.com-style marketing sites,
+   2026-10-19), not an Apple guideline. Two variants:
+     (a) full-width bar (default): .as-site-header
+     (b) floating capsule: .as-site-header.as-site-header-floating, with the
+         inner element also carrying .as-glass
+   Project defaults below: --as-site-header-h and --as-site-width.
+   ========================================================================== */
+:root {
+  /* Height the sticky header covers. Used for scroll-padding, so anchors are not
+     hidden under it. Bar: 56px. Floating variant: set 80px on :root. If the bar
+     wraps to two rows (no JavaScript, narrow), set it to the taller height. */
+  --as-site-header-h: 56px;
+  /* Content width of the header and footer. Project default. */
+  --as-site-width: 1120px;
+}
+/* Anchor targets stop below the sticky header. Remove this rule if the page has no sticky header. */
+html { scroll-padding-top: calc(var(--as-site-header-h) + 16px); }
+
+/* (a) Bar. A standard material, not Liquid Glass: a website has no system bar to
+   supply the scroll edge, so the bar draws its own translucent band and hairline. */
+.as-site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--as-material-regular);
+  -webkit-backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+  backdrop-filter: blur(var(--as-material-blur)) saturate(1.8);
+  border-block-end: 1px solid var(--as-separator);
+  color: var(--as-label);
+}
+.as-site-header-inner {
+  position: relative; box-sizing: border-box;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px;
+  min-block-size: var(--as-site-header-h); max-inline-size: var(--as-site-width); margin-inline: auto;
+  padding-inline: var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-header-inner { padding-inline: var(--as-margin-regular); } }
+/* The brand may wrap (min-inline-size 0) so a long name cannot push the page wider than the viewport. */
+.as-site-brand {
+  display: inline-flex; align-items: center; min-block-size: var(--as-hit-min); min-inline-size: 0;
+  color: var(--as-label); font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  text-decoration: none; overflow-wrap: anywhere;
+}
+.as-site-brand:hover { text-decoration: underline; text-underline-offset: .25em; }
+.as-site-nav { display: flex; margin-inline-start: auto; min-inline-size: 0; }
+/* Static, so the narrow panel is positioned against the header row, not the nav. .as-glass > * would make the nav relative in the floating variant. */
+.as-site-header .as-site-nav { position: static; }
+.as-site-nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.as-site-nav-links a {
+  display: inline-flex; align-items: center; min-block-size: 32px; padding: 0 10px; border-radius: var(--as-radius-s);
+  color: var(--as-label); font: 400 14px/20px var(--as-font-text); letter-spacing: -.24px; text-decoration: none;
+}
+.as-site-nav-links a:hover { text-decoration: underline; text-underline-offset: .25em; }
+/* 320 to 479 px: the brand, Menu and the CTA stay on one row. At 320 px the content is 288 px wide (320 minus two
+   16 px gutters). The normal sizes need about 286 px, which leaves no room for another system's font, so below 30em
+   the gaps and the type are tighter (about 250 px needed). Above 30em the normal sizes apply. A long brand name or a
+   large text setting can still wrap the CTA onto a second row; the reflow rule (WCAG 1.4.10) allows that, and then
+   --as-site-header-h must be the taller height. */
+@media (max-width: 29.99em) {
+  .as-site-header-inner { gap: 4px 8px; }
+  .as-site-header .as-site-brand { font-size: 16px; line-height: 20px; }
+  .as-site-header .as-site-nav-toggle { padding-inline: 10px; font-size: 14px; }
+  .as-site-header .as-button-small { padding-inline: 12px; font-size: 14px; }
+}
+/* Current page: weight and underline as well as the position of the link. Colour is not the only cue. */
+.as-site-nav-links a[aria-current="page"] {
+  font-weight: 600; text-decoration-line: underline; text-decoration-thickness: 2px; text-underline-offset: .35em;
+}
+@media (pointer: coarse) { .as-site-nav-links a { min-block-size: var(--as-hit-min); } }
+.as-site-brand:focus-visible, .as-site-nav-links a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* (b) Floating capsule. The glass is the navigation layer, so it is allowed here
+   (materials rule 1). The outer element is transparent and only sets the gutter. */
+.as-site-header-floating { background: none; border-block-end: 0; -webkit-backdrop-filter: none; backdrop-filter: none; padding-block: 12px; padding-inline: var(--as-margin); }
+.as-site-header-floating > .as-site-header-inner { min-block-size: 56px; padding-inline: 16px; border-radius: var(--as-radius-capsule); }
+/* Narrow floating capsule: keep the inner height that the no-JavaScript links need (92 px in mobile emulation, two rows of
+   content at 390 to 412 px). Without this the header shrinks by 24 px when
+   site-nav.js collapses the links, which moves the page below it (layout shift). Below about 375 px
+   the links wrap to a second row without JavaScript; that case is not covered and is listed in
+   website-patterns.md, Narrow navigation. Set --as-site-header-h to the same total height. */
+@media (max-width: 47.99em) { .as-site-header-floating > .as-site-header-inner { min-block-size: 92px; } }
+/* Below 380 px the no-JavaScript links wrap to two rows, so the header needs 114 px inside. */
+@media (max-width: 23.75em) { .as-site-header-floating > .as-site-header-inner { min-block-size: 114px; } }
+
+.as-site-header-floating .as-site-brand,
+.as-site-header-floating .as-site-nav-links a { color: var(--as-glass-fg); }
+
+/* Reduced transparency: an opaque bar. */
+@media (prefers-reduced-transparency: reduce) {
+  .as-site-header { background: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* Forced colors: the bar and the current-page marker keep a visible edge. */
+@media (forced-colors: active) {
+  .as-site-header { background: Canvas; color: CanvasText; border-block-end: 1px solid CanvasText; }
+  .as-site-nav-links a[aria-current="page"] { outline: 2px solid CanvasText; outline-offset: 3px; }
+}
+
+/* ==========================================================================
+   Narrow-screen navigation (pattern 2.2). Pairs with web/js/site-nav.js.
+   Below the breakpoint the links collapse behind a toggle button, but only when
+   the script has set data-enhanced. Without JavaScript the links wrap in place.
+   Breakpoint (project default): 48em (768px). The max-width query below and the
+   NARROW constant in site-nav.js must match. Written as 47.99em so 768px is wide.
+
+   Why a disclosure and not role="menu": these are ordinary navigation links.
+   role="menu" promises arrow-key menu behaviour that the links do not implement.
+   So the toggle is a button with aria-expanded, and the list stays a list of links.
+   ========================================================================== */
+
+/* Hidden unless the script enhances the nav below the breakpoint. */
+.as-site-nav-toggle {
+  display: none; align-items: center; gap: 8px;
+  min-block-size: var(--as-hit-min); min-inline-size: var(--as-hit-min); padding: 0 14px;
+  border: 0; border-radius: var(--as-radius-capsule);
+  background: var(--as-fill-tertiary); color: var(--as-label);
+  font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* The chevron is a shape, so open and closed do not depend on colour. */
+.as-site-nav-toggle::after {
+  content: ""; inline-size: 7px; block-size: 7px; margin-block-start: -3px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  transition: transform var(--as-dur-fast) var(--as-ease-soft);
+}
+.as-site-nav-toggle[aria-expanded="true"]::after { margin-block-start: 3px; transform: rotate(-135deg); }
+.as-site-nav-toggle:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+@media (max-width: 47.99em) {
+  /* No JavaScript: the links drop to their own full-width row under the brand. */
+  .as-site-nav:not([data-enhanced]) { order: 3; flex: 1 0 100%; }
+  .as-site-nav[data-enhanced] .as-site-nav-toggle { display: inline-flex; }
+  /* The panel is a layer over the page: solid, not glass, so text in it is never over a busy backdrop. */
+  .as-site-nav[data-enhanced] .as-site-nav-links {
+    display: none; position: absolute; inset-inline: 0; top: 100%;
+    flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 0;
+    box-sizing: border-box; max-block-size: calc(100dvh - var(--as-site-header-h)); overflow-y: auto;
+    padding: 8px var(--as-margin) 16px; background: var(--as-bg); box-shadow: 0 1px 0 var(--as-separator);
+  }
+  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links { display: flex; }
+  .as-site-nav[data-enhanced] .as-site-nav-links a { min-block-size: var(--as-hit-min); padding: 0 4px; font-size: 17px; line-height: 22px; }
+  .as-site-header-floating .as-site-nav[data-enhanced] .as-site-nav-links { margin-block-start: 8px; border-radius: var(--as-radius-l); }
+}
+/* The open animation is opt-in: it runs only when motion is not reduced. */
+@media (max-width: 47.99em) and (prefers-reduced-motion: no-preference) {
+  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links {
+    animation: as-site-nav-in var(--as-dur-fast) var(--as-ease-soft);
+  }
+}
+@keyframes as-site-nav-in { from { opacity: 0; transform: translateY(-4px); } }
+
+@media (forced-colors: active) {
+  .as-site-nav-toggle { border: 1px solid ButtonText; background: ButtonFace; color: ButtonText; }
+  .as-site-nav[data-enhanced] .as-site-nav-links { border-block-end: 1px solid CanvasText; }
+}
+
+/* ==========================================================================
+   Site footer (pattern 2.3): sitemap columns and a legal row. No JavaScript.
+   Observed convention (apple.com-style marketing sites, 2026-10-19), not an Apple
+   guideline. Columns stack below 48em; each column is a heading and a list.
+   ========================================================================== */
+.as-site-footer {
+  background: var(--as-bg-secondary); color: var(--as-label-secondary);
+  border-block-start: 1px solid var(--as-separator);
+  font: 400 14px/20px var(--as-font-text); letter-spacing: -.24px;
+}
+.as-site-footer-inner {
+  box-sizing: border-box; display: grid; gap: 32px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: 40px var(--as-margin) 24px;
+}
+@media (min-width: 48em) { .as-site-footer-inner { padding-inline: var(--as-margin-regular); } }
+.as-site-footer-sitemap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 24px; }
+@media (min-width: 48em) { .as-site-footer-sitemap { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); } }
+.as-site-footer-col { min-inline-size: 0; }
+.as-site-footer-heading { margin: 0 0 8px; color: var(--as-label); font: 600 14px/20px var(--as-font-text); }
+/* Lists of links are not underlined: they are not running text (WCAG 1.4.1). */
+.as-site-footer-list, .as-site-footer-legal-links { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.as-site-footer-legal-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.as-site-footer-list a, .as-site-footer-legal-links a {
+  color: var(--as-label); text-decoration: none; overflow-wrap: anywhere;
+}
+.as-site-footer-list a:hover, .as-site-footer-legal-links a:hover { text-decoration: underline; text-underline-offset: .25em; }
+/* Links inside a paragraph keep the underline from base.css (WCAG 1.4.1), so no class here. */
+.as-site-footer p a { color: var(--as-link); }
+.as-site-footer-legal {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding-block-start: 20px; border-block-start: 1px solid var(--as-separator);
+}
+.as-site-footer-legal p { margin: 0; }
+.as-site-footer a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+
+/* ==========================================================================
+   Article body (pattern 2.8): .as-prose. Requires the core layers.
+   Measure: Latin 65ch (visual heuristic, 60–75ch in the typography guide); CJK
+   40em under :lang(zh) and :lang(ja) (visual heuristic, about 40 characters).
+   Links: this file does NOT set text-decoration on links. base.css underlines
+   links inside running text (WCAG 1.4.1, audit W4). Do not reset all links.
+   Scrolling: long code and wide tables scroll inside their own box, not the page.
+   ========================================================================== */
+.as-prose {
+  box-sizing: border-box; max-inline-size: 65ch; margin-inline: auto; overflow-wrap: break-word;
+  font: 400 1.0625rem/1.6 var(--as-font-text); color: var(--as-label);
+}
+.as-prose:is(:lang(zh), :lang(ja)) { max-inline-size: 40em; font-size: 1.0625rem; line-height: 1.7; word-break: normal; word-break: auto-phrase; line-break: strict; }
+.as-prose > :first-child { margin-block-start: 0; }
+.as-prose h2 { margin: 2em 0 .5em; font: 600 clamp(1.5rem, 1.3rem + .8vw, 2rem)/1.2 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-prose h3 { margin: 1.75em 0 .4em; font: 600 1.25rem/1.3 var(--as-font-text); color: var(--as-label); text-wrap: balance; }
+.as-prose p { margin: 0 0 1.1em; text-wrap: pretty; }
+.as-prose :is(ul, ol) { margin: 0 0 1.1em; padding-inline-start: 1.4em; }
+.as-prose li + li { margin-block-start: .3em; }
+.as-prose a { color: var(--as-link); }
+.as-prose blockquote {
+  margin: 1.5em 0; padding-inline-start: 1em; border-inline-start: 3px solid var(--as-separator-opaque);
+  font-size: 1.1875rem; line-height: 1.5; color: var(--as-label-secondary);
+}
+.as-prose figure { margin: 2em 0; }
+.as-prose img { display: block; max-inline-size: 100%; block-size: auto; height: auto; border-radius: var(--as-radius-m); }
+.as-prose figcaption { margin-block-start: 8px; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+.as-prose :not(pre) > code { padding: .1em .35em; border-radius: var(--as-radius-xs); background: var(--as-fill-tertiary); font-size: .9em; }
+.as-prose code, .as-prose pre { font-family: var(--as-font-mono); }
+.as-prose pre {
+  margin: 0 0 1.1em; padding: 16px 20px; overflow-x: auto; max-inline-size: 100%; tab-size: 2;
+  border-radius: var(--as-radius-m); background: var(--as-bg-secondary); font-size: 14px; line-height: 20px; white-space: pre;
+}
+.as-prose pre code { font: inherit; background: none; }
+/* Wrap a table in .as-prose-table (role="region", tabindex="0", aria-label) so it scrolls inside the article. */
+.as-prose-table { max-inline-size: 100%; margin: 0 0 1.1em; overflow-x: auto; border-radius: var(--as-radius-s); }
+.as-prose table { inline-size: 100%; border-collapse: collapse; font-size: 15px; line-height: 20px; }
+.as-prose caption { padding-block-end: 8px; text-align: start; font-weight: 600; }
+.as-prose th, .as-prose td { padding: 8px 12px; border-block-end: 1px solid var(--as-separator); text-align: start; vertical-align: top; }
+.as-prose th { font-weight: 600; }
+.as-prose hr { margin: 2.5em 0; border: 0; border-block-start: 1px solid var(--as-separator); }
+
+/* ==========================================================================
+   Legal pages and the 404 page (pattern 2.11). Requires the core layers. Legal
+   text itself is article prose (prose.css); this file adds the table of contents,
+   the last-updated line and the 404 layout. Layout: observed convention and
+   project defaults, not an Apple guideline. The HTTP 404 status and noindex are
+   set by the page and the host, see website-patterns.md.
+   ========================================================================== */
+
+/* Table of contents: a nav with a list of in-page links. The headings it points to are in the article.
+   The html scroll-padding from site-header.css keeps each target below a sticky header. */
+.as-site-toc { box-sizing: border-box; margin: 0 0 32px; padding: 16px 20px; border-radius: var(--as-radius-m); background: var(--as-bg-secondary); }
+.as-site-toc-title { margin: 0 0 8px; font: 600 15px/20px var(--as-font-text); color: var(--as-label); }
+.as-site-toc ol { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font: 400 15px/20px var(--as-font-text); }
+.as-site-toc a { display: inline-flex; align-items: center; min-block-size: 32px; color: var(--as-link); }
+.as-site-toc a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.as-site-toc a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+@media (pointer: coarse) { .as-site-toc a { min-block-size: var(--as-hit-min); } }
+
+/* Last updated: the date is a <time> element. The text is secondary, the value is in the datetime attribute. */
+.as-site-updated { margin: 0 0 24px; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+
+/* 404: a centred message, one search or link row, and no redirect. Text is left-aligned from 48em. */
+.as-site-404 {
+  box-sizing: border-box; display: grid; justify-items: start; gap: 16px;
+  max-inline-size: var(--as-site-width, 1120px); margin-inline: auto;
+  padding: clamp(48px, 10vw, 120px) var(--as-margin);
+}
+@media (min-width: 48em) { .as-site-404 { padding-inline: var(--as-margin-regular); } }
+/* The large numeral is decoration: the page title and the h1 carry the message, so the numeral is aria-hidden in the markup. */
+.as-site-404-code { margin: 0; font: 600 clamp(3rem, 2rem + 6vw, 6rem)/1 var(--as-font-display); color: var(--as-label-secondary); font-variant-numeric: tabular-nums; }
+.as-site-404-title { margin: 0; font: 600 clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem)/1.15 var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-site-404-text { margin: 0; max-inline-size: 36em; font: 400 17px/1.45 var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty; }
+.as-site-404-links { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 8px; }
+.as-site-404-search { display: flex; flex-wrap: wrap; gap: 12px; inline-size: 100%; max-inline-size: 36rem; }
+.as-site-404-search .as-form-field { flex: 1 1 16rem; }
+.as-site-404-search .as-button { flex: 0 0 auto; }
+
+@media (forced-colors: active) {
+  .as-site-toc { border: 1px solid CanvasText; }
+  .as-site-toc a { color: LinkText; }
+}
+
+/* ==========================================================================
+   Section rhythm, feature grid and card (pattern 2.5). Requires the core layers.
+   Layout: observed convention (apple.com-style marketing pages, 2026-10-19, not
+   re-verified online in this revision). Project defaults: the clamp rhythm, the
+   16 and 20 px gaps, the 16rem grid minimum and the 1120 px width (site-header.css
+   declares --as-site-width; the fallback here keeps this file standalone).
+   The card is a content surface: a solid background, not glass.
+   ========================================================================== */
+.as-site-section {
+  --_gutter: var(--as-margin);
+  box-sizing: border-box; padding-block: clamp(3rem, 2rem + 5vw, 7rem);
+  /* Text lines up with the header and footer edges, which are --as-site-width wide with a gutter inside. */
+  padding-inline: max(var(--_gutter), calc((100% - var(--as-site-width, 1120px)) / 2 + var(--_gutter)));
+}
+@media (min-width: 48em) { .as-site-section { --_gutter: var(--as-margin-regular); } }
+/* Adjacent sections with the same background share one gap: the second drops its top padding, so the gap is
+   the first section's bottom padding alone. Two sections with different backgrounds keep both paddings, because
+   the edge between them is visible and the content needs room from it. */
+.as-site-section:not(.as-site-section-alt) + .as-site-section:not(.as-site-section-alt),
+.as-site-section-alt + .as-site-section-alt { padding-block-start: 0; }
+/* Alternating background. The surface for cards and tables steps up one level so they still read as raised. */
+.as-site-section-alt { --as-site-surface: var(--as-bg-tertiary); background: var(--as-bg-secondary); }
+.as-site-section-title {
+  margin: 0 0 16px; font: 600 var(--as-display-2, clamp(2rem, 1.25rem + 3vw, 3.5rem))/1.1 var(--as-font-display);
+  letter-spacing: 0; color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.as-site-section-lead {
+  margin: 0 0 clamp(32px, 4vw, 56px); max-inline-size: 36em;
+  font: 400 19px/1.45 var(--as-font-text); color: var(--as-label-secondary); text-wrap: pretty;
+}
+.as-site-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 16px; margin: 0; padding: 0; list-style: none;
+}
+@media (min-width: 48em) { .as-site-grid { gap: 20px; } }
+/* Nested media inside a card can use .as-concentric (base.css) with --as-concentric-inset set to the card padding. */
+.as-site-card {
+  --as-container-radius: var(--as-radius-l);
+  box-sizing: border-box; display: grid; align-content: start; gap: 8px; min-inline-size: 0; margin: 0;
+  padding: 24px; border-radius: var(--as-container-radius);
+  background: var(--as-site-surface, var(--as-bg-secondary)); color: var(--as-label);
+}
+.as-site-card-title { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); text-wrap: balance; }
+.as-site-card p {
+  margin: 0; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px;
+  color: var(--as-label-secondary); text-wrap: pretty; overflow-wrap: break-word;
+}
+@media (forced-colors: active) { .as-site-card { border: 1px solid CanvasText; } }

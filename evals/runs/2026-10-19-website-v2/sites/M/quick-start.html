@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick start · Tidepool Docs</title>
+<meta name="description" content="Create a project, run a task and add a plugin in about five minutes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%230a5fb4'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem("tidepool-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="brand" href="index.html">Tidepool <span class="ver">v0.5.0</span></a>
+  <nav class="top-links" aria-label="Site">
+    <a href="quick-start.html">Quick start</a>
+    <a href="reference/api.html">API reference</a>
+    <a href="changelog.html">Changelog</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav aria-label="Documentation">
+        <p class="nav-group">Start</p>
+        <ul>
+          <li><a href="index.html">Introduction</a></li>
+          <li><a href="quick-start.html" aria-current="page">Quick start</a></li>
+        </ul>
+        <p class="nav-group">Guides</p>
+        <ul>
+          <li><a href="guides/configuration.html">Configuration</a></li>
+          <li><a href="guides/plugins.html">Plugins</a></li>
+          <li><a href="guides/troubleshooting.html">Troubleshooting</a></li>
+        </ul>
+        <p class="nav-group">Reference</p>
+        <ul>
+          <li><a href="reference/api.html">API reference</a></li>
+        </ul>
+        <p class="nav-group">Project</p>
+        <ul>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="content" id="main" tabindex="-1">
+    <article class="prose">
+<p class="crumb">Start</p><h1>Quick start</h1>
+<p class="lead">Go from an empty directory to a running task, with one plugin installed, in about five minutes.</p><details class="toc-inline"><summary>On this page</summary><ul><li class="lvl2"><a href="#before-you-begin">Before you begin</a></li><li class="lvl2"><a href="#1-create-a-project">1. Create a project</a></li><li class="lvl2"><a href="#2-run-a-task">2. Run a task</a></li><li class="lvl2"><a href="#3-add-a-plugin">3. Add a plugin</a></li><li class="lvl2"><a href="#4-check-the-setup">4. Check the setup</a></li><li class="lvl2"><a href="#next-steps">Next steps</a></li></ul></details>
+<h2 id="before-you-begin">Before you begin</h2>
+<p>You need Tidepool 0.5.0 or later, a POSIX shell (bash, zsh or fish) and, optionally, git. If Tidepool is not installed yet, follow the steps in the <a href="index.html#install">introduction</a>.</p>
+<h2 id="1-create-a-project">1. Create a project</h2>
+<p>Make a directory and let Tidepool write a starter configuration into it:</p>
+<div class="code"><pre tabindex="0"><code>$ mkdir hello-pool &amp;&amp; cd hello-pool
+$ tidepool init
+created tidepool.toml</code></pre></div>
+<p>The starter file is short. Its <code>name</code> comes from the directory name:</p>
+<div class="code"><pre tabindex="0"><code>name = "hello-pool"
+version = 1
+
+[tasks.hello]
+run = "echo Hello from Tidepool"</code></pre></div>
+<h2 id="2-run-a-task">2. Run a task</h2>
+<p>Tasks are named commands. Run the <code>hello</code> task:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool run hello
+[hello] running: echo Hello from Tidepool
+Hello from Tidepool
+[hello] done in 0.02s</code></pre></div>
+<h2 id="3-add-a-plugin">3. Add a plugin</h2>
+<p>Plugins bring in tools and tasks maintained by someone else. Add the <code>node</code> plugin, then install it:</p>
+<div class="code"><pre tabindex="0"><code>$ tidepool plugin add node
+added node 2.1.4 (source tidepool/node); run `tidepool sync` to install
+$ tidepool sync
+resolving 1 plugin
+  node 2.1.4 ... ok
+wrote tidepool.lock</code></pre></div>
+<p>The first command also adds a <code>[plugins.node]</code> table to <code>tidepool.toml</code>. Commit the configuration and the lock file together:</p>
+<div class="code"><pre tabindex="0"><code>$ git add tidepool.toml tidepool.lock
+$ git commit -m "Add Tidepool configuration"</code></pre></div>
+<h2 id="4-check-the-setup">4. Check the setup</h2>
+<div class="code"><pre tabindex="0"><code>$ tidepool doctor
+[ok]   config    tidepool.toml parsed (schema v1)
+[ok]   plugins   1 plugin installed, lock file current
+Summary: 2 ok, 0 warnings, 0 failures</code></pre></div>
+<h2 id="next-steps">Next steps</h2>
+<ul><li><a href="guides/configuration.html">Configuration</a> explains tasks, environment variables and local overrides.</li><li><a href="guides/plugins.html">Plugins</a> covers version constraints and writing your own plugin.</li><li><a href="reference/api.html">API reference</a> lists every command and flag.</li></ul>
+    </article>
+<nav class="pager" aria-label="Pages"><a class="prev" href="index.html"><span class="small">Previous</span>Introduction</a><a class="next" href="guides/configuration.html"><span class="small">Next</span>Configuration</a></nav>
+    <footer class="site-footer">Tidepool documentation for version 0.5.0. Sample content for a fictional project.</footer>
+  </main>
+<aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="lvl2"><a href="#before-you-begin">Before you begin</a></li><li class="lvl2"><a href="#1-create-a-project">1. Create a project</a></li><li class="lvl2"><a href="#2-run-a-task">2. Run a task</a></li><li class="lvl2"><a href="#3-add-a-plugin">3. Add a plugin</a></li><li class="lvl2"><a href="#4-check-the-setup">4. Check the setup</a></li><li class="lvl2"><a href="#next-steps">Next steps</a></li></ul></aside>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

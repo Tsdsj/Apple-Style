@@ -88,6 +88,22 @@ test.describe('menu shortcuts leave text editing to the focused field (§2.2)', 
   }
   const take = page => page.evaluate(() => { const r = { hits: [...hits], prevented: [...prevented] }; hits.length = 0; prevented.length = 0; return r; });
 
+  test('an ⌥ shortcut is not taken for a field editing key (⌥⌘I is not Italic)', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(Navigator.prototype, 'platform', { get: () => 'Win32', configurable: true });
+      Object.defineProperty(Navigator.prototype, 'userAgentData', { get: () => ({ platform: 'Windows' }), configurable: true });
+    });
+    await load(page, `<div class="as-menubar" role="menubar" data-shortcuts><button class="as-menubar-item">View</button></div>
+      <div class="as-menu" role="menu">
+        <button class="as-menu-item" role="menuitem" data-cmd="italic">Italic<span class="as-shortcut">⌘I</span></button>
+        <button class="as-menu-item" role="menuitem" data-cmd="inspector">Show Inspector<span class="as-shortcut">⌥⌘I</span></button></div>
+      <div id="rich" contenteditable="true">rich</div>`);
+    await page.evaluate(() => { window.hits = []; document.querySelectorAll('[data-cmd]').forEach(b => b.addEventListener('click', () => hits.push(b.dataset.cmd))); LiquidGlass.init(); });
+    await page.locator('#rich').focus();
+    await page.keyboard.press('Control+i');
+    await page.keyboard.press('Control+Alt+i');
+    expect(await page.evaluate(() => hits)).toEqual(['inspector']);
+  });
   test('non-Apple platform: ⌘ maps to Ctrl, editing keys stay with fields', async ({ page }) => {
     await setup(page, { platform: 'Win32', ua: 'Windows' });
     for (const field of ['#text', '#area']) {
@@ -522,4 +538,16 @@ test.describe('links in running text are underlined by default (1.9)', () => {
     await load(page, `<style>p a { text-decoration: none; }</style><p><a id="p" href="#p">Prose link</a></p>`);
     expect(await decoration(page, 'p')).toBe('none');
   });
+});
+
+// A hidden split-view pane stays hidden: .as-split > .as-inspector sets display with the same specificity
+// as .as-split > [hidden] and comes later (found by the 2026-10-19 v2 app regression run).
+test('hiding the inspector in the desktop demo hides it', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${base}/skills/Apple-Style/web/demo-desktop.html`);
+  await expect(page.locator('.as-split > .as-inspector')).toBeVisible();
+  await page.locator('#tInspector').click();
+  await expect(page.locator('.as-split > .as-inspector')).toBeHidden();
+  await page.locator('#tInspector').click();
+  await expect(page.locator('.as-split > .as-inspector')).toBeVisible();
 });

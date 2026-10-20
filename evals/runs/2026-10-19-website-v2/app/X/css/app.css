@@ -1,0 +1,464 @@
+/* --------------------------------------------------------------------------
+   6c. Web app components — toolbar, tab bar and sidebar, sheet, menu, alert,
+   scrubbable controls, search, grouped list and navigation bar; selectable
+   list, modal dialog, toast, empty and loading states
+
+   Applications only: a content website does not load this file. The form
+   fields, buttons, status pills and badge it used to hold are in controls.css.
+
+   What a real web application needs on top of the components above. Each one
+   is built on the native element that already owns its behaviour (<input>,
+   <select>, <dialog>), so focus, validation, Escape and the accessibility tree
+   come from the browser. The two that have no native element — the selectable
+   list and the toast — get their keyboard model and live region from
+   liquid-glass.js (listbox(), toast()). All of them follow data-density and
+   data-platform like the rest of the stylesheet.
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   Moved here from the core layers so that a content website loads less (plan 2.16):
+   glass groups, transient glass and the dim layer (from glass.css); the Mac-platform sizes
+   (from controls.css and base.css); the extra-small and extra-large buttons, the form row and
+   the customizable select picker (from controls.css). A content website does not load them.
+   -------------------------------------------------------------------------- */
+/* Glass groups: several items share ONE glass background (toolbar groups,
+   tab bars). Children must NOT be glass themselves — never glass on glass. */
+.as-glass-group { display: inline-flex; align-items: center; gap: 2px; padding: 4px; }
+/* Glass inside a glass group is a markup mistake (glass on glass). Render it
+   flat — content visible and usable, no second material — and let
+   liquid-glass.js warn in the console. Never hide content. */
+.as-glass-group > .as-glass { -webkit-backdrop-filter: none; backdrop-filter: none; background: transparent; box-shadow: none; }
+.as-glass-group > .as-glass::before, .as-glass-group > .as-glass::after { display: none; }
+.as-glass-group > .as-item {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: calc(var(--as-hit-min) - 8px); min-height: calc(var(--as-hit-min) - 8px);
+  padding: 0 14px; border-radius: var(--as-radius-capsule); border: 0; background: transparent;
+  color: inherit; font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer;
+  transition: background var(--as-dur-fast) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-spring);
+}
+.as-glass-group > .as-item:hover { background: rgb(128 128 128 / .12); }
+.as-glass-group > .as-item:active { transform: scale(.94); }
+.as-glass-group > .as-item[aria-pressed="true"], .as-glass-group > .as-item.is-selected {
+  background: light-dark(rgb(255 255 255 / .85), rgb(255 255 255 / .16));
+  box-shadow: 0 1px 4px rgb(0 0 0 / .12);
+}
+.as-glass-group > .as-item.is-selected { color: var(--as-accent); }
+
+/* Element lifts INTO glass only while interacting (sliders, toggles knobs) */
+.as-glass-transient { transition: all var(--as-dur-base) var(--as-ease-spring); }
+.as-glass-transient:not(:active):not(.is-dragging) { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 3px rgb(0 0 0 / .15); }
+
+/* Dimming layer for clear glass / modality */
+.as-dim { position: absolute; inset: 0; background: rgb(0 0 0 / .35); pointer-events: none; }
+/* macOS built-in text styles */
+[data-platform="macos"] .as-root, [data-platform="macos"] .as-body { font-size: 13px; line-height: 16px; }
+[data-platform="macos"] .as-text-largetitle { font: 400 26px/32px var(--as-font-display); }
+[data-platform="macos"] .as-text-title1     { font: 400 22px/26px var(--as-font-display); }
+[data-platform="macos"] .as-text-title2     { font: 400 17px/22px var(--as-font-text); }
+[data-platform="macos"] .as-text-title3     { font: 400 15px/20px var(--as-font-text); }
+[data-platform="macos"] .as-text-headline   { font: 700 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-body       { font: 400 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-text-callout    { font: 400 12px/15px var(--as-font-text); }
+[data-platform="macos"] .as-text-subhead    { font: 400 11px/14px var(--as-font-text); }
+[data-platform="macos"] .as-text-footnote,
+[data-platform="macos"] .as-text-caption1   { font: 400 10px/13px var(--as-font-text); }
+[data-platform="macos"] .as-text-caption2   { font: 500 10px/13px var(--as-font-text); }
+.as-button-mini   { min-height: 28px; padding: 0 12px; font-size: 13px; line-height: 18px; }
+.as-button-xlarge { min-height: 60px; padding: 0 28px; font-size: 20px; line-height: 25px; }
+.as-form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+[data-platform="macos"] .as-button { min-height: 22px; padding: 0 12px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
+[data-platform="macos"] .as-button-large, [data-platform="macos"] .as-button-xlarge { border-radius: var(--as-radius-capsule); }
+[data-platform="macos"] .as-input { min-block-size: 22px; padding-inline: 6px; border-radius: var(--as-radius-xs); font-size: 13px; line-height: 16px; }
+[data-platform="macos"] textarea.as-input { min-block-size: 64px; padding-block: 3px; }
+[data-platform="macos"] .as-form-hint, [data-platform="macos"] .as-form-error { font-size: 11px; line-height: 14px; }
+/* Customizable select (Chrome 135+, Safari 27): a menu-like picker with a
+   leading checkmark. Pointer input only: on a touchscreen the platform picker
+   (iOS menu or wheel, Android sheet) is the better control. */
+@supports (appearance: base-select) {
+  @media (pointer: fine) {
+    select.as-input, select.as-input::picker(select) { appearance: base-select; }
+    select.as-input { display: inline-flex; align-items: center; gap: 6px; padding-inline: 12px 10px; }
+    select.as-input::picker-icon { color: var(--as-label-secondary); transition: rotate var(--as-dur-fast) var(--as-ease-soft); }
+    select.as-input:open::picker-icon { rotate: 180deg; }
+    select.as-input::picker(select) {
+      box-sizing: border-box; min-inline-size: anchor-size(inline); margin-block: 4px; padding: 5px;
+      border: 1px solid transparent; border-radius: var(--as-radius-m);
+      background: var(--as-glass-fill-large); color: var(--as-label);
+      -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+      box-shadow: var(--as-glass-shadow-large), inset 0 0 0 .5px var(--as-glass-edge);
+    }
+    select.as-input option { display: flex; align-items: center; gap: 6px; min-block-size: 28px; padding: 3px 10px 3px 6px; border-radius: var(--as-radius-xs); }
+    select.as-input option::checkmark { order: -1; inline-size: 14px; color: inherit; }
+    select.as-input option:not(:checked)::checkmark { visibility: hidden; }
+    select.as-input option:is(:hover, :focus-visible) { outline: none; background: var(--as-action-bg); color: var(--as-action-fg); }
+    select.as-input option:disabled { opacity: .45; background: transparent; color: inherit; }
+  }
+}
+
+
+
+:root {
+  /* Toast: thick enough that its label keeps ≥ 9:1 over any content. */
+  --as-toast-fill: light-dark(rgb(250 250 252 / .86), rgb(44 44 48 / .86));
+}
+
+/* Toolbar: transparent bar; items float in glass groups; scroll edge under it */
+.as-toolbar { display: flex; align-items: center; gap: 12px; padding: 8px var(--as-margin); min-height: 60px; }
+.as-toolbar .as-spacer { flex: 1; }
+.as-toolbar .as-glass-group > .as-item { padding: 0 12px; }
+.as-toolbar .as-item svg { width: 20px; height: 20px; }
+.as-toolbar-title { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; color: var(--as-label); }
+/* Opt-in (HIG Navigation bars): large title while the view is at the top, the
+   standard title only once that large title has scrolled away — otherwise the
+   same words sit on screen twice. Add `data-reveal-on-scroll` to the toolbar
+   title (optional value = selector of the large title, default .as-large-title)
+   and LiquidGlass.init() wires the observer. */
+.as-toolbar-title[data-reveal-on-scroll] {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), transform var(--as-dur-base) var(--as-ease-soft);
+}
+.as-toolbar-title[data-reveal-on-scroll].is-visible { opacity: 1; transform: none; }
+
+/* Narrow containers: the toolbar wraps and its title and search shrink. */
+@media (max-width: 600px) {
+  .as-toolbar { flex-wrap: wrap; gap: 8px; }
+  .as-toolbar-title { min-inline-size: 0; overflow-wrap: anywhere; }
+  .as-toolbar .as-search { min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; }
+}
+
+/* Tab bar (iOS): floating capsule, search tab separate at trailing end */
+.as-tabbar { position: fixed; inset-inline: 0; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 10px; padding: 0 var(--as-margin); z-index: 20; pointer-events: none; }
+.as-tabbar > * { pointer-events: auto; }
+.as-tabbar .as-glass-group { padding: 5px; gap: 0; transition: transform var(--as-dur-slow) var(--as-ease-spring), width var(--as-dur-slow) var(--as-ease-spring); }
+.as-tabbar .as-tab { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: 48px; padding: 4px 10px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-glass-fg-secondary); font: 500 10px/12px var(--as-font-text); cursor: pointer; transition: color var(--as-dur-fast), background var(--as-dur-base) var(--as-ease-spring), transform var(--as-dur-base) var(--as-ease-spring); }
+.as-tabbar .as-tab svg { width: 24px; height: 24px; }
+.as-tabbar .as-tab:active { transform: scale(.92); }
+/* A focus ring tuned for glass — the UA default is drawn for opaque surfaces
+   and disappears against a bright backdrop behind the bar. */
+.as-tabbar .as-tab:focus-visible,
+.as-glass-group > .as-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 65%, transparent); outline-offset: -2px; }
+.as-tabbar .as-tab.is-selected { color: var(--as-accent); background: light-dark(rgb(255 255 255 / .9), rgb(255 255 255 / .14)); box-shadow: 0 1px 4px rgb(0 0 0 / .12); }
+.as-tabbar .as-tab-search { width: 56px; height: 56px; min-width: 0; padding: 0; }
+/* minimize on scroll: liquid-glass.js toggles .is-minimized */
+.as-tabbar.is-minimized .as-glass-group { transform: translateY(8px) scale(.82); opacity: .9; }
+.as-tabbar.is-minimized .as-tab:not(.is-selected):not(.as-tab-search) { display: none; }
+.as-tabbar.is-minimized .as-tab-search { width: 46px; height: 46px; }
+.as-tabbar.is-minimized .as-tab span { display: none; }
+.as-tabbar .as-tab { box-sizing: border-box; }
+
+/* Tab bar ↔ sidebar: ONE navigational element that scales with width
+   (`sidebarAdaptable` / `UITabBarController.Mode.tabSidebar`). Opt in with
+   `data-sidebar` on the .as-tabbar; it takes effect at regular width.
+   The radius override is the point: .as-glass defaults to a capsule, which is
+   right for a short horizontal pill and wrong the moment the surface becomes
+   tall — a 216×198 capsule is a 99px lozenge, not a sidebar. Large glass is a
+   rounded rectangle (same radius .as-glass-large uses). */
+@media (min-width: 1024px) {
+  .as-tabbar[data-sidebar] {
+    flex-direction: column; justify-content: flex-start; align-items: stretch;
+    inset-block: 12px max(12px, env(safe-area-inset-bottom));
+    inset-inline: 12px auto;   /* leading edge, mirrors in RTL */
+    width: var(--as-tabsidebar-width); padding: 0;
+  }
+  .as-tabbar[data-sidebar] .as-glass-group {
+    --as-glass-radius: var(--as-radius-xl);
+    --as-tabsidebar-pad: 8px;
+    flex-direction: column; align-items: stretch; padding: var(--as-tabsidebar-pad); gap: 2px;
+  }
+  .as-tabbar[data-sidebar] .as-tab {
+    flex-direction: row; justify-content: flex-start; gap: 10px;
+    min-height: var(--as-hit-min); padding: 0 12px;
+    /* Concentric: the selected-row highlight is inset by the group padding, so
+       its radius is the group radius MINUS that inset. A fixed small radius
+       here reads as flared corners inside the rounded group — the single most
+       visible concentricity bug in a sidebar. */
+    border-radius: max(0px, calc(var(--as-glass-radius) - var(--as-tabsidebar-pad)));
+    font: 500 15px/20px var(--as-font-text);
+  }
+  .as-tabbar[data-sidebar] .as-tab svg { width: 20px; height: 20px; }
+  .as-tabbar[data-sidebar] .as-tab span { font-size: 15px; line-height: 20px; }
+  .as-tabbar[data-sidebar] .as-tab-search { width: auto; height: auto; min-width: 0; min-height: var(--as-hit-min); padding: 0 12px; border-radius: max(0px, calc(var(--as-glass-radius) - var(--as-tabsidebar-pad))); }
+  .as-tabbar[data-sidebar] .as-badge { position: static; margin-inline-start: auto; }
+  /* minimize-on-scroll is a compact-width behavior; a sidebar stays put.
+     The :not() chain mirrors the compact rules above so these win on
+     specificity rather than on source order alone. */
+  .as-tabbar[data-sidebar].is-minimized .as-glass-group { transform: none; opacity: 1; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab:not(.is-selected):not(.as-tab-search) { display: inline-flex; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab span { display: inline; }
+  .as-tabbar[data-sidebar].is-minimized .as-tab-search { width: auto; height: auto; min-height: var(--as-hit-min); }
+  /* content inset: put this on the element that owns the page padding */
+  .as-with-tabsidebar { padding-inline-start: calc(var(--as-tabsidebar-width) + 24px); }
+  .as-with-tabsidebar.as-safe-bottom { padding-bottom: max(40px, env(safe-area-inset-bottom)); }
+}
+
+/* Sidebar (iPad/Mac): inset floating glass; content extends beneath */
+/* Logical inset so the sidebar lands on the leading edge in RTL too. */
+.as-sidebar { position: absolute; inset-block: 12px; inset-inline: 12px auto; width: 280px; --as-sidebar-pad: 12px; padding: var(--as-sidebar-pad); overflow: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 2px; z-index: 15; }
+/* Same button reset as the menu item: sidebar rows are navigation targets, so
+   they are <button> or <a>, not <div>. */
+.as-sidebar .as-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 0 12px; box-sizing: border-box; appearance: none; -webkit-appearance: none; border: 0; background: transparent; border-radius: max(0px, calc(var(--as-glass-radius, var(--as-radius-xl)) - var(--as-sidebar-pad, 12px))); color: var(--as-glass-fg); font: 400 15px/20px var(--as-font-text); text-align: start; text-decoration: none; cursor: pointer; }
+.as-sidebar .as-row:hover { background: rgb(128 128 128 / .12); }
+.as-sidebar .as-row:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
+.as-sidebar .as-row.is-selected { background: light-dark(rgb(0 0 0 / .08), rgb(255 255 255 / .14)); font-weight: 600; }
+.as-sidebar .as-row svg { width: 20px; height: 20px; color: var(--as-accent); }
+.as-sidebar .as-section-title { padding: 14px 12px 6px; font: 600 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
+.as-with-sidebar { padding-inline-start: 304px; }
+/* Background extension effect: mirror + blur content beneath sidebar/inspector */
+.as-bg-extension { position: absolute; inset-block: 0; inset-inline: 0 auto; width: 304px; overflow: hidden; z-index: 0; }
+.as-bg-extension > img, .as-bg-extension > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); filter: blur(24px) saturate(1.2); }
+
+/* Sheet: inset half-sheet with large radius; becomes opaque at full height */
+/* Closed, the dimming layer is not rendered at all (visibility flips after the
+   fade): an invisible full-viewport fixed element with a dark background can
+   still be picked up by browsers that tint their toolbars from fixed
+   elements at the viewport edges. */
+.as-sheet-backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / .30); z-index: 30; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity var(--as-dur-base) var(--as-ease-soft), visibility 0s linear var(--as-dur-base); }
+.as-sheet-backdrop.is-open { opacity: 1; visibility: visible; pointer-events: auto; transition-delay: 0s; }
+/* overscroll-behavior: reaching the end of a sheet/menu/sidebar must not hand
+   the scroll to the page behind it. */
+.as-sheet { position: fixed; inset-inline: 8px; bottom: 8px; max-height: 60vh; z-index: 31; padding: 8px 20px 24px; overflow: auto; overscroll-behavior: contain;
+  --as-glass-radius: var(--as-radius-sheet); transform: translateY(110%); transition: transform var(--as-dur-slow) var(--as-ease-spring), border-radius var(--as-dur-base), background var(--as-dur-base), inset-inline-start var(--as-dur-base), inset-inline-end var(--as-dur-base), bottom var(--as-dur-base), max-height var(--as-dur-slow) var(--as-ease-spring); }
+.as-sheet.is-open { transform: translateY(0); }
+.as-sheet.is-full { inset-inline: 0; bottom: 0; max-height: 100vh; --as-glass-radius: var(--as-radius-sheet) var(--as-glass-radius, 0) 0 0; border-radius: var(--as-radius-sheet) var(--as-radius-sheet) 0 0; --_fill: var(--as-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.as-sheet .as-grabber { width: 36px; height: 5px; margin: 6px auto 14px; border-radius: 3px; background: var(--as-label-tertiary); }
+.as-sheet .as-sheet-title { text-align: start; font: 700 20px/25px var(--as-font-display); margin: 0 0 12px; }  /* bolder, leading-aligned */
+
+/* Menu / popover: pops open from its source; thicker glass; icons lead items */
+.as-menu { position: absolute; min-width: 250px; max-height: min(70dvh, 520px); overflow: auto; overscroll-behavior: contain; padding: 6px; z-index: 40; transform-origin: var(--as-origin, top left); --as-glass-radius: var(--as-radius-l);
+  opacity: 0; transform: scale(.4); pointer-events: none; transition: transform var(--as-dur-base) var(--as-ease-spring), opacity var(--as-dur-fast); }
+.as-menu:dir(rtl) { transform-origin: var(--as-origin, top right); }
+.as-menu.is-open { opacity: 1; transform: none; pointer-events: auto; }
+/* The item must work as a real <button role="menuitem"> — the menu keyboard
+   model (arrow keys, Escape, Tab) needs a focusable element, and a bare <div>
+   is not one. So the UA button chrome (buttonface background, 2px outset
+   border, shrink-to-fit width, system font) has to be reset here, exactly as
+   .as-item / .as-tab / .as-segment / .as-button already do. Without this a
+   correctly-marked-up menu renders as a stack of gray OS buttons on glass. */
+.as-menu .as-menu-item { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 12px; box-sizing: border-box; appearance: none; -webkit-appearance: none; border: 0; background: transparent; border-radius: var(--as-radius-m); color: var(--as-glass-fg); font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; text-align: start; cursor: pointer; }
+.as-menu .as-menu-item:hover { background: rgb(128 128 128 / .14); }
+.as-menu .as-menu-item:focus-visible { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: -2px; }
+.as-menu .as-menu-item svg { width: 20px; height: 20px; opacity: .9; }
+.as-menu .as-menu-item .as-shortcut { margin-inline-start: auto; color: var(--as-glass-fg-secondary); font-size: 15px; }
+.as-menu .as-menu-item.as-destructive { color: var(--as-destructive-text); }
+.as-menu .as-menu-sep { height: .5px; margin: 6px 0; background: var(--as-separator); }
+[data-platform="macos"] .as-menu .as-menu-item { min-height: 28px; font-size: 13px; line-height: 16px; border-radius: var(--as-radius-xs); }
+
+.as-alert { box-sizing: border-box; max-inline-size: 100%; }
+/* Alert: bolder, leading-aligned text */
+.as-alert { width: 270px; padding: 20px 16px 8px; --as-glass-radius: var(--as-radius-xl); text-align: start; }
+.as-alert h2 { margin: 0 0 4px; font: 700 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-alert p  { margin: 0 0 16px; font: 400 13px/18px var(--as-font-text); color: var(--as-glass-fg-secondary); }
+.as-alert .as-actions { display: flex; gap: 8px; margin: 0 -8px; }
+.as-alert .as-actions .as-button { flex: 1; }
+
+/* --------------------------------------------------------------------------
+   6a. Scrubbable controls
+   These are content-layer controls, so they are quiet at rest and only *lift
+   into glass while being manipulated* (WWDC25/219). All three are draggable —
+   on Apple platforms you press the selected segment / the switch knob / the
+   slider thumb and slide, and the control tracks your finger 1:1, stretching
+   with the drag and settling on a spring. liquid-glass.js adds the indicator
+   and the gesture; the CSS below degrades to click-only without it.
+   -------------------------------------------------------------------------- */
+
+/* Segmented control: selection lifts into glass and can be dragged */
+.as-segmented { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--as-radius-capsule); background: var(--as-fill-tertiary); position: relative; touch-action: pan-y; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; contain: layout style; }
+.as-segmented .as-segment { position: relative; z-index: 1; min-height: 32px; padding: 0 16px; border: 0; border-radius: var(--as-radius-capsule); background: transparent; color: var(--as-label); font: 500 15px/20px var(--as-font-text); letter-spacing: -.24px; cursor: pointer; transition: color var(--as-dur-fast) var(--as-ease-soft); }
+/* fallback selection when JS has not upgraded the control */
+.as-segmented .as-segment.is-selected { background: light-dark(rgb(255 255 255), rgb(99 99 102)); box-shadow: 0 2px 6px rgb(0 0 0 / .14), inset 0 0 0 .5px rgb(255 255 255 / .5); }
+.as-segmented .as-segment:active { transform: scale(1.04); }
+/* upgraded: one sliding indicator carries the selection */
+.as-segmented[data-indicator] .as-segment.is-selected { background: transparent; box-shadow: none; }
+.as-segmented[data-indicator] .as-segment:active { transform: none; }
+.as-seg-indicator {
+  /* physical `left` on purpose: liquid-glass.js measures physical offsets, in RTL too */
+  position: absolute; top: 3px; left: 0; height: calc(100% - 6px); width: 0; z-index: 0;
+  border-radius: var(--as-radius-capsule); pointer-events: none;
+  background: light-dark(rgb(255 255 255), rgb(99 99 102));
+  box-shadow: 0 2px 6px rgb(0 0 0 / .14), inset 0 0 0 .5px rgb(255 255 255 / .5);
+  transform: translateX(var(--as-ind-x, 0px)) scaleX(var(--as-ind-sx, 1));
+  transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring);
+}
+/* promote the moving part on press, before it starts moving, so the first
+   frame of the drag is not spent creating a layer */
+.as-segmented:active .as-seg-indicator, .as-segmented.is-scrubbing .as-seg-indicator,
+.as-toggle:active .as-knob, .as-toggle.is-scrubbing .as-knob,
+.as-slider:active ~ .as-slider-knob, .as-slider-knob.is-scrubbing { will-change: transform; }
+/* while the finger is down the indicator follows it 1:1 — no transition, and
+   it lifts into glass so the label underneath stays readable through it */
+.as-segmented.is-scrubbing .as-seg-indicator {
+  transition: none;
+  background: light-dark(rgb(255 255 255 / .72), rgb(120 120 124 / .72));
+  -webkit-backdrop-filter: blur(3px) saturate(1.7) brightness(1.06);
+  backdrop-filter: blur(3px) saturate(1.7) brightness(1.06);
+  box-shadow: 0 6px 18px rgb(0 0 0 / .2), inset 0 0 0 1px rgb(255 255 255 / .7);
+}
+
+/* Toggle (switch): capsule mirrors slider proportions; knob is draggable and
+   lifts into glass while held */
+.as-toggle { position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: var(--as-radius-capsule); background: var(--as-fill); cursor: pointer; transition: background var(--as-dur-base) var(--as-ease-soft); -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
+.as-toggle[aria-checked="true"] { background: var(--as-green); }
+.as-toggle .as-knob { position: absolute; top: 2px; inset-inline-start: 2px; width: var(--as-knob-w, 27px); height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transform: translateX(var(--as-knob-x, 0px)); transition: transform var(--as-dur-base) var(--as-ease-spring), width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle[aria-checked="true"] { --as-knob-x: 20px; }
+.as-toggle:active { --as-knob-w: 33px; }
+.as-toggle[aria-checked="true"]:active { --as-knob-x: 14px; }
+/* RTL: the switch is mirrored, so "on" travels toward the inline start. */
+.as-toggle[aria-checked="true"]:dir(rtl) { --as-knob-x: -20px; }
+.as-toggle[aria-checked="true"]:active:dir(rtl) { --as-knob-x: -14px; }
+.as-toggle.is-scrubbing .as-knob { transition: width var(--as-dur-base) var(--as-ease-spring); }
+.as-toggle.is-scrubbing { --as-knob-w: 33px; }
+
+/* Slider: the thumb turns into a transparent liquid lens while dragged, so you
+   can watch the value underneath. JS hides the native thumb and overlays
+   .as-slider-knob as a sibling — the input keeps its own box, so it goes on
+   contributing its intrinsic width to whatever grid or flex row it sits in.
+   The bare input below is the no-JS fallback. */
+.as-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; touch-action: pan-y; }
+.as-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
+/* A range input runs right to left in RTL (HIG: flip controls that show
+   progress), so the filled part of the track starts on the right. */
+.as-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--as-accent) var(--as-value, 50%), var(--as-fill) var(--as-value, 50%)); }
+.as-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16); transition: transform var(--as-dur-base) var(--as-ease-spring); }
+.as-slider:active::-webkit-slider-thumb { transform: scaleX(1.35); background: rgb(255 255 255 / .6); box-shadow: 0 6px 16px rgb(0 0 0 / .18), inset 0 0 0 1px rgb(255 255 255 / .8); }
+.as-slider::-moz-range-track { height: 6px; border-radius: 3px; background: var(--as-fill); }
+.as-slider::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--as-accent); }
+.as-slider::-moz-range-thumb { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / .15); }
+/* upgraded */
+.as-slider.is-upgraded::-webkit-slider-thumb { opacity: 0; }
+.as-slider.is-upgraded::-moz-range-thumb { opacity: 0; }
+.as-slider-knob {
+  position: absolute; z-index: 1;
+  /* physical on purpose: liquid-glass.js positions the knob from offsetLeft
+     and mirrors the value itself when the input runs right to left */
+  left: var(--as-knob-l, 0px); top: var(--as-knob-y, 50%);
+  width: 28px; height: 28px; margin-left: -14px;
+  border-radius: 50%; pointer-events: none; background: #fff;
+  box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 1px 1px rgb(0 0 0 / .16);
+  transform: translate(var(--as-knob-x, 0px), -50%) scaleX(var(--as-knob-sx, 1));
+  transition: background var(--as-dur-base) var(--as-ease-soft),
+              box-shadow var(--as-dur-base) var(--as-ease-soft),
+              transform var(--as-dur-base) var(--as-ease-spring);
+}
+/* transient lift: only while the value is being changed */
+.as-slider-knob.is-scrubbing {
+  transition: background var(--as-dur-fast), box-shadow var(--as-dur-fast);
+  background: rgb(255 255 255 / .38);
+  -webkit-backdrop-filter: blur(1px) saturate(1.8) brightness(1.08);
+  backdrop-filter: blur(1px) saturate(1.8) brightness(1.08);
+  box-shadow: 0 8px 20px rgb(0 0 0 / .2), inset 0 0 0 1px rgb(255 255 255 / .85);
+}
+.as-slider-knob.is-focused { box-shadow: 0 3px 8px rgb(0 0 0 / .15), 0 0 0 3px color-mix(in oklab, var(--as-accent) 55%, transparent); }
+
+/* Search field: own glass surface (compose with .as-glass) */
+.as-search { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; }
+/* The input drops its own outline so the ring can wrap the whole glass pill
+   instead of the bare text box — but the ring has to come back somewhere, or
+   keyboard users lose the field entirely. Never `outline: none` alone. */
+.as-search:focus-within { outline: 3px solid color-mix(in oklab, var(--as-accent) 60%, transparent); outline-offset: 2px; }
+.as-search input { flex: 1; min-inline-size: 0; border: 0; background: transparent; color: inherit; font: 400 17px/22px var(--as-font-text); outline: none; }
+.as-search input::placeholder { color: var(--as-glass-fg-secondary); }
+.as-search svg { width: 18px; height: 18px; color: var(--as-glass-fg-secondary); }
+
+/* Inset grouped list: larger radius and row height (iOS 26) */
+.as-list { margin: 0 var(--as-margin); padding: 0; list-style: none; border-radius: var(--as-radius-xl); background: var(--as-bg-grouped-2); overflow: hidden; }
+.as-list li { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 16px; font: 400 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+.as-list li + li { box-shadow: inset 0 .5px 0 var(--as-separator); }
+.as-list li .as-value { margin-inline-start: auto; color: var(--as-label-secondary); }
+.as-list-header { margin: 24px calc(var(--as-margin) + 16px) 8px; font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); text-transform: none; } /* title-style capitalization, not ALL CAPS */
+.as-grouped { background: var(--as-bg-grouped); }
+
+/* Navigation bar large title */
+.as-navbar { display: flex; flex-direction: column; padding: 0 var(--as-margin); }
+.as-navbar .as-large-title { font: 700 34px/41px var(--as-font-display); letter-spacing: .4px; margin: 4px 0 8px; }
+
+/* Selectable list — role="listbox" with role="option" rows; LiquidGlass
+   upgrades .as-listbox with the single-select keyboard model (one tab stop,
+   arrows move the selection, Home/End, type-ahead). Selection is the
+   aria-selected attribute: set it to select from code. */
+.as-listbox { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 4px; list-style: none; }
+.as-listbox[aria-orientation="horizontal"] { flex-direction: row; flex-wrap: wrap; }
+.as-option {
+  display: flex; align-items: center; gap: 10px; box-sizing: border-box;
+  min-block-size: var(--as-hit-min); padding: 6px 12px; border-radius: var(--as-radius-s);
+  color: var(--as-label); cursor: default; -webkit-tap-highlight-color: transparent;
+}
+.as-option:hover { background: var(--as-fill-quaternary); }
+/* Outside the row, so it shows on the accent-filled selected row too. */
+.as-option:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 1px; }
+.as-option[aria-selected="true"] { background: var(--as-action-bg); color: var(--as-action-fg); }
+.as-option[aria-selected="true"] :is(.as-secondary, .as-tertiary) { color: var(--as-action-fg); }
+.as-option[aria-disabled="true"], .as-listbox[aria-disabled="true"] { opacity: .45; }
+.as-option[aria-selected="true"] .as-pill { background: rgb(0 0 0 / .22); color: var(--as-action-fg); }
+
+/* Modal dialog — <dialog class="as-dialog"> opened with showModal(): the
+   browser supplies focus containment, the inert page, Escape and focus
+   return. Header and footer stay put while a long body scrolls. Footer
+   actions sit at the trailing end, the primary action last. Do not compose
+   with .as-glass: a backdrop filter would also capture the toast. */
+.as-dialog {
+  box-sizing: border-box; inline-size: min(var(--as-dialog-inline-size, 520px), calc(100% - 32px));
+  max-inline-size: none; max-block-size: calc(100% - 32px);
+  margin: auto; padding: 0; overscroll-behavior: contain;
+  border: 1px solid transparent; border-radius: var(--as-radius-xl);
+  background: var(--as-modal-bg); color: var(--as-label);
+  box-shadow: var(--as-glass-shadow-large), 0 0 0 .5px var(--as-glass-edge);
+  opacity: 0; translate: 0 8px; scale: .98;
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), translate var(--as-dur-base) var(--as-ease-soft), scale var(--as-dur-base) var(--as-ease-soft),
+              overlay var(--as-dur-base) allow-discrete, display var(--as-dur-base) allow-discrete;
+}
+.as-dialog[open] { opacity: 1; translate: none; scale: none; }
+.as-dialog::backdrop { background: rgb(0 0 0 / 0); transition: background-color var(--as-dur-base) var(--as-ease-soft), overlay var(--as-dur-base) allow-discrete, display var(--as-dur-base) allow-discrete; }
+.as-dialog[open]::backdrop { background: rgb(0 0 0 / .32); }
+@starting-style {
+  .as-dialog[open] { opacity: 0; translate: 0 8px; scale: .98; }
+  .as-dialog[open]::backdrop { background: rgb(0 0 0 / 0); }
+}
+.as-dialog-header { position: sticky; inset-block-start: 0; z-index: 1; display: flex; align-items: center; gap: 8px; padding: 18px 20px 8px; background: var(--as-modal-bg); }
+.as-dialog-title { flex: 1; min-inline-size: 0; margin: 0; font: 700 20px/25px var(--as-font-display); }   /* bolder, leading-aligned */
+.as-dialog-body { padding: 8px 20px 20px; }
+.as-dialog-footer { position: sticky; inset-block-end: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 12px 20px 18px; background: var(--as-modal-bg); }
+
+/* Toast — a short status message that needs no action. LiquidGlass.toast()
+   creates or reuses one per layer (the page, or the open modal dialog, whose
+   inert backdrop would otherwise hide it from assistive technology) and
+   announces it through role="status". Never the only place an error or an
+   action appears: it leaves after a few seconds. */
+.as-toast {
+  position: fixed; inset-block-end: var(--as-toast-bottom, max(24px, env(safe-area-inset-bottom))); inset-inline-start: 50%; z-index: 60;
+  box-sizing: border-box; inline-size: max-content; max-inline-size: calc(100vw - 32px);
+  padding: 10px 18px; border: 1px solid transparent; border-radius: var(--as-radius-capsule);
+  background: var(--as-toast-fill); color: var(--as-label);
+  -webkit-backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+  backdrop-filter: blur(var(--as-glass-blur-large)) saturate(var(--as-glass-saturate));
+  box-shadow: var(--as-glass-shadow), inset 0 0 0 .5px var(--as-glass-edge);
+  font: 500 15px/20px var(--as-font-text); text-align: center; overflow-wrap: anywhere;
+  pointer-events: none; opacity: 0; translate: -50% 8px;
+  transition: opacity var(--as-dur-base) var(--as-ease-soft), translate var(--as-dur-base) var(--as-ease-spring);
+}
+.as-toast:dir(rtl) { translate: 50% 8px; }
+.as-toast.is-on { opacity: 1; translate: -50% 0; }
+.as-toast.is-on:dir(rtl) { translate: 50% 0; }
+/* Above a floating tab bar (58 px tall, 12 px off the bottom), not on it. */
+:root:has(.as-tabbar) { --as-toast-bottom: calc(max(12px, env(safe-area-inset-bottom)) + 70px); }
+@media (min-width: 1024px) { :root:has(.as-tabbar[data-sidebar]) { --as-toast-bottom: max(24px, env(safe-area-inset-bottom)); } }
+
+/* Empty state — says what belongs here and how to get it (ContentUnavailableView). */
+.as-empty { display: grid; justify-items: center; align-content: center; gap: 6px; padding: 64px 24px; text-align: center; color: var(--as-label-secondary); }
+.as-empty[hidden] { display: none; }
+.as-empty > svg { inline-size: 44px; block-size: 44px; margin-block-end: 6px; color: var(--as-label-secondary); }
+.as-empty-title { margin: 0; font: 600 20px/25px var(--as-font-display); color: var(--as-label); }
+.as-empty p { margin: 0; max-inline-size: 40ch; }
+.as-empty .as-button { margin-block-start: 10px; }
+
+/* Loading placeholder — shaped like the content it stands in for. Mark the
+   placeholders aria-hidden and the region aria-busy="true". */
+.as-skeleton { display: block; block-size: var(--as-skeleton-h, 1em); border-radius: var(--as-radius-xs); background: var(--as-fill-tertiary); animation: as-skeleton-pulse 1.6s var(--as-ease-soft) infinite alternate; }
+@keyframes as-skeleton-pulse { to { opacity: .45; } }
+
+/* Mac density */
+[data-platform="macos"] .as-option { min-block-size: var(--as-row-min); padding: 2px 8px; border-radius: var(--as-radius-xs); }
+[data-platform="macos"] .as-dialog { border-radius: var(--as-radius-l); }
+[data-platform="macos"] .as-dialog-title { font: 700 13px/16px var(--as-font-text); }
+[data-platform="macos"] .as-toast { padding: 6px 14px; font-size: 13px; line-height: 16px; }
+[data-platform="macos"] .as-empty-title { font-size: 15px; line-height: 20px; }

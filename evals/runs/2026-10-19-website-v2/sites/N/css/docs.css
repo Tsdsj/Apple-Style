@@ -1,0 +1,144 @@
+/* ==========================================================================
+   Tidepool docs: page layout, documentation menu, reading column, pager and
+   the appearance switch. Uses the core tokens and the pattern files only.
+   No glass on content: the header and footer use the standard material.
+   ========================================================================== */
+
+/* Skip link: off screen until it takes focus. */
+.docs-skip {
+  position: absolute; z-index: 100; inset-block-start: 8px; inset-inline-start: var(--as-margin);
+  padding: 10px 16px; border-radius: var(--as-radius-s); transform: translateY(-200%);
+  background: var(--as-action-bg); color: var(--as-action-fg);
+  font: 600 15px/20px var(--as-font-text); text-decoration: none;
+}
+.docs-skip:focus { transform: none; outline: 3px solid var(--as-accent); outline-offset: 2px; }
+
+.docs-kicker { margin: 0 0 8px; font: 600 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+
+/* Home hero */
+.as-site-section.docs-hero { padding-block-start: clamp(40px, 7vw, 96px); }
+.docs-hero-title {
+  margin: 0 0 16px; max-inline-size: 24ch;
+  font: 700 clamp(2.25rem, 1.45rem + 3.6vw, 4rem)/1.05 var(--as-font-display);
+  letter-spacing: -.02em; color: var(--as-label); text-wrap: balance; overflow-wrap: break-word;
+}
+.docs-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 28px; }
+.docs-install { max-inline-size: 44rem; }
+.docs-install h3 { margin-block-start: 1.25em; }
+
+/* Layout: one column on narrow screens; sidebar and reading column from 64em. */
+.docs-layout {
+  box-sizing: border-box; max-inline-size: var(--as-site-width); margin-inline: auto;
+  padding: 16px var(--as-margin) 56px;
+}
+@media (min-width: 48em) { .docs-layout { padding-inline: var(--as-margin-regular); } }
+@media (min-width: 64em) {
+  .docs-layout {
+    display: grid; grid-template-columns: 232px minmax(0, 1fr); column-gap: 48px;
+    align-items: start; padding-block-start: 32px;
+  }
+  .docs-sidebar {
+    position: sticky; top: calc(var(--as-site-header-h) + 24px);
+    max-block-size: calc(100dvh - var(--as-site-header-h) - 48px); overflow-y: auto;
+    overscroll-behavior: contain; scrollbar-gutter: stable;
+  }
+}
+
+/* Documentation menu: a native disclosure. Open on wide screens, closed on narrow ones. */
+.docs-sidebar { min-inline-size: 0; font: 400 15px/20px var(--as-font-text); letter-spacing: -.24px; }
+.docs-menu { margin: 0 0 16px; }
+.docs-menu > summary {
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  min-block-size: var(--as-hit-min); padding: 0 16px; border-radius: var(--as-radius-s);
+  background: var(--as-fill-tertiary); color: var(--as-label); cursor: pointer;
+  font: 500 16px/22px var(--as-font-text);
+}
+.docs-menu > summary::-webkit-details-marker { display: none; }
+.docs-menu > summary::after {
+  content: ""; flex: none; inline-size: 7px; block-size: 7px; margin-block-start: -4px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+}
+.docs-menu[open] > summary::after { margin-block-start: 4px; transform: rotate(-135deg); }
+.docs-menu > summary:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+.docs-menu-body { padding-block-start: 12px; }
+@media (min-width: 64em) {
+  .docs-menu { margin: 0; }
+  .docs-menu > summary { display: none; }
+  .docs-menu-body { padding-block-start: 0; }
+}
+
+.docs-groups { display: grid; gap: 20px; margin: 0; padding: 0; list-style: none; }
+.docs-group-title { margin: 0 0 6px; padding: 0 10px; font: 600 13px/18px var(--as-font-text); color: var(--as-label-secondary); }
+.docs-group-links { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.docs-sidebar a {
+  display: flex; align-items: center; min-block-size: 32px; padding: 0 10px;
+  border-radius: var(--as-radius-xs); color: var(--as-label); text-decoration: none;
+}
+.docs-sidebar a:hover { background: var(--as-fill-quaternary); text-decoration: underline; text-underline-offset: .25em; }
+.docs-sidebar a[aria-current="page"] {
+  background: var(--as-fill-tertiary); font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .35em;
+}
+.docs-sidebar a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+@media (pointer: coarse) { .docs-sidebar a { min-block-size: var(--as-hit-min); } }
+@media (forced-colors: active) {
+  .docs-sidebar a[aria-current="page"] { outline: 2px solid CanvasText; outline-offset: -2px; }
+}
+
+/* Reading column */
+.docs-main { min-inline-size: 0; }
+.docs-title {
+  margin: 0 0 12px; font: 700 clamp(2rem, 1.6rem + 1.6vw, 2.75rem)/1.12 var(--as-font-display);
+  letter-spacing: -.01em; color: var(--as-label); text-wrap: balance; overflow-wrap: anywhere;
+}
+.docs-lead {
+  margin: 0 0 20px; max-inline-size: 40em;
+  font: 400 19px/1.45 var(--as-font-text); letter-spacing: -.2px; color: var(--as-label-secondary); text-wrap: pretty;
+}
+.docs-main > .as-site-updated { margin-block-end: 28px; }
+.docs-main .as-site-toc { margin-block-end: 40px; }
+.docs-article { margin-inline: 0; max-inline-size: 65ch; }
+.docs-article.is-wide { max-inline-size: none; }
+.docs-article h2 { scroll-margin-top: 0; }
+.docs-release-date { margin: -.4em 0 1em; font: 400 14px/20px var(--as-font-text); color: var(--as-label-secondary); }
+.docs-article code { overflow-wrap: anywhere; }
+.docs-article td code, .docs-article th code { white-space: nowrap; }
+.docs-article td { overflow-wrap: anywhere; }
+.docs-article .as-prose-table table { min-inline-size: 36rem; }
+.docs-article ol, .docs-article ul { padding-inline-start: 1.4em; }
+
+/* Notes: a labelled block with an accent edge. The word "Note" carries the meaning, not the colour. */
+.docs-note {
+  margin: 0 0 1.1em; padding: 12px 16px; border-radius: var(--as-radius-m);
+  background: var(--as-bg-secondary); border-inline-start: 3px solid var(--as-accent);
+}
+.docs-note p { margin: 0; }
+
+/* Previous and next */
+.docs-pager {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px;
+  margin-block-start: 48px; padding-block-start: 24px; border-block-start: 1px solid var(--as-separator);
+}
+.docs-pager a {
+  display: grid; gap: 4px; min-block-size: var(--as-hit-min); padding: 14px 16px;
+  border-radius: var(--as-radius-m); background: var(--as-bg-secondary);
+  color: var(--as-label); text-decoration: none;
+}
+.docs-pager-next { text-align: end; }
+.docs-pager a:hover .docs-pager-title { text-decoration: underline; text-underline-offset: .25em; }
+.docs-pager a:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+.docs-pager-label { font: 400 13px/18px var(--as-font-text); color: var(--as-label-secondary); }
+.docs-pager-title { font: 600 17px/22px var(--as-font-text); letter-spacing: -.43px; }
+@media (max-width: 29.99em) { .docs-pager { grid-template-columns: minmax(0, 1fr); } }
+
+/* Appearance switch (footer) */
+.docs-theme { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.docs-theme legend { padding: 0; margin: 0 0 6px; font: 600 14px/20px var(--as-font-text); color: var(--as-label); }
+.docs-theme-options { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.docs-theme label {
+  display: inline-flex; align-items: center; gap: 6px; min-block-size: 32px;
+  font: 400 14px/20px var(--as-font-text); color: var(--as-label); cursor: pointer;
+}
+.docs-theme input { margin: 0; }
+.docs-theme input:focus-visible { outline: 2px solid var(--as-accent); outline-offset: 2px; }
+@media (pointer: coarse) { .docs-theme label { min-block-size: var(--as-hit-min); } }

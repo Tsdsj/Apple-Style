@@ -162,3 +162,14 @@ Safari、Firefox、VoiceOver/NVDA、框架应用和性能/模型对比仍未验�
 - 渲染限制（渲染器未改，内容未手工改写）：页内锚点（如 `#section-badges`）与无 href 的“Download Artwork”按钮被解析为 `https://developer.apple.com` 首页，引用时以正文为准；Headline 等示例图小节只剩小标题；页面包含 App Store 营销素材许可协议全文，原样保存。
 - 未做：未保存任何徽章、图片或 zip；未刷新既有 208 页；未改动 CHANGELOG、计划文档与 `skills/Apple-Style/SKILL.md`。
 - 测试：`python3 -m unittest discover -s tests -p 'test_*.py'`：43 项运行，**35 通过，8 项 PowerShell 跳过**（本容器无 pwsh），0 失败。HEAD 为 42 项运行、34 通过；新增的 `test_reference` 用例覆盖 `marketing` 分类的接受、INDEX 段、`cited()` 映射与其他目录的拒绝。`test_reference.py` 与 `test_skill_links.py` 通过；`git diff --check` 通过。
+
+## 网站优先改造（未发布）
+
+执行日期：2026-10-19 至 10-20。环境：Linux 容器，Chromium 141 headless（`chromium_headless_shell-1194`，通过临时 Playwright 配置指定路径；仓库配置要求的版本未安装），Python 3.13，Node 22。对应 [改造清单](plan/2026-10-19-website-first-plan.md) 全部条目。
+
+- 全部测试：**Chromium 194 通过**；**Python 74 通过（PowerShell 8 项跳过）**，其中 `test_check_site` 需要能启动 Chromium（指定 `CHROMIUM` 时运行，否则跳过）；`scripts/build-css.py --check` 与 `git diff --check` 通过。
+- 拆分与重新分层：在演示页和测试页上逐元素比较计算样式（宽度、深浅色、强制颜色、减弱动态效果、增强对比度、减弱透明度、密度、平台的 240 种组合；后续瘦身另比较 5,338 个元素），与拆分前一致；压缩版样式替换整包后整套浏览器测试通过。
+- 参考站：每页 axe（WCAG 2.2 AA + 最佳实践，浅色与深色）0 违规；Lighthouse 移动端首页、文章页、联系页性能 100，CLS 0；`check-site` 在参考站上无失败项（表单成功状态因没有后端记为未检查）。
+- `check-site` 用埋入问题的小站验证：每个埋入问题都在对应检查中报失败；对照上一轮评测的站点 A、B，结果与当时记录一致，差异已在其 README 说明。
+- 对照重测：见 [2026-10-19 v2](../evals/runs/2026-10-19-website-v2/README.md)。
+- 范围：只在 Chromium 中验证。Safari、Firefox、读屏软件、真机与 GPU 渲染下的大面积玻璃均未实测；无头 Chromium 对 20px 以上的背景模糊渲染不准确。

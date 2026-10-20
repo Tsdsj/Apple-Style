@@ -956,7 +956,7 @@ function markdown(doc) {
   const count = (st) => doc.checks.filter((c) => c.status === st).length;
   const out = [
     '# check-site summary', '',
-    `Site: \`${doc.site}\`  `,
+    `Site: \`${doc.site}\``, '',
     `Base: ${doc.base} · pages: ${doc.pages.length} · widths: ${doc.widths.join(', ')} · ${doc.seconds} s · axe: ${doc.axe ? 'yes' : 'no'} · Lighthouse: ${doc.lighthouse ? 'yes' : 'no'}`, '',
     `**Totals:** pass ${count('pass')} · fail ${count('fail')} · not checked ${count('not checked')} · not applicable ${count('not applicable')}`, '',
     '## Not checked (not a pass)', '',
@@ -994,6 +994,6 @@ function writeOutputs() {
     pages: (S && S.pages) || [], axe: !!AXE, lighthouse: !!LIGHTHOUSE, counts, checks,
   };
   fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify(doc, null, 2) + '\n');
-  fs.writeFileSync(path.join(OUT, 'summary.md'), markdown(doc));
+  fs.writeFileSync(path.join(OUT, 'summary.md'), markdown(doc).replace(/\s+$/, '') + '\n');
   console.log(`check-site: ${JSON.stringify(counts)} in ${seconds} s; summary: ${path.join(OUT, 'summary.md')}`);
 }

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>文稿 · 两种宽度</title>
+<style>
+  :root { --bg: #f2f2f7; --fg: #1d1d1f; --mut: #6e6e73; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #161618; --fg: #f5f5f7; --mut: #a1a1a6; } }
+  body { margin: 0; padding: 24px; background: var(--bg); color: var(--fg);
+    font: 400 14px/20px -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif; }
+  h1 { margin: 0 0 4px; font: 600 18px/24px -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; }
+  p.lead { margin: 0 0 24px; color: var(--mut); max-width: 72ch; }
+  figure { margin: 0 0 32px; }
+  figcaption { margin: 0 0 8px; color: var(--mut); font-size: 12px; line-height: 16px; }
+  .frame { position: relative; overflow: hidden; border-radius: 10px; background: var(--bg);
+    box-shadow: 0 0 0 .5px rgb(0 0 0 / .3), 0 12px 32px rgb(0 0 0 / .18); }
+  .frame iframe { display: block; border: 0; transform-origin: 0 0; }
+</style>
+</head>
+<body>
+<h1>文稿窗口 · 700 px 与 1440 px</h1>
+<p class="lead">同一个原型，按窗口宽度切换布局。两个窗口各自是独立的视口，媒体查询按真实宽度计算。
+  右侧较宽的预览在窗口较窄时等比缩小，不改变布局。打开 <code>index.html</code> 可在完整视口中使用。</p>
+
+<figure>
+  <figcaption>700 px 宽 · 列表与编辑区并列；属性以覆盖编辑区的方式打开（⌥⌘I）</figcaption>
+  <div class="frame" data-w="700" data-h="820"><iframe src="index.html" width="700" height="820" title="文稿窗口 700 px"></iframe></div>
+</figure>
+
+<figure>
+  <figcaption>1440 px 宽 · 文稿列表、编辑区、属性三栏</figcaption>
+  <div class="frame" data-w="1440" data-h="900"><iframe src="index.html" width="1440" height="900" title="文稿窗口 1440 px"></iframe></div>
+</figure>
+
+<script>
+  // Scale a frame down to fit the page. The iframe keeps its real CSS width, so
+  // its media queries and layout are unchanged; only the drawn size shrinks.
+  function fit() {
+    var avail = document.documentElement.clientWidth - 48;
+    document.querySelectorAll('.frame').forEach(function (f) {
+      var w = +f.dataset.w, h = +f.dataset.h;
+      var s = Math.min(1, avail / w);
+      var fr = f.querySelector('iframe');
+      fr.style.transform = 'scale(' + s + ')';
+      f.style.width = Math.round(w * s) + 'px';
+      f.style.height = Math.round(h * s) + 'px';
+    });
+  }
+  fit();
+  window.addEventListener('resize', fit);
+</script>
+</body>
+</html>

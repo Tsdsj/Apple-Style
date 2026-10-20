@@ -1,0 +1,62 @@
+/* --------------------------------------------------------------------------
+   7. Accessibility + user preferences for the content layer: glass, buttons,
+   form fields and utilities. Preferences for application components (toolbar,
+   tab bar, sidebar, sheet, segmented control, slider, toggle, dialog, toast and
+   the desktop window) are in app-preferences.css (7b).
+   -------------------------------------------------------------------------- */
+/* Reduce Transparency → frostier, obscures more of what's behind */
+@media (prefers-reduced-transparency: reduce) {
+  .as-glass { --_fill: light-dark(rgb(245 245 247 / .92), rgb(44 44 46 / .92)); --_blur: 40px; }
+  .as-glass::before { opacity: .5; }
+  .as-glass-clear { --_fill: rgb(0 0 0 / .6); }
+}
+:root[data-liquid-glass="tinted"] .as-glass { --_fill: light-dark(rgb(245 245 247 / .80), rgb(44 44 46 / .82)); } /* user-preferred "Tinted" look */
+/* Increase Contrast → predominantly black/white with a contrasting border */
+@media (prefers-contrast: more) {
+  .as-glass {
+    --_fill: light-dark(rgb(255 255 255 / .96), rgb(0 0 0 / .96));
+    --_blur: 0px; --as-glass-filter: none;
+    --as-glass-brightness: 1; --as-glass-contrast: 1; --as-glass-sheen: transparent;
+    /* The fill stops following the backdrop here, so the label has to follow
+       the fill: an element that adapt() marked dark would otherwise keep white
+       text on now-white glass. */
+    --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary);
+    color: var(--as-label);
+    box-shadow: var(--_shadow), inset 0 0 0 1.5px var(--as-label);
+  }
+  .as-glass[data-glass-scheme] { --as-glass-fg: var(--as-label); --as-glass-fg-secondary: var(--as-label-secondary); color: var(--as-label); }
+  .as-glass::before, .as-glass::after { display: none; }
+  .as-glass-tinted, .as-glass-prominent,
+  .as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { --as-glass-tint: var(--as-tint, var(--as-action-bg)); color: var(--as-action-fg); }
+  .as-glass-clear, .as-glass-clear[data-glass-scheme] { --as-glass-fg: #fff; color: #fff; }
+  /* Fields get a real edge. */
+  .as-input { border-color: var(--as-label-secondary); }
+}
+/* Reduce Motion → no elastic / morphing, keep opacity changes */
+@media (prefers-reduced-motion: reduce) {
+  .as-glass, .as-glass *, .as-button { transition-duration: 1ms !important; }
+  /* no elastic: keep the illumination, drop the flex and the drag stretch */
+  .as-glass-interactive:active, .as-glass-interactive.is-pressed { --as-flex-x: 1; --as-flex-y: 1; }
+}
+/* Forced colors (Windows High Contrast). The browser flattens backgrounds to
+   Canvas and drops box-shadows. Glass, buttons and the picker are redrawn here;
+   the application's controls are in app-preferences.css (7b). */
+@media (forced-colors: active) {
+  .as-glass { background: Canvas; color: CanvasText; border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .as-glass::before, .as-glass::after { display: none; }
+  /* Buttons that rely on a fill to look like buttons keep a visible boundary. */
+  .as-button-filled, .as-button-tinted, .as-button-gray, .as-button-bordered { border: 1px solid ButtonText; }
+}
+/* No backdrop-filter support → solid material fallback */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .as-glass { --_fill: light-dark(rgb(250 250 252 / .94), rgb(40 40 44 / .94)); }
+}
+
+/* Utilities */
+.as-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.as-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.as-safe-bottom { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* Prominent controls keep the accessible foreground when adaptivity samples
+   a light backdrop. Custom --as-tint overrides need their own contrast check. */
+.as-glass-tinted[data-glass-scheme], .as-glass-prominent[data-glass-scheme] { color: var(--as-action-fg); }
