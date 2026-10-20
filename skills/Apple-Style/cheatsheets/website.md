@@ -109,20 +109,27 @@ Multi-page static sites repeat the header and footer on every page. Choose one o
 - *Project default* — avoid runtime injection for navigation. If it is used, ship the same markup in the HTML, so the page works without JS, and let the script only enhance it. Do not replace a working header with an empty placeholder.
 - *Project default* — give the wrapper a fixed class (`site-header`, `site-footer`) so the check can find it, and keep each block on its own lines.
 
-Check script for option (3) (Python 3, no dependencies). It fails when the header or footer differs between pages:
+Check script for option (3) (Python 3, no dependencies). It fails when a page lacks the header or footer, or when they differ between pages. `aria-current="page"` is removed before comparing, because it marks a different link on each page:
 
 ```python
 import pathlib, re, sys
-pattern = re.compile(r'<(?P<tag>header|footer) class="site-(?:header|footer)".*?</(?P=tag)>', re.S)
-blocks = {}
-for page in sorted(pathlib.Path("site").rglob("*.html")):
-    for m in pattern.finditer(page.read_text(encoding="utf-8")):
-        blocks.setdefault(m.group(0), []).append(str(page))
-if len(blocks) != 2:  # one header and one footer, identical on every page
-    sys.exit(f"{len(blocks)} distinct header/footer blocks; expected 2")
+site = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "site")
+pattern = re.compile(r'<(header|footer)\b[^>]*class="[^"]*\bas-site-(?:header|footer)\b.*?</\1>', re.S)
+blocks, problems = {}, []
+for page in sorted(site.rglob("*.html")):
+    if page.name == "404.html":  # often trimmed on purpose; check it by hand
+        continue
+    found = [re.sub(r'\s+aria-current="page"', "", m.group(0)) for m in pattern.finditer(page.read_text(encoding="utf-8"))]
+    if len(found) != 2:
+        problems.append(f"{page}: {len(found)} header/footer blocks, expected 2")
+    for block in found:
+        blocks.setdefault(block, []).append(str(page))
+if len(blocks) != 2:
+    problems.append(f"{len(blocks)} distinct header/footer blocks across pages, expected 2")
+sys.exit("\n".join(problems) if problems else 0)
 ```
 
-The check compares markup exactly, including whitespace. It does not check that a page is missing the block; add that if pages can drop it.
+Run it as `python3 check-shared.py path/to/site`. It compares markup exactly, including whitespace, so keep each block formatted the same way on every page. Adjust the class names if the site renames `as-site-header` / `as-site-footer`.
 
 ## Fonts
 

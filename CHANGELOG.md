@@ -32,6 +32,8 @@
 - `check-site` 修正：空提交后焦点落在链接到出错字段的错误摘要上也算通过；表单提交到本机不存在的后端时，成功状态记为未检查而非误判为通过；只含图片的链接在强制颜色下视为可见。
 - 修复窄屏导航的布局偏移：`site-nav.js` 延后加载，加载后才收起链接，页眉随之变矮，下面的内容整体上移。对照重测中用通栏页眉的两个站点 CLS 为 0.27 和 0.29（Lighthouse 性能 85–86）。现在由 `<head>` 中一行内联脚本给 `<html>` 加 `as-js`，收起状态从首帧就生效；`destroy()` 设置 `data-plain` 恢复原位。浮动页眉原先用来抵消偏移的固定高度一并去掉，参考站三页 CLS 从 0.017 降到 0。新增测试：脚本延迟加载时页眉高度不变，并以去掉 `as-js` 的对照证明测试能发现偏移。
 - 演示首页改为先展示参考网站，再进入组件工作台（仓库根目录 `index.html`，打包时原样复制）；打包时由 `scripts/relativize-site.py` 把参考站的根相对路径改写为相对路径，部署在 Pages 子路径下也能加载。新增 `tests/test_relativize_site.py` 与在 `/Apple-Style/` 子路径下检查打包结果的 `tests/browser/pages-package.spec.js`（4.3）。
+- `website.md` 中多页共享页眉页脚的校验脚本改为匹配 `as-site-header` / `as-site-footer`，比较前去掉每页不同的 `aria-current`，并报告缺少页眉页脚的页面（原脚本类名不匹配，且在正确的站点上也会报错）。
+- README 改为以网站为主的定位，新增“网站使用”一节。
 
 修复 [2026-10 实用性审计](docs/audit/2026-10-16-practicality-audit.md) §2.1–2.7 的 P0/P1 缺陷，每项都有回归测试（`tests/browser/regressions.spec.js`）。
 

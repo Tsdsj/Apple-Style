@@ -1,6 +1,6 @@
 # Apple-Style
 
-Apple HIG 与 Liquid Glass 的四个 Agent 技能，以及可直接引入的 Web CSS / JavaScript。**Web 使用无运行时依赖、无构建步骤**；Node、Playwright 和 Python 仅用于维护与回归验证。
+Apple HIG 与 Liquid Glass 的四个 Agent 技能，**主要用于指导 Agent 做 Apple 风格的网站**（产品官网、落地页、文档、博客），其次是 Web 应用，原生 SwiftUI/UIKit/AppKit 作为次要分支。技能提供的是判断依据、结构约定、可复制的参考代码和验证脚本，不是 UI 组件库。**Web 参考代码无运行时依赖、无构建步骤**；Node、Playwright 和 Python 仅用于维护与回归验证。
 
 [English summary](#english) · [在线演示](https://tsdsj.github.io/Apple-Style/) · [演示源码](demo/index.html) · [验证记录](docs/validation.md) · [变更说明](CHANGELOG.md)
 
@@ -62,16 +62,27 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 
 | 技能 | 内容 |
 |---|---|
-| [Apple-Style](skills/Apple-Style/SKILL.md) | 组成、工作流程、语义颜色、Web 入口 |
+| [Apple-Style](skills/Apple-Style/SKILL.md) | 入口：先判断页面类型（内容网站 / Web 应用 / Mac 窗口 / 原生），再读对应文件；网站模式、参考站、Web 代码 |
 | [Apple-Style-HIG](skills/Apple-Style-HIG/SKILL.md) | 离线参考和来源检索 |
 | [Apple-Style-Liquid-Glass](skills/Apple-Style-Liquid-Glass/SKILL.md) | 材质实现和参数调节 |
-| [Apple-Style-Review](skills/Apple-Style-Review/SKILL.md) | 有证据的只读审查与修复建议 |
+| [Apple-Style-Review](skills/Apple-Style-Review/SKILL.md) | 有证据的只读审查与修复建议；网站检查清单与 `scripts/check-site/` |
 
 分别判断**目标平台、应用类型、输入方式、可用容器空间**。1366px 的 iPad 不是 Mac，700px 的 Mac 窗口也不是 iPhone；普通网页无需模拟原生窗口。768/1024/1280px 是本项目布局默认值。`data-platform="macos"` 是显式密度选择，`.as-window`、侧栏、检查器按产品需要选用。
 
-[规则强度与证据](skills/Apple-Style/cheatsheets/rules-and-evidence.md) 区分官方要求、官方建议、项目默认和视觉经验。Review 用“已检查（通过/失败）／未检查／不适用”，不能把读完文字清单当作验证通过。固定的 Skill 启用/关闭比较任务见 [evals](evals/README.md)；当前尚未执行模型对比。
+[规则强度与证据](skills/Apple-Style/cheatsheets/rules-and-evidence.md) 区分官方要求、官方建议、项目默认和视觉经验。Review 用“已检查（通过/失败）／未检查／不适用”，不能把读完文字清单当作验证通过。固定的 Skill 启用/关闭比较任务见 [evals](evals/README.md)；已执行的探索性对比见 [2026-10-19 完整官网](evals/runs/2026-10-19-website/README.md) 与 [网站优先改造后的重测](evals/runs/2026-10-19-website-v2/README.md)（样本少，只作方向参考）。
 
-## Web 使用与生命周期
+## 网站使用
+
+内容网站只复制需要的部分，不整包引入：
+
+- 样式：按顺序拼接公共层 `skills/Apple-Style/web/css/` 下的 `tokens.css`、`base.css`、`glass.css`、`controls.css`、`preferences.css`（压缩后约 20 KB），再加页面用到的 `web/patterns/*.css`。`<body class="as-body">`。
+- 脚本：默认不需要；窄屏导航用 `web/js/site-nav.js`（`defer`，并在 `<head>` 里用一行内联脚本给 `<html>` 加 `as-js`，避免布局偏移），表单用 `web/js/site-form.js`。折射效果是可选增强。
+- 写法与约定：[website.md](skills/Apple-Style/cheatsheets/website.md)（加载、元数据、多页维护、字体、深色模式、部署、性能预算）和 [website-patterns.md](skills/Apple-Style/cheatsheets/website-patterns.md)（14 个网站模式）。完整示例：[参考站](skills/Apple-Style/web/examples/site/README.md)。
+- 验证：Review 技能的网站检查清单与 [`check-site`](skills/Apple-Style-Review/scripts/check-site/README.md)（13 项检查，没测的项记为未检查）。
+
+`apple-style.css` / `apple-style.min.css` 由 `web/css/` 生成（`python3 scripts/build-css.py`），供 Web 应用整包使用；修改请改 `web/css/` 源文件。
+
+## Web 应用使用与生命周期
 
 复制 `skills/Apple-Style/web/apple-style.css` 和 `liquid-glass.js`，直接引入：
 
@@ -107,7 +118,7 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 - `data-shortcuts`：⌘ 在 Apple 平台为 Command、其他平台为 Ctrl；焦点在文本框或富文本中时，全选、复制/剪切/粘贴、撤销/重做、光标移动与删除留给输入框，其他命令（如 ⌘S）照常执行。
 - 强制颜色（Windows 对比度主题）下，开关、分段选中、滑块与选中的标签/行改用系统色绘制；`dir="rtl"` 下滑块与开关按 HIG 镜像。
 - 尺寸档：默认是 iOS 档（17px 正文、44px 控件）；跨平台桌面 Web 应用在 `<html>` 上设 `data-density="desktop"`（14/20 正文、32px 控件，触屏时仍保持 44px 命中区）；Mac 风格界面用 `data-platform="macos"`。三者都按产品与输入方式选择，不按宽度推断。
-- Web 应用组件：表单字段 `.as-form-field` + `.as-input`（文本框、文本区、`<select>` pop-up 按钮；有指针时用可定制 select 选单，触屏保留系统选择器）、可选择列表 `.as-listbox` / `.as-option`（运行时提供单选键盘模型：一个 Tab 停靠点、方向键、Home/End、按字母跳转；选中状态就是 `aria-selected`）、`<dialog class="as-dialog">` 不透明模态（`showModal()` 负责焦点、Esc 和背景不可操作）、`LiquidGlass.toast('已保存')`（`role="status"` 播报，有模态时放进对话框内）、空状态 `.as-empty`、骨架屏 `.as-skeleton`、状态标签 `.as-pill`。全部跟随尺寸档，并处理强制颜色、减弱动态效果与增强对比度。用法见 [Web 实现速查](skills/Apple-Style/cheatsheets/web-implementation.md#selectable-lists-and-toasts-runtime)。
+- Web 应用组件：表单字段 `.as-form-field` + `.as-input`（文本框、文本区、`<select>` pop-up 按钮；有指针时用可定制 select 选单，触屏保留系统选择器）、可选择列表 `.as-listbox` / `.as-option`（运行时提供单选键盘模型：一个 Tab 停靠点、方向键、Home/End、按字母跳转；选中状态就是 `aria-selected`）、`<dialog class="as-dialog">` 不透明模态（`showModal()` 负责焦点、Esc 和背景不可操作）、`LiquidGlass.toast('已保存')`（`role="status"` 播报，有模态时放进对话框内）、空状态 `.as-empty`、骨架屏 `.as-skeleton`、状态标签 `.as-pill`。全部跟随尺寸档，并处理强制颜色、减弱动态效果与增强对比度。用法见 [Web 应用速查](skills/Apple-Style/cheatsheets/web-app.md#selectable-lists-and-toasts-runtime)，表单见 [Web 实现速查](skills/Apple-Style/cheatsheets/web-implementation.md#forms)。
 
 系统蓝色样本 `--as-blue` 保留；普通白字操作面使用 `--as-action-bg` / `--as-action-fg`，默认浅深色均满足 4.5:1。自定义 tint、透明度、图片背景和辅助文字仍应检查实际组合。增强对比度、降低透明度、减弱动态效果是额外支持，不是默认可读性的替代。
 
@@ -162,12 +173,12 @@ Apple 参考文本版权归 Apple Inc.，保留来源记录；未捆绑 SF 字�
 
 ## English
 
-Four Apple design skills plus dependency-free, build-free CSS/JS. Install from a reviewed checkout with `./install.sh` or `install.ps1`. Install receipts protect unowned or modified directories; legacy installations are never silently adopted. Exit 2 means content was preserved and needs review. Copy updates and uninstall require a matching fingerprint; links are only unlinked, never recursively removed through their target.
+Four Apple design skills whose main use is guiding agents to build Apple-style websites (product, landing, docs and blog sites), then web apps, with native SwiftUI/UIKit/AppKit as a secondary branch. The skills supply decisions, contracts, small copyable reference code and verification scripts, not a component library: a content site copies the ~20 KB core layers and the website patterns it uses (`cheatsheets/website.md`, `website-patterns.md`, reference site in `web/examples/site/`), and the Review skill's `scripts/check-site/` checks the result. Dependency-free, build-free CSS/JS. Install from a reviewed checkout with `./install.sh` or `install.ps1`. Install receipts protect unowned or modified directories; legacy installations are never silently adopted. Exit 2 means content was preserved and needs review. Copy updates and uninstall require a matching fingerprint; links are only unlinked, never recursively removed through their target.
 
 Choose platform, app type, input methods and container size independently. A wide iPad is not a Mac, and a desktop web page does not require a native window. Rules distinguish official constraints, recommendations, project defaults and visual heuristics.
 
 Call `LiquidGlass.init(root)` after mount and `destroy(root)` before unmount. Bundlers import `liquid-glass.mjs`; importing is safe during server rendering. To let Tailwind v4 utilities adjust components, import the stylesheet into a layer below utilities. Initialization is idempotent and scoped; single surfaces support `attach(el, options)` / `detach(el)`. Options survive resize and appearance regeneration. Radio groups select values; tabs require linked panels. Keyboard, click and drag are supported without duplicate activation; cancellation does not commit. Default white-text actions use accessible semantic colors while retaining Apple system swatches.
 
-Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Windows-native junctions are covered by the Windows CI jobs, separately from macOS copy fallback tests. Safari, Firefox, VoiceOver and model on/off comparisons remain unverified. See the linked release verification record for actual CI and deployment runs.
+Run `npm ci`, `npx playwright install chromium`, `npm test`, and `python3 -m unittest discover -s tests -p 'test_*.py' -v`. See [validation](docs/validation.md) for executed checks and explicit gaps. Windows-native junctions are covered by the Windows CI jobs, separately from macOS copy fallback tests. Safari, Firefox and VoiceOver remain unverified; the skill on/off comparisons in `evals/runs/` are exploratory (small samples). See the linked release verification record for actual CI and deployment runs.
 
 Reference refreshes use a source manifest, hashes, timestamps, local fixtures and a transactional commit; every source was re-fetched on 2026-10-17. Moved pages are reported with `moved_to`, `--retire` removes a replaced page in the same transaction, and the report maps each cheatsheet to the changed pages it cites. Apple reference content is not relicensed. The existing free-use statement for original project code is retained; choosing a standard LICENSE remains the author's decision.
