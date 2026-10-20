@@ -188,3 +188,36 @@ test('forced colors keep the toggle boundary and the current-page marker visible
   expect(marker[0]).toBe('solid');
   expect(marker[1]).not.toBe('rgba(0, 0, 0, 0)');
 });
+
+// Layout shift (found by the 2026-10-19 v2 evaluation: CLS 0.27-0.29 on two sites). site-nav.js is deferred,
+// so the collapsed header must already be in place at first paint, keyed off the early as-js class.
+async function headerHeights(page, { stripEarlyClass = false } = {}) {
+  await page.setViewportSize({ width: 390, height: 800 });
+  if (stripEarlyClass) {
+    await page.route('**/site-patterns.html', async route => {
+      const res = await route.fetch();
+      await route.fulfill({ response: res, body: (await res.text()).replace(/<script>document\.documentElement\.classList\.add\('as-js'\)<\/script>/, '') });
+    });
+  }
+  let release; const gate = new Promise(r => { release = r; });
+  await page.route('**/site-nav.js', async route => { await gate; await route.continue(); });
+  await page.goto(fixture, { waitUntil: 'commit' });
+  await page.waitForSelector('.as-site-footer', { state: 'attached' });
+  await page.waitForTimeout(300);
+  const before = await page.evaluate(() => ({ h: document.querySelector('.as-site-header').getBoundingClientRect().height,
+    enhanced: document.querySelector('[data-site-nav]').hasAttribute('data-enhanced') }));
+  release();
+  await page.waitForFunction(() => document.querySelector('[data-site-nav]').hasAttribute('data-enhanced'));
+  const after = await page.evaluate(() => document.querySelector('.as-site-header').getBoundingClientRect().height);
+  return { before, after };
+}
+test('the narrow header has its collapsed height before the deferred script runs (no layout shift)', async ({ page }) => {
+  const { before, after } = await headerHeights(page);
+  expect(before.enhanced).toBe(false);
+  expect(after).toBe(before.h);
+});
+test('control: without the early as-js class the header height changes when the script runs', async ({ page }) => {
+  const { before, after } = await headerHeights(page, { stripEarlyClass: true });
+  expect(before.enhanced).toBe(false);
+  expect(after).toBeLessThan(before.h);
+});

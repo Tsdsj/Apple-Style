@@ -115,10 +115,11 @@ irm https://raw.githubusercontent.com/Tsdsj/Apple-Style/main/install.ps1 | iex
 
 ```bash
 python3 -m http.server 8765 --bind 127.0.0.1
-# http://127.0.0.1:8765/demo/index.html
+# http://127.0.0.1:8765/          演示首页：先是参考网站，再是组件工作台
+# http://127.0.0.1:8765/demo/index.html   组件工作台
 ```
 
-统一入口保留移动组件、同心圆角和无障碍模拟，并链接 [桌面窗口](skills/Apple-Style/web/demo-desktop.html) 与 [最小组件示例](skills/Apple-Style/web/demo.html)。示例共用本体 CSS/JS。检查清单只记录人工检查状态，不自动证明质量。
+演示首页的第一个入口是 [参考网站](skills/Apple-Style/web/examples/site/README.md)（虚构产品的官网与博客，用到全部网站模式；源码是根相对路径，单独检查时以它的目录为站点根启动服务）。组件工作台保留移动组件、同心圆角和无障碍模拟，并链接 [桌面窗口](skills/Apple-Style/web/demo-desktop.html) 与 [最小组件示例](skills/Apple-Style/web/demo.html)。示例共用本体 CSS/JS。检查清单只记录人工检查状态，不自动证明质量。
 
 本次实际浏览器验证为 Chromium，详见 [验证记录](docs/validation.md)。SVG backdrop lensing 使用 Chromium 启发式检测，**不等于逐浏览器的渲染能力证明**；其他引擎走 CSS blur/highlight 路径。Safari、Firefox、VoiceOver 目前未验证。现代 CSS（如 `light-dark()`、`color-mix()`）、Observer 与 Pointer Events 是使用前提，不承诺旧浏览器完整兼容。
 
@@ -153,7 +154,7 @@ skills/Apple-Style/scripts/update-reference.sh --report /tmp/reference-update.js
 
 ## 发布准备与许可
 
-[CHANGELOG](CHANGELOG.md)、[发布检查项](docs/release-checklist.md)、[Pages 部署工作流](.github/workflows/deploy-pages.yml) 已启用为手动触发，模板仍保留作参考。`scripts/prepare-demo.sh NEW_DIRECTORY` 只打包演示和 Web 资产，排除 Apple 离线参考和本机文件。本次按作者授权发布 `v0.1.0`，演示站通过 Actions 部署。后续部署使用手动触发；正式许可证保持原有声明。
+[CHANGELOG](CHANGELOG.md)、[发布检查项](docs/release-checklist.md)、[Pages 部署工作流](.github/workflows/deploy-pages.yml) 已启用为手动触发，模板仍保留作参考。`scripts/prepare-demo.sh NEW_DIRECTORY` 只打包演示首页、组件工作台、参考网站和 Web 资产，排除 Apple 离线参考和本机文件；参考网站的根相对路径在打包副本中由 `scripts/relativize-site.py` 改写为相对路径，以便部署在 Pages 子路径下。本次按作者授权发布 `v0.1.0`，演示站通过 Actions 部署。后续部署使用手动触发；正式许可证保持原有声明。
 
 Apple 参考文本版权归 Apple Inc.，保留来源记录；未捆绑 SF 字体与 SF Symbols。原项目声明“本仓库自身的代码（CSS / JS / 脚本 / 速查表写作）可自由使用”保持不变。当前没有标准 LICENSE，本次不新增授权范围。正式许可证由作者选择，见 [许可证决策](docs/license-decision.md)。
 

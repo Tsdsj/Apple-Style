@@ -49,6 +49,7 @@ Concatenate the five core layers (`cheatsheets/website.md`, *Loading*) and copy 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('as-js')</script>
   <title>Product name: short description</title>
   <link rel="stylesheet" href="/css/apple-core.css">
   <link rel="stylesheet" href="/css/site-header.css">

@@ -73,15 +73,6 @@ html { scroll-padding-top: calc(var(--as-site-header-h) + 16px); }
    (materials rule 1). The outer element is transparent and only sets the gutter. */
 .as-site-header-floating { background: none; border-block-end: 0; -webkit-backdrop-filter: none; backdrop-filter: none; padding-block: 12px; padding-inline: var(--as-margin); }
 .as-site-header-floating > .as-site-header-inner { min-block-size: 56px; padding-inline: 16px; border-radius: var(--as-radius-capsule); }
-/* Narrow floating capsule: keep the inner height that the no-JavaScript links need (92 px in mobile emulation, two rows of
-   content at 390 to 412 px). Without this the header shrinks by 24 px when
-   site-nav.js collapses the links, which moves the page below it (layout shift). Below about 375 px
-   the links wrap to a second row without JavaScript; that case is not covered and is listed in
-   website-patterns.md, Narrow navigation. Set --as-site-header-h to the same total height. */
-@media (max-width: 47.99em) { .as-site-header-floating > .as-site-header-inner { min-block-size: 92px; } }
-/* Below 380 px the no-JavaScript links wrap to two rows, so the header needs 114 px inside. */
-@media (max-width: 23.75em) { .as-site-header-floating > .as-site-header-inner { min-block-size: 114px; } }
-
 .as-site-header-floating .as-site-brand,
 .as-site-header-floating .as-site-nav-links a { color: var(--as-glass-fg); }
 

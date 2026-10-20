@@ -1,7 +1,14 @@
 /* ==========================================================================
    Narrow-screen navigation (pattern 2.2). Pairs with web/js/site-nav.js.
-   Below the breakpoint the links collapse behind a toggle button, but only when
-   the script has set data-enhanced. Without JavaScript the links wrap in place.
+   Below the breakpoint the links collapse behind a toggle button when JavaScript
+   runs. Without JavaScript the links wrap in place.
+   Layout shift: site-nav.js is deferred, so the collapsed layout must not wait for
+   it. A one-line inline script in <head> adds .as-js to <html> before first paint:
+     <script>document.documentElement.classList.add('as-js')</script>
+   and the collapsed layout keys off .as-js (or data-enhanced, set by the script).
+   Without .as-js the header changes height when the script runs and the page
+   jumps (measured CLS 0.27-0.29 in the 2026-10-19 v2 evaluation).
+   site-nav.js destroy() sets data-plain, which brings the links back in place.
    Breakpoint (project default): 48em (768px). The max-width query below and the
    NARROW constant in site-nav.js must match. Written as 47.99em so 768px is wide.
 
@@ -30,22 +37,22 @@
 
 @media (max-width: 47.99em) {
   /* No JavaScript: the links drop to their own full-width row under the brand. */
-  .as-site-nav:not([data-enhanced]) { order: 3; flex: 1 0 100%; }
-  .as-site-nav[data-enhanced] .as-site-nav-toggle { display: inline-flex; }
+  .as-site-nav:not([data-enhanced]):is(:root:not(.as-js) *, [data-plain]) { order: 3; flex: 1 0 100%; }
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-toggle { display: inline-flex; }
   /* The panel is a layer over the page: solid, not glass, so text in it is never over a busy backdrop. */
-  .as-site-nav[data-enhanced] .as-site-nav-links {
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-links {
     display: none; position: absolute; inset-inline: 0; top: 100%;
     flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 0;
     box-sizing: border-box; max-block-size: calc(100dvh - var(--as-site-header-h)); overflow-y: auto;
     padding: 8px var(--as-margin) 16px; background: var(--as-bg); box-shadow: 0 1px 0 var(--as-separator);
   }
-  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links { display: flex; }
-  .as-site-nav[data-enhanced] .as-site-nav-links a { min-block-size: var(--as-hit-min); padding: 0 4px; font-size: 17px; line-height: 22px; }
-  .as-site-header-floating .as-site-nav[data-enhanced] .as-site-nav-links { margin-block-start: 8px; border-radius: var(--as-radius-l); }
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links { display: flex; }
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-links a { min-block-size: var(--as-hit-min); padding: 0 4px; font-size: 17px; line-height: 22px; }
+  .as-site-header-floating :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-links { margin-block-start: 8px; border-radius: var(--as-radius-l); }
 }
 /* The open animation is opt-in: it runs only when motion is not reduced. */
 @media (max-width: 47.99em) and (prefers-reduced-motion: no-preference) {
-  .as-site-nav[data-enhanced] .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links {
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-toggle[aria-expanded="true"] ~ .as-site-nav-links {
     animation: as-site-nav-in var(--as-dur-fast) var(--as-ease-soft);
   }
 }
@@ -53,5 +60,5 @@
 
 @media (forced-colors: active) {
   .as-site-nav-toggle { border: 1px solid ButtonText; background: ButtonFace; color: ButtonText; }
-  .as-site-nav[data-enhanced] .as-site-nav-links { border-block-end: 1px solid CanvasText; }
+  :is(.as-js .as-site-nav:not([data-plain]), .as-site-nav[data-enhanced]) .as-site-nav-links { border-block-end: 1px solid CanvasText; }
 }

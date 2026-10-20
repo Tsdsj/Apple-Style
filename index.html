@@ -1,0 +1,121 @@
+<!doctype html>
+<!-- Apple-Style demo landing. It sits at the repository root so that scripts/prepare-demo.sh can copy it unchanged
+     to the package root: every link below is relative to that one location and works both here and under a Pages
+     sub-path. Text lives in demo/i18n.js (zh default, en); the language choice is shared with the workbench. -->
+<html lang="zh-Hans" class="as-root as-grouped">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title data-i18n="land.doc">Apple-Style · 演示</title>
+<link rel="stylesheet" href="skills/Apple-Style/web/apple-style.css">
+<style>
+  .land { box-sizing: border-box; max-width: 960px; margin: 0 auto; padding: clamp(24px, 6vw, 64px) 16px 48px; }
+  .land-head { display: grid; justify-items: start; gap: 12px; margin-bottom: 32px; }
+  .land-eyebrow { margin: 0; color: var(--as-label-secondary); font-size: 15px; font-weight: 600; }
+  .land-title { margin: 0; font-size: clamp(28px, 6vw, 44px); line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+  .land-sub { margin: 0; max-width: 62ch; color: var(--as-label-secondary); font-size: 17px; line-height: 1.5; }
+  .land-lang { margin-top: 4px; }
+  .land-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .land-grid { grid-template-columns: 1fr 1fr; } }
+  .land-card { position: relative; display: flex; flex-direction: column; padding: 12px; border-radius: 24px; background: var(--as-bg-grouped-2); }
+  .land-thumb { display: flex; align-items: center; justify-content: center; gap: 10px; aspect-ratio: 1200 / 630; overflow: hidden; border-radius: 12px; background: var(--as-bg-grouped); }
+  .land-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .land-dots { display: flex; gap: 10px; }
+  .land-dots span { width: 36px; height: 36px; border-radius: 50%; }
+  .land-pill { padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 600; color: var(--as-label); }
+  .land-body { display: grid; gap: 8px; padding: 16px 8px 8px; }
+  .land-kicker { margin: 0; color: var(--as-label-secondary); font-size: 13px; font-weight: 600; }
+  .land-card-title { margin: 0; font-size: 24px; line-height: 1.2; font-weight: 700; }
+  .land-text { margin: 0; color: var(--as-label-secondary); font-size: 16px; line-height: 1.5; }
+  .land-meta { margin: 0; color: var(--as-label-tertiary); font-size: 14px; line-height: 1.4; }
+  .card-link { color: inherit; text-decoration: none; }
+  .card-link::after { content: ""; position: absolute; inset: 0; border-radius: 24px; }
+  .card-link:focus { outline: none; }
+  .card-link:focus-visible::after { outline: 3px solid var(--as-blue); outline-offset: -3px; }
+  .land-foot { margin: 40px 0 0; color: var(--as-label-tertiary); font-size: 13px; line-height: 1.5; }
+</style>
+</head>
+<body class="as-body as-grouped">
+<main class="land">
+  <header class="land-head">
+    <p class="land-eyebrow" data-i18n="land.eyebrow">Apple-Style 技能组 · 演示</p>
+    <h1 class="land-title" data-i18n="land.h1">先看参考网站，再看组件工作台</h1>
+    <p class="land-sub" data-i18n="land.sub">参考网站是一个完整的小型官网与博客，展示网站模式落在真实页面上的样子。组件工作台逐个检查技能本体的组件、材质与无障碍设置。两者都是静态页面，无需构建。</p>
+    <button class="as-button as-button-bordered land-lang" id="langBtn" type="button" data-i18n="ctl.lang.next">English</button>
+  </header>
+
+  <section class="land-grid" aria-label="演示入口">
+    <article class="land-card" data-card="site">
+      <div class="land-thumb">
+        <img src="skills/Apple-Style/web/examples/site/img/social.png" width="1200" height="630" alt="" loading="lazy">
+      </div>
+      <div class="land-body">
+        <p class="land-kicker" data-i18n="land.site.kicker">参考网站 · 第一入口</p>
+        <h2 class="land-card-title"><a class="card-link" href="skills/Apple-Style/web/examples/site/" data-card-link="site" data-i18n="land.site.title">Ferrule 官网与博客</a></h2>
+        <p class="land-text" data-i18n="land.site.body">一个虚构产品的首页、博客、文章、联系表单与隐私页，由技能的网站模式、CSS 与少量脚本构成。可以直接看导航、页脚、文章排版和表单在手机与桌面上的表现。</p>
+        <p class="land-meta" data-i18n="land.site.pages">首页 · 博客 · 文章 · 联系表单 · 隐私页</p>
+      </div>
+    </article>
+
+    <article class="land-card" data-card="workbench">
+      <div class="land-thumb" aria-hidden="true">
+        <div class="land-dots">
+          <span style="background: var(--as-blue)"></span>
+          <span style="background: var(--as-green)"></span>
+          <span style="background: var(--as-orange)"></span>
+          <span style="background: var(--as-purple)"></span>
+        </div>
+        <span class="as-glass land-pill">Liquid Glass</span>
+      </div>
+      <div class="land-body">
+        <p class="land-kicker" data-i18n="land.bench.kicker">组件工作台 · 第二入口</p>
+        <h2 class="land-card-title"><a class="card-link" href="demo/index.html" data-card-link="workbench" data-i18n="land.bench.title">组件与无障碍演示</a></h2>
+        <p class="land-text" data-i18n="land.bench.body">移动组件、系统颜色、字体阶、拖拽控件、桌面窗口，以及减弱透明度、增强对比度等偏好模拟。直接引用技能本体的 CSS 与 JS，用于调试技能。</p>
+        <p class="land-meta" data-i18n="land.bench.pages">移动组件 · 颜色 · 字体 · 控件 · 桌面窗口 · 无障碍</p>
+      </div>
+    </article>
+  </section>
+
+  <footer>
+    <p class="land-foot" data-i18n="ft.note">本页仅供技能调试；文字与规格来自 Apple 人机界面指南，版权归 Apple Inc. 所有。</p>
+  </footer>
+</main>
+
+<script src="demo/i18n.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'as-demo:lang';            // same key as the workbench, so the choice carries over
+  var html = document.documentElement;
+  var button = document.getElementById('langBtn');
+  var lang = 'zh';
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY));
+    if (saved === 'zh' || saved === 'en') lang = saved;
+  } catch (error) { /* private mode: keep the default */ }
+
+  function t(key) {
+    var dict = window.I18N && window.I18N[lang];
+    if (dict && key in dict) return dict[key];
+    console.warn('[i18n] 缺少翻译 / missing key:', key, '@', lang);
+    return (window.I18N && window.I18N.en && window.I18N.en[key]) || key;
+  }
+
+  function apply() {
+    html.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.dataset.i18n); });
+    button.textContent = t('ctl.lang.next');
+  }
+
+  button.addEventListener('click', function () {
+    lang = lang === 'zh' ? 'en' : 'zh';
+    try { localStorage.setItem(KEY, JSON.stringify(lang)); } catch (error) { /* ignore */ }
+    apply();
+  });
+
+  if (window.I18N && lang !== 'zh') apply();
+})();
+</script>
+</body>
+</html>

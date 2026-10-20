@@ -44,6 +44,7 @@
     document.addEventListener('pointerdown', onDown);
     mq.addEventListener('change', onMq);
     toggle.hidden = false;
+    root.removeAttribute('data-plain');
     root.setAttribute('data-enhanced', '');
     toggle.setAttribute(ATTR, 'false');
 
@@ -56,6 +57,7 @@
         document.removeEventListener('pointerdown', onDown);
         mq.removeEventListener('change', onMq);
         root.removeAttribute('data-enhanced');
+        root.setAttribute('data-plain', '');
         toggle.hidden = true;
         if (original === null) toggle.removeAttribute(ATTR); else toggle.setAttribute(ATTR, original);
         live.delete(root);

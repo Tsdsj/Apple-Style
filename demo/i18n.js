@@ -275,6 +275,21 @@ window.I18N = {
     'ck.reset': '重置',
 
     /* 杂项 */
+    /* 演示入口（根目录 index.html） */
+    'land.back': '演示首页',
+    'land.doc': 'Apple-Style · 演示',
+    'land.eyebrow': 'Apple-Style 技能组 · 演示',
+    'land.h1': '先看参考网站，再看组件工作台',
+    'land.sub': '参考网站是一个完整的小型官网与博客，展示网站模式落在真实页面上的样子。组件工作台逐个检查技能本体的组件、材质与无障碍设置。两者都是静态页面，无需构建。',
+    'land.site.kicker': '参考网站 · 第一入口',
+    'land.site.title': 'Ferrule 官网与博客',
+    'land.site.body': '一个虚构产品的首页、博客、文章、联系表单与隐私页，由技能的网站模式、CSS 与少量脚本构成。可以直接看导航、页脚、文章排版和表单在手机与桌面上的表现。',
+    'land.site.pages': '首页 · 博客 · 文章 · 联系表单 · 隐私页',
+    'land.bench.kicker': '组件工作台 · 第二入口',
+    'land.bench.title': '组件与无障碍演示',
+    'land.bench.body': '移动组件、系统颜色、字体阶、拖拽控件、桌面窗口，以及减弱透明度、增强对比度等偏好模拟。直接引用技能本体的 CSS 与 JS，用于调试技能。',
+    'land.bench.pages': '移动组件 · 颜色 · 字体 · 控件 · 桌面窗口 · 无障碍',
+
     'ft.note': '本页仅供技能调试；文字与规格来自 Apple 人机界面指南，版权归 Apple Inc. 所有。',
     'toast.copied': '类名已拷贝',
     'common.source': '规则来源'
@@ -535,6 +550,21 @@ window.I18N = {
     'ck.i11': 'Segmented control, switch and slider drag 1:1 and stretch with the drag',
     'ck.i12': 'Press gives gel flex and inner light; the highlight travels around the silhouette',
     'ck.reset': 'Reset',
+
+    /* Demo entry (root index.html) */
+    'land.back': 'Demo home',
+    'land.doc': 'Apple-Style · Demos',
+    'land.eyebrow': 'Apple-Style skill set · Demos',
+    'land.h1': 'Start with the reference website, then the component workbench',
+    'land.sub': 'The reference website is a small, complete company site and blog that shows the website patterns on real pages. The component workbench checks the skill’s components, materials and accessibility settings one by one. Both are static pages with no build step.',
+    'land.site.kicker': 'Reference website · first entry',
+    'land.site.title': 'Ferrule site and blog',
+    'land.site.body': 'A fictional product’s home, blog, articles, contact form and privacy page, built from the skill’s website patterns, CSS and a little script. Look at the navigation, footer, article typography and form on phone and desktop widths.',
+    'land.site.pages': 'Home · Blog · Articles · Contact form · Privacy',
+    'land.bench.kicker': 'Component workbench · second entry',
+    'land.bench.title': 'Components and accessibility',
+    'land.bench.body': 'Mobile components, system colours, the type scale, drag controls, a desktop window, and simulated preferences such as Reduce Transparency and Increase Contrast. It loads the skill’s own CSS and JS, for debugging the skill.',
+    'land.bench.pages': 'Mobile components · Colours · Type · Controls · Desktop window · Accessibility',
 
     'ft.note': 'This page exists to debug the skills. Text and specs derive from Apple’s Human Interface Guidelines; © Apple Inc.',
     'toast.copied': 'Class names copied',
